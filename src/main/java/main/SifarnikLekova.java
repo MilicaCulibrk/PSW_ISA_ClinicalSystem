@@ -1,22 +1,13 @@
 package main;
 
-/***********************************************************************
- * Module:  SifarnikLekova.java
- * Author:  23nik
- * Purpose: Defines the Class SifarnikLekova
- ***********************************************************************/
-
-import java.util.*;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 
-@Entity
+//@Entity
 public class SifarnikLekova {
 	
 	@Id
@@ -26,8 +17,7 @@ public class SifarnikLekova {
 	@Column(name = "naziv", nullable = false)
     private String naziv;
 	
-	/** @pdRoleInfo migr=no name=ZdravstveniKarton assc=association3 mult=1..1 side=A 
-	   public ZdravstveniKarton zdravstveniKarton; */
+
 
 	public SifarnikLekova(Long id, String naziv) {
 		super();

@@ -1,19 +1,11 @@
 package main;
 
-/***********************************************************************
- * Module:  SifranikDijagnoza.java
- * Author:  23nik
- * Purpose: Defines the Class SifranikDijagnoza
- ***********************************************************************/
-
-import java.util.*;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-@Entity
+//@Entity
 public class SifranikDijagnoza {
 
 	@Id

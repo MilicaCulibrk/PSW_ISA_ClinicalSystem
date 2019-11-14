@@ -1,20 +1,13 @@
-package model;
+package main;
 
-/***********************************************************************
- * Module:  NeautentifikovaniKorisnik.java
- * Author:  23nik
- * Purpose: Defines the Class NeautentifikovaniKorisnik
- ***********************************************************************/
+import javax.persistence.Entity;
 
-import java.util.*;
 
-/** @pdOid 40d0323b-b7fd-4831-b8bf-9bf764b52c0f */
+//@Entity
 public class NeautentifikovaniKorisnik {
-   /** @pdRoleInfo migr=no name=ZahtevZaRegistraciju assc=association12 mult=1..1 */
    public ZahtevZaRegistraciju zahtevZaRegistraciju;
    
    
-   /** @pdGenerated default parent getter */
    public ZahtevZaRegistraciju getZahtevZaRegistraciju() {
       return zahtevZaRegistraciju;
    }

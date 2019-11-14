@@ -1,16 +1,10 @@
-package model;
+package main;
 
-/***********************************************************************
- * Module:  ZahtevZaRegistraciju.java
- * Author:  23nik
- * Purpose: Defines the Class ZahtevZaRegistraciju
- ***********************************************************************/
+import javax.persistence.Entity;
 
-import java.util.*;
-
-/** @pdOid 7e47e9eb-9049-47ed-8d26-ee740c2d4c04 */
+//@Entity
 public class ZahtevZaRegistraciju {
-   /** @pdRoleInfo migr=no name=NeautentifikovaniKorisnik assc=association12 coll=java.util.Collection impl=java.util.HashSet mult=0..* side=A */
+	
    public java.util.Collection<NeautentifikovaniKorisnik> neautentifikovaniKorisnik;
    
    
