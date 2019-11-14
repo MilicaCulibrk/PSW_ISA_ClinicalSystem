@@ -1,29 +1,25 @@
-package model;
+package main;
 
-/***********************************************************************
- * Module:  ZahtevZaOperaciju.java
- * Author:  23nik
- * Purpose: Defines the Class ZahtevZaOperaciju
- ***********************************************************************/
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
-import java.util.*;
-
-/** @pdOid 64fcd310-4540-4b09-9926-ba8f6d0755db */
+//@Entity
 public class ZahtevZaOperaciju {
-   /** @pdOid b13d15db-b144-4bf2-b069-33a9f9a4ff97 */
+	
+	@Column(name = "odobren", nullable = false)
    private boolean odobren;
-   /** @pdOid a45002f4-a75e-42b2-9d14-70bbe94bc226 */
+	
+	@Column(name = "terminPregleda", nullable = false)
    private long terminPregleda;
-   /** @pdOid 9825b994-0a38-402e-bd92-27b088131bf3 */
+	
+	@Column(name = "trajanje", nullable = false)
    private long trajanje;
-   /** @pdOid 22733f5c-b260-4a9a-b4b0-601e78773575 */
+	
+	@Column(name = "cena", nullable = false)
    private long cena;
    
-   /** @pdRoleInfo migr=no name=Pacijent assc=association39 mult=1..1 */
    public Pacijent pacijent;
-   /** @pdRoleInfo migr=no name=Lekar assc=association41 coll=java.util.Collection impl=java.util.HashSet mult=1..* */
    public java.util.Collection<Lekar> lekar;
-   /** @pdRoleInfo migr=no name=Sala assc=association40 mult=1..1 */
    public Sala sala;
    
    
