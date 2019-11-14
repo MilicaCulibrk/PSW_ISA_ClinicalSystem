@@ -8,6 +8,9 @@ package model;
 
 import java.util.*;
 
+import main.SifarnikLekova;
+import main.SifranikDijagnoza;
+
 /** @pdOid b57cbf0c-24f1-4056-ba91-f8e062902178 */
 public class ZdravstveniKarton {
    /** @pdOid aad2d602-de0b-4049-abb7-cbdc0feb0cc8 */
@@ -45,15 +48,15 @@ public class ZdravstveniKarton {
    
    /** @pdGenerated default setter
      * @param newSifarnikLekova */
-   public void setSifarnikLekova(java.util.Collection<SifarnikLekova> newSifarnikLekova) {
+  /* public void setSifarnikLekova(java.util.Collection<SifarnikLekova> newSifarnikLekova) {
       removeAllSifarnikLekova();
       for (java.util.Iterator iter = newSifarnikLekova.iterator(); iter.hasNext();)
          addSifarnikLekova((SifarnikLekova)iter.next());
-   }
+   } */
    
    /** @pdGenerated default add
      * @param newSifarnikLekova */
-   public void addSifarnikLekova(SifarnikLekova newSifarnikLekova) {
+  /* public void addSifarnikLekova(SifarnikLekova newSifarnikLekova) {
       if (newSifarnikLekova == null)
          return;
       if (this.sifarnikLekova == null)
@@ -66,7 +69,7 @@ public class ZdravstveniKarton {
    }
    
    /** @pdGenerated default remove
-     * @param oldSifarnikLekova */
+     * @param oldSifarnikLekova 
    public void removeSifarnikLekova(SifarnikLekova oldSifarnikLekova) {
       if (oldSifarnikLekova == null)
          return;
@@ -78,7 +81,7 @@ public class ZdravstveniKarton {
          }
    }
    
-   /** @pdGenerated default removeAll */
+   /** @pdGenerated default removeAll 
    public void removeAllSifarnikLekova() {
       if (sifarnikLekova != null)
       {
@@ -90,7 +93,7 @@ public class ZdravstveniKarton {
             oldSifarnikLekova.setZdravstveniKarton((ZdravstveniKarton)null);
          }
       }
-   }
+   } */
    /** @pdGenerated default getter */
    public java.util.Collection<SifranikDijagnoza> getSifranikDijagnoza() {
       if (sifranikDijagnoza == null)
@@ -105,54 +108,10 @@ public class ZdravstveniKarton {
       return sifranikDijagnoza.iterator();
    }
    
-   /** @pdGenerated default setter
-     * @param newSifranikDijagnoza */
-   public void setSifranikDijagnoza(java.util.Collection<SifranikDijagnoza> newSifranikDijagnoza) {
-      removeAllSifranikDijagnoza();
-      for (java.util.Iterator iter = newSifranikDijagnoza.iterator(); iter.hasNext();)
-         addSifranikDijagnoza((SifranikDijagnoza)iter.next());
-   }
+  
    
-   /** @pdGenerated default add
-     * @param newSifranikDijagnoza */
-   public void addSifranikDijagnoza(SifranikDijagnoza newSifranikDijagnoza) {
-      if (newSifranikDijagnoza == null)
-         return;
-      if (this.sifranikDijagnoza == null)
-         this.sifranikDijagnoza = new java.util.HashSet<SifranikDijagnoza>();
-      if (!this.sifranikDijagnoza.contains(newSifranikDijagnoza))
-      {
-         this.sifranikDijagnoza.add(newSifranikDijagnoza);
-         newSifranikDijagnoza.setZdravstveniKarton(this);      
-      }
-   }
+  
    
-   /** @pdGenerated default remove
-     * @param oldSifranikDijagnoza */
-   public void removeSifranikDijagnoza(SifranikDijagnoza oldSifranikDijagnoza) {
-      if (oldSifranikDijagnoza == null)
-         return;
-      if (this.sifranikDijagnoza != null)
-         if (this.sifranikDijagnoza.contains(oldSifranikDijagnoza))
-         {
-            this.sifranikDijagnoza.remove(oldSifranikDijagnoza);
-            oldSifranikDijagnoza.setZdravstveniKarton((ZdravstveniKarton)null);
-         }
-   }
-   
-   /** @pdGenerated default removeAll */
-   public void removeAllSifranikDijagnoza() {
-      if (sifranikDijagnoza != null)
-      {
-         SifranikDijagnoza oldSifranikDijagnoza;
-         for (java.util.Iterator iter = getIteratorSifranikDijagnoza(); iter.hasNext();)
-         {
-            oldSifranikDijagnoza = (SifranikDijagnoza)iter.next();
-            iter.remove();
-            oldSifranikDijagnoza.setZdravstveniKarton((ZdravstveniKarton)null);
-         }
-      }
-   }
    /** @pdGenerated default getter */
    public java.util.Collection<Izvestaj> getIzvestaj() {
       if (izvestaj == null)
