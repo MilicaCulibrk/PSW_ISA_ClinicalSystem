@@ -28,23 +28,6 @@ public class Klinika {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Klinika(Long id, String naziv, String adresa, String email, String grad, String telefon, String opis,
-			int ocena, int brojRecenzija, Collection<MedicinskaSestra> medicinskaSestra,
-			Collection<AdministratorKlinike> administratorKlinike, Collection<Pacijent> pacijent) {
-		super();
-		this.id = id;
-		this.naziv = naziv;
-		this.adresa = adresa;
-		this.email = email;
-		this.grad = grad;
-		this.telefon = telefon;
-		this.opis = opis;
-		this.ocena = ocena;
-		this.brojRecenzija = brojRecenzija;
-		this.medicinskaSestra = medicinskaSestra;
-		this.administratorKlinike = administratorKlinike;
-		this.pacijent = pacijent;
-	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,16 +45,19 @@ public class Klinika {
 	@Column(name = "grad", nullable = false)
    private String grad;
 	
+	@Column(name = "drzava", nullable = false)
+	   private String drzava;
+	
 	@Column(name = "telefon", nullable = false)
    private String telefon;
 	
 	@Column(name = "opis", nullable = false)
    private String opis;
 	
-	@Column(name = "ocena", nullable = false)
+	@Column(name = "ocena", nullable = true)
    private int ocena;
 	
-	@Column(name = "brojRecenzija", nullable = false)
+	@Column(name = "brojRecenzija", nullable = true)
    private int brojRecenzija;
    
    
@@ -101,6 +87,43 @@ public class Klinika {
    
    @OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
    public java.util.Collection<Sala> sala;
+
+
+
+	
+public Klinika(Long id, String naziv, String adresa, String email, String grad, String drzava, String telefon,
+		String opis, int ocena, int brojRecenzija, Collection<Pacijent> pacijent, KlinickiCentar klinickiCentar,
+		Collection<Cenovnik> cenovnik, Collection<MedicinskaSestra> medicinskaSestra,
+		Collection<AdministratorKlinike> administratorKlinike, Collection<Lekar> lekar, Collection<Pregled> pregled,
+		Collection<Sala> sala) {
+	super();
+	this.id = id;
+	this.naziv = naziv;
+	this.adresa = adresa;
+	this.email = email;
+	this.grad = grad;
+	this.drzava = drzava;
+	this.telefon = telefon;
+	this.opis = opis;
+	this.ocena = ocena;
+	this.brojRecenzija = brojRecenzija;
+	this.pacijent = pacijent;
+	this.klinickiCentar = klinickiCentar;
+	this.cenovnik = cenovnik;
+	this.medicinskaSestra = medicinskaSestra;
+	this.administratorKlinike = administratorKlinike;
+	this.lekar = lekar;
+	this.pregled = pregled;
+	this.sala = sala;
+}
+
+public String getDrzava() {
+	return drzava;
+}
+
+public void setDrzava(String drzava) {
+	this.drzava = drzava;
+}
 
 public Long getId() {
 	return id;

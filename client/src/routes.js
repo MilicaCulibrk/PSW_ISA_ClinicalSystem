@@ -6,7 +6,7 @@ import dodajKliniku from './components/dodavanjeKlinike.vue';
 import dodajAdministratora from './components/dodavanjeAdministratora.vue';
 
 export default [
-    { path: '/', component: pocetnaAdministratorKC},
+    { path: '', component: pocetnaAdministratorKC},
     { path: '/pocetna', component: pocetna},
     { path: '/login', component: login},
     { path: '/registration', component: registration},

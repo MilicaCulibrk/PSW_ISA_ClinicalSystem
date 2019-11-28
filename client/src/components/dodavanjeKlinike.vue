@@ -12,9 +12,11 @@
             <input type="text" v-model=klinika.drzava  />
             <label for="telefon">Telefon</label>
             <input type="text" v-model=klinika.telefon />
+            <label for="email">Email</label>
+            <input type="text" v-model=klinika.email />
             <label for="opis">Opis</label>
             <input type="text" v-model=klinika.opis />
-            <button v-onclick="dodajKliniku">Dodaj kliniku</button>
+            <button @click="dodajKliniku">Dodaj kliniku</button>
             <p class="message">Zelite da odustanete? <router-link to="">Odustani</router-link></p>
           </form>
         </div>
@@ -128,6 +130,7 @@
   </style>
 
 <script>
+import axios from "axios";
   export default{
     data() {
       return{
@@ -138,13 +141,37 @@
           drzava: "",
           telefon: "",
           opis: "",
+          email: "",
           ocena: 0,
           adresa: "",
         }
       }
 
     },
-   
+    methods: {
+      dodajKliniku(){
+        if(this.klinika.naziv=="" || this.klinika.adresa=="" || this.klinika.grad=="" || this.klinika.drzava=="" ||
+         this.klinika.telefon=="" || this.klinika.opis=="" || this.klinika.email=="")
+         {
+          alert("Molimo vas popunite sva polja.");
+          return;
+         }
+
+        axios
+        .post("http://localhost:8080/klinika/dodajKlinikuUBazu", this.klinika)
+        .then(klinika => {
+          this.klinika.naziv="";
+          this.klinika.adresa="";
+          this.klinika.grad="";
+          this.klinika.drzava="";
+          this.klinika.telefon="";
+          this.klinika.opis="";
+          this.klinika.email="";
+          this.klinika.ocena=0;
+        })
+
+      }
+    }
   }
 
 </script>
