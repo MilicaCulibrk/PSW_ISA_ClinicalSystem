@@ -30,6 +30,9 @@ public class KlinikaController {
 		KlinikaDTO klinikadto = new KlinikaDTO();
 		try {
 			klinikadto = klinikaService.dodajKliniku(klinikaDTO);
+			if (klinikadto==null) {
+				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
 		} catch (ValidationException e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
