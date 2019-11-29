@@ -9,6 +9,7 @@ import pocetnaMedicinskeSestre from './components/pocetnaMedicinskeSestre.vue';
 import pocetnaLekara from './components/pocetnaLekara.vue';
 import pocetnaPacijenta from './components/pocetnaPacijenta.vue';
 
+
 export default [
     { path: '/', component: pocetna},
     { path: '/login', component: login},
@@ -16,7 +17,12 @@ export default [
     { path: '/dodajKliniku', component: dodajKliniku},
     { path: '/dodajAdministratora', component: dodajAdministratora},
     { path: '/pocetnaAdministratoraKlinike', component: pocetnaAdministratoraKlinike},
+
+    { path: '/pocetnaMedicinskeSestre', component: pocetnaMedicinskeSestre},
+   
+
+
     { path: '/pocetnaAdministratoraKC', component: pocetnaAdministratorKC},
-    { path: '/pocetnaLekara', component: pocetnaLekara},
+ 
     { path: '/pocetnaPacijenta', component: pocetnaPacijenta},
-]
+
