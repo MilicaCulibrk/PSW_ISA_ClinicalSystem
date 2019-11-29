@@ -156,10 +156,10 @@ import axios from "axios";
           alert("Molimo vas popunite sva polja.");
           return;
          }
-
         axios
         .post("http://localhost:8080/klinika/dodajKlinikuUBazu", this.klinika)
-        .then(klinika => {
+        .then(klinika => 
+        {
           this.klinika.naziv="";
           this.klinika.adresa="";
           this.klinika.grad="";
@@ -169,6 +169,10 @@ import axios from "axios";
           this.klinika.email="";
           this.klinika.ocena=0;
         })
+		.catch(error => {
+			alert("Klinika sa ovim email-om vec postoji.");
+		})
+        
 
       }
     }

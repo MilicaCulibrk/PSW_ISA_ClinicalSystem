@@ -20,7 +20,7 @@
             <input type="text" v-model=administrator.telefon />
             <label for="jmbg">Jmbg</label>
             <input type="text" v-model=administrator.jmbg />
-            <button v-onclick="dodajAdministatora">Dodaj administratora</button>
+            <button @click="dodajAdministratora">Dodaj administratora</button>
             <p class="message">Zelite da odustanete? <router-link to="">Odustani</router-link></p>
           </form>
         </div>
@@ -134,6 +134,7 @@
   </style>
 
 <script>
+import axios from "axios";
   export default{
     data() {
       return{
@@ -152,7 +153,34 @@
 
     },
     
-  
+    methods: {
+      dodajAdministratora(){
+        if(this.administrator.ime=="" || this.administrator.prezime=="" || this.administrator.email==""  || this.administrator.lozinka=="" ||
+         this.administrator.adresa=="" || this.administrator.grad=="" || this.administrator.drzava=="" ||
+         this.administrator.telefon=="" || this.administrator.jmbg=="")
+         {
+          alert("Molimo vas popunite sva polja.");
+          return;
+         }
+
+        axios
+        .post("http://localhost:8080/administrator/dodajAdministratoraUBazu", this.administrator)
+        .then(administrator => {
+          this.administrator.ime="";
+          this.administrator.prezime="";
+          this.administrator.email="";
+          this.administrator.lozinka="";
+          this.administrator.adresa="";
+          this.administrator.grad="";
+          this.administrator.drzava="";
+          this.administrator.telefon="";
+          this.administrator.jmbg="";
+        })
+        .catch(error => {
+			alert("Administrator sa ovim email-om vec postoji.");
+        });
+      }
+    }
   }
 
 </script>
