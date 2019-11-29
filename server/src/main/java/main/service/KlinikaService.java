@@ -21,7 +21,12 @@ public class KlinikaService {
 		klinika.setDrzava(klinikaDTO.getDrzava());
 		klinika.setTelefon(klinikaDTO.getTelefon());
 		klinika.setEmail(klinikaDTO.getEmail());
-	
+		
+		for (Klinika k : klinikaRepository.findAll()) {
+			if (klinika.getEmail().equals(k.getEmail())) {
+				return null;
+			}
+		}
 		klinikaRepository.save(klinika);
 		
 		KlinikaDTO klinikadto=new KlinikaDTO(klinika);
@@ -31,4 +36,6 @@ public class KlinikaService {
 	public Klinika findOne(Long id) {
 		return klinikaRepository.findById(id).orElseGet(null);
 	}
+	
+
 }

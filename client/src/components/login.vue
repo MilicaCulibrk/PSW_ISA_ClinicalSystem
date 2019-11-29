@@ -2,8 +2,8 @@
 <div class="login-page">
       <div class="form">
         <form class="login-form">
-           <label for="username">Korisnicko ime</label>
-           <input type="text" v-model="korisnik.korisnickoIme"  placeholder="Korisnicko ime" required id="ime">
+           <label for="email">Email</label>
+           <input type="text" v-model="korisnik.email"  placeholder="Email" required id="email">
           <label for="password">Lozinka</label>
            <input type="password" v-model="korisnik.lozinka"  placeholder="********" required id="lozinka">
           <button v-on:click="login">Prijavite se</button>
@@ -18,30 +18,52 @@ import axios from "axios";
 export default {
   data() {
     return {
-          korisnik: {korisnickoIme:'', lozinka:''},     
+          korisnik: {korisnickoIme:"", lozinka:""},     
      	  errormessage: ""
-       }
+       };
   },
   methods: {
 	   login(){
 	    	var temp = this;
-	        if (this.korisnik.korisnickoIme=="" || this.korisnik.lozinka==""){
+	        if (this.korisnik.email=="" || this.korisnik.lozinka==""){
 	        	alert('Morate uneti sva polja!');
           		return;
 	          }
-	           axios.post('http://localhost:8080/login/uloguj', this.korisnik)
-	          .then(function (response) {
-        console.log(response);  //vracam ga sa bc
-        alert('Uspesno ste se registrovali!');
-        temp.korisnik  = { ime : '', prezime:'', email: '', korisnickoIme:'', lozinka:'', telefon: '', grad: '' }
-    
+	          
+	  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!re.test(String(this.korisnik.email.trim()).toLowerCase())) {
+        alert('Mail adresa nije u odgovarajucem formatu!');
+        return;
+     
+      }axios
+        .post("http://localhost:8081/prijava/login", this.korisnik)
+        .then(korisnik => {
+          this.korisnik.email = "";
+          this.korisnik.lozinka = "";
+        
+        	if(korisnik.data.uloga == "ADMIN_KLINIKE"){
+        		this.$router.push("/pocetnaAdministratoraKlinike");
+        	}else if(korisnik.data.uloga == "ADMIN_CENTRA"){
+        		this.$router.push("/pocetnaAdministratoraKC");
+        	}else if(korisnik.data.uloga == "PACIJENT"){
+        		this.$router.push("/pocetnaPacijenta");
+        	}else if(korisnik.data.uloga == "MEDICINSKA_SESTRA"){
+        		this.$router.push("/pocetnaMedicinskeSestre");
+        	}else if(korisnik.data.uloga == "LEKAR"){
+        		this.$router.push("/pocetnaLekara");
+        	}else{
+        		alert('Ne postoji takav korisnik!');
+        	}
+      
+          
+          
         })
         .catch(error => {
-          console.log(error);
-  	 });
+          alert('Ne postoji takav korisnik!');
+        });
     }
-    },
- };
+  }
+};
 </script>
 
 
