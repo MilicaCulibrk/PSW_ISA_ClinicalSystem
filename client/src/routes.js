@@ -17,12 +17,7 @@ export default [
     { path: '/dodajKliniku', component: dodajKliniku},
     { path: '/dodajAdministratora', component: dodajAdministratora},
     { path: '/pocetnaAdministratoraKlinike', component: pocetnaAdministratoraKlinike},
-
     { path: '/pocetnaMedicinskeSestre', component: pocetnaMedicinskeSestre},
-   
-
-
-    { path: '/pocetnaAdministratoraKC', component: pocetnaAdministratorKC},
- 
-    { path: '/pocetnaPacijenta', component: pocetnaPacijenta},
-
+    { path: '/pocetnaAdministratorKC', component: pocetnaAdministratorKC},
+    { path: '/pocetnaPacijenta', component: pocetnaPacijenta}
+]

@@ -1,69 +1,34 @@
 <template>
-
-
-
-    
-    <div>
-
-            
-
-
-            <div id="viewport">
-                    <!-- Sidebar -->
-
-
-
+  <div>
+    <div id="viewport">
+      <div id="sidebar">
+        <header>
+          <a href="#">.</a>
+        </header>
+                      
+        <ul class="nav">
+          <a href="#">
+              <i v-on:click="otvoriFormu" >    PROFIL          
+              </i>
+          </a>
+          <a href="#">
+              <i class="zmdi zmdi-view-dashboard">LISTA KLINIKA</i>
+          </a>
+          <a href="#">
+             <i class="zmdi zmdi-link">  DEFINISANJE PREGLEDA</i> 
+          </a>
+        </ul>
                     
-                    <div id="sidebar">
-                      <header>
-                        <a href="#">.</a>
-                      </header>
-                      <ul class="nav">
-                            
-                                    <a href="#">
-                                      <i v-on:click="otvoriFormu()" >    PROFIL          
-                                   </i>
-                                   
-                                  
-                                   
-                                  
-                                
-                                  </li>
-                                </a>
-                          <a href="#">
-                            <i class="zmdi zmdi-view-dashboard"></i>
+      </div>
 
-                             LISTA KLINIKA
-                          </a>
-                        </li>
-                       
-                          <a href="#">
-                            <i class="zmdi zmdi-link"></i> 
+      <div id="content">
+        <div class="container-fluid">
+          <h1 style="color: #b3b3b3;">Administrator Klinike - {{ korisnik.ime }} {{ korisnik.prezime }} </h1>
+        </div>
+      </div>
+    </div>
 
-
-                            DEFINISANJE PREGLEDA
-                          </a>
-                        </li>
-                       
-                        
-                       
-                
-                       
-                      </ul>
-                    </div>
-                    <!-- Content -->
-                    <div id="content">
-                            
-                      <div class="container-fluid">
-                        <h1 style="color: #b3b3b3;">Administrator Klinike</h1>
-                        
-                      </div>
-                    </div>
-                  </div>
-
-
-
-                  <form   class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+                  <form v-if="prikaz"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
                         <div>
                                 
                             
@@ -71,12 +36,7 @@
                             
                                 
                                 <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
-                            
-                                 
-                                  
-                            
-                            
-                            
+
                                   <div class="form-group">
                             
                                     <div class="card-body mx-4 mt-4">
@@ -85,19 +45,19 @@
                                         <div class="col">
                                         <div class="md-form">
                                           <label for="Form-username" style="color: #b3b3b3;">E-mail</label>
-                                          <input type="text" id="Form-username" class="form-control">
+                                          <input type="text" v-model="korisnik.email" id="Form-username" class="form-control" disabled>
                                           
                                           <label for="Form-ime" style="color: #b3b3b3;">Ime</label>
-                                          <input type="text" id="Form-ime" class="form-control" >
+                                          <input type="text" v-model="korisnik.ime" id="Form-ime" class="form-control" :disabled="!izmeni">
                                           
                                           <label for="Form-phone" style="color: #b3b3b3;">Telefon</label>
-                                          <input type="text" id="Form-phone" class="form-control">
+                                          <input type="text" v-model="korisnik.telefon" id="Form-phone" class="form-control" :disabled="!izmeni">
                                           
                                           <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
-                                          <input type="text" id="Form-email4" class="form-control" >
+                                          <input type="text" v-model="korisnik.adresa" id="Form-email4" class="form-control" :disabled="!izmeni">
 
                                           <label for="Form-email4" style="color: #b3b3b3;">JMBG</label>
-                                          <input type="text" id="Form-email4" class="form-control">
+                                          <input type="text" v-model="korisnik.jmbg" id="Form-email4" class="form-control" disabled>
                                         
                                           
                             
@@ -107,18 +67,18 @@
                                         <div class="md-form pb-3">
                             
                                           <label for="Form-city" style="color: #b3b3b3;">Lozinka</label>
-                                          <input type="text" id="Form-city" class="form-control">
+                                          <input type="text" v-model="korisnik.lozinka" id="Form-city" class="form-control" disabled>
                                           
                                           <label for="Form-prezime" style="color: #b3b3b3;">Prezime</label>
-                                          <input type="text" id="Form-prezime" class="form-control" >
+                                          <input type="text" v-model="korisnik.prezime" id="Form-prezime" class="form-control" :disabled="!izmeni">
                             
                                           
                                           <label for="Form-city" style="color: #b3b3b3;">Grad</label>
-                                          <input type="text" id="Form-city" class="form-control">
+                                          <input type="text" v-model="korisnik.grad" id="Form-city" class="form-control" :disabled="!izmeni">
                             
                                       
                                           <label for="Form-city" style="color: #b3b3b3;">Drzava</label>
-                                          <input type="text" id="Form-city" class="form-control" >
+                                          <input type="text" v-model="korisnik.drzava" id="Form-city" class="form-control" :disabled="!izmeni">
                                          
                                        
 
@@ -130,11 +90,11 @@
                             
                                       <div class="text-center mb-4 mt-4">
                                         <template>
-                                        <button type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " >Izmeni</button>
+                                        <button  v-if="!izmeni" type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="izmena">Izmeni</button>
                                         </template>
                                         <template>
-                                        <button type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " >Sačuvaj</button>
-                                        <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " >Odustani</button>
+                                        <button v-if="izmeni" type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="sacuvaj">Sacuvaj</button>
+                                        <button v-if="izmeni" type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustani">Odustani</button>
                                         </template>
                                       </div>
                             
@@ -153,22 +113,69 @@
                   
 </div>
 
-
-
-
-
 </template>
 
 <script>
+import axios from 'axios'
     export default {
  data() {
-    prikaz = false;
+     return {
+      korisnik: {},
+      prikaz:false,
+      izmeni:false
+      }
   },
   methods: {
         otvoriFormu(){
             this.prikaz=!this.prikaz;
-        }
+        },
+        izmena() {
+        this.izmeni = true
+        },
+      odustani() {
+        this.izmeni = false
+        axios
+        .get("http://localhost:8081/adminKlinike/get")
+        .then(adminKlinike =>{
+          this.korisnik = adminKlinike.data;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+      },
+      sacuvaj() {
+      if(this.korisnik.ime === "" || this.korisnik.prezime === "" || this.korisnik.adresa === "" || this.korisnik.grad === "" || this.korisnik.drzava === ""
+      || this.korisnik.telefon === "") {
+        alert("Polja ne smeju biti prazna!");
+        return;
+      }
+      var rex = /^\+381\/6[0-9]-?[0-9]+(-[0-9]+)?$/;
+      if (!rex.test(String(this.korisnik.telefon.trim()))) {
+        alert("Broj telefona treba da bude oblika +381/65-504205");
+
+        return;
+      }
+      axios
+      .put("http://localhost:8081/adminKlinike/izmeni", this.korisnik)
+      .then(adminKlinike =>{
+        this.korisnik = adminKlinike.data;
+        this.izmeni = false;
+      })
+      .catch(error => {
+          console.log(error)
+      });
     }
+    },
+ mounted() {
+      axios
+      .get("http://localhost:8081/adminKlinike/get")
+      .then(adminKlinike =>{
+        this.korisnik = adminKlinike.data;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+  }
 };
 
 </script>
