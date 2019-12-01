@@ -19,7 +19,7 @@ import main.service.KlinikaService;
 
 @RestController
 @RequestMapping(value = "klinika")
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:8080")
 public class KlinikaController {
 	@Autowired
 	private KlinikaService klinikaService;

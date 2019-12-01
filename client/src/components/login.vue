@@ -19,7 +19,6 @@ export default {
   data() {
     return {
           korisnik: {korisnickoIme:"", lozinka:""},     
-     	  errormessage: ""
        };
   },
   methods: {
@@ -38,15 +37,11 @@ export default {
       }axios
         .post("http://localhost:8081/prijava/login", this.korisnik)
         .then(korisnik => {
-          this.korisnik.email = "";
-          this.korisnik.lozinka = "";
         
         	if(korisnik.data.uloga == "ADMIN_KLINIKE"){
         		this.$router.push("/pocetnaAdministratoraKlinike");
         	}else if(korisnik.data.uloga == "ADMIN_CENTRA"){
-        		this.$router.push("/pocetnaAdministratoraKC");
-        	}else if(korisnik.data.uloga == "PACIJENT"){
-        		this.$router.push("/pocetnaPacijenta");
+        		this.$router.push("/pocetnaAdministratorKC");
         	}else if(korisnik.data.uloga == "MEDICINSKA_SESTRA"){
         		this.$router.push("/pocetnaMedicinskeSestre");
         	}else if(korisnik.data.uloga == "LEKAR"){

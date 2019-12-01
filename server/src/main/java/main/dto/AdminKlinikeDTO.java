@@ -2,7 +2,7 @@ package main.dto;
 
 import main.model.AdministratorKlinike;
 
-public class AdministratorDTO {
+public class AdminKlinikeDTO {
 	private Long id;
 
 	private String ime;
@@ -23,7 +23,7 @@ public class AdministratorDTO {
 	
    private String jmbg;
 
-public AdministratorDTO(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
+public AdminKlinikeDTO(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
 		String drzava, String telefon, String jmbg) {
 	super();
 	this.id = id;
@@ -38,7 +38,7 @@ public AdministratorDTO(Long id, String ime, String prezime, String email, Strin
 	this.jmbg = jmbg;
 }
 
-public AdministratorDTO(AdministratorKlinike admin) {
+public AdminKlinikeDTO(AdministratorKlinike admin) {
 	super();
 	this.id = admin.getId();
 	this.ime = admin.getIme();
@@ -52,7 +52,7 @@ public AdministratorDTO(AdministratorKlinike admin) {
 	this.jmbg = admin.getJmbg();
 }
 
-public AdministratorDTO() {
+public AdminKlinikeDTO() {
 	super();
 }
 

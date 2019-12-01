@@ -164,7 +164,7 @@ import axios from "axios";
          }
 
         axios
-        .post("http://localhost:8080/administrator/dodajAdministratoraUBazu", this.administrator)
+        .post("http://localhost:8081/adminKlinike/dodaj", this.administrator)
         .then(administrator => {
           this.administrator.ime="";
           this.administrator.prezime="";

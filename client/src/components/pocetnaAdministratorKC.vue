@@ -30,7 +30,7 @@
     </ul>
     <div class="navbar-nav ml-auto">
        <li class="nav-item">
-	        <router-link to="/pocetna"><font color="white">ODJAVA</font></router-link>
+	        <router-link to="/pocetnaAdministratorKC"><font color="white">ODJAVA</font></router-link>
 	      </li>
     </div>
   </div>

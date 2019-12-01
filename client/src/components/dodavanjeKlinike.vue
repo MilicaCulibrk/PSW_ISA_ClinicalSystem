@@ -157,7 +157,7 @@ import axios from "axios";
           return;
          }
         axios
-        .post("http://localhost:8080/klinika/dodajKlinikuUBazu", this.klinika)
+        .post("http://localhost:8081/klinika/dodajKlinikuUBazu", this.klinika)
         .then(klinika => 
         {
           this.klinika.naziv="";
