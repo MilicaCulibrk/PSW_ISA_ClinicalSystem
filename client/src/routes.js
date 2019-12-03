@@ -19,5 +19,6 @@ export default [
     { path: '/pocetnaAdministratoraKlinike', component: pocetnaAdministratoraKlinike},
     { path: '/pocetnaMedicinskeSestre', component: pocetnaMedicinskeSestre},
     { path: '/pocetnaAdministratorKC', component: pocetnaAdministratorKC},
-    { path: '/pocetnaPacijenta', component: pocetnaPacijenta}
+    { path: '/pocetnaPacijenta', component: pocetnaPacijenta},
+    { path: '/pocetnaLekara', component: pocetnaLekara}
 ]
