@@ -1,7 +1,6 @@
 package main.dto;
 
 import main.model.AdministratorKlinike;
-import main.model.Klinika;
 
 public class AdminKlinikeDTO {
 	private Long id;
@@ -24,9 +23,10 @@ public class AdminKlinikeDTO {
 	
    private String jmbg;
 
-   private Klinika klinika;
+   private Long idKlinike;
+   
 public AdminKlinikeDTO(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
-		String drzava, String telefon, String jmbg, Klinika klinika) {
+		String drzava, String telefon, String jmbg, Long idKlinike) {
 	super();
 	this.id = id;
 	this.ime = ime;
@@ -38,7 +38,7 @@ public AdminKlinikeDTO(Long id, String ime, String prezime, String email, String
 	this.drzava = drzava;
 	this.telefon = telefon;
 	this.jmbg = jmbg;
-	this.klinika = klinika;
+	this.idKlinike = idKlinike;
 }
 
 public AdminKlinikeDTO(AdministratorKlinike admin) {
@@ -53,17 +53,19 @@ public AdminKlinikeDTO(AdministratorKlinike admin) {
 	this.drzava = admin.getDrzava();
 	this.telefon = admin.getTelefon();
 	this.jmbg = admin.getJmbg();
-	this.klinika = admin.getKlinika();
+	this.idKlinike = admin.klinika.getId();
 }
 
 
 
-public Klinika getKlinika() {
-	return klinika;
+
+
+public Long getIdKlinike() {
+	return idKlinike;
 }
 
-public void setKlinika(Klinika klinika) {
-	this.klinika = klinika;
+public void setIdKlinike(Long idKlinike) {
+	this.idKlinike = idKlinike;
 }
 
 public AdminKlinikeDTO() {

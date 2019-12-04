@@ -44,6 +44,77 @@
       </div>
   </template>
   
+
+
+<script >
+
+import axios from "axios";
+  export default{
+    data() {
+      return{
+        klinike: {},
+        administrator: {
+          ime: "",
+          prezime: "",
+          email: "",
+          lozinka: "",
+          adresa: "",
+          grad: "",
+          drzava: "",
+          telefon: "",
+          jmbg: "",
+          idKlinike: "",
+        }
+      }
+
+    },
+    
+    methods: {
+      dodajAdministratora(){
+        if(this.administrator.ime=="" || this.administrator.prezime=="" || this.administrator.email==""  || this.administrator.lozinka=="" ||
+         this.administrator.adresa=="" || this.administrator.grad=="" || this.administrator.drzava=="" ||
+         this.administrator.telefon=="" || this.administrator.jmbg=="")
+         {
+          alert("Molimo vas popunite sva polja.");
+          return;
+         }
+
+        axios
+        .post("http://localhost:8081/adminKlinike/dodaj", this.administrator)
+        .then(administrator => {
+          this.administrator.ime="";
+          this.administrator.prezime="";
+          this.administrator.email="";
+          this.administrator.lozinka="";
+          this.administrator.adresa="";
+          this.administrator.grad="";
+          this.administrator.drzava="";
+          this.administrator.telefon="";
+          this.administrator.jmbg="";
+        })
+        .catch(error => {
+			alert("Administrator sa ovim email-om vec postoji.");
+        });
+      },
+	  izabranaKlinika(klinika){
+		 this.administrator.idKlinike = klinika.id;
+	  }
+    },
+    mounted() {
+      axios
+      .get('http://localhost:8081/klinika/izlistaj')
+      .then(klinika =>{
+		        this.klinike = klinika.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		});
+  	}
+  }
+
+</script>
+
+
   <style scoped>
   @import url(https://fonts.googleapis.com/css?family=Roboto:300);
   
@@ -149,70 +220,3 @@
   }
   
   </style>
-
-<script >
-
-import axios from "axios";
-  export default{
-    data() {
-      return{
-        klinike: {},
-        administrator: {
-          ime: "",
-          prezime: "",
-          email: "",
-          lozinka: "",
-          adresa: "",
-          grad: "",
-          drzava: "",
-          telefon: "",
-          jmbg: "",
-        }
-      }
-
-    },
-    
-    methods: {
-      dodajAdministratora(){
-        if(this.administrator.ime=="" || this.administrator.prezime=="" || this.administrator.email==""  || this.administrator.lozinka=="" ||
-         this.administrator.adresa=="" || this.administrator.grad=="" || this.administrator.drzava=="" ||
-         this.administrator.telefon=="" || this.administrator.jmbg=="")
-         {
-          alert("Molimo vas popunite sva polja.");
-          return;
-         }
-
-        axios
-        .post("http://localhost:8081/adminKlinike/dodaj", this.administrator)
-        .then(administrator => {
-          this.administrator.ime="";
-          this.administrator.prezime="";
-          this.administrator.email="";
-          this.administrator.lozinka="";
-          this.administrator.adresa="";
-          this.administrator.grad="";
-          this.administrator.drzava="";
-          this.administrator.telefon="";
-          this.administrator.jmbg="";
-        })
-        .catch(error => {
-			alert("Administrator sa ovim email-om vec postoji.");
-        });
-      },
-	  izabranaKlinika(klinika){
-		 this.administrator.klinika = klinika;
-	  }
-    },
-    mounted() {
-      axios
-      .get('http://localhost:8081/klinika/izlistaj')
-      .then(klinika =>{
-		        this.klinike = klinika.data;
-		      })
-		      .catch(error => {
-		          console.log(error)
-		});
-  	}
-  }
-
-</script>

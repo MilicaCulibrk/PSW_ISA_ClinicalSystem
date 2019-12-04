@@ -10,12 +10,16 @@ import main.SendEmailTLS;
 import main.dto.AdminKlinikeDTO;
 import main.model.AdministratorKlinike;
 import main.repository.AdminKlinikeRepository;
+import main.repository.KlinikaRepository;
 
 @Service
 public class AdminKlinikeService {
+	
 	@Autowired
 	private AdminKlinikeRepository adminKlinikeRepository;
 	
+	@Autowired
+	private KlinikaRepository klinikaRepository;
 	public AdministratorKlinike findOne(Long id) {
 		return adminKlinikeRepository.findById(id).orElseGet(null);
 	}
@@ -33,7 +37,7 @@ public class AdminKlinikeService {
 		ak.setEmail(administratorDTO.getEmail());
 		ak.setJmbg(administratorDTO.getJmbg());
 		ak.setLozinka(administratorDTO.getLozinka());
-		ak.setKlinikaId(administratorDTO.getKlinika().getId());
+		ak.setKlinika(klinikaRepository.getOne(administratorDTO.getIdKlinike()));
 		for (AdministratorKlinike k : adminKlinikeRepository.findAll()) {
 			if (ak.getEmail().equals(k.getEmail())) {
 				return null;
