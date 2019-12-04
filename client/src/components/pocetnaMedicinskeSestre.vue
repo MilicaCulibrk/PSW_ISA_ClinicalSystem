@@ -16,7 +16,7 @@
 	                </i>                   
 	              </a>
 	              <a href="#">
-	                <i class="zmdi zmdi-view-dashboard"> LISTA KLINIKA
+	                <i v-on:click="otvoriListuKlinika"> LISTA KLINIKA
 	                </i>                   
 	              </a>	               
 	           </ul>
@@ -30,7 +30,7 @@
 	     </div>
 	
       <form   class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
-        <div>	                    
+        <div v-if="prikaz">	                    
           <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
             <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	                    
               <div class="form-group">
@@ -100,6 +100,16 @@
         
           </div>
           </div>
+ 		<div v-if="prikazKlinika">	                    
+          <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+				<li v-for="k,i in klinike.length">
+ 					<a href="#" class="list-group-item list-group-item-action">{{klinike[i].naziv}}, {{klinike[i].adresa}}</a>		
+				</li>        
+          </div>
+          </div>        
+         
+         </div>
         </form>
 
                   
@@ -117,13 +127,16 @@ export default {
 	data() {
 		return{
 			korisnik: {},
+			klinike: {},
 			prikaz: false,
 			izmeni: false,
+			prikazKlinika: false,
 		}
 	},
 	methods: {
 		otvoriFormu(){
 			this.prikaz=!this.prikaz
+			this.prikazKlinika=false
 		},
 		izmena(){
 			this.izmeni = true
@@ -160,6 +173,18 @@ export default {
             .catch(error => {
                 console.log(error)
             });
+	  	},
+	  	otvoriListuKlinika(){
+	  		this.prikaz=false
+	  		this.prikazKlinika=!this.prikazKlinika
+	  	      axios
+		      .get('http://localhost:8081/klinika/izlistaj')
+		      .then(klinika =>{
+		        this.klinike = klinika.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
 	  	}
 	},
 	mounted() {

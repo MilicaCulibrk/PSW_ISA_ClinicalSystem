@@ -44,6 +44,7 @@ public class KlinikaService {
 		return klinikaRepository.findById(id).orElseGet(null);
 	}
 
+
 	public List<Klinika> findAll() {
 		// TODO Auto-generated method stub
 		return klinikaRepository.findAll();
