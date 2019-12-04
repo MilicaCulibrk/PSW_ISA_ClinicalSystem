@@ -20,9 +20,26 @@
             <input type="text" v-model=administrator.telefon />
             <label for="jmbg">Jmbg</label>
             <input type="text" v-model=administrator.jmbg />
+            <label for="klinika">Klinika</label>
+            <div class="listbox-area">
+                <div class="left-area">
+                  <ul id="ss_elem_list"
+                      tabindex="0"
+                      role="listbox"
+                      aria-labelledby="ss_elem">
+				<li v-for="k,i in klinike.length">
+ 					<button type="button" href="#" class="list-group-item list-group-item-action" v-on:click="izabranaKlinika(klinike[i])">{{klinike[i].naziv}}</button>		
+				</li>  
+                    
+                  </ul>
+                </div>
+              </div>
+            
             <button @click="dodajAdministratora">Dodaj administratora</button>
             <p class="message">Zelite da odustanete? <router-link to="">Odustani</router-link></p>
           </form>
+
+
         </div>
       </div>
   </template>
@@ -133,11 +150,13 @@
   
   </style>
 
-<script>
+<script >
+
 import axios from "axios";
   export default{
     data() {
       return{
+        klinike: {},
         administrator: {
           ime: "",
           prezime: "",
@@ -179,8 +198,21 @@ import axios from "axios";
         .catch(error => {
 			alert("Administrator sa ovim email-om vec postoji.");
         });
-      }
-    }
+      },
+	  izabranaKlinika(klinika){
+		 this.administrator.klinika = klinika;
+	  }
+    },
+    mounted() {
+      axios
+      .get('http://localhost:8081/klinika/izlistaj')
+      .then(klinika =>{
+		        this.klinike = klinika.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		});
+  	}
   }
 
 </script>

@@ -1,5 +1,8 @@
 package main.controller;
 import org.springframework.http.MediaType;
+
+import java.util.List;
+
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +43,7 @@ public class KlinikaController {
 		return new ResponseEntity<>(klinikadto, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/postojecaKlinika")
+	@GetMapping(value = "/pronadji")
 	public ResponseEntity<KlinikaDTO> getPostojecaKlinika() {
 		
 		Klinika klinika = klinikaService.findOne((long) 1);
@@ -48,5 +51,15 @@ public class KlinikaController {
 		KlinikaDTO klinikaDTO = new KlinikaDTO(klinika);
 		
 		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/izlistaj")
+	public ResponseEntity<List<Klinika>> getIzlistaj() {
+		
+		List<Klinika> klinika = klinikaService.findAll();
+		
+		
+		
+		return new ResponseEntity<>(klinika, HttpStatus.OK);
 	}
 }

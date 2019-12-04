@@ -22,25 +22,26 @@ public class AdminKlinikeService {
 	
 	
 	public AdminKlinikeDTO dodajAdministratora(AdminKlinikeDTO administratorDTO) {
-		AdministratorKlinike klinika = new AdministratorKlinike();
+		AdministratorKlinike ak = new AdministratorKlinike();
 		
-		klinika.setIme(administratorDTO.getIme());
-		klinika.setPrezime(administratorDTO.getPrezime());
-		klinika.setAdresa(administratorDTO.getAdresa());
-		klinika.setGrad(administratorDTO.getGrad());
-		klinika.setDrzava(administratorDTO.getDrzava());
-		klinika.setTelefon(administratorDTO.getTelefon());
-		klinika.setEmail(administratorDTO.getEmail());
-		klinika.setJmbg(administratorDTO.getJmbg());
-		klinika.setLozinka(administratorDTO.getLozinka());
+		ak.setIme(administratorDTO.getIme());
+		ak.setPrezime(administratorDTO.getPrezime());
+		ak.setAdresa(administratorDTO.getAdresa());
+		ak.setGrad(administratorDTO.getGrad());
+		ak.setDrzava(administratorDTO.getDrzava());
+		ak.setTelefon(administratorDTO.getTelefon());
+		ak.setEmail(administratorDTO.getEmail());
+		ak.setJmbg(administratorDTO.getJmbg());
+		ak.setLozinka(administratorDTO.getLozinka());
+		ak.setKlinikaId(administratorDTO.getKlinika().getId());
 		for (AdministratorKlinike k : adminKlinikeRepository.findAll()) {
-			if (klinika.getEmail().equals(k.getEmail())) {
+			if (ak.getEmail().equals(k.getEmail())) {
 				return null;
 			}
 		}
-		adminKlinikeRepository.save(klinika);
-		SendEmailTLS.main(administratorDTO.getEmail());
-		AdminKlinikeDTO administratordto =new AdminKlinikeDTO(klinika);
+		adminKlinikeRepository.save(ak);
+		//SendEmailTLS.main(administratorDTO.getEmail());
+		AdminKlinikeDTO administratordto =new AdminKlinikeDTO(ak);
 		return administratordto;
 	}
 	

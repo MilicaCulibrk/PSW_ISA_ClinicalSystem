@@ -36,6 +36,11 @@ public class KlinikaService {
 	public Klinika findOne(Long id) {
 		return klinikaRepository.findById(id).orElseGet(null);
 	}
+
+	public java.util.List<Klinika> findAll() {
+		// TODO Auto-generated method stub
+		return klinikaRepository.findAll();
+	}
 	
 
 }
