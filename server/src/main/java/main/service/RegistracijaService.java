@@ -11,6 +11,7 @@ import main.dto.RegistracijaDTO;
 import main.model.AdministratorKlinickogCentra;
 import main.model.Pacijent;
 import main.model.ZahtevZaRegistraciju;
+import main.repository.PacijentRepository;
 //import main.repository.PacijentRepository;
 import main.repository.ZahtevZaRegRepository;
 
@@ -21,8 +22,8 @@ public class RegistracijaService {
 	 private PacijentService pacijentService;
 	 
 
-		//@Autowired
-		//private PacijentRepository pacijentRepository;
+		@Autowired
+		private PacijentRepository pacijentRepository;
 		
 		@Autowired
 		private AdminKCService adminKCService;
@@ -30,7 +31,7 @@ public class RegistracijaService {
 
 
 	
-	/*public void register(RegistracijaDTO pacijentDTO) {
+	public void register(PacijentDTO pacijentDTO) {
 		
 		Pacijent pacijent = new Pacijent();
 		Pacijent pacijentPostoji = pacijentRepository.findByEmail(pacijentDTO.getEmail());
@@ -55,7 +56,7 @@ public class RegistracijaService {
 			}
 		}
 
-	} */
+	} 
 	
 
 	
