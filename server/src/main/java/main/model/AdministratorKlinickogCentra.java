@@ -1,5 +1,9 @@
 package main.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class AdministratorKlinickogCentra {
@@ -49,10 +54,13 @@ public class AdministratorKlinickogCentra {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "klinickiCentar_id", referencedColumnName = "id")
    public KlinickiCentar klinickiCentar;
-   
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "adminKC")
+	private Set<ZahtevZaRegistraciju> zahtevi;
+	
    
    public AdministratorKlinickogCentra(Long id, String ime, String prezime, String email, String lozinka,
-			String adresa, String grad, String drzava, String telefon, String jmbg, KlinickiCentar klinickiCentar) {
+			String adresa, String grad, String drzava, String telefon, String jmbg) {
 		super();
 		this.id = id;
 		this.ime = ime;
@@ -64,7 +72,7 @@ public class AdministratorKlinickogCentra {
 		this.drzava = drzava;
 		this.telefon = telefon;
 		this.jmbg = jmbg;
-		this.klinickiCentar = klinickiCentar;
+		this.zahtevi = new HashSet<>();
 	}
 
 	public AdministratorKlinickogCentra() {
@@ -159,6 +167,16 @@ public void setJmbg(String jmbg) {
 
 public void setKlinickiCentar(KlinickiCentar klinickiCentar) {
 	this.klinickiCentar = klinickiCentar;
+}
+
+
+
+public Set<ZahtevZaRegistraciju> getZahtevi() {
+	return zahtevi;
+}
+
+public void setZahtevi(Set<ZahtevZaRegistraciju> zahtevi) {
+	this.zahtevi = zahtevi;
 }
 
 @Override

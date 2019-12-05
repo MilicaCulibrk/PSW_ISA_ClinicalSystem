@@ -17,7 +17,7 @@
             <label for="opis">Opis</label>
             <input type="text" v-model=klinika.opis />
             <button @click="dodajKliniku">Dodaj kliniku</button>
-            <p class="message">Zelite da odustanete? <router-link to="">Odustani</router-link></p>
+            <p class="message">Zelite da odustanete? <router-link to="/pocetnaAdministratorKC">Odustani</router-link></p>
           </form>
         </div>
       </div>

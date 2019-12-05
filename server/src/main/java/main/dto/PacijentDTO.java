@@ -15,10 +15,11 @@ public class PacijentDTO {
    private String grad;
    private String drzava;
    private String telefon;
+   private String jmbg;
 
    
    public PacijentDTO(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
-		String drzava, String telefon) {
+		String drzava, String telefon, String jmbg) {
 	super();
 	this.id = id;
 	this.ime = ime;
@@ -29,6 +30,7 @@ public class PacijentDTO {
 	this.grad = grad;
 	this.drzava = drzava;
 	this.telefon = telefon;
+	this.jmbg = jmbg;
 	
    }
 	
@@ -43,6 +45,7 @@ public class PacijentDTO {
 		this.grad = pacijent.getGrad();
 		this.drzava = pacijent.getDrzava();
 		this.telefon = pacijent.getTelefon();
+		this.jmbg = pacijent.getJmbg();
 	}
 
 	public Long getId() {
@@ -115,6 +118,14 @@ public class PacijentDTO {
 
 	public void setTelefon(String telefon) {
 		this.telefon = telefon;
+	}
+
+	public String getJmbg() {
+		return jmbg;
+	}
+
+	public void setJmbg(String jmbg) {
+		this.jmbg = jmbg;
 	}
    
 	

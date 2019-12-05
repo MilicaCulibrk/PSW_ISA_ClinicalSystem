@@ -15,6 +15,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import main.dto.PacijentDTO;
+
 @Entity
 public class Pacijent {
 	
@@ -72,10 +74,24 @@ public Pacijent() {
 	// TODO Auto-generated constructor stub
 }
 
+public Pacijent(PacijentDTO pacijentDTO) {
+	
+	this.id = pacijentDTO.getId();
+	this.ime = pacijentDTO.getIme();
+	this.prezime = pacijentDTO.getPrezime();
+	this.email = pacijentDTO.getEmail();
+	this.lozinka = pacijentDTO.getLozinka();
+	this.adresa = pacijentDTO.getAdresa();
+	this.grad = pacijentDTO.getGrad();
+	this.drzava = pacijentDTO.getDrzava();
+	this.telefon = pacijentDTO.getTelefon();
+	this.jmbg = pacijentDTO.getJmbg();
+}
+
 public Pacijent(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
 		String drzava, String telefon, String jmbg, Collection<Pregled> pregled, Collection<Operacija> operacija,
 		ZdravstveniKarton zdravstveniKarton, Collection<Klinika> klinika, Collection<Izvestaj> izvestaj) {
-	super();
+
 	this.id = id;
 	this.ime = ime;
 	this.prezime = prezime;

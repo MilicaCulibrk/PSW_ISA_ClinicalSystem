@@ -21,7 +21,7 @@
             <label for="jmbg">Jmbg</label>
             <input type="text" v-model=administrator.jmbg />
             <button @click="dodajAdministratora">Dodaj administratora</button>
-            <p class="message">Zelite da odustanete? <router-link to="">Odustani</router-link></p>
+            <p class="message">Zelite da odustanete? <router-link to="/pocetnaAdministratorKC">Odustani</router-link></p>
           </form>
         </div>
       </div>
