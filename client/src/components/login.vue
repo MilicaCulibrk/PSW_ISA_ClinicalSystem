@@ -38,7 +38,7 @@ export default {
         .post("http://localhost:8081/prijava/login", this.korisnik)
         .then(korisnik => {
         
-        	if(korisnik.data.uloga == "ADMIN_KLINIKE"){
+          if(korisnik.data.uloga == "ADMIN_KLINIKE"){
         		this.$router.push("/pocetnaAdministratoraKlinike");
         	}else if(korisnik.data.uloga == "ADMIN_CENTRA"){
         		this.$router.push("/pocetnaAdministratorKC");
@@ -46,6 +46,8 @@ export default {
         		this.$router.push("/pocetnaMedicinskeSestre");
         	}else if(korisnik.data.uloga == "LEKAR"){
         		this.$router.push("/pocetnaLekara");
+        	}else if(korisnik.data.uloga == "PACIJENT"){
+        		this.$router.push("/pocetnaPacijenta");
         	}else{
         		alert('Ne postoji takav korisnik!');
         	}
