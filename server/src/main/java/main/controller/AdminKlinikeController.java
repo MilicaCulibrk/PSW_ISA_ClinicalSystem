@@ -45,7 +45,7 @@ public class AdminKlinikeController {
 	@GetMapping(value = "/get")
 	public ResponseEntity<AdminKlinikeDTO> getAdmina() {
 		
-		AdministratorKlinike adminKlinike = adminKlinikeService.findOne((long) 2);
+		AdministratorKlinike adminKlinike = adminKlinikeService.findOne((long) 1);
 		
 		AdminKlinikeDTO adminKlinikeDTO = new AdminKlinikeDTO(adminKlinike);
 		

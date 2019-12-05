@@ -22,7 +22,7 @@ public class RegistracijaController {
 	@PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public void Register(@RequestBody PacijentDTO korisnik) {
 		
-		registracijaService.posaljiZahtevAdminuKC(korisnik);
+		//registracijaService.posaljiZahtevAdminuKC(korisnik);
 		//registracijaService.register(korisnik);
 	}
 

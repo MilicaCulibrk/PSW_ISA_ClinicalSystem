@@ -258,8 +258,8 @@ import axios from 'axios'
              this.prikazZ = true;
                axios
         .get("http://localhost:8081/zahtevZaReg/getPacijenta/"+ id)
-        .then(pacijent =>{
-          this.pacijent = pacijent.data;
+        .then(zahtev =>{
+          this.pacijent = zahtev.data;
       })
       .catch(error => {
           console.log(error)

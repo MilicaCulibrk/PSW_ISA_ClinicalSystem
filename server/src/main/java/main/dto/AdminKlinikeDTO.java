@@ -56,9 +56,9 @@ public AdminKlinikeDTO(AdministratorKlinike admin) {
 	this.idKlinike = admin.klinika.getId();
 }
 
-
-
-
+public AdminKlinikeDTO() {
+	super();
+}
 
 public Long getIdKlinike() {
 	return idKlinike;
@@ -68,9 +68,7 @@ public void setIdKlinike(Long idKlinike) {
 	this.idKlinike = idKlinike;
 }
 
-public AdminKlinikeDTO() {
-	super();
-}
+
 
 public Long getId() {
 	return id;

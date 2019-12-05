@@ -66,7 +66,7 @@ export default {
           this.korisnik["lozinka"] = this.lozinka;
 
           axios
-          .post("http://localhost:8081/registracija/register", this.korisnik)
+          .post("http://localhost:8081/zahtevZaReg/posalji", this.korisnik)
           .then(() => {
               alert('Uspesna registracija!');
               this.$router.push("/login")
