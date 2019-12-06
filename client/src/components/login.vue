@@ -46,6 +46,8 @@ export default {
         		this.$router.push("/pocetnaMedicinskeSestre");
         	}else if(korisnik.data.uloga == "LEKAR"){
         		this.$router.push("/pocetnaLekara");
+        	}else if(korisnik.data.uloga == "PACIJENT"){
+        		this.$router.push("/pocetnaPacijenta");
         	}else{
         		alert('Ne postoji takav korisnik!');
         	}
