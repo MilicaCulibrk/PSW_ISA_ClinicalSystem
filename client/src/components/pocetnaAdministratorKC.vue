@@ -179,7 +179,14 @@
                             </div>
                           </div>
                           
-                
+                          <div class="text-center mb-4 mt-4">
+                                        <template>
+                                        <button v-if="!obradjen"  type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="">Prihvati</button>
+                                        </template>
+                                        <template>
+                                        <button v-if="!obradjen"   type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odbijZahtev">Odbij</button>
+                                        </template>
+                                      </div>
                 
   
                 
@@ -196,7 +203,7 @@
     </form>
        <form v-if="prikaz1"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
         
-         <option v-on:click="prikaziZahtev(zahtev.id)" class="card border-info" style="font-size:25px; text-align: center; position:relative;  left: 165px;  height: 3rem; width: 30rem; top: 20px"
+         <option v-on:click="prikaziZahtev(zahtev)" class="card border-info" style="font-size:25px; text-align: center; position:relative;  left: 165px;  height: 3rem; width: 30rem; top: 20px"
                     v-for="zahtev in zahtevi"
                     :value="zahtev.id"
                     :key="zahtev.id"
@@ -228,7 +235,9 @@ import axios from 'axios'
       prikaz:false,
       prikaz1:false,
       izmeni:false,
-      prikazZ: false
+      prikazZ: false,
+      obradjen: false,
+      trenutni: {},
       }
   },
   methods: {
@@ -252,19 +261,24 @@ import axios from 'axios'
      dodajKliniku(){
            	this.$router.push("/dodajKliniku");
         },
-     prikaziZahtev(id){
+     prikaziZahtev(zahtev){
             this.prikaz = false;
             this.prikaz1 = false;
              this.prikazZ = true;
+             this.trenutni = zahtev;
                axios
-        .get("http://localhost:8081/zahtevZaReg/getPacijenta/"+ id)
-        .then(zahtev =>{
-          this.pacijent = zahtev.data;
+        .get("http://localhost:8081/zahtevZaReg/getPacijenta/"+ zahtev.id)
+        .then(z =>{
+          this.pacijent = z.data;
       })
       .catch(error => {
           console.log(error)
       });
              
+        },
+        odbijZahtev(){
+        	this.trenutni.status = "ODBIJEN";
+        	this.obradjen = true;
         },
         pogledajZahteve(){
           this.prikaz = false;
