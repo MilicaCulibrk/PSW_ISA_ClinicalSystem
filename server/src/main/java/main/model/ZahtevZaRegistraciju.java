@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 @Entity
@@ -21,9 +22,32 @@ public class ZahtevZaRegistraciju {
 	    @Column(name = "status", nullable = false)
 	    private String status;
 
-	    @OneToOne(cascade = CascadeType.ALL)
-	    @JoinColumn(name = "pacijent_id", referencedColumnName = "id")
-	    private Pacijent pacijent;
+	    @Column(name = "ime", nullable = false)
+	    private String ime;
+	 	
+	 	@Column(name = "prezime", nullable = false)
+	    private String prezime;
+	 	
+	 	@Column(name = "email", nullable = false)
+	    private String email;
+	 	
+	 	@Column(name = "lozinka", nullable = false)
+	    private String lozinka;
+	 	
+	 	@Column(name = "adresa", nullable = false)
+	    private String adresa;
+	 	
+	 	@Column(name = "grad", nullable = false)
+	    private String grad;
+	 	
+	 	@Column(name = "drzava", nullable = false)
+	    private String drzava;
+	 	
+	 	@Column(name = "telefon", nullable = false)
+	    private String telefon;
+	 	
+	 	@Column(name = "jmbg", nullable = false)
+	    private String jmbg;
 
 	    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	    @JoinColumn(name = "admin_id", nullable = false)
@@ -33,10 +57,19 @@ public class ZahtevZaRegistraciju {
 	        this.status = "NA_CEKANJU";
 	    }
 	    
-	    public ZahtevZaRegistraciju(Long id, Pacijent pacijent) {
+	    public ZahtevZaRegistraciju(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
+	    		String drzava, String telefon, String jmbg) {
 	        this.id = id;
-	        this.pacijent = pacijent;
-	        this.status = "NA_CEKANJU";
+	        this.ime = ime;
+	    	this.prezime = prezime;
+	    	this.email = email;
+	    	this.lozinka = lozinka;
+	    	this.adresa = adresa;
+	    	this.grad = grad;
+	    	this.drzava = drzava;
+	    	this.telefon = telefon;
+	    	this.jmbg = jmbg;
+	    	this.status = "NA_CEKANJU";
 	    }
 
 		public Long getId() {
@@ -55,12 +88,76 @@ public class ZahtevZaRegistraciju {
 			this.status = status;
 		}
 
-		public Pacijent getPacijent() {
-			return pacijent;
+		public String getIme() {
+			return ime;
 		}
 
-		public void setPacijent(Pacijent pacijent) {
-			this.pacijent = pacijent;
+		public void setIme(String ime) {
+			this.ime = ime;
+		}
+
+		public String getPrezime() {
+			return prezime;
+		}
+
+		public void setPrezime(String prezime) {
+			this.prezime = prezime;
+		}
+
+		public String getEmail() {
+			return email;
+		}
+
+		public void setEmail(String email) {
+			this.email = email;
+		}
+
+		public String getLozinka() {
+			return lozinka;
+		}
+
+		public void setLozinka(String lozinka) {
+			this.lozinka = lozinka;
+		}
+
+		public String getAdresa() {
+			return adresa;
+		}
+
+		public void setAdresa(String adresa) {
+			this.adresa = adresa;
+		}
+
+		public String getGrad() {
+			return grad;
+		}
+
+		public void setGrad(String grad) {
+			this.grad = grad;
+		}
+
+		public String getDrzava() {
+			return drzava;
+		}
+
+		public void setDrzava(String drzava) {
+			this.drzava = drzava;
+		}
+
+		public String getTelefon() {
+			return telefon;
+		}
+
+		public void setTelefon(String telefon) {
+			this.telefon = telefon;
+		}
+
+		public String getJmbg() {
+			return jmbg;
+		}
+
+		public void setJmbg(String jmbg) {
+			this.jmbg = jmbg;
 		}
 
 		public AdministratorKlinickogCentra getAdminKC() {

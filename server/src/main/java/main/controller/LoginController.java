@@ -30,7 +30,7 @@ public class LoginController {
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<LoginResponseDTO> Login(@RequestBody LoginDTO user) {
 
-		Pacijent pacijent = loginService.findPacijent(user.getEmail());
+	//	Pacijent pacijent = loginService.findPacijent(user.getEmail());
 		MedicinskaSestra medicinskaSestra = loginService.findMedicinskaSestra(user.getEmail());
 		Lekar lekar = loginService.findLekar(user.getEmail());
 		AdministratorKlinike adminKlinike = loginService.findAdminKlinike(user.getEmail());
@@ -39,18 +39,18 @@ public class LoginController {
 		LoginResponseDTO responseUser = new LoginResponseDTO();
 		responseUser.setMail(user.getEmail());
 
-		if (pacijent == null && medicinskaSestra == null && lekar==null && adminKlinike == null && adminCentra == null) {
+		if ( medicinskaSestra == null && lekar==null && adminKlinike == null && adminCentra == null) {
 			System.out.println("Email je nepostojeci");
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 
-		if (pacijent != null) {
+	/*	if (pacijent != null) {
 			if (user.getLozinka().equals(pacijent.getLozinka())) {
 				responseUser.setIme(pacijent.getIme());
 				responseUser.setPrezime(pacijent.getPrezime());
 				responseUser.setUloga("PACIJENT");
 			}
-		} else if (medicinskaSestra != null) {
+		} else*/ if (medicinskaSestra != null) {
 			if (user.getLozinka().equals(medicinskaSestra.getLozinka())) {
 				responseUser.setIme(medicinskaSestra.getIme());
 				responseUser.setPrezime(medicinskaSestra.getPrezime());
