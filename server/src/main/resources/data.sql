@@ -1,4 +1,4 @@
-INSERT INTO public.klinika(
+/*INSERT INTO public.klinika(
 	id, adresa, broj_recenzija, email, grad, drzava, naziv, ocena, opis, telefon)
   
 	VALUES (nextval('klinika_id_seq'), 'Jovana Obrenovica 83A', '5', 'klinika@klinika.com', 'Podgorica', 'Crna Gora',  'Bolnica', 3.5, 'Vrlo lepo', '+381/61-5534209');	
@@ -22,4 +22,4 @@ INSERT INTO public.medicinska_sestra(
 INSERT INTO public.lekar(
 	id, adresa, broj_recenzija, drzava,  email, grad, ime, jmpg, lozinka, ocena, prezime, telefon)
 	VALUES (nextval('pacijent_id_seq'),'Marsala Tita 58',  '5', 'Srbija', 'pb@gmail.com', 'Novi Sad', 'Peca', '012123', 'peca', 5, 'Basic', '+381/61-5534209');
-
+*/

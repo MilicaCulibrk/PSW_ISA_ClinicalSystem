@@ -5,43 +5,34 @@ import javax.persistence.Column;
 import main.model.Pacijent;
 
 public class PacijentDTO {
-
+		
    private Long id;
-	
    private String ime;
-	
    private String prezime;
-	
    private String email;
-	
    private String lozinka;
-	
    private String adresa;
-	
    private String grad;
-	
    private String drzava;
-	
    private String telefon;
-	
    private String jmbg;
    
    public PacijentDTO(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
-			String drzava, String telefon, String jmbg) {
-		super();
-		this.id = id;
-		this.ime = ime;
-		this.prezime = prezime;
-		this.email = email;
-		this.lozinka = lozinka;
-		this.adresa = adresa;
-		this.grad = grad;
-		this.drzava = drzava;
-		this.telefon = telefon;
-		this.jmbg = jmbg;
-	}
-
-   public PacijentDTO(Pacijent pacijent) {
+		String drzava, String telefon, String jmbg) {
+	super();
+	this.id = id;
+	this.ime = ime;
+	this.prezime = prezime;
+	this.email = email;
+	this.lozinka = lozinka;
+	this.adresa = adresa;
+	this.grad = grad;
+	this.drzava = drzava;
+	this.telefon = telefon;
+	this.jmbg = jmbg
+   }
+	
+    public PacijentDTO(Pacijent pacijent) {
 		super();
 		this.id = pacijent.getId();
 		this.ime = pacijent.getIme();
@@ -138,5 +129,5 @@ public String getJmbg() {
 public void setJmbg(String jmbg) {
 	this.jmbg = jmbg;
 }
-   
+  
 }

@@ -15,7 +15,7 @@ public class PacijentService {
 
 	@Autowired
 	private PacijentRepository pacijentRepository;
-	
+
 	public Pacijent findOne(Long id) {
 		return pacijentRepository.findById(id).orElseGet(null);
 	}
@@ -39,5 +39,5 @@ public class PacijentService {
 			throw new ValidationException("Admin sa tim id-ijem ne postoji");
 		}
 	}
-	
+
 }

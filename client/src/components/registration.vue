@@ -7,11 +7,21 @@
           <label for="prezime">Prezime</label>
           <input type="text"  v-model = "korisnik.prezime" placeholder="prezime"/>
           <label for="password">Lozinka</label>
-          <input type="password"  v-model = "korisnik.lozinka" placeholder="****"/>
+          <input type="password"  v-model = "lozinka" placeholder="****"/>
           <label for="password">Ponovi unos lozinke</label>
-          <input type="password"  v-model = "korisnik.lozinka2" placeholder="****"/>
+          <input type="password"  v-model = "lozinka2" placeholder="****"/>
           <label for="email">Email adresa</label>
-          <input type="text"  v-model = "korisnik.email" placeholder="email@.com"/>          
+          <input type="email"  v-model = "korisnik.email" placeholder="email@email.com"/>
+          <label for="adresa">Adresa</label>
+          <input type="text"  v-model = "korisnik.adresa" placeholder="adresa"/>
+          <label for="grad">Grad</label>
+          <input type="text"  v-model = "korisnik.grad" placeholder="grad"/>
+          <label for="drzava">Drzava</label>
+          <input type="text"  v-model = "korisnik.drzava" placeholder="drzava"/>
+          <label for="telefon">Telefon</label>
+          <input type="text"  v-model = "korisnik.telefon" placeholder="telefon"/>
+          <label for="jmbg">JMBG</label>
+          <input type="text"  v-model = "korisnik.jmbg" placeholder="jmbg"/>         
           <button  v-on:click="reg">Registrujte se</button>
           <p class="message">Vec posedujete nalog? <router-link to="/login">Prijavite se na svoj nalog</router-link></p>
         </form>       
@@ -24,30 +34,45 @@ import axios from "axios";
 export default {
   data() {
     return {
-          korisnik: { ime : '', prezime:'', lozinka: '', lozinka2:'', email:''},     
+          korisnik: { ime : '', prezime:'', email:'', adresa:'', grad:'', drzava:'', telefon:'', jmbg: ''},     
+          lozinka2: "",
+          lozinka: ""
        }
   },
   methods: { 
   		reg(){
 	        var temp = this;
-	        if (this.korisnik.ime=="" || this.korisnik.prezime=="" || this.korisnik.lozinka=="" 
-	        || this.korisnik.lozinka2=="" || this.korisnik.email==""){
+	        if (this.korisnik.ime=="" || this.korisnik.prezime=="" || this.lozinka=="" 
+	        || this.lozinka2=="" || this.korisnik.email=="" || this.korisnik.adresa=="" || this.korisnik.grad=="" || this.korisnik.drzava=="" || this.korisnik.telefon=="" || this.korisnik.jmbg==""){
 	          alert('Morate uneti sva polja!');
 	          return;
 	        }
-	        if (this.korisnik.lozinka != this.korisnik.lozinka2){
+	        if (this.lozinka != this.lozinka2){
 	          alert('Lozinke se ne poklapaju!');
 	          return;
-	        }
-	        axios.post('http://localhost:8080/registraion/registruj', this.korisnik)
-	        .then(function (response) {
-	        console.log(response);  //vracam ga sa bc
-	        alert('Uspesno ste se registrovali!');
-	        temp.korisnik  = { ime : '', prezime:'', lozinka: '', lozinka2:'', email:''}
-	    
-	    })
+          }
+          var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          if (!re.test(String(this.korisnik.email.trim()).toLowerCase())) {
+           
+            return;
+          }
+
+          var rex = /^\+38[0-9]\/6[0-9]-?[0-9]+(-[0-9]+)?$/;
+          if (!rex.test(String(this.korisnik.telefon.trim()))) {
+            alert("Broj telefona treba da bude oblika +381/65-504205!")
+            return;
+          }
+
+          this.korisnik["lozinka"] = this.lozinka;
+
+          axios
+          .post("http://localhost:8081/registracija/register", this.korisnik)
+          .then(() => {
+              alert('Uspesna registracija!');
+              this.$router.push("/login")
+        })
+
 	    .catch(function (error) {
-	        console.log(error);
 	        alert('Neuspesna registracija!');
 	    
 	    });
