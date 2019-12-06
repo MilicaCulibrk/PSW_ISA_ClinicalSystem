@@ -258,7 +258,7 @@ import axios from 'axios'
       });
     	this.prikazKlinike = !this.prikazKlinike;
     	this.prikaz = false;
-    }
+
     },
       izmenaKlinika() {
         this.izmeniKliniku = true
@@ -281,7 +281,7 @@ import axios from 'axios'
         return;
       }
       var rex = /^\+381\/6[0-9]-?[0-9]+(-[0-9]+)?$/;
-      if (!rex.test(String(this.korisnik.telefon.trim()))) {
+      if (!rex.test(String(this.klinika.telefon.trim()))) {
         alert("Broj telefona treba da bude oblika +381/65-504205");
 
         return;
@@ -295,6 +295,7 @@ import axios from 'axios'
       .catch(error => {
           console.log(error)
       });
+      }
     },
  mounted() {
       axios

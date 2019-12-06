@@ -79,5 +79,15 @@ public class KlinikaController {
 		return new ResponseEntity<>(listaKlinikaDTO, HttpStatus.OK);
 	}
 	
-
+	@PutMapping(value = "/izmeni", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<KlinikaDTO> izmeni(@RequestBody KlinikaDTO klinikaDTO){
+		
+		try {
+			klinikaService.izmeniKliniku(klinikaDTO);
+		} catch (ValidationException e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);
+	}
 }
