@@ -238,6 +238,7 @@ import axios from 'axios'
       prikazZ: false,
       obradjen: false,
       trenutni: {},
+      text: {},
       }
   },
   methods: {
@@ -264,12 +265,14 @@ import axios from 'axios'
      prikaziZahtev(zahtev){
             this.prikaz = false;
             this.prikaz1 = false;
-             this.prikazZ = true;
-             this.trenutni = zahtev;
-               axios
-        .get("http://localhost:8081/zahtevZaReg/getPacijenta/"+ zahtev.id)
-        .then(z =>{
-          this.pacijent = z.data;
+            this.prikazZ = true;
+            this.trenutni = zahtev;
+            axios
+	        .get("http://localhost:8081/zahtevZaReg/getPacijenta/"+ zahtev.id)
+	        .then(z =>{
+	          this.pacijent = z.data;
+
+
       })
       .catch(error => {
           console.log(error)
@@ -279,10 +282,18 @@ import axios from 'axios'
         odbijZahtev(){
         	this.trenutni.status = "ODBIJEN";
         	this.obradjen = true;
+        	var razlog = prompt("Molimo vas navedite razlog odbijanja:");
+        	this.text = "Nazalost,"
+                    + "\n\n vas zahtev je odbijen!" + "\n\nRazlog odbijanja: "+ razlog;
+        	axios
+          .post("http://localhost:8081/registracija/odbijen", this.pacijent.email)
+        	
         },
         prihvatiZahtev(){
         	this.trenutni.status = "PRIHVACEN";
         	this.obradjen = true;
+        	this.text = "Cestitamo,"
+                    + "\n\n Upravo ste registrovani kao pacijent na sajt Klinickog centra!";
         	axios
           .post("http://localhost:8081/registracija/register", this.pacijent)
           .then(() => {
@@ -293,6 +304,7 @@ import axios from 'axios'
 		        alert('Neuspesna registracija!');
 		    
 		    });
+
         },
         pogledajZahteve(){
           this.prikaz = false;
