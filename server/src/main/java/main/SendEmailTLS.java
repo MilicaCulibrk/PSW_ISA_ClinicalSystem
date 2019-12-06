@@ -7,7 +7,7 @@ import java.util.Properties;
 
 public class SendEmailTLS {
 
-    public static void main(String string) {
+    public static void main(String email, String poruka) {
         final String username = "23nikolasevic@gmail.com";
         final String password = "N.inf.23.";
 
@@ -30,11 +30,10 @@ public class SendEmailTLS {
             message.setFrom(new InternetAddress("23nikolasevic@gmail.com"));
             message.setRecipients(
                     Message.RecipientType.TO,
-                    InternetAddress.parse(string)
+                    InternetAddress.parse(email)
             );
             message.setSubject("Klinicki centar");
-            message.setText("Cestitamo,"
-                    + "\n\n Upravo ste registrovani kao administrator na sajt Klinickog centra!");
+            message.setText(poruka);
 
             Transport.send(message);
 

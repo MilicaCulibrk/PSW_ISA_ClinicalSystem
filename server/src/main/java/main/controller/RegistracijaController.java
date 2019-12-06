@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import main.SendEmailTLS;
 import main.dto.PacijentDTO;
 import main.service.RegistracijaService;
 
@@ -24,8 +25,14 @@ public class RegistracijaController {
 		
 		//registracijaService.posaljiZahtevAdminuKC(korisnik);
 		registracijaService.register(korisnik);
+	    SendEmailTLS.main(korisnik.getEmail(),  "Cestitamo,"
+                + "\n\n Upravo ste registrovani kao pacijent na sajt Klinickog centra!");
 	}
 
-
+	@PostMapping(value = "/odbijen", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public void Odbijen(@RequestBody String email, @RequestBody String text) {
+	    SendEmailTLS.main(email, "Nazalost,"
+                + "\n\n vas zahtev je odbijen!" + "\n\nRazlog odbijanja: ");
+	}
 
 }
