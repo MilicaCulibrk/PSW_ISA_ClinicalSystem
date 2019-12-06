@@ -36,7 +36,7 @@
               </div>
             
             <button @click="dodajAdministratora">Dodaj administratora</button>
-            <p class="message">Zelite da odustanete? <router-link to="">Odustani</router-link></p>
+            <p class="message">Zelite da odustanete? <router-link to="/pocetnaAdministratorKC">Odustani</router-link></p>
           </form>
 
 

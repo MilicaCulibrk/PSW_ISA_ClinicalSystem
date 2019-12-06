@@ -1,56 +1,76 @@
 package main.model;
 
-import java.util.Collection;
-
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class ZahtevZaRegistraciju {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	   @OneToMany(mappedBy = "zahtevZaRegistraciju")
-   public java.util.Collection<NeautentifikovaniKorisnik> neautentifikovaniKorisnik;
+	    @Id
+	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	    private Long id;
+	    
+	    @Column(name = "status", nullable = false)
+	    private String status;
 
-	public ZahtevZaRegistraciju() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+	    @OneToOne(cascade = CascadeType.ALL)
+	    @JoinColumn(name = "pacijent_id", referencedColumnName = "id")
+	    private Pacijent pacijent;
 
-	public ZahtevZaRegistraciju(Long id, Collection<NeautentifikovaniKorisnik> neautentifikovaniKorisnik) {
-		super();
-		this.id = id;
-		this.neautentifikovaniKorisnik = neautentifikovaniKorisnik;
-	}
+	    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	    @JoinColumn(name = "admin_id", nullable = false)
+	    private AdministratorKlinickogCentra adminKC;
+	    
+	    public ZahtevZaRegistraciju() {
+	        this.status = "NA_CEKANJU";
+	    }
+	    
+	    public ZahtevZaRegistraciju(Long id, Pacijent pacijent) {
+	        this.id = id;
+	        this.pacijent = pacijent;
+	        this.status = "NA_CEKANJU";
+	    }
 
-	public Long getId() {
-		return id;
-	}
+		public Long getId() {
+			return id;
+		}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+		public void setId(Long id) {
+			this.id = id;
+		}
 
-	public java.util.Collection<NeautentifikovaniKorisnik> getNeautentifikovaniKorisnik() {
-		return neautentifikovaniKorisnik;
-	}
+		public String getStatus() {
+			return status;
+		}
 
-	public void setNeautentifikovaniKorisnik(java.util.Collection<NeautentifikovaniKorisnik> neautentifikovaniKorisnik) {
-		this.neautentifikovaniKorisnik = neautentifikovaniKorisnik;
-	}
+		public void setStatus(String status) {
+			this.status = status;
+		}
 
-	@Override
-	public String toString() {
-		return "ZahtevZaRegistraciju [id=" + id + ", neautentifikovaniKorisnik=" + neautentifikovaniKorisnik + "]";
-	}
-   
-   
+		public Pacijent getPacijent() {
+			return pacijent;
+		}
+
+		public void setPacijent(Pacijent pacijent) {
+			this.pacijent = pacijent;
+		}
+
+		public AdministratorKlinickogCentra getAdminKC() {
+			return adminKC;
+		}
+
+		public void setAdminKC(AdministratorKlinickogCentra adminKC) {
+			this.adminKC = adminKC;
+		}
+
+	    
 
 }

@@ -28,6 +28,19 @@
             <!-- Content -->
             <div id="content">                    
               <div class="container-fluid">
+
+                <h1 style="color: #b3b3b3;">Pacijent </h1>                
+              </div>
+            </div>
+	     </div>
+	
+     
+</div>
+
+
+
+
+
                 <h1 style="color: #b3b3b3;">Pacijent - {{ korisnik.ime }} {{ korisnik.prezime }} </h1>                
               </div>
             </div>
@@ -117,7 +130,9 @@
      
 </div>
 
+
 </template>
+
 
 
 <script>
@@ -184,7 +199,6 @@
     };
     
     </script>
-    
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');

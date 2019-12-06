@@ -16,6 +16,7 @@ public class PacijentDTO {
    private String drzava;
    private String telefon;
    private String jmbg;
+
    
    public PacijentDTO(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
 		String drzava, String telefon, String jmbg) {
@@ -29,7 +30,8 @@ public class PacijentDTO {
 	this.grad = grad;
 	this.drzava = drzava;
 	this.telefon = telefon;
-	this.jmbg = jmbg
+	this.jmbg = jmbg;
+
    }
 	
     public PacijentDTO(Pacijent pacijent) {
@@ -114,6 +116,7 @@ public void setDrzava(String drzava) {
 	this.drzava = drzava;
 }
 
+   
 public String getTelefon() {
 	return telefon;
 }
@@ -121,6 +124,7 @@ public String getTelefon() {
 public void setTelefon(String telefon) {
 	this.telefon = telefon;
 }
+
 
 public String getJmbg() {
 	return jmbg;
