@@ -1,5 +1,9 @@
 package main.controller;
 import org.springframework.http.MediaType;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,11 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import main.dto.AdminKlinikeDTO;
 import main.dto.KlinikaDTO;
 import main.model.Klinika;
 import main.service.KlinikaService;
@@ -40,12 +47,46 @@ public class KlinikaController {
 		return new ResponseEntity<>(klinikadto, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/postojecaKlinika")
+	@GetMapping(value = "/pronadji")
 	public ResponseEntity<KlinikaDTO> getPostojecaKlinika() {
 		
 		Klinika klinika = klinikaService.findOne((long) 1);
 		
 		KlinikaDTO klinikaDTO = new KlinikaDTO(klinika);
+		
+		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/pronadjiKliniku/{id}")
+	public ResponseEntity<KlinikaDTO> getPronadjiKliniku(@PathVariable Long id) {
+		
+		Klinika klinika = klinikaService.findOne(id);
+		
+		KlinikaDTO klinikaDTO = new KlinikaDTO(klinika);
+		
+		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/izlistaj")
+	public ResponseEntity<List<KlinikaDTO>> getIzlistaj() {
+		
+		List<Klinika> listaKlinika = klinikaService.findAll();
+		List<KlinikaDTO> listaKlinikaDTO = new ArrayList<KlinikaDTO>();
+		for (Klinika k : listaKlinika) {
+			listaKlinikaDTO.add(new KlinikaDTO(k));
+		}
+		
+		return new ResponseEntity<>(listaKlinikaDTO, HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/izmeni", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<KlinikaDTO> izmeni(@RequestBody KlinikaDTO klinikaDTO){
+		
+		try {
+			klinikaService.izmeniKliniku(klinikaDTO);
+		} catch (ValidationException e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		
 		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);
 	}

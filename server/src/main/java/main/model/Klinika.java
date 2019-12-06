@@ -62,7 +62,21 @@ public class Klinika {
    
    
    
-   @ManyToMany(mappedBy = "klinika")
+   public Klinika(Long id, String naziv, String adresa, String email, String grad, String drzava, String telefon,
+			String opis) {
+		super();
+		this.id = id;
+		this.naziv = naziv;
+		this.adresa = adresa;
+		this.email = email;
+		this.grad = grad;
+		this.drzava = drzava;
+		this.telefon = telefon;
+		this.opis = opis;
+	}
+
+
+@ManyToMany(mappedBy = "klinika")
    public java.util.Collection<Pacijent> pacijent;
    
    
