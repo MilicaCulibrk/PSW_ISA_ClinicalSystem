@@ -38,7 +38,7 @@ export default {
         .post("http://localhost:8081/prijava/login", this.korisnik)
         .then(korisnik => {
         
-        	if(korisnik.data.uloga == "ADMIN_KLINIKE"){
+          if(korisnik.data.uloga == "ADMIN_KLINIKE"){
         		this.$router.push("/pocetnaAdministratoraKlinike");
         	}else if(korisnik.data.uloga == "ADMIN_CENTRA"){
         		this.$router.push("/pocetnaAdministratorKC");

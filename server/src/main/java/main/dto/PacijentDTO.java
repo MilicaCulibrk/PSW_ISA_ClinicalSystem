@@ -36,7 +36,7 @@ public PacijentDTO(Long id, String ime, String prezime, String email, String loz
 	this.drzava = drzava;
 	this.telefon = telefon;
 	this.jmbg = jmbg;
-	
+
    }
 	
    public PacijentDTO(String ime, String prezime, String email, String lozinka, String adresa, String grad,
@@ -54,8 +54,8 @@ public PacijentDTO(Long id, String ime, String prezime, String email, String loz
 	this.jmbg = jmbg;
 	
    }
-   
-	public PacijentDTO(Pacijent pacijent) {
+
+    public PacijentDTO(Pacijent pacijent) {
 		super();
 		this.id = pacijent.getId();
 		this.ime = pacijent.getIme();
@@ -69,88 +69,87 @@ public PacijentDTO(Long id, String ime, String prezime, String email, String loz
 		this.jmbg = pacijent.getJmbg();
 	}
 
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+public Long getId() {
+	return id;
+}
 
-	public String getIme() {
-		return ime;
-	}
+public void setId(Long id) {
+	this.id = id;
+}
 
-	public void setIme(String ime) {
-		this.ime = ime;
-	}
+public String getIme() {
+	return ime;
+}
 
-	public String getPrezime() {
-		return prezime;
-	}
+public void setIme(String ime) {
+	this.ime = ime;
+}
 
-	public void setPrezime(String prezime) {
-		this.prezime = prezime;
-	}
+public String getPrezime() {
+	return prezime;
+}
 
-	public String getEmail() {
-		return email;
-	}
+public void setPrezime(String prezime) {
+	this.prezime = prezime;
+}
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+public String getEmail() {
+	return email;
+}
 
-	public String getLozinka() {
-		return lozinka;
-	}
+public void setEmail(String email) {
+	this.email = email;
+}
 
-	public void setLozinka(String lozinka) {
-		this.lozinka = lozinka;
-	}
+public String getLozinka() {
+	return lozinka;
+}
 
-	public String getAdresa() {
-		return adresa;
-	}
+public void setLozinka(String lozinka) {
+	this.lozinka = lozinka;
+}
 
-	public void setAdresa(String adresa) {
-		this.adresa = adresa;
-	}
+public String getAdresa() {
+	return adresa;
+}
 
-	public String getGrad() {
-		return grad;
-	}
+public void setAdresa(String adresa) {
+	this.adresa = adresa;
+}
 
-	public void setGrad(String grad) {
-		this.grad = grad;
-	}
+public String getGrad() {
+	return grad;
+}
 
-	public String getDrzava() {
-		return drzava;
-	}
+public void setGrad(String grad) {
+	this.grad = grad;
+}
 
-	public void setDrzava(String drzava) {
-		this.drzava = drzava;
-	}
+public String getDrzava() {
+	return drzava;
+}
 
-	public String getTelefon() {
-		return telefon;
-	}
+public void setDrzava(String drzava) {
+	this.drzava = drzava;
+}
 
-	public void setTelefon(String telefon) {
-		this.telefon = telefon;
-	}
-
-	public String getJmbg() {
-		return jmbg;
-	}
-
-	public void setJmbg(String jmbg) {
-		this.jmbg = jmbg;
-	}
    
-	
-   
-	
+public String getTelefon() {
+	return telefon;
+}
 
+public void setTelefon(String telefon) {
+	this.telefon = telefon;
+}
+
+
+public String getJmbg() {
+	return jmbg;
+}
+
+public void setJmbg(String jmbg) {
+	this.jmbg = jmbg;
+}
+  
 }

@@ -54,6 +54,16 @@ public AdminKlinikeDTO(AdministratorKlinike admin) {
 	this.telefon = admin.getTelefon();
 	this.jmbg = admin.getJmbg();
 	this.idKlinike = admin.klinika.getId();
+
+}
+
+
+public Long getIdKlinike() {
+	return idKlinike;
+}
+
+public void setIdKlinike(Long idKlinike) {
+	this.idKlinike = idKlinike;
 }
 
 public AdminKlinikeDTO() {
