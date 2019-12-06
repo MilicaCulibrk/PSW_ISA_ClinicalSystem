@@ -181,7 +181,7 @@
                           
                           <div class="text-center mb-4 mt-4">
                                         <template>
-                                        <button v-if="!obradjen"  type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="">Prihvati</button>
+                                        <button v-if="!obradjen"  type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="prihvatiZahtev">Prihvati</button>
                                         </template>
                                         <template>
                                         <button v-if="!obradjen"   type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odbijZahtev">Odbij</button>
@@ -279,6 +279,20 @@ import axios from 'axios'
         odbijZahtev(){
         	this.trenutni.status = "ODBIJEN";
         	this.obradjen = true;
+        },
+        prihvatiZahtev(){
+        	this.trenutni.status = "PRIHVACEN";
+        	this.obradjen = true;
+        	axios
+          .post("http://localhost:8081/registracija/register", this.pacijent)
+          .then(() => {
+              alert('Pacijent uspesno registrovan!');
+	        })
+	
+		    .catch(function (error) {
+		        alert('Neuspesna registracija!');
+		    
+		    });
         },
         pogledajZahteve(){
           this.prikaz = false;

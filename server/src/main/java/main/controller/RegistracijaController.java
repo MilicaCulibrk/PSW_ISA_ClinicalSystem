@@ -23,7 +23,7 @@ public class RegistracijaController {
 	public void Register(@RequestBody PacijentDTO korisnik) {
 		
 		//registracijaService.posaljiZahtevAdminuKC(korisnik);
-		//registracijaService.register(korisnik);
+		registracijaService.register(korisnik);
 	}
 
 
