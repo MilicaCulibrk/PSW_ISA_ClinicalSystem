@@ -70,13 +70,7 @@ public AdminKlinikeDTO() {
 	super();
 }
 
-public Long getIdKlinike() {
-	return idKlinike;
-}
 
-public void setIdKlinike(Long idKlinike) {
-	this.idKlinike = idKlinike;
-}
 
 
 

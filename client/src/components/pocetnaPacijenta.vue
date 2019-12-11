@@ -32,19 +32,10 @@
                 <h1 style="color: #b3b3b3;">Pacijent </h1>                
               </div>
             </div>
-	     </div>
 	
-     
-</div>
-
-
-
-
-
                 <h1 style="color: #b3b3b3;">Pacijent - {{ korisnik.ime }} {{ korisnik.prezime }} </h1>                
               </div>
-            </div>
-	     </div>
+
     
          <form v-if="prikaz"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
             <div>
@@ -298,6 +289,3 @@ body {
 
 
 </style>
-
-
-
