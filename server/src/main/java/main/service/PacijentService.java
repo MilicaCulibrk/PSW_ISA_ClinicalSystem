@@ -1,5 +1,7 @@
 package main.service;
 
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 
@@ -10,6 +12,7 @@ import main.dto.PacijentDTO;
 import main.model.Pacijent;
 //import main.repository.PacijentRepository;
 import main.repository.PacijentRepository;
+import main.repository.ZdravstveniKartonRepository;
 
 @Service
 public class PacijentService {
@@ -17,6 +20,8 @@ public class PacijentService {
 	@Autowired
 	private PacijentRepository pacijentRepository;
 
+	@Autowired
+	private ZdravstveniKartonRepository zdravstveniKartonRepository;
 	public Pacijent findOne(Long id) {
 		return pacijentRepository.findById(id).orElseGet(null);
 	}
@@ -35,10 +40,17 @@ public class PacijentService {
 			pacijent.setTelefon(pacijentDTO.getTelefon());
 			pacijent.setGrad(pacijentDTO.getGrad());
 			pacijent.setDrzava(pacijentDTO.getDrzava());
+
+			pacijent.setZdravstveniKarton(zdravstveniKartonRepository.getOne(pacijentDTO.getIdZdravstveniKarton()));
 			pacijentRepository.save(pacijent);
 		} catch (EntityNotFoundException e) {
 			throw new ValidationException("Admin sa tim id-ijem ne postoji");
 		}
+	}
+
+	public List<Pacijent> findAll() {
+		// TODO Auto-generated method stub
+		return pacijentRepository.findAll();
 	}
 
 }

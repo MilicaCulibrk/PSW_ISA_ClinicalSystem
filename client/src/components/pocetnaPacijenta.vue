@@ -12,7 +12,7 @@
 					</i>                                  				     
 				  </a>
 	              <a href="#">
-	                <i class="zmdi zmdi-view-dashboard"> ZDRAVSTVENI KARTON
+	                <i class="zmdi zmdi-view-dashboard" v-on:click="otvoriFormuZK"> ZDRAVSTVENI KARTON
 	                </i>                   
 	              </a>
 	              <a href="#">
@@ -29,11 +29,11 @@
             <div id="content">                    
               <div class="container-fluid">
 
-                <h1 style="color: #b3b3b3;">Pacijent </h1>                
+                <h1 style="color: #b3b3b3;">Pacijent - {{ korisnik.ime }} {{ korisnik.prezime }} </h1>                
               </div>
             </div>
 	
-                <h1 style="color: #b3b3b3;">Pacijent - {{ korisnik.ime }} {{ korisnik.prezime }} </h1>                
+                               
               </div>
 
     
@@ -118,6 +118,60 @@
                   </div>
                   </div>
     </form>
+    <form v-if="prikazZK"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 390px; background-color: rgba(130, 206, 209, 0.733); ">
+      <div>
+              
+          
+            <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+          
+              
+              <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+
+                <div class="form-group">
+          
+                  <div class="card-body mx-4 mt-4">
+                    <div class="row">
+          
+                      <div class="col">
+                      <div class="md-form">
+                        <label for="Form-dioptrija" style="color: #b3b3b3;">Dioptrija</label>
+                        <input type="text" v-model="zdravstveniK.dioptrija" id="Form-username" class="form-control" disabled>
+                        
+                        <label for="Form-alergija" style="color: #b3b3b3;">Alergija</label>
+                        <input type="text" v-model="zdravstveniK.alergije" id="Form-ime" class="form-control" :disabled="!izmeni">
+                        
+                        <label for="Form-visina" style="color: #b3b3b3;">Visina</label>
+                        <input type="text" v-model="zdravstveniK.visina" id="Form-phone" class="form-control" :disabled="!izmeni">
+                        
+                        <label for="Form-tezina" style="color: #b3b3b3;">Tezina</label>
+                        <input type="text" v-model="zdravstveniK.tezina" id="Form-email4" class="form-control" :disabled="!izmeni">
+
+                       
+                      </div>
+                      </div>
+                      <div class="col">
+                      <div class="md-form pb-3">
+          
+                        
+
+                      </div>
+                      </div>
+                    </div>
+                    
+          
+          
+                    
+                  </div>
+          
+                </div>
+          
+          
+              </div>
+              
+          
+            </div>
+            </div>
+</form>
      
 </div>
 
@@ -131,8 +185,10 @@
         export default {
      data() {
          return {
+          zdravstveniK: {},
           korisnik: {},
           prikaz:false,
+          prikazZK:false,
           izmeni:false
           }
       },
@@ -140,6 +196,19 @@
             otvoriFormu(){
                 this.prikaz=!this.prikaz;
             },
+            otvoriFormuZK(){
+              axios
+                .get("http://localhost:8081/zdravstveniKarton/pronadjiZdravstveniKarton/" + 1)
+                .then(zdravstveniK =>{
+                  this.zdravstveniK = zdravstveniK.data;
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+                this.prikazZK = !this.prikazZK;
+               
+
+    },
             izmena() {
             this.izmeni = true
             },

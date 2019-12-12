@@ -18,6 +18,9 @@
           <a href="#">
              <i class="zmdi zmdi-link">LISTA PREGLEDA</i> 
           </a>
+          <a href="#">
+            <i v-on:click="otvoriListuPacijenata" class="zmdi zmdi-link">LISTA PACIJENATA</i> 
+         </a>
         </ul>
                     
       </div>
@@ -29,8 +32,8 @@
       </div>
     </div>
 
-                  <form v-if="prikaz"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
-                        <div>
+                  <form  v-if="prikaz" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+                        <div >
                                 
                             
                               <div  class="container d-flex justify-content-center" style="margin-top: 30px">
@@ -109,8 +112,77 @@
                             
                               </div>
                               </div>
-                </form>
+                            </form>
+                <form  v-if="prikazPacijenata" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
 
+                  <div >	                    
+                    <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+                      <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+                        <li v-for="k,i in pacijenti.length">
+                          <a href="#" class="list-group-item list-group-item-action" v-on:click="otvoriZK(pacijenti[i])">{{pacijenti[i].ime}} {{pacijenti[i].prezime}}</a>		
+                        </li>        
+                      </div>
+                    </div>        
+                   
+                   </div>
+                  </form>
+                  <form  v-if="prikazZK" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+  
+
+                   <div >	                    
+                      <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+          
+              
+                          <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+            
+                            <div class="form-group">
+                      
+                              <div class="card-body mx-4 mt-4">
+                                <div class="row">
+                      
+                                  <div class="col">
+                                  <div class="md-form">
+                                    <label for="Form-dioptrija" style="color: #b3b3b3;">Dioptrija</label>
+                                    <input type="text" v-model="zdravstveniK.dioptrija" id="Form-username" class="form-control" :disabled="!izmeniZK">
+                                    
+                                    <label for="Form-alergija" style="color: #b3b3b3;">Alergija</label>
+                                    <input type="text" v-model="zdravstveniK.alergije" id="Form-ime" class="form-control" :disabled="!izmeniZK">
+                                    
+                                    <label for="Form-visina" style="color: #b3b3b3;">Visina</label>
+                                    <input type="text" v-model="zdravstveniK.visina" id="Form-phone" class="form-control" :disabled="!izmeniZK">
+                                    
+                                    <label for="Form-tezina" style="color: #b3b3b3;">Tezina</label>
+                                    <input type="text" v-model="zdravstveniK.tezina" id="Form-email4" class="form-control" :disabled="!izmeniZK">
+            
+                                   
+                                  </div>
+                                  </div>
+                                 
+                                </div>
+                                
+                                <div class="text-center mb-4 mt-4">
+                                    <template>
+                                    <button v-if="!izmeniZK" type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="izmenaZK">Izmeni</button>
+                                    </template>
+                                    <template>
+                                    <button v-if="izmeniZK" type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="sacuvajZK">Sacuvaj</button>
+                                    <button v-if="izmeniZK" type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustaniZK">Odustani</button>
+                                    </template>
+                                  </div>
+                      
+                                
+                              </div>
+                      
+                            </div>
+                      
+                      
+                          </div>
+                          
+                      
+                        </div>
+                     
+                     </div>
+                </form>
                   
 </div>
 
@@ -123,8 +195,13 @@ import axios from 'axios'
  data() {
      return {
       korisnik: {},
+      pacijenti: {},
+      zdravstveniK: {},
+      prikazZK: false,
       prikaz:false,
-      izmeni:false
+      izmeni:false,
+      izmeniZK:false,
+      prikazPacijenata:false,
       }
   },
   methods: {
@@ -166,7 +243,56 @@ import axios from 'axios'
       .catch(error => {
           console.log(error)
       });
-    }
+    },
+    otvoriListuPacijenata(){
+	  		this.prikaz=false;
+	  		this.prikazPacijenata=!this.prikazPacijenata;
+	  	      axios
+		      .get('http://localhost:8081/pacijent/izlistaj')
+		      .then(pacijent =>{
+		        this.pacijenti = pacijent.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+	  	},
+    otvoriZK(pac){
+      axios
+	        .get("http://localhost:8081/zdravstveniKarton/pronadjiZdravstveniKarton/"+ pac.idZdravstveniKarton)
+	        .then(z =>{
+	          this.zdravstveniK = z.data;
+          })
+      this.prikazZK=!this.prikazZK;
+      this.prikazPacijenata=false;
+    
+    },
+    izmenaZK(){
+      this.izmeniZK = true
+    },
+    sacuvajZK(){
+      axios
+      .put("http://localhost:8081/zdravstveniKarton/izmeni", this.zdravstveniK)
+      .then(adminKlinike =>{
+        this.zdravstveniK = adminKlinike.data;
+        this.izmeniZK = false;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+
+    },
+    odustaniZK(){
+      this.izmeniZK = false
+        axios
+        .get("http://localhost:8081/zdravstveniKarton/pronadjiZdravstveniKarton/"+ this.zdravstveniK.id)
+	        .then(z =>{
+	          this.zdravstveniK = z.data;
+          })
+      .catch(error => {
+          console.log(error)
+      });
+    },
+
     },
  mounted() {
       axios
