@@ -1,5 +1,7 @@
 package main.service;
 
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 
@@ -67,5 +69,11 @@ public class AdminKlinikeService {
 		} catch (EntityNotFoundException e) {
 			throw new ValidationException("Admin sa tim id-ijem ne postoji");
 		}
+	}
+
+
+	public List<AdministratorKlinike> findAll() {
+		// TODO Auto-generated method stub
+		return adminKlinikeRepository.findAll();
 	}
 }
