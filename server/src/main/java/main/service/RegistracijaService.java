@@ -11,9 +11,11 @@ import main.dto.RegistracijaDTO;
 import main.model.AdministratorKlinickogCentra;
 import main.model.Pacijent;
 import main.model.ZahtevZaRegistraciju;
+import main.model.ZdravstveniKarton;
 import main.repository.PacijentRepository;
 //import main.repository.PacijentRepository;
 import main.repository.ZahtevZaRegRepository;
+import main.repository.ZdravstveniKartonRepository;
 
 @Service
 public class RegistracijaService {
@@ -26,6 +28,9 @@ public class RegistracijaService {
 		private PacijentRepository pacijentRepository;
 		
 		@Autowired
+		private ZdravstveniKartonRepository zdravstveniKartonRepository;
+		
+		@Autowired
 		private AdminKCService adminKCService;
 
 
@@ -35,12 +40,17 @@ public class RegistracijaService {
 		
 		Pacijent pacijent = new Pacijent();
 		Pacijent pacijentPostoji = pacijentRepository.findByEmail(pacijentDTO.getEmail());
-
+		ZdravstveniKarton zk = new ZdravstveniKarton();
 		
 	    if (pacijentPostoji != null) {
 			throw new ValidationException("Postoji korisnik sa datim Mailom");
 		} else {
 			try {
+				zk.setAlergije("");
+				zk.setDioptrija("");
+				zk.setTezina("");
+				zk.setVisina("");
+				zdravstveniKartonRepository.save(zk);
 				pacijent.setEmail(pacijentDTO.getEmail());
 				pacijent.setLozinka(pacijentDTO.getLozinka());
 				pacijent.setIme(pacijentDTO.getIme());
@@ -50,7 +60,9 @@ public class RegistracijaService {
 				pacijent.setDrzava(pacijentDTO.getDrzava());
 				pacijent.setTelefon(pacijentDTO.getTelefon());
 				pacijent.setJmbg(pacijentDTO.getJmbg());
+				pacijent.setZdravstveniKarton(zk);
 				pacijentRepository.save(pacijent);
+				zk.setPacijent(pacijent);
 			} catch (EntityNotFoundException e) {
 				throw new ValidationException("Doslo je do greske");
 			}

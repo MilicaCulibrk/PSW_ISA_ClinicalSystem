@@ -59,7 +59,7 @@ public class Pacijent {
    
    @OneToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
    @JoinColumn(name = "zdrastveniKarton_id", referencedColumnName = "id")
-   public ZdravstveniKarton zdravstveniKarton;
+   private ZdravstveniKarton zdravstveniKarton;
  
    
    @ManyToMany(fetch = FetchType.LAZY)
@@ -86,6 +86,7 @@ public Pacijent(PacijentDTO pacijentDTO) {
 	this.drzava = pacijentDTO.getDrzava();
 	this.telefon = pacijentDTO.getTelefon();
 	this.jmbg = pacijentDTO.getJmbg();
+
 }
 
 public Pacijent(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,

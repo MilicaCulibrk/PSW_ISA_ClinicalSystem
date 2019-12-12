@@ -2,6 +2,7 @@ package main.dto;
 
 import javax.persistence.Column;
 
+import main.model.AdministratorKlinike;
 import main.model.Pacijent;
 
 public class PacijentDTO {
@@ -16,15 +17,16 @@ public class PacijentDTO {
    private String drzava;
    private String telefon;
    private String jmbg;
+   private Long idZdravstveniKarton;
 
-   
-   public PacijentDTO() {
+
+public PacijentDTO() {
 	super();
 	// TODO Auto-generated constructor stub
 }
 
 public PacijentDTO(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
-		String drzava, String telefon, String jmbg) {
+		String drzava, String telefon, String jmbg, Long idZdravstveniKarton) {
 	super();
 	this.id = id;
 	this.ime = ime;
@@ -36,39 +38,36 @@ public PacijentDTO(Long id, String ime, String prezime, String email, String loz
 	this.drzava = drzava;
 	this.telefon = telefon;
 	this.jmbg = jmbg;
+	this.idZdravstveniKarton = idZdravstveniKarton;
+}
 
-   }
-	
-   public PacijentDTO(String ime, String prezime, String email, String lozinka, String adresa, String grad,
-		String drzava, String telefon, String jmbg) {
+public PacijentDTO(Pacijent pacijent) {
 	super();
+	this.id = pacijent.getId();
+	this.ime = pacijent.getIme();
+	this.prezime = pacijent.getPrezime();
+	this.email = pacijent.getEmail();
+	this.lozinka = pacijent.getLozinka();
+	this.adresa = pacijent.getAdresa();
+	this.grad = pacijent.getGrad();
+	this.drzava = pacijent.getDrzava();
+	this.telefon = pacijent.getTelefon();
+	this.jmbg = pacijent.getJmbg();
+	if(pacijent.getZdravstveniKarton()==null)
+		this.idZdravstveniKarton=null;
+	else
+		this.idZdravstveniKarton = pacijent.getZdravstveniKarton().getId();
 
-	this.ime = ime;
-	this.prezime = prezime;
-	this.email = email;
-	this.lozinka = lozinka;
-	this.adresa = adresa;
-	this.grad = grad;
-	this.drzava = drzava;
-	this.telefon = telefon;
-	this.jmbg = jmbg;
-	
-   }
+}
 
-    public PacijentDTO(Pacijent pacijent) {
-		super();
-		this.id = pacijent.getId();
-		this.ime = pacijent.getIme();
-		this.prezime = pacijent.getPrezime();
-		this.email = pacijent.getEmail();
-		this.lozinka = pacijent.getLozinka();
-		this.adresa = pacijent.getAdresa();
-		this.grad = pacijent.getGrad();
-		this.drzava = pacijent.getDrzava();
-		this.telefon = pacijent.getTelefon();
-		this.jmbg = pacijent.getJmbg();
+
+public Long getIdZdravstveniKarton() {
+		return idZdravstveniKarton;
 	}
 
+public void setIdZdravstveniKarton(Long idZdravstveniKarton) {
+		this.idZdravstveniKarton = idZdravstveniKarton;
+	}
 
 public Long getId() {
 	return id;
