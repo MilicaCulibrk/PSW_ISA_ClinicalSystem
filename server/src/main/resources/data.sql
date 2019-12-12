@@ -3,9 +3,6 @@ INSERT INTO public.klinika(
   
 	VALUES (nextval('klinika_id_seq'), 'Jovana Obrenovica 83A', '5', 'klinika@klinika.com', 'Podgorica', 'Crna Gora',  'Bolnica', 3.5, 'Vrlo lepo', '+381/61-5534209');	
 
-INSERT INTO public.administrator_klinike(
-	id, adresa, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon)
-	VALUES (nextval('administrator_klinike_id_seq'),'Marsala Tita 58','Srbija', 'an@gmail.com', 'Novi Sad', 'Ana', '012123', 'ana',  'Nikolasevic', '+381/61-5534209');
 	
 INSERT INTO public.administrator_klinickog_centra(
 	id, adresa, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon)

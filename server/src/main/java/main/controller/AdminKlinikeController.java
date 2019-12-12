@@ -1,5 +1,8 @@
 package main.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.AdminKlinikeDTO;
+import main.dto.KlinikaDTO;
 import main.model.AdministratorKlinike;
+import main.model.Klinika;
 import main.service.AdminKlinikeService;
 
 @RestController
@@ -59,6 +64,19 @@ public class AdminKlinikeController {
 			adminKlinikeService.izmeniAdminaKlinike(adminKlinikeDTO);
 		} catch (ValidationException e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<>(adminKlinikeDTO, HttpStatus.OK);
+	}
+	
+	
+	@GetMapping(value = "/izlistaj")
+	public ResponseEntity<List<AdminKlinikeDTO>> getIzlistaj() {
+		
+		List<AdministratorKlinike> listaAdmina = adminKlinikeService.findAll();
+		List<AdminKlinikeDTO> adminKlinikeDTO = new ArrayList<AdminKlinikeDTO>();
+		for (AdministratorKlinike k : listaAdmina) {
+			adminKlinikeDTO.add(new AdminKlinikeDTO(k));
 		}
 		
 		return new ResponseEntity<>(adminKlinikeDTO, HttpStatus.OK);
