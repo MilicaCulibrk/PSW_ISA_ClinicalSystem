@@ -12,13 +12,14 @@ import main.repository.AdminCentraRepository;
 import main.repository.AdminKlinikeRepository;
 import main.repository.LekarRepository;
 import main.repository.MedicinskaSestraRepository;
+import main.repository.PacijentRepository;
 //import main.repository.PacijentRepository;
 
 @Service
 public class LoginService {
 	
-	//@Autowired
-	//private PacijentRepository pacijentRepository;
+	@Autowired
+	private PacijentRepository pacijentRepository;
 
 	@Autowired
 	private MedicinskaSestraRepository medicinskaSestraRepository;
@@ -32,9 +33,9 @@ public class LoginService {
 	@Autowired
 	private AdminCentraRepository adminCentraRepository;
 
-	/*public Pacijent findPacijent(String mail) {
+	public Pacijent findPacijent(String mail) {
 		return pacijentRepository.findByEmail(mail);
-	}*/
+	}
 
 	public MedicinskaSestra findMedicinskaSestra(String mail) {
 		return medicinskaSestraRepository.findByEmail(mail);

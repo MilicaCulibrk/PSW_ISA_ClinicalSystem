@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import main.dto.PacijentDTO;
 import main.model.Pacijent;
 //import main.repository.PacijentRepository;
+import main.repository.PacijentRepository;
 
 @Service
 public class PacijentService {
