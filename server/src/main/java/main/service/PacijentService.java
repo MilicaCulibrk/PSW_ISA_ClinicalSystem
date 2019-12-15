@@ -39,10 +39,17 @@ public class PacijentService {
 			pacijent.setGrad(pacijentDTO.getGrad());
 			pacijent.setDrzava(pacijentDTO.getDrzava());
 
-			//pacijent.setZdravstveniKarton(zdravstveniKartonRepository.getOne(pacijentDTO.getIdZdravstveniKarton()));
+
+			pacijent.setZdravstveniKarton(zdravstveniKartonRepository.getOne(pacijentDTO.getIdZdravstveniKarton()));
+
 			pacijentRepository.save(pacijent);
 			
 			return pacijent;
+	}
+
+	public List<Pacijent> findAll() {
+		// TODO Auto-generated method stub
+		return pacijentRepository.findAll();
 	}
 
 	public List<Pacijent> findAll() {

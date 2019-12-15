@@ -13,9 +13,15 @@ import org.springframework.stereotype.Service;
 import main.dto.PacijentDTO;
 import main.model.Authority;
 import main.model.Pacijent;
-import main.model.ZdravstveniKarton;
+
+
 import main.repository.AuthorityRepository;
+
+import main.model.ZahtevZaRegistraciju;
+import main.model.ZdravstveniKarton;
 import main.repository.PacijentRepository;
+//import main.repository.PacijentRepository;
+import main.repository.ZahtevZaRegRepository;
 import main.repository.ZdravstveniKartonRepository;
 
 
@@ -50,6 +56,7 @@ public class RegistracijaService {
 		
 		Pacijent pacijent = new Pacijent();
 
+
 		
 		Authority auth = this.authorityRepository.findByUloga("PACIJENT");
 		List<Authority> auths = new ArrayList<>();
@@ -77,6 +84,7 @@ public class RegistracijaService {
 		
 		this.pacijentRepository.save(pacijent);
 		
+
 
 	}
 	

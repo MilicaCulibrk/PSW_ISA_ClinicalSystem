@@ -3,7 +3,9 @@ package main.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,11 +34,14 @@ public class PacijentController {
 	private PacijentService pacijentService;
 	
 
+
 	
 	@GetMapping(value = "/get/{id}")
 	@PreAuthorize("hasAuthority('PACIJENT')")
 	public ResponseEntity<PacijentDTO> getPostojeciPacijent(@PathVariable Long id) {
+
 		
+
 
 		Pacijent pacijent = pacijentService.findOne(id);
 
@@ -68,7 +73,9 @@ public class PacijentController {
 	
 	
 	@GetMapping(value = "/izlistaj")
+
 	@PreAuthorize("hasAuthority('LEKAR')")
+
 	public ResponseEntity<List<PacijentDTO>> getIzlistaj() {
 		
 		List<Pacijent> listaPacijenata = pacijentService.findAll();

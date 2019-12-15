@@ -36,12 +36,11 @@
               <div class="container-fluid">
 
 
+
                 <h1 style="color: #b3b3b3;"> Pacijent - {{ user.ime }} {{ user.prezime }} </h1>         
               </div>
             </div>
 	
-
-                          
               </div>
            
        
@@ -205,8 +204,10 @@
           korisnik: {},
           prikaz:false,
           prikazZK:false,
+
           izmeni:false,
           id: 1
+
           }
       },
       methods: {
@@ -226,6 +227,7 @@
             otvoriFormuZK(){
               axios
                 .get("/zdravstveniKarton/pronadjiZdravstveniKarton/" + this.id)
+
                 .then(zdravstveniK =>{
                   this.zdravstveniK = zdravstveniK.data;
                 })

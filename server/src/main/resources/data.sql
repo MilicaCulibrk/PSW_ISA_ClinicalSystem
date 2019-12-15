@@ -1,4 +1,6 @@
 
+
+
 INSERT INTO public.klinika(adresa, broj_recenzija, email, grad, drzava, naziv, ocena, opis, telefon)
 VALUES ('Jovana Obrenovica 83A', '5', 'klinika@klinika.com', 'Podgorica', 'Crna Gora',  'Bolnica', 3.5, 'Vrlo lepo', '+381/61-5534209');	
 
@@ -20,6 +22,7 @@ INSERT INTO public.pacijent(adresa, aktiviran_nalog, drzava,  email, grad, ime, 
 INSERT INTO public.medicinska_sestra( adresa, drzava,  email, grad, ime, jmbg, lozinka, ocena, prezime, telefon)
 	VALUES ('Marsala Tita 58','Srbija', 'mm@gmail.com', 'Novi Sad', 'Masa', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Matovic', '+381/61-5534209');
 	
+
 INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmpg, lozinka, ocena, prezime, telefon)
 	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'pb@gmail.com', 'Novi Sad', 'Peca', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209');
 
@@ -40,3 +43,4 @@ INSERT INTO public.lekar_authority (lekar_id, authority_id) VALUES (2, 2);
 INSERT INTO public.admink_authority (admink_id, authority_id) VALUES (1,5);
 INSERT INTO public.adminkc_authority (adminkc_id, authority_id) VALUES (1, 4);
 INSERT INTO public.sestra_authority (sestra_id, authority_id) VALUES (1, 3);
+
