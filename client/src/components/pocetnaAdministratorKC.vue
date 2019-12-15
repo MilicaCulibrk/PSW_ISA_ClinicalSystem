@@ -15,13 +15,13 @@
               <i  v-on:click="dodajKliniku" class="zmdi zmdi-view-dashboard">DODAJ KLINIKU</i>
           </a>
           <a href="#">
-             <i class="zmdi zmdi-link"> LISTA KLINIKA</i> 
+             <i  class="zmdi zmdi-link"> LISTA KLINIKA</i> 
           </a>
-                    <a href="#">
+          <a href="#">
              <i  v-on:click="dodajAdministratora" class="zmdi zmdi-link"> DODAJ ADMINISTRATORA</i> 
           </a>
-                <a href="#">
-             <i  class="zmdi zmdi-link"> LISTA ADMINISTRATORA</i> 
+          <a href="#">
+             <i  v-on:click="listaAdmina" class="zmdi zmdi-link"> LISTA ADMINISTRATORA</i> 
           </a>
            <a href="#">
              <i v-on:click="pogledajZahteve" class="zmdi zmdi-link" style="color: yellow" >ZAHTEVI ZA REGISTRACIJU : {{ zahtevi.length }}</i> 
@@ -206,24 +206,26 @@
                   </div>
                   </div>
     </form>
-       <form v-if="prikaz1"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
-        
+       <form v-if="prikaz1"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">       
          <option v-on:click="prikaziZahtev(zahtev)" class="card border-info" style="font-size:25px; text-align: center; position:relative;  left: 165px;  height: 3rem; width: 30rem; top: 20px"
                     v-for="zahtev in zahtevi"
                     :value="zahtev.id"
                     :key="zahtev.id"
                
-                  >
-                  
-                
-                    Zahtev {{zahtev.id}} -    Status: {{zahtev.status}}	 
-                
-        </option>
-       
-       
-       
-             
+                  >                              
+                    Zahtev {{zahtev.id}} -    Status: {{zahtev.status}}	              
+        </option>           
        </form>
+	   <form   v-if="prikazListaAdmina" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+          <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+				<li v-for="k,i in admini.length">
+ 					<a href="#" class="list-group-item list-group-item-action">{{admini[i].ime}} {{admini[i].prezime}}</a>		
+				</li>        
+          </div>
+          </div>        
+       </form>
+
                   
 </div>
 
@@ -244,6 +246,8 @@ import axios from 'axios'
       obradjen: false,
       trenutni: {},
       text: {},
+      prikazListaAdmina: false,
+      admini: {},
       }
   },
   methods: {
@@ -342,7 +346,11 @@ import axios from 'axios'
       odustani() {
         this.izmeni = false
         axios
+
         .get("/adminKlinike/get/"  + this.$store.state.user.id)
+
+        .get("http://localhost:8081/adminKC/get")
+
         .then(adminKlinike =>{
           this.korisnik = adminKlinike.data;
       })
@@ -351,6 +359,7 @@ import axios from 'axios'
       });
       },
       sacuvaj() {
+
       if(this.korisnik.ime === "" || this.korisnik.prezime === "" || this.korisnik.adresa === "" || this.korisnik.grad === "" || this.korisnik.drzava === ""
       || this.korisnik.telefon === "") {
         alert("Polja ne smeju biti prazna!");
@@ -376,6 +385,48 @@ import axios from 'axios'
  mounted() {
     axios
       .get("/adminKlinike/get/"  + this.$store.state.user.id)
+
+	      if(this.korisnik.ime === "" || this.korisnik.prezime === "" || this.korisnik.adresa === "" || this.korisnik.grad === "" || this.korisnik.drzava === ""
+	      || this.korisnik.telefon === "") {
+	        alert("Polja ne smeju biti prazna!");
+	        return;
+	      }
+	      var rex = /^\+381\/6[0-9]-?[0-9]+(-[0-9]+)?$/;
+	      if (!rex.test(String(this.korisnik.telefon.trim()))) {
+	        alert("Broj telefona treba da bude oblika +381/65-504205");
+	
+	        return;
+	      }
+	      axios
+	      .put("http://localhost:8081/adminKC/izmeni", this.korisnik)
+	      .then(adminKlinike =>{
+	        this.korisnik = adminKlinike.data;
+	        this.izmeni = false;
+	      })
+	      .catch(error => {
+	          console.log(error)
+	      });
+	    },
+	 listaAdmina(){
+	 	this.prikazListaAdmina=true;
+        this.prikaz = false;
+        this.prikaz1 = false;
+        this.prikazZ = false;	 	
+        	axios
+		      .get('http://localhost:8081/adminKlinike/izlistaj')
+		      .then(admini =>{
+		        this.admini = admini.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+	 },
+
+
+ mounted() {
+      axios
+      .get("http://localhost:8081/adminKC/get")
+
       .then(adminKlinike =>{
         this.korisnik = adminKlinike.data;
       })
