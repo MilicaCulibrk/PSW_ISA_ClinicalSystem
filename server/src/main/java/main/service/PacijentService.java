@@ -21,14 +21,12 @@ public class PacijentService {
 		return pacijentRepository.findById(id).orElseGet(null);
 	}
 	
-	public void izmeniPacijenta(PacijentDTO pacijentDTO) {
-		Pacijent pacijent = pacijentRepository.findById(pacijentDTO.getId()).orElse(null);
-		
-		if(pacijent == null) {
-			throw new ValidationException("Pacijent sa zadatim id-jem ne postoji");
-		}
-		try {
-			pacijent = pacijentRepository.getOne(pacijentDTO.getId());
+	public Pacijent findOne(String mail) {
+		return pacijentRepository.findByEmail(mail);
+	}
+	
+	public Pacijent izmeniPacijenta(Pacijent pacijent, PacijentDTO pacijentDTO) {
+		  
 			pacijent.setIme(pacijentDTO.getIme());
 			pacijent.setPrezime(pacijentDTO.getPrezime());
 			pacijent.setAdresa(pacijentDTO.getAdresa());
@@ -36,9 +34,8 @@ public class PacijentService {
 			pacijent.setGrad(pacijentDTO.getGrad());
 			pacijent.setDrzava(pacijentDTO.getDrzava());
 			pacijentRepository.save(pacijent);
-		} catch (EntityNotFoundException e) {
-			throw new ValidationException("Admin sa tim id-ijem ne postoji");
-		}
+			
+			return pacijent;
 	}
 
 }

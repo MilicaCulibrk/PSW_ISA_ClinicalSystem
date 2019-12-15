@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity
 public class KlinickiCentar {
 	

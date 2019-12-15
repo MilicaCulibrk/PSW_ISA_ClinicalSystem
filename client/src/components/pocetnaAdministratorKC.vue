@@ -24,8 +24,13 @@
              <i  class="zmdi zmdi-link"> LISTA ADMINISTRATORA</i> 
           </a>
            <a href="#">
-             <i v-on:click="pogledajZahteve" class="zmdi zmdi-link">ZAHTEVI ZA REGISTRACIJU</i> 
+             <i v-on:click="pogledajZahteve" class="zmdi zmdi-link" style="color: yellow" >ZAHTEVI ZA REGISTRACIJU : {{ zahtevi.length }}</i> 
           </a>
+            <a href="#">
+	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
+	                </i>     
+                                
+	              </a>	    	  
         </ul>
                     
       </div>
@@ -244,12 +249,13 @@ import axios from 'axios'
   methods: {
          ucitajZahteve(){
           axios
-          .get("http://localhost:8081/zahtevZaReg/getAll")
+          .get("/zahtevZaReg/getAll")
           .then(zahtevi =>{
           
           
          
           this.zahtevi = zahtevi.data;
+    
 
            
           
@@ -268,7 +274,7 @@ import axios from 'axios'
             this.prikazZ = true;
             this.trenutni = zahtev;
             axios
-	        .get("http://localhost:8081/zahtevZaReg/getPacijenta/"+ zahtev.id)
+	        .get("/zahtevZaReg/getPacijenta/"+ zahtev.id)
 	        .then(z =>{
 	          this.pacijent = z.data;
 
@@ -279,6 +285,15 @@ import axios from 'axios'
       });
              
         },
+          odjava(){
+                localStorage.removeItem("jwt");
+                this.$store.state.user = {
+                role: {
+                authority: ""
+            }
+          };
+          this.$router.push("/");
+            },
         odbijZahtev(){
         	this.trenutni.status = "ODBIJEN";
         	this.obradjen = true;
@@ -286,7 +301,7 @@ import axios from 'axios'
         	this.text = "Nazalost,"
                     + "\n\n vas zahtev je odbijen!" + "\n\nRazlog odbijanja: "+ razlog;
         	axios
-          .post("http://localhost:8081/registracija/odbijen", this.pacijent.email)
+          .post("/registracija/odbijen", this.pacijent.email)
         	
         },
         prihvatiZahtev(){
@@ -295,7 +310,7 @@ import axios from 'axios'
         	this.text = "Cestitamo,"
                     + "\n\n Upravo ste registrovani kao pacijent na sajt Klinickog centra!";
         	axios
-          .post("http://localhost:8081/registracija/register", this.pacijent)
+          .post("/registracija/register", this.pacijent)
           .then(() => {
               alert('Pacijent uspesno registrovan!');
 	        })
@@ -327,7 +342,7 @@ import axios from 'axios'
       odustani() {
         this.izmeni = false
         axios
-        .get("http://localhost:8081/adminKlinike/get")
+        .get("/adminKlinike/get/"  + this.$store.state.user.id)
         .then(adminKlinike =>{
           this.korisnik = adminKlinike.data;
       })
@@ -348,7 +363,7 @@ import axios from 'axios'
         return;
       }
       axios
-      .put("http://localhost:8081/adminKlinike/izmeni", this.korisnik)
+      .put("/adminKlinike/izmeni", this.korisnik)
       .then(adminKlinike =>{
         this.korisnik = adminKlinike.data;
         this.izmeni = false;
@@ -359,8 +374,8 @@ import axios from 'axios'
     }
     },
  mounted() {
-      axios
-      .get("http://localhost:8081/adminKlinike/get")
+    axios
+      .get("/adminKlinike/get/"  + this.$store.state.user.id)
       .then(adminKlinike =>{
         this.korisnik = adminKlinike.data;
       })

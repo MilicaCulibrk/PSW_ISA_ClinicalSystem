@@ -18,7 +18,12 @@
 	              <a href="#">
 	                <i v-on:click="otvoriListuKlinika"> LISTA KLINIKA
 	                </i>                   
-	              </a>	               
+	              </a>	  
+                  <a href="#">
+	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
+	                </i>     
+                                
+	              </a>	    	               
 	           </ul>
 	        </div>
             <!-- Content -->
@@ -140,7 +145,16 @@ export default {
 		},
 		izmena(){
 			this.izmeni = true
-		},
+    },
+      odjava(){
+                localStorage.removeItem("jwt");
+                this.$store.state.user = {
+                role: {
+                authority: ""
+            }
+          };
+          this.$router.push("/");
+            },
 		odustani(){
 	        this.izmeni = false
 	        axios

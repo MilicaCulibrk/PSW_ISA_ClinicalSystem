@@ -37,7 +37,7 @@ public class AdminKlinikeService {
 		ak.setEmail(administratorDTO.getEmail());
 		ak.setJmbg(administratorDTO.getJmbg());
 		ak.setLozinka(administratorDTO.getLozinka());
-		ak.setKlinika(klinikaRepository.getOne(administratorDTO.getIdKlinike()));
+		//ak.setKlinika(klinikaRepository.getOne(administratorDTO.getIdKlinike()));
 		for (AdministratorKlinike k : adminKlinikeRepository.findAll()) {
 			if (ak.getEmail().equals(k.getEmail())) {
 				return null;

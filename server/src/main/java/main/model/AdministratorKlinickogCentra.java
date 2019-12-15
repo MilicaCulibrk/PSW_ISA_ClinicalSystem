@@ -1,6 +1,8 @@
 package main.model;
 
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,11 +13,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-public class AdministratorKlinickogCentra {
+public class AdministratorKlinickogCentra implements UserDetails{
 	
 	
 	@Id
@@ -57,6 +66,12 @@ public class AdministratorKlinickogCentra {
 	
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "adminKC")
 	private Set<ZahtevZaRegistraciju> zahtevi;
+	
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@JoinTable(name = "adminkc_authority",
+			joinColumns = @JoinColumn(name = "adminkc_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+	private List<Authority> authorities;
 	
    
    public AdministratorKlinickogCentra(Long id, String ime, String prezime, String email, String lozinka,
@@ -185,8 +200,79 @@ public String toString() {
 			+ ", lozinka=" + lozinka + ", adresa=" + adresa + ", grad=" + grad + ", drzava=" + drzava + ", telefon="
 			+ telefon + ", jmbg=" + jmbg + ", klinickiCentar=" + klinickiCentar + "]";
 }
-  
 
-   
+public void setAuthorities(List<Authority> authorities) {
+	this.authorities = authorities;
+}
+
+@Override
+public Collection<? extends GrantedAuthority> getAuthorities() {
+	return this.authorities;
+}
+
+
+@Override
+
+public String getPassword() {
+
+	return lozinka;
+
+}
+
+
+
+@Override
+
+public String getUsername() {
+
+	return email;
+
+}
+
+
+
+@JsonIgnore
+
+@Override
+
+public boolean isAccountNonExpired() {
+
+	return true;
+
+}
+
+
+
+@JsonIgnore
+
+@Override
+
+public boolean isAccountNonLocked() {
+
+	return true;
+
+}
+
+
+
+@JsonIgnore
+
+@Override
+
+public boolean isCredentialsNonExpired() {
+
+	return true;
+
+}
+
+
+
+@Override
+
+public boolean isEnabled() {
+
+	return true;
+
+}
 
 }

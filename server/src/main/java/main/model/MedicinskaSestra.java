@@ -5,8 +5,8 @@ package main.model;
  * Author:  23nik
  * Purpose: Defines the Class MedicinskaSestra
  ***********************************************************************/
-
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,11 +16,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-public class MedicinskaSestra {
+public class MedicinskaSestra implements UserDetails{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -92,6 +99,12 @@ public class MedicinskaSestra {
 	 @OneToMany(mappedBy = "medicinskaSestra", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
    public java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor;
 
+	 @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+		@JoinTable(name = "sestra_authority",
+				joinColumns = @JoinColumn(name = "sestra_id", referencedColumnName = "id"),
+				inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+		private List<Authority> authorities;
+	 
 
 	public Long getId() {
 		return id;
@@ -184,8 +197,91 @@ public class MedicinskaSestra {
 				+ ", telefon=" + telefon + ", jmbg=" + jmbg + ", radniKalendar=" + radniKalendar + ", klinika="
 				+ klinika + ", zahtevZaOdmor=" + zahtevZaOdmor + "]";
 	}
-   
-   
+
+
+	public void setAuthorities(List<Authority> authorities) {
+
+		this.authorities = authorities;
+
+	}
+
+
+
+	@Override
+
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+
+		return this.authorities;
+
+	}
+
+
+
+
+
+	@Override
+
+	public String getPassword() {
+
+		return lozinka;
+
+	}
+
+
+
+	@Override
+
+	public String getUsername() {
+
+		return email;
+
+	}
+
+
+
+	@JsonIgnore
+
+	@Override
+
+	public boolean isAccountNonExpired() {
+
+		return true;
+
+	}
+
+
+
+	@JsonIgnore
+
+	@Override
+
+	public boolean isAccountNonLocked() {
+
+		return true;
+
+	}
+
+
+
+	@JsonIgnore
+
+	@Override
+
+	public boolean isCredentialsNonExpired() {
+
+		return true;
+
+	}
+
+
+
+	@Override
+
+	public boolean isEnabled() {
+
+		return true;
+
+	}
     
 
 }

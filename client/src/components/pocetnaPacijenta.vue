@@ -21,19 +21,24 @@
                   </a>
                   <a href="#">
 	                <i class="zmdi zmdi-view-dashboard"> ISTORIJA PREGLEDA I OPERACIJA
-	                </i>                   
-	              </a>	    	               
+	                </i>     
+                                
+	              </a>
+                <a href="#">
+	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
+	                </i>     
+                                
+	              </a>	    	  	    	               
 	           </ul>
 	        </div>
             <!-- Content -->
             <div id="content">                    
               <div class="container-fluid">
 
-                <h1 style="color: #b3b3b3;">Pacijent </h1>                
+                <h1 style="color: #b3b3b3;"> Pacijent - {{ user.ime }} {{ user.prezime }} </h1>         
               </div>
             </div>
 	
-                <h1 style="color: #b3b3b3;">Pacijent - {{ korisnik.ime }} {{ korisnik.prezime }} </h1>                
               </div>
 
     
@@ -54,19 +59,19 @@
                             <div class="col">
                             <div class="md-form">
                               <label for="Form-username" style="color: #b3b3b3;">E-mail</label>
-                              <input type="text" v-model="korisnik.email" id="Form-username" class="form-control" disabled>
+                              <input type="text" v-model="user.email" id="Form-username" class="form-control" disabled>
                               
                               <label for="Form-ime" style="color: #b3b3b3;">Ime</label>
-                              <input type="text" v-model="korisnik.ime" id="Form-ime" class="form-control" :disabled="!izmeni">
+                              <input type="text" v-model="user.ime" id="Form-ime" class="form-control" :disabled="!izmeni">
                               
                               <label for="Form-phone" style="color: #b3b3b3;">Telefon</label>
-                              <input type="text" v-model="korisnik.telefon" id="Form-phone" class="form-control" :disabled="!izmeni">
+                              <input type="text" v-model="user.telefon" id="Form-phone" class="form-control" :disabled="!izmeni">
                               
                               <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
-                              <input type="text" v-model="korisnik.adresa" id="Form-email4" class="form-control" :disabled="!izmeni">
+                              <input type="text" v-model="user.adresa" id="Form-email4" class="form-control" :disabled="!izmeni">
 
                               <label for="Form-email4" style="color: #b3b3b3;">JMBG</label>
-                              <input type="text" v-model="korisnik.jmbg" id="Form-email4" class="form-control" disabled>
+                              <input type="text" v-model="user.jmbg" id="Form-email4" class="form-control" disabled>
                             
                               
                 
@@ -76,18 +81,18 @@
                             <div class="md-form pb-3">
                 
                               <label for="Form-city" style="color: #b3b3b3;">Lozinka</label>
-                              <input type="text" v-model="korisnik.lozinka" id="Form-city" class="form-control" disabled>
+                              <input type="text" v-model="user.lozinka" id="Form-city" class="form-control" disabled>
                               
                               <label for="Form-prezime" style="color: #b3b3b3;">Prezime</label>
-                              <input type="text" v-model="korisnik.prezime" id="Form-prezime" class="form-control" :disabled="!izmeni">
+                              <input type="text" v-model="user.prezime" id="Form-prezime" class="form-control" :disabled="!izmeni">
                 
                               
                               <label for="Form-city" style="color: #b3b3b3;">Grad</label>
-                              <input type="text" v-model="korisnik.grad" id="Form-city" class="form-control" :disabled="!izmeni">
+                              <input type="text" v-model="user.grad" id="Form-city" class="form-control" :disabled="!izmeni">
                 
                           
                               <label for="Form-city" style="color: #b3b3b3;">Drzava</label>
-                              <input type="text" v-model="korisnik.drzava" id="Form-city" class="form-control" :disabled="!izmeni">
+                              <input type="text" v-model="user.drzava" id="Form-city" class="form-control" :disabled="!izmeni">
                              
                            
 
@@ -131,7 +136,7 @@
         export default {
      data() {
          return {
-          korisnik: {},
+          user: {},
           prikaz:false,
           izmeni:false
           }
@@ -140,36 +145,45 @@
             otvoriFormu(){
                 this.prikaz=!this.prikaz;
             },
+            odjava(){
+                localStorage.removeItem("jwt");
+                this.$store.state.user = {
+                role: {
+                authority: ""
+            }
+          };
+          this.$router.push("/");
+            },
             izmena() {
             this.izmeni = true
             },
           odustani() {
             this.izmeni = false
             axios
-            .get("http://localhost:8081/pacijent/get")
+            .get("/pacijent/get/"  + this.$store.state.user.id)
             .then(pacijent =>{
-              this.korisnik = pacijent.data;
+              this.user = pacijent.data;
           })
           .catch(error => {
               console.log(error)
           });
           },
           sacuvaj() {
-          if(this.korisnik.ime === "" || this.korisnik.prezime === "" || this.korisnik.adresa === "" || this.korisnik.grad === "" || this.korisnik.drzava === ""
-          || this.korisnik.telefon === "") {
+          if(this.user.ime === "" || this.user.prezime === "" || this.user.adresa === "" || this.user.grad === "" || this.user.drzava === ""
+          || this.user.telefon === "") {
             alert("Polja ne smeju biti prazna!");
             return;
           }
           var rex = /^\+381\/6[0-9]-?[0-9]+(-[0-9]+)?$/;
-          if (!rex.test(String(this.korisnik.telefon.trim()))) {
+          if (!rex.test(String(this.user.telefon.trim()))) {
             alert("Broj telefona treba da bude oblika +381/65-504205");
     
             return;
           }
           axios
-          .put("http://localhost:8081/pacijent/izmeni", this.korisnik)
+          .put("/pacijent/izmeni", this.user)
           .then(pacijent =>{
-            this.korisnik = pacijent.data;
+            this.user = pacijent.data;
             this.izmeni = false;
           })
           .catch(error => {
@@ -178,15 +192,17 @@
         }
         },
      mounted() {
+       
           axios
-          .get("http://localhost:8081/pacijent/get")
+          .get("/pacijent/get/"  + this.$store.state.user.id)
           .then(pacijent =>{
-            this.korisnik = pacijent.data;
+            this.user = pacijent.data;
           })
           .catch(error => {
               console.log(error)
           });
-      }
+       
+        }
     };
     
     </script>

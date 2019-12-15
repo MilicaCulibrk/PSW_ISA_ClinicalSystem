@@ -5,9 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,13 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.PacijentDTO;
 import main.dto.ZahtevZaRegDTO;
-import main.model.Pacijent;
 import main.model.ZahtevZaRegistraciju;
 import main.service.ZahtevZaRegService;
 
+
 @RestController
-@RequestMapping(value = "zahtevZaReg")
-@CrossOrigin(origins = "http://localhost:8080")
+@RequestMapping(value = "/zahtevZaReg")
 public class ZahtevZaRegController {
 	
 	@Autowired
@@ -66,10 +64,6 @@ public class ZahtevZaRegController {
 		return new ResponseEntity<>(pacijentDTO, HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/posalji", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public void Posalji(@RequestBody PacijentDTO korisnik) {
-		
-		zahtevZaRegService.posaljiZahtevAdminuKC(korisnik);
-	}
+	
 	
 }

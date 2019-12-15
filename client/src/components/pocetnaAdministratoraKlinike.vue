@@ -17,6 +17,11 @@
           <a href="#">
              <i class="zmdi zmdi-link">  DEFINISANJE PREGLEDA</i> 
           </a>
+            <a href="#">
+	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
+	                </i>     
+                                
+	              </a>	    	  
         </ul>
                     
       </div>
@@ -217,7 +222,7 @@ import axios from 'axios'
       odustani() {
         this.izmeni = false
         axios
-        .get("http://localhost:8081/adminKlinike/get")
+        .get("/adminKlinike/pronadji")
         .then(adminKlinike =>{
           this.korisnik = adminKlinike.data;
       })
@@ -238,7 +243,7 @@ import axios from 'axios'
         return;
       }
       axios
-      .put("http://localhost:8081/adminKlinike/izmeni", this.korisnik)
+      .put("/adminKlinike/izmeni", this.korisnik)
       .then(adminKlinike =>{
         this.korisnik = adminKlinike.data;
         this.izmeni = false;
@@ -249,7 +254,7 @@ import axios from 'axios'
     },
     otvoriKliniku(){
    	   axios
-      .get("http://localhost:8081/klinika/pronadjiKliniku/" + this.korisnik.idKlinike)
+      .get("/klinika/pronadjiKliniku/")
       .then(klinika =>{
         this.klinika = klinika.data;
       })
@@ -260,13 +265,22 @@ import axios from 'axios'
     	this.prikaz = false;
 
     },
+      odjava(){
+                localStorage.removeItem("jwt");
+                this.$store.state.user = {
+                role: {
+                authority: ""
+            }
+          };
+          this.$router.push("/");
+            },
       izmenaKlinika() {
         this.izmeniKliniku = true
         },
       odustaniKlinika() {
         this.izmeniKliniku = false
         axios
-        .get("http://localhost:8081/klinika/pronadjiKliniku/" + this.klinika.id)
+        .get("/klinika/pronadjiKliniku/" + this.klinika.id)
         .then(klinika =>{
           this.klinika = klinika.data;
       })
@@ -287,7 +301,7 @@ import axios from 'axios'
         return;
       }
       axios
-      .put("http://localhost:8081/klinika/izmeni", this.klinika)
+      .put("/klinika/izmeni", this.klinika)
       .then(klinika =>{
         this.klinika = klinika.data;
         this.izmeniKliniku = false;
@@ -299,7 +313,7 @@ import axios from 'axios'
     },
  mounted() {
       axios
-      .get("http://localhost:8081/adminKlinike/get")
+      .get("/adminKlinike/pronadji"  + this.$store.state.user.id)
       .then(adminKlinike =>{
         this.korisnik = adminKlinike.data;
       })
