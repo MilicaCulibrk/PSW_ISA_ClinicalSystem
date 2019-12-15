@@ -15,7 +15,7 @@
               <i  v-on:click="dodajKliniku" class="zmdi zmdi-view-dashboard">DODAJ KLINIKU</i>
           </a>
           <a href="#">
-             <i  class="zmdi zmdi-link"> LISTA KLINIKA</i> 
+             <i v-on:click="listaKlinika" class="zmdi zmdi-link"> LISTA KLINIKA</i> 
           </a>
           <a href="#">
              <i  v-on:click="dodajAdministratora" class="zmdi zmdi-link"> DODAJ ADMINISTRATORA</i> 
@@ -225,7 +225,15 @@
           </div>
           </div>        
        </form>
-
+       <form   v-if="prikazListaKlinika" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+          <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+				<li v-for="k,i in klinike.length">
+ 					<a href="#" class="list-group-item list-group-item-action">{{klinike[i].naziv}}, {{klinike[i].adresa}}</a>		
+				</li>        
+          </div>
+          </div>        
+       </form>
                   
 </div>
 
@@ -238,6 +246,7 @@ import axios from 'axios'
      return {
       korisnik: {},
       pacijent: {},
+      klinike: {},
       zahtevi: [],
       prikaz:false,
       prikaz1:false,
@@ -247,6 +256,7 @@ import axios from 'axios'
       trenutni: {},
       text: {},
       prikazListaAdmina: false,
+      prikazListaKlinika: false,
       admini: {},
       }
   },
@@ -416,6 +426,22 @@ import axios from 'axios'
 		      .get('http://localhost:8081/adminKlinike/izlistaj')
 		      .then(admini =>{
 		        this.admini = admini.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+	 },
+
+	 listaKlinika(){
+	 	this.prikazListaKlinika=true;
+        this.prikaz = false;
+        this.prikaz1 = false;
+        this.prikazZ = false;	
+        this.prikazListaAdmina = false; 	
+        	axios
+		      .get('http://localhost:8081/klinika/izlistaj')
+		      .then(klinika =>{
+		        this.klinike = klinika.data;
 		      })
 		      .catch(error => {
 		          console.log(error)
