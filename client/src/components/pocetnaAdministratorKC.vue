@@ -24,9 +24,9 @@
              <i  v-on:click="listaAdmina" class="zmdi zmdi-link"> LISTA ADMINISTRATORA</i> 
           </a>
            <a href="#">
-             <i v-on:click="pogledajZahteve" class="zmdi zmdi-link" style="color: yellow" >ZAHTEVI ZA REGISTRACIJU : {{ zahtevi.length }}</i> 
+             <i v-on:click="pogledajZahteve" class="zmdi zmdi-link" style="color: rgba(130, 206, 209, 0.733); " >ZAHTEVI ZA REGISTRACIJU : {{zahtevi.length}}</i> 
           </a>
-            <a href="#">
+           <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
 	                </i>     
                                 
@@ -269,7 +269,6 @@ import axios from 'axios'
           
          
           this.zahtevi = zahtevi.data;
-    
 
            
           
@@ -299,15 +298,6 @@ import axios from 'axios'
       });
              
         },
-          odjava(){
-                localStorage.removeItem("jwt");
-                this.$store.state.user = {
-                role: {
-                authority: ""
-            }
-          };
-          this.$router.push("/");
-            },
         odbijZahtev(){
         	this.trenutni.status = "ODBIJEN";
         	this.obradjen = true;
@@ -356,11 +346,7 @@ import axios from 'axios'
       odustani() {
         this.izmeni = false
         axios
-
-        .get("/adminKlinike/get/"  + this.$store.state.user.id)
-
-        .get("http://localhost:8081/adminKC/get")
-
+        .get("/adminKlinickogCentra/get/" + this.$store.state.user.id)
         .then(adminKlinike =>{
           this.korisnik = adminKlinike.data;
       })
@@ -369,33 +355,6 @@ import axios from 'axios'
       });
       },
       sacuvaj() {
-
-      if(this.korisnik.ime === "" || this.korisnik.prezime === "" || this.korisnik.adresa === "" || this.korisnik.grad === "" || this.korisnik.drzava === ""
-      || this.korisnik.telefon === "") {
-        alert("Polja ne smeju biti prazna!");
-        return;
-      }
-      var rex = /^\+381\/6[0-9]-?[0-9]+(-[0-9]+)?$/;
-      if (!rex.test(String(this.korisnik.telefon.trim()))) {
-        alert("Broj telefona treba da bude oblika +381/65-504205");
-
-        return;
-      }
-      axios
-      .put("/adminKlinike/izmeni", this.korisnik)
-      .then(adminKlinike =>{
-        this.korisnik = adminKlinike.data;
-        this.izmeni = false;
-      })
-      .catch(error => {
-          console.log(error)
-      });
-    }
-    },
- mounted() {
-    axios
-      .get("/adminKlinike/get/"  + this.$store.state.user.id)
-
 	      if(this.korisnik.ime === "" || this.korisnik.prezime === "" || this.korisnik.adresa === "" || this.korisnik.grad === "" || this.korisnik.drzava === ""
 	      || this.korisnik.telefon === "") {
 	        alert("Polja ne smeju biti prazna!");
@@ -408,7 +367,7 @@ import axios from 'axios'
 	        return;
 	      }
 	      axios
-	      .put("http://localhost:8081/adminKC/izmeni", this.korisnik)
+	      .put("/adminKlinickogCentra/izmeni", this.korisnik)
 	      .then(adminKlinike =>{
 	        this.korisnik = adminKlinike.data;
 	        this.izmeni = false;
@@ -416,14 +375,23 @@ import axios from 'axios'
 	      .catch(error => {
 	          console.log(error)
 	      });
-	    },
+      },
+         odjava(){
+                localStorage.removeItem("jwt");
+                this.$store.state.user = {
+                role: {
+                authority: ""
+            }
+          };
+          this.$router.push("/");
+            },
 	 listaAdmina(){
 	 	this.prikazListaAdmina=true;
         this.prikaz = false;
         this.prikaz1 = false;
         this.prikazZ = false;	 	
         	axios
-		      .get('http://localhost:8081/adminKlinike/izlistaj')
+		      .get('/adminKlinike/izlistaj')
 		      .then(admini =>{
 		        this.admini = admini.data;
 		      })
@@ -431,7 +399,6 @@ import axios from 'axios'
 		          console.log(error)
 		      });
 	 },
-
 	 listaKlinika(){
 	 	this.prikazListaKlinika=true;
         this.prikaz = false;
@@ -439,7 +406,7 @@ import axios from 'axios'
         this.prikazZ = false;	
         this.prikazListaAdmina = false; 	
         	axios
-		      .get('http://localhost:8081/klinika/izlistaj')
+		      .get('/klinika/izlistaj')
 		      .then(klinika =>{
 		        this.klinike = klinika.data;
 		      })
@@ -447,12 +414,10 @@ import axios from 'axios'
 		          console.log(error)
 		      });
 	 },
-
-
+},
  mounted() {
       axios
-      .get("http://localhost:8081/adminKC/get")
-
+      .get("/adminKlinickogCentra/get/" + this.$store.state.user.id)
       .then(adminKlinike =>{
         this.korisnik = adminKlinike.data;
       })
@@ -564,5 +529,4 @@ body {
 
 
 </style>
-
 

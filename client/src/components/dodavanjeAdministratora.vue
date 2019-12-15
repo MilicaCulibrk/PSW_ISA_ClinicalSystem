@@ -9,7 +9,7 @@
             <label for="email">Email</label>
             <input type="text" v-model=administrator.email />
             <label for="lozinka">Lozinka</label>
-            <input type="text" v-model=administrator.lozinka  />
+            <input type="password" v-model=administrator.lozinka  />
             <label for="adresa">Adresa</label>
             <input type="text" v-model=administrator.adresa />
             <label for="grad">Grad</label>
@@ -80,7 +80,7 @@ import axios from "axios";
          }
 
         axios
-        .post("http://localhost:8081/adminKlinike/dodaj", this.administrator)
+        .post("/adminKlinike/dodaj", this.administrator)
         .then(administrator => {
           this.administrator.ime="";
           this.administrator.prezime="";
@@ -91,6 +91,9 @@ import axios from "axios";
           this.administrator.drzava="";
           this.administrator.telefon="";
           this.administrator.jmbg="";
+          alert("Dodat administrator!");
+          this.$router.push("/login");
+       
         })
         .catch(error => {
 			alert("Administrator sa ovim email-om vec postoji.");
@@ -102,7 +105,7 @@ import axios from "axios";
     },
     mounted() {
       axios
-      .get('http://localhost:8081/klinika/izlistaj')
+      .get('/klinika/izlistaj')
       .then(klinika =>{
 		        this.klinike = klinika.data;
 		      })

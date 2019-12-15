@@ -119,6 +119,10 @@ public AdminKCDTO(Long id, String ime, String prezime, String email, String lozi
 	this.jmbg = jmbg;
 }
 
+public AdminKCDTO() {
+	super();
+}
+
 public AdminKCDTO(AdministratorKlinickogCentra admin) {
 	super();
 	this.id = admin.getId();

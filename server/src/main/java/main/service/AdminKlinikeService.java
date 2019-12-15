@@ -1,17 +1,20 @@
 package main.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import main.SendEmailTLS;
 import main.dto.AdminKlinikeDTO;
 import main.model.AdministratorKlinike;
+import main.model.Authority;
 import main.repository.AdminKlinikeRepository;
+import main.repository.AuthorityRepository;
 import main.repository.KlinikaRepository;
 
 @Service
@@ -26,9 +29,22 @@ public class AdminKlinikeService {
 		return adminKlinikeRepository.findById(id).orElseGet(null);
 	}
 	
+
+	@Autowired
+	private AuthorityRepository authorityRepository;
+	
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	
 	public AdminKlinikeDTO dodajAdministratora(AdminKlinikeDTO administratorDTO) {
 		AdministratorKlinike ak = new AdministratorKlinike();
+		
+		Authority auth = this.authorityRepository.findByUloga("ADMIN_KLINIKE");
+		List<Authority> auths = new ArrayList<>();
+	    auths.add(auth);
+	    ak.setAuthorities(auths);
 		
 		ak.setIme(administratorDTO.getIme());
 		ak.setPrezime(administratorDTO.getPrezime());
@@ -38,8 +54,9 @@ public class AdminKlinikeService {
 		ak.setTelefon(administratorDTO.getTelefon());
 		ak.setEmail(administratorDTO.getEmail());
 		ak.setJmbg(administratorDTO.getJmbg());
-		ak.setLozinka(administratorDTO.getLozinka());
-		//ak.setKlinika(klinikaRepository.getOne(administratorDTO.getIdKlinike()));
+		ak.setLozinka(passwordEncoder.encode(administratorDTO.getLozinka()));
+	
+		ak.setKlinika(klinikaRepository.getOne(administratorDTO.getIdKlinike()));
 		for (AdministratorKlinike k : adminKlinikeRepository.findAll()) {
 			if (ak.getEmail().equals(k.getEmail())) {
 				return null;

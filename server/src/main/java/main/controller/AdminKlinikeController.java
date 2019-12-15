@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.AdminKlinikeDTO;
 import main.dto.KlinikaDTO;
+import main.dto.LekarDTO;
 import main.model.AdministratorKlinike;
 import main.model.Klinika;
+import main.model.Lekar;
 import main.service.AdminKlinikeService;
 
 
@@ -35,6 +37,7 @@ public class AdminKlinikeController {
 	
 	
 	@PostMapping(value = "/dodaj", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
 	public ResponseEntity<AdminKlinikeDTO> dodajAdministratora(@RequestBody AdminKlinikeDTO administratorDTO) {
 		
 		AdminKlinikeDTO administratordto = new AdminKlinikeDTO();
@@ -52,17 +55,22 @@ public class AdminKlinikeController {
 	
 	
 	@GetMapping(value = "/get/{id}")
-	public ResponseEntity<AdminKlinikeDTO> getAdmina(@PathVariable String id) {
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	public ResponseEntity<AdminKlinikeDTO> getAdmina(@PathVariable Long id) {
 		
-		Long idLong = Long.parseLong(id);
-		AdministratorKlinike adminKlinike = adminKlinikeService.findOne((long) 1);
+		AdministratorKlinike ak = adminKlinikeService.findOne(id);
 		
-		AdminKlinikeDTO adminKlinikeDTO = new AdminKlinikeDTO(adminKlinike);
-		
-		return new ResponseEntity<>(adminKlinikeDTO, HttpStatus.OK);
+		if (ak == null) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+
+		AdminKlinikeDTO akDTO = new AdminKlinikeDTO(ak);
+
+		return new ResponseEntity<>(akDTO, HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/izmeni", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/izmeni")
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
 	public ResponseEntity<AdminKlinikeDTO> izmeni(@RequestBody AdminKlinikeDTO adminKlinikeDTO){
 		
 		try {
@@ -76,6 +84,7 @@ public class AdminKlinikeController {
 	
 	
 	@GetMapping(value = "/izlistaj")
+	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
 	public ResponseEntity<List<AdminKlinikeDTO>> getIzlistaj() {
 		
 		List<AdministratorKlinike> listaAdmina = adminKlinikeService.findAll();

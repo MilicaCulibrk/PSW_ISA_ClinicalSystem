@@ -68,6 +68,7 @@ public class PacijentController {
 	
 	
 	@GetMapping(value = "/izlistaj")
+	@PreAuthorize("hasAuthority('LEKAR')")
 	public ResponseEntity<List<PacijentDTO>> getIzlistaj() {
 		
 		List<Pacijent> listaPacijenata = pacijentService.findAll();

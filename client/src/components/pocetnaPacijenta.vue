@@ -41,7 +41,7 @@
             </div>
 	
 
-                <h1 style="color: #b3b3b3;">Pacijent - {{ korisnik.ime }} {{ korisnik.prezime }} </h1>                
+                          
               </div>
            
        
@@ -205,7 +205,8 @@
           korisnik: {},
           prikaz:false,
           prikazZK:false,
-          izmeni:false
+          izmeni:false,
+          id: 1
           }
       },
       methods: {
@@ -224,7 +225,7 @@
 
             otvoriFormuZK(){
               axios
-                .get("http://localhost:8081/zdravstveniKarton/pronadjiZdravstveniKarton/" + 1)
+                .get("/zdravstveniKarton/pronadjiZdravstveniKarton/" + this.id)
                 .then(zdravstveniK =>{
                   this.zdravstveniK = zdravstveniK.data;
                 })

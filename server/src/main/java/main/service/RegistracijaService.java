@@ -66,37 +66,17 @@ public class RegistracijaService {
 		pacijent.setJmbg(pacijentDTO.getJmbg());
 		pacijent.setLozinka(passwordEncoder.encode(pacijentDTO.getLozinka()));
 		
+		ZdravstveniKarton zk = new ZdravstveniKarton();
+		zk.setAlergije("ambrozija");
+		zk.setDioptrija("-1.5");
+		zk.setTezina("70");
+		zk.setVisina("180");
+		zdravstveniKartonRepository.save(zk);
+		pacijent.setZdravstveniKarton(zk);
+		zk.setPacijent(pacijent);
+		
 		this.pacijentRepository.save(pacijent);
 		
-
-		Pacijent pacijentPostoji = pacijentRepository.findByEmail(pacijentDTO.getEmail());
-		ZdravstveniKarton zk = new ZdravstveniKarton();
-		
-	    if (pacijentPostoji != null) {
-			throw new ValidationException("Postoji korisnik sa datim Mailom");
-		} else {
-			try {
-				zk.setAlergije("");
-				zk.setDioptrija("");
-				zk.setTezina("");
-				zk.setVisina("");
-				zdravstveniKartonRepository.save(zk);
-				pacijent.setEmail(pacijentDTO.getEmail());
-				pacijent.setLozinka(pacijentDTO.getLozinka());
-				pacijent.setIme(pacijentDTO.getIme());
-				pacijent.setPrezime(pacijentDTO.getPrezime());
-				pacijent.setAdresa(pacijentDTO.getAdresa());
-				pacijent.setGrad(pacijentDTO.getGrad());
-				pacijent.setDrzava(pacijentDTO.getDrzava());
-				pacijent.setTelefon(pacijentDTO.getTelefon());
-				pacijent.setJmbg(pacijentDTO.getJmbg());
-				pacijent.setZdravstveniKarton(zk);
-				pacijentRepository.save(pacijent);
-				zk.setPacijent(pacijent);
-			} catch (EntityNotFoundException e) {
-				throw new ValidationException("Doslo je do greske");
-			}
-		}
 
 	}
 	

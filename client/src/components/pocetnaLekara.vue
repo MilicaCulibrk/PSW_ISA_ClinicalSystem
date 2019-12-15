@@ -18,6 +18,10 @@
           <a href="#">
              <i class="zmdi zmdi-link">LISTA PREGLEDA</i> 
           </a>
+            <a href="#">
+            <i v-on:click="otvoriListuPacijenata" class="zmdi zmdi-link">LISTA PACIJENATA</i> 
+         </a>
+
 
             <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
@@ -25,10 +29,7 @@
                                 
 	              </a>	    	  
 
-          <a href="#">
-            <i v-on:click="otvoriListuPacijenata" class="zmdi zmdi-link">LISTA PACIJENATA</i> 
-         </a>
-
+        
         </ul>
                     
       </div>
@@ -222,7 +223,7 @@ import axios from 'axios'
       odustani() {
         this.izmeni = false
         axios
-        .get("/lekar/get" + this.$store.state.user.id)
+        .get("/lekar/get/" + this.$store.state.user.id)
         .then(lekar =>{
           this.korisnik = lekar.data;
       })
@@ -265,7 +266,7 @@ import axios from 'axios'
 	  		this.prikaz=false;
 	  		this.prikazPacijenata=!this.prikazPacijenata;
 	  	      axios
-		      .get('http://localhost:8081/pacijent/izlistaj')
+		      .get('/pacijent/izlistaj')
 		      .then(pacijent =>{
 		        this.pacijenti = pacijent.data;
 		      })
@@ -275,7 +276,7 @@ import axios from 'axios'
 	  	},
     otvoriZK(pac){
       axios
-	        .get("http://localhost:8081/zdravstveniKarton/pronadjiZdravstveniKarton/"+ pac.idZdravstveniKarton)
+	        .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ pac.idZdravstveniKarton)
 	        .then(z =>{
 	          this.zdravstveniK = z.data;
           })
@@ -288,7 +289,7 @@ import axios from 'axios'
     },
     sacuvajZK(){
       axios
-      .put("http://localhost:8081/zdravstveniKarton/izmeni", this.zdravstveniK)
+      .put("/zdravstveniKarton/izmeni", this.zdravstveniK)
       .then(adminKlinike =>{
         this.zdravstveniK = adminKlinike.data;
         this.izmeniZK = false;
@@ -301,7 +302,7 @@ import axios from 'axios'
     odustaniZK(){
       this.izmeniZK = false
         axios
-        .get("http://localhost:8081/zdravstveniKarton/pronadjiZdravstveniKarton/"+ this.zdravstveniK.id)
+        .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ this.zdravstveniK.id)
 	        .then(z =>{
 	          this.zdravstveniK = z.data;
           })

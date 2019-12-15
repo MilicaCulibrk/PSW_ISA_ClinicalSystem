@@ -59,8 +59,9 @@ public class KlinikaController {
 		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);
 	}
 	
-	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	
 	@GetMapping(value = "/pronadjiKliniku/{id}")
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
 	public ResponseEntity<KlinikaDTO> getPronadjiKliniku(@PathVariable Long id) {
 		
 		Klinika klinika = klinikaService.findOne(id);
@@ -71,6 +72,7 @@ public class KlinikaController {
 	}
 	
 	@GetMapping(value = "/izlistaj")
+	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
 	public ResponseEntity<List<KlinikaDTO>> getIzlistaj() {
 		
 		List<Klinika> listaKlinika = klinikaService.findAll();

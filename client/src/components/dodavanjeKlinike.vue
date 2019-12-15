@@ -168,6 +168,8 @@ import axios from "axios";
           this.klinika.opis="";
           this.klinika.email="";
           this.klinika.ocena=0;
+          alert("Dodata klinika!");
+          this.$router.push("/login");
         })
 		.catch(error => {
 			alert("Klinika sa ovim email-om vec postoji.");

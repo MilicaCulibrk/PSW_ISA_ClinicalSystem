@@ -56,6 +56,7 @@ export default {
              	 this.proveriUlogu();       
                 }) // Kad stigne odgovor od servera preuzmi objekat
                  .catch(error => {
+               
                 })
             },
             proveriUlogu: function() {

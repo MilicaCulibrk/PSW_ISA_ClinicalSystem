@@ -11,10 +11,7 @@
 					<i v-on:click="otvoriFormu" > PROFIL            
 					</i>                                  				     
 				  </a>
-	              <a href="#">
-	                <i class="zmdi zmdi-view-dashboard"> KALENDAR
-	                </i>                   
-	              </a>
+	             
 	              <a href="#">
 	                <i v-on:click="otvoriListuKlinika"> LISTA KLINIKA
 	                </i>                   
@@ -34,8 +31,8 @@
             </div>
 	     </div>
 	
-      <form   class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
-        <div v-if="prikaz">	                    
+      <form  v-if="prikaz" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+        <div >	                    
           <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
             <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	                    
               <div class="form-group">
@@ -84,7 +81,7 @@
                     </div>
                     </div>
                   </div>
-        
+                 
                   <div class="text-center mb-4 mt-4">
                     <template>
                     <button type="button" v-if="!izmeni" v-on:click="izmena" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " >Izmeni</button>
@@ -105,7 +102,12 @@
         
           </div>
           </div>
- 		<div v-if="prikazKlinika">	                    
+
+    </form>
+     <form v-if="prikazKlinika"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+
+
+ 		<div >	                    
           <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
             <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
 				<li v-for="k,i in klinike.length">
@@ -158,9 +160,9 @@ export default {
 		odustani(){
 	        this.izmeni = false
 	        axios
-	        .get("http://localhost:8081/medicinskaSestra/get")
+	        .get("/medicinska_sestra/get/"  + this.$store.state.user.id)
 	        .then(medicinskaSestra =>{
-		          this.korisnik = medicinskaSestra.data;
+		          this.korisnik = medicinska_sestra.data;
 		      })
 		    .catch(error => {
 		          console.log(error)
@@ -179,7 +181,7 @@ export default {
              	return;
             }
             axios
-            .put("http://localhost:8081/medicinskaSestra/izmeni", this.korisnik)
+            .put("/medicinska_sestra/izmeni", this.korisnik)
             .then(medicinskaSestra =>{
               this.korisnik = medicinskaSestra.data;
               this.izmeni = false;
@@ -192,7 +194,7 @@ export default {
 	  		this.prikaz=false
 	  		this.prikazKlinika=!this.prikazKlinika
 	  	      axios
-		      .get('http://localhost:8081/klinika/izlistaj')
+		      .get('/klinika/izlistaj')
 		      .then(klinika =>{
 		        this.klinike = klinika.data;
 		      })
@@ -203,7 +205,7 @@ export default {
 	},
 	mounted() {
       axios
-      .get('http://localhost:8081/medicinskaSestra/get')
+      .get('/medicinska_sestra/get/'  + this.$store.state.user.id)
       .then(medicinskaSestra =>{
         this.korisnik = medicinskaSestra.data;
       })
