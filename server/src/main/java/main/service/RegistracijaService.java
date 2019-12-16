@@ -1,21 +1,29 @@
 package main.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import main.dto.PacijentDTO;
-import main.dto.RegistracijaDTO;
-import main.model.AdministratorKlinickogCentra;
+import main.model.Authority;
 import main.model.Pacijent;
+
+
+import main.repository.AuthorityRepository;
+
 import main.model.ZahtevZaRegistraciju;
 import main.model.ZdravstveniKarton;
 import main.repository.PacijentRepository;
 //import main.repository.PacijentRepository;
 import main.repository.ZahtevZaRegRepository;
 import main.repository.ZdravstveniKartonRepository;
+
 
 @Service
 public class RegistracijaService {
@@ -32,6 +40,14 @@ public class RegistracijaService {
 		
 		@Autowired
 		private AdminKCService adminKCService;
+		
+
+		@Autowired
+		private AuthorityRepository authorityRepository;
+		
+		@Autowired
+		private PasswordEncoder passwordEncoder;
+
 
 
 
@@ -39,38 +55,38 @@ public class RegistracijaService {
 	public void register(PacijentDTO pacijentDTO) {
 		
 		Pacijent pacijent = new Pacijent();
-		Pacijent pacijentPostoji = pacijentRepository.findByEmail(pacijentDTO.getEmail());
-		ZdravstveniKarton zk = new ZdravstveniKarton();
+
+
 		
-	    if (pacijentPostoji != null) {
-			throw new ValidationException("Postoji korisnik sa datim Mailom");
-		} else {
-			try {
-				zk.setAlergije("");
-				zk.setDioptrija("");
-				zk.setTezina("");
-				zk.setVisina("");
-				zdravstveniKartonRepository.save(zk);
-				pacijent.setEmail(pacijentDTO.getEmail());
-				pacijent.setLozinka(pacijentDTO.getLozinka());
-				pacijent.setIme(pacijentDTO.getIme());
-				pacijent.setPrezime(pacijentDTO.getPrezime());
-				pacijent.setAdresa(pacijentDTO.getAdresa());
-				pacijent.setGrad(pacijentDTO.getGrad());
-				pacijent.setDrzava(pacijentDTO.getDrzava());
-				pacijent.setTelefon(pacijentDTO.getTelefon());
-				pacijent.setJmbg(pacijentDTO.getJmbg());
-				pacijent.setZdravstveniKarton(zk);
-				pacijentRepository.save(pacijent);
-				zk.setPacijent(pacijent);
-			} catch (EntityNotFoundException e) {
-				throw new ValidationException("Doslo je do greske");
-			}
-		}
+		Authority auth = this.authorityRepository.findByUloga("PACIJENT");
+		List<Authority> auths = new ArrayList<>();
+	    auths.add(auth);
+		
+		pacijent.setAdresa(pacijentDTO.getAdresa());
+	    pacijent.setAuthorities(auths);
+		pacijent.setTelefon(pacijentDTO.getTelefon());
+		pacijent.setDrzava(pacijentDTO.getDrzava());
+		pacijent.setGrad(pacijentDTO.getGrad());
+		pacijent.setIme(pacijentDTO.getIme());
+		pacijent.setEmail(pacijentDTO.getEmail());
+		pacijent.setPrezime(pacijentDTO.getPrezime());
+		pacijent.setJmbg(pacijentDTO.getJmbg());
+		pacijent.setLozinka(passwordEncoder.encode(pacijentDTO.getLozinka()));
+		
+		ZdravstveniKarton zk = new ZdravstveniKarton();
+		zk.setAlergije("ambrozija");
+		zk.setDioptrija("-1.5");
+		zk.setTezina("70");
+		zk.setVisina("180");
+		zdravstveniKartonRepository.save(zk);
+		pacijent.setZdravstveniKarton(zk);
+		zk.setPacijent(pacijent);
+		
+		this.pacijentRepository.save(pacijent);
+		
 
-	} 
-	
 
+	}
 	
 
 }

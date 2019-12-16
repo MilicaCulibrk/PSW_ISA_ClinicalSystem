@@ -1,3 +1,8 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+Vue.use(VueRouter)
+
 import login from './components/login.vue';
 import pocetna from './components/pocetna.vue';
 import registration from './components/registration.vue';
@@ -9,8 +14,7 @@ import pocetnaMedicinskeSestre from './components/pocetnaMedicinskeSestre.vue';
 import pocetnaLekara from './components/pocetnaLekara.vue';
 import pocetnaPacijenta from './components/pocetnaPacijenta.vue';
 
-
-export default [
+const routes = [
     { path: '/', component: pocetna},
     { path: '/login', component: login},
     { path: '/registration', component: registration},
@@ -22,3 +26,9 @@ export default [
     { path: '/pocetnaPacijenta', component: pocetnaPacijenta},
     { path: '/pocetnaLekara', component: pocetnaLekara}
 ]
+
+const router = new VueRouter({
+  routes
+})
+
+export default router

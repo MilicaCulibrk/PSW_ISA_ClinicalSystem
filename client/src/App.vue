@@ -10,6 +10,7 @@
 
   import Vue from 'vue';
   import BootstrapVue from 'bootstrap-vue';
+  import VueJwtDecode from "vue-jwt-decode";
 
   Vue.use(BootstrapVue);
 
@@ -18,9 +19,9 @@ export default {
       'login': login,
       'pocetna': pocetna
   },
-  data(){
-    return{
-
+   mounted() {
+    if (localStorage.getItem("jwt") != undefined) {
+      this.$store.state.user = VueJwtDecode.decode(localStorage.getItem("jwt"));
     }
   }
  

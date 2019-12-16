@@ -24,8 +24,13 @@
              <i  v-on:click="listaAdmina" class="zmdi zmdi-link"> LISTA ADMINISTRATORA</i> 
           </a>
            <a href="#">
-             <i v-on:click="pogledajZahteve" class="zmdi zmdi-link">ZAHTEVI ZA REGISTRACIJU</i> 
+             <i v-on:click="pogledajZahteve" class="zmdi zmdi-link" style="color: rgba(130, 206, 209, 0.733); " >ZAHTEVI ZA REGISTRACIJU : {{zahtevi.length}}</i> 
           </a>
+           <a href="#">
+	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
+	                </i>     
+                                
+	              </a>	    	  
         </ul>
                     
       </div>
@@ -258,7 +263,7 @@ import axios from 'axios'
   methods: {
          ucitajZahteve(){
           axios
-          .get("http://localhost:8081/zahtevZaReg/getAll")
+          .get("/zahtevZaReg/getAll")
           .then(zahtevi =>{
           
           
@@ -282,7 +287,7 @@ import axios from 'axios'
             this.prikazZ = true;
             this.trenutni = zahtev;
             axios
-	        .get("http://localhost:8081/zahtevZaReg/getPacijenta/"+ zahtev.id)
+	        .get("/zahtevZaReg/getPacijenta/"+ zahtev.id)
 	        .then(z =>{
 	          this.pacijent = z.data;
 
@@ -300,7 +305,7 @@ import axios from 'axios'
         	this.text = "Nazalost,"
                     + "\n\n vas zahtev je odbijen!" + "\n\nRazlog odbijanja: "+ razlog;
         	axios
-          .post("http://localhost:8081/registracija/odbijen", this.pacijent.email)
+          .post("/registracija/odbijen", this.pacijent.email)
         	
         },
         prihvatiZahtev(){
@@ -309,7 +314,7 @@ import axios from 'axios'
         	this.text = "Cestitamo,"
                     + "\n\n Upravo ste registrovani kao pacijent na sajt Klinickog centra!";
         	axios
-          .post("http://localhost:8081/registracija/register", this.pacijent)
+          .post("/registracija/register", this.pacijent)
           .then(() => {
               alert('Pacijent uspesno registrovan!');
 	        })
@@ -341,7 +346,7 @@ import axios from 'axios'
       odustani() {
         this.izmeni = false
         axios
-        .get("http://localhost:8081/adminKC/get")
+        .get("/adminKlinickogCentra/get/" + this.$store.state.user.id)
         .then(adminKlinike =>{
           this.korisnik = adminKlinike.data;
       })
@@ -362,7 +367,7 @@ import axios from 'axios'
 	        return;
 	      }
 	      axios
-	      .put("http://localhost:8081/adminKC/izmeni", this.korisnik)
+	      .put("/adminKlinickogCentra/izmeni", this.korisnik)
 	      .then(adminKlinike =>{
 	        this.korisnik = adminKlinike.data;
 	        this.izmeni = false;
@@ -370,14 +375,23 @@ import axios from 'axios'
 	      .catch(error => {
 	          console.log(error)
 	      });
-	    },
+      },
+         odjava(){
+                localStorage.removeItem("jwt");
+                this.$store.state.user = {
+                role: {
+                authority: ""
+            }
+          };
+          this.$router.push("/");
+            },
 	 listaAdmina(){
 	 	this.prikazListaAdmina=true;
         this.prikaz = false;
         this.prikaz1 = false;
         this.prikazZ = false;	 	
         	axios
-		      .get('http://localhost:8081/adminKlinike/izlistaj')
+		      .get('/adminKlinike/izlistaj')
 		      .then(admini =>{
 		        this.admini = admini.data;
 		      })
@@ -392,7 +406,7 @@ import axios from 'axios'
         this.prikazZ = false;	
         this.prikazListaAdmina = false; 	
         	axios
-		      .get('http://localhost:8081/klinika/izlistaj')
+		      .get('/klinika/izlistaj')
 		      .then(klinika =>{
 		        this.klinike = klinika.data;
 		      })
@@ -403,7 +417,7 @@ import axios from 'axios'
 },
  mounted() {
       axios
-      .get("http://localhost:8081/adminKC/get")
+      .get("/adminKlinickogCentra/get/" + this.$store.state.user.id)
       .then(adminKlinike =>{
         this.korisnik = adminKlinike.data;
       })
@@ -515,5 +529,4 @@ body {
 
 
 </style>
-
 

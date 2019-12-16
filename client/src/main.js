@@ -1,19 +1,26 @@
 import Vue from 'vue'
 import App from './App.vue'
-import VueResource from 'vue-resource'
-import VueRouter from 'vue-router'
-import Routes from './routes'
+import router from './routes'
+import store from './store'
+import axios from "axios";
+import BootstrapVue from 'bootstrap-vue'
 
-Vue.use(VueResource);
-Vue.use(VueRouter);
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-const router = new VueRouter({
-    routes: Routes
-});
+axios.defaults.baseURL = "http://localhost:8081"
+
+axios.interceptors.request.use(config => {
+  config.headers['Authorization'] = "Bearer " + localStorage.getItem("jwt");
+  return config;
+})
+
+Vue.config.productionTip = false
+
+Vue.use(BootstrapVue)
 
 new Vue({
-  el: '#app',
-  render: h => h(App),
-  router: router
-
-})
+  router,
+  store,
+  render: h => h(App)
+}).$mount('#app')

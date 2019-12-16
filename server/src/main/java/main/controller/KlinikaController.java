@@ -1,6 +1,4 @@
 package main.controller;
-import org.springframework.http.MediaType;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +6,9 @@ import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,19 +18,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import main.dto.AdminKlinikeDTO;
 import main.dto.KlinikaDTO;
 import main.model.Klinika;
 import main.service.KlinikaService;
 
 
+
+@CrossOrigin
 @RestController
-@RequestMapping(value = "klinika")
-@CrossOrigin(origins = "http://localhost:8080")
+@RequestMapping(value = "/klinika")
 public class KlinikaController {
+	
 	@Autowired
 	private KlinikaService klinikaService;
 	
+	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
 	@PostMapping(value = "/dodajKlinikuUBazu", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<KlinikaDTO> dodajKliniku(@RequestBody KlinikaDTO klinikaDTO) {
 		
@@ -57,7 +59,9 @@ public class KlinikaController {
 		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);
 	}
 	
+	
 	@GetMapping(value = "/pronadjiKliniku/{id}")
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
 	public ResponseEntity<KlinikaDTO> getPronadjiKliniku(@PathVariable Long id) {
 		
 		Klinika klinika = klinikaService.findOne(id);
@@ -68,6 +72,7 @@ public class KlinikaController {
 	}
 	
 	@GetMapping(value = "/izlistaj")
+	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
 	public ResponseEntity<List<KlinikaDTO>> getIzlistaj() {
 		
 		List<Klinika> listaKlinika = klinikaService.findAll();
@@ -79,6 +84,7 @@ public class KlinikaController {
 		return new ResponseEntity<>(listaKlinikaDTO, HttpStatus.OK);
 	}
 	
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
 	@PutMapping(value = "/izmeni", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<KlinikaDTO> izmeni(@RequestBody KlinikaDTO klinikaDTO){
 		

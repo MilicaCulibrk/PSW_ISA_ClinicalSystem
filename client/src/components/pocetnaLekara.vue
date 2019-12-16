@@ -18,9 +18,24 @@
           <a href="#">
              <i class="zmdi zmdi-link">LISTA PREGLEDA</i> 
           </a>
+
+            <a href="#">
+            <i v-on:click="otvoriListuPacijenata" class="zmdi zmdi-link">LISTA PACIJENATA</i> 
+         </a>
+
+
+            <a href="#">
+	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
+	                </i>     
+                                
+	              </a>	    	  
+
+        
+
           <a href="#">
             <i v-on:click="otvoriListuPacijenata" class="zmdi zmdi-link">LISTA PACIJENATA</i> 
          </a>
+
         </ul>
                     
       </div>
@@ -214,7 +229,7 @@ import axios from 'axios'
       odustani() {
         this.izmeni = false
         axios
-        .get("http://localhost:8081/lekar/get")
+        .get("/lekar/get/" + this.$store.state.user.id)
         .then(lekar =>{
           this.korisnik = lekar.data;
       })
@@ -222,6 +237,15 @@ import axios from 'axios'
           console.log(error)
       });
       },
+       odjava(){
+                localStorage.removeItem("jwt");
+                this.$store.state.user = {
+                role: {
+                authority: ""
+            }
+          };
+          this.$router.push("/");
+            },
       sacuvaj() {
       if(this.korisnik.ime === "" || this.korisnik.prezime === "" || this.korisnik.adresa === "" || this.korisnik.grad === "" || this.korisnik.drzava === ""
       || this.korisnik.telefon === "") {
@@ -235,7 +259,7 @@ import axios from 'axios'
         return;
       }
       axios
-      .put("http://localhost:8081/lekar/izmeni", this.korisnik)
+      .put("/lekar/izmeni", this.korisnik)
       .then(lekar =>{
         this.korisnik = lekar.data;
         this.izmeni = false;
@@ -248,7 +272,9 @@ import axios from 'axios'
 	  		this.prikaz=false;
 	  		this.prikazPacijenata=!this.prikazPacijenata;
 	  	      axios
-		      .get('http://localhost:8081/pacijent/izlistaj')
+
+		      .get('/pacijent/izlistaj')
+
 		      .then(pacijent =>{
 		        this.pacijenti = pacijent.data;
 		      })
@@ -258,7 +284,9 @@ import axios from 'axios'
 	  	},
     otvoriZK(pac){
       axios
-	        .get("http://localhost:8081/zdravstveniKarton/pronadjiZdravstveniKarton/"+ pac.idZdravstveniKarton)
+
+	        .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ pac.idZdravstveniKarton)
+
 	        .then(z =>{
 	          this.zdravstveniK = z.data;
           })
@@ -271,7 +299,9 @@ import axios from 'axios'
     },
     sacuvajZK(){
       axios
-      .put("http://localhost:8081/zdravstveniKarton/izmeni", this.zdravstveniK)
+
+      .put("/zdravstveniKarton/izmeni", this.zdravstveniK)
+
       .then(adminKlinike =>{
         this.zdravstveniK = adminKlinike.data;
         this.izmeniZK = false;
@@ -284,7 +314,9 @@ import axios from 'axios'
     odustaniZK(){
       this.izmeniZK = false
         axios
-        .get("http://localhost:8081/zdravstveniKarton/pronadjiZdravstveniKarton/"+ this.zdravstveniK.id)
+
+        .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ this.zdravstveniK.id)
+
 	        .then(z =>{
 	          this.zdravstveniK = z.data;
           })
@@ -296,7 +328,7 @@ import axios from 'axios'
     },
  mounted() {
       axios
-      .get("http://localhost:8081/lekar/get")
+      .get("/lekar/get/" + this.$store.state.user.id)
       .then(lekar =>{
         this.korisnik = lekar.data;
       })

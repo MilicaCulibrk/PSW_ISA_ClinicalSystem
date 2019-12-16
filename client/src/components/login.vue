@@ -3,64 +3,92 @@
       <div class="form">
         <form class="login-form">
            <label for="email">Email</label>
-           <input type="text" v-model="korisnik.email"  placeholder="Email" required id="email">
+           <input type="email" v-model="user.email"  placeholder="Email" required id="email">
           <label for="password">Lozinka</label>
-           <input type="password" v-model="korisnik.lozinka"  placeholder="********" required id="lozinka">
+           <input type="password" v-model="user.lozinka"  placeholder="********" required id="lozinka">
           <button v-on:click="login">Prijavite se</button>
           <p class="message">Niste registrovani? <router-link to="/registration">Napravite nalog</router-link></p>
         </form>
       </div>
     </div>
-</template>
+ </template>
 
 <script>
 import axios from "axios";
+import VueJwtDecode from "vue-jwt-decode";
+
 export default {
   data() {
     return {
-          korisnik: {korisnickoIme:"", lozinka:""},     
+     user: {
+        email: "",
+        lozinka: "",
+      },
+          token: null,
+		  neispravniPodaci: false,   
        };
   },
   methods: {
 	   login(){
 	    	var temp = this;
-	        if (this.korisnik.email=="" || this.korisnik.lozinka==""){
+	        if (this.user.email=="" || this.user.lozinka==""){
 	        	alert('Morate uneti sva polja!');
           		return;
 	          }
 	          
 	  var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      if (!re.test(String(this.korisnik.email.trim()).toLowerCase())) {
+      if (!re.test(String(this.user.email.trim()).toLowerCase())) {
         alert('Mail adresa nije u odgovarajucem formatu!');
         return;
      
-      }axios
-        .post("http://localhost:8081/prijava/login", this.korisnik)
-        .then(korisnik => {
-        
-          if(korisnik.data.uloga == "ADMIN_KLINIKE"){
-        		this.$router.push("/pocetnaAdministratoraKlinike");
-        	}else if(korisnik.data.uloga == "ADMIN_CENTRA"){
-        		this.$router.push("/pocetnaAdministratorKC");
-        	}else if(korisnik.data.uloga == "MEDICINSKA_SESTRA"){
-        		this.$router.push("/pocetnaMedicinskeSestre");
-        	}else if(korisnik.data.uloga == "LEKAR"){
-        		this.$router.push("/pocetnaLekara");
-        	}else if(korisnik.data.uloga == "PACIJENT"){
-        		this.$router.push("/pocetnaPacijenta");
-        	}else{
-        		alert('Ne postoji takav korisnik!');
-        	}
+      }
       
-          
-          
-        })
-        .catch(error => {
-          alert('Ne postoji takav korisnik!');
-        });
+          axios
+        .post("/auth/login", this.user)
+        .then(response => {
+          this.user.email = "";
+          this.user.lozinka = "";
+          localStorage.setItem("jwt", response.data.accessToken);
+          this.$store.state.user = VueJwtDecode.decode(
+            localStorage.getItem("jwt")
+          );
+    
+             	 this.proveriUlogu();       
+                }) // Kad stigne odgovor od servera preuzmi objekat
+                 .catch(error => {
+               
+                })
+            },
+            proveriUlogu: function() {
+
+               if (this.$store.state.user.role.authority == "PACIJENT") {
+
+                    this.$router.push('/pocetnaPacijenta')
+
+                } else if (this.$store.state.user.role.authority == "ADMIN_KLINIKE") {
+
+                    this.$router.push('/pocetnaAdministratoraKlinike')
+
+                }else if (this.$store.state.user.role.authority == "LEKAR"){
+
+                    this.$router.push('/pocetnaLekara')
+                    
+                }else if(this.$store.state.user.role.authority == "ADMIN_CENTRA"){
+
+                    this.$router.push('/pocetnaAdministratorKC')
+                
+
+                }else if (this.$store.state.user.role.authority == "MEDICINSKA_SESTRA"){
+
+                    this.$router.push('/pocetnaMedicinskeSestre')
+
+                }
+
+            }
+
+        }    
+
     }
-  }
-};
 </script>
 
 

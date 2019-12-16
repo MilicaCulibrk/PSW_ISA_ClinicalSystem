@@ -1,5 +1,9 @@
 package main.model;
 
+import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,10 +11,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-public class AdministratorKlinike {
+public class AdministratorKlinike implements UserDetails{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +58,14 @@ public class AdministratorKlinike {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "klinika_id", referencedColumnName = "id")
    public Klinika klinika;
+	
+	
+
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+	@JoinTable(name = "admink_authority",
+			joinColumns = @JoinColumn(name = "admink_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+	private List<Authority> authorities;
 
 
 	public AdministratorKlinike() {
@@ -188,7 +207,89 @@ public class AdministratorKlinike {
 				+ ", lozinka=" + lozinka + ", adresa=" + adresa + ", grad=" + grad + ", drzava=" + drzava + ", telefon="
 				+ telefon + ", jmbg=" + jmbg + ", klinika=" + klinika + "]";
 	}
-   
+
+	public void setAuthorities(List<Authority> authorities) {
+
+		this.authorities = authorities;
+
+	}
+
+
+
+	@Override
+
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+
+		return this.authorities;
+
+	}
+
+
+
+
+	@Override
+
+	public String getPassword() {
+
+		return lozinka;
+
+	}
+
+
+
+	@Override
+
+	public String getUsername() {
+
+		return email;
+
+	}
+
+
+
+	@JsonIgnore
+
+	@Override
+
+	public boolean isAccountNonExpired() {
+
+		return true;
+
+	}
+
+
+
+	@JsonIgnore
+
+	@Override
+
+	public boolean isAccountNonLocked() {
+
+		return true;
+
+	}
+
+
+
+	@JsonIgnore
+
+	@Override
+
+	public boolean isCredentialsNonExpired() {
+
+		return true;
+
+	}
+
+
+
+	@Override
+
+	public boolean isEnabled() {
+
+		return true;
+
+	}
    
     
 

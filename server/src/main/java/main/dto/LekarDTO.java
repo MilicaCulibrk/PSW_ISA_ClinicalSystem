@@ -27,7 +27,11 @@ public class LekarDTO {
 
 	
 
-	
+	   public LekarDTO() {
+			super();
+			// TODO Auto-generated constructor stub
+		}
+
  
 	
 	public LekarDTO(Long id, String ime, String prezime, String lozinka, String jmbg, String adresa, String email,

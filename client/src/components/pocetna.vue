@@ -74,6 +74,25 @@
 
 </template>
 
+<script>
+export default {
+  methods: {
+      odjava(){
+               localStorage.removeItem("jwt");
+                this.$store.state.user = {
+                role: {
+                authority: ""
+                }
+            };
+   
+        },
+  },
+   mounted() {
+      this.odjava()
+  }
+};
+</script>
+
 <style scoped>
  
  .container {

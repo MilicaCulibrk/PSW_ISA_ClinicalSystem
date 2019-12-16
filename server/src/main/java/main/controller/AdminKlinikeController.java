@@ -9,29 +9,35 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.AdminKlinikeDTO;
 import main.dto.KlinikaDTO;
+import main.dto.LekarDTO;
 import main.model.AdministratorKlinike;
 import main.model.Klinika;
+import main.model.Lekar;
 import main.service.AdminKlinikeService;
 
+
+@CrossOrigin
 @RestController
-@RequestMapping(value = "adminKlinike")
-@CrossOrigin(origins = "http://localhost:8080")
+@RequestMapping(value = "/adminKlinike")
 public class AdminKlinikeController {
 	
 	@Autowired
 	private AdminKlinikeService adminKlinikeService;
 	
+	
 	@PostMapping(value = "/dodaj", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
 	public ResponseEntity<AdminKlinikeDTO> dodajAdministratora(@RequestBody AdminKlinikeDTO administratorDTO) {
 		
 		AdminKlinikeDTO administratordto = new AdminKlinikeDTO();
@@ -47,17 +53,24 @@ public class AdminKlinikeController {
 		return new ResponseEntity<>(administratordto, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/get")
-	public ResponseEntity<AdminKlinikeDTO> getAdmina() {
+	
+	@GetMapping(value = "/get/{id}")
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	public ResponseEntity<AdminKlinikeDTO> getAdmina(@PathVariable Long id) {
 		
-		AdministratorKlinike adminKlinike = adminKlinikeService.findOne((long) 2);
+		AdministratorKlinike ak = adminKlinikeService.findOne(id);
 		
-		AdminKlinikeDTO adminKlinikeDTO = new AdminKlinikeDTO(adminKlinike);
-		
-		return new ResponseEntity<>(adminKlinikeDTO, HttpStatus.OK);
+		if (ak == null) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+
+		AdminKlinikeDTO akDTO = new AdminKlinikeDTO(ak);
+
+		return new ResponseEntity<>(akDTO, HttpStatus.OK);
 	}
 	
-	@PutMapping(value = "/izmeni", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/izmeni")
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
 	public ResponseEntity<AdminKlinikeDTO> izmeni(@RequestBody AdminKlinikeDTO adminKlinikeDTO){
 		
 		try {
@@ -71,6 +84,7 @@ public class AdminKlinikeController {
 	
 	
 	@GetMapping(value = "/izlistaj")
+	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
 	public ResponseEntity<List<AdminKlinikeDTO>> getIzlistaj() {
 		
 		List<AdministratorKlinike> listaAdmina = adminKlinikeService.findAll();

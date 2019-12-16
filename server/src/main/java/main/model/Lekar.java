@@ -5,8 +5,8 @@ package main.model;
  * Author:  23nik
  * Purpose: Defines the Class Lekar
  ***********************************************************************/
-
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -16,11 +16,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
-public class Lekar {
+public class Lekar implements UserDetails{
 	
 
 	@Id
@@ -82,6 +89,15 @@ public class Lekar {
 	 
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
      public java.util.Collection<Recept> recept;
+	 
+		
+	 @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	 @JoinTable(name = "lekar_authority",
+	 	joinColumns = @JoinColumn(name = "lekar_id", referencedColumnName = "id"),
+	 	inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
+	 private List<Authority> authorities;
+
+
 
 public Lekar() {
 	super();
@@ -225,7 +241,92 @@ public String toString() {
 			+ klinika + ", radniKalendar=" + radniKalendar + ", pregled=" + pregled + ", operacija=" + operacija
 			+ ", zahtevZaOdmor=" + zahtevZaOdmor + ", recept=" + recept + "]";
 }
-   
+
+
+
+public void setAuthorities(List<Authority> authorities) {
+
+	this.authorities = authorities;
+
+}
+
+
+
+@Override
+
+public Collection<? extends GrantedAuthority> getAuthorities() {
+
+	return this.authorities;
+
+}
+
+
+
+
+
+@Override
+
+public String getPassword() {
+
+	return lozinka;
+
+}
+
+
+
+@Override
+
+public String getUsername() {
+
+	return email;
+
+}
+
+
+
+@JsonIgnore
+
+@Override
+
+public boolean isAccountNonExpired() {
+
+	return true;
+
+}
+
+
+
+@JsonIgnore
+
+@Override
+
+public boolean isAccountNonLocked() {
+
+	return true;
+
+}
+
+
+
+@JsonIgnore
+
+@Override
+
+public boolean isCredentialsNonExpired() {
+
+	return true;
+
+}
+
+
+
+@Override
+
+public boolean isEnabled() {
+
+	return true;
+
+}
     
   
 

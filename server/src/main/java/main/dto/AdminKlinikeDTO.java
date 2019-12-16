@@ -41,6 +41,22 @@ public AdminKlinikeDTO(Long id, String ime, String prezime, String email, String
 	this.idKlinike = idKlinike;
 }
 
+public AdminKlinikeDTO(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
+		String drzava, String telefon, String jmbg) {
+	super();
+	this.id = id;
+	this.ime = ime;
+	this.prezime = prezime;
+	this.email = email;
+	this.lozinka = lozinka;
+	this.adresa = adresa;
+	this.grad = grad;
+	this.drzava = drzava;
+	this.telefon = telefon;
+	this.jmbg = jmbg;
+	
+}
+
 public AdminKlinikeDTO(AdministratorKlinike admin) {
 	super();
 	this.id = admin.getId();
@@ -53,7 +69,10 @@ public AdminKlinikeDTO(AdministratorKlinike admin) {
 	this.drzava = admin.getDrzava();
 	this.telefon = admin.getTelefon();
 	this.jmbg = admin.getJmbg();
-	this.idKlinike = admin.klinika.getId();
+	if(admin.getKlinika()==null)
+		this.idKlinike=null;
+	else
+	this.idKlinike = admin.getKlinika().getId(); 
 
 }
 
@@ -64,7 +83,7 @@ public Long getIdKlinike() {
 
 public void setIdKlinike(Long idKlinike) {
 	this.idKlinike = idKlinike;
-}
+}  
 
 public AdminKlinikeDTO() {
 	super();

@@ -2,6 +2,7 @@ package main.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,14 +13,16 @@ import main.SendEmailTLS;
 import main.dto.PacijentDTO;
 import main.service.RegistracijaService;
 
+@CrossOrigin
 @RestController
-@RequestMapping(value = "registracija")
-@CrossOrigin(origins = "http://localhost:8080")
+@RequestMapping(value = "/registracija")
+
 public class RegistracijaController {
 	
 	@Autowired
 	private RegistracijaService registracijaService;
 	
+
 	@PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public void Register(@RequestBody PacijentDTO korisnik) {
 		
@@ -28,6 +31,7 @@ public class RegistracijaController {
 	    SendEmailTLS.main(korisnik.getEmail(),  "Cestitamo,"
                 + "\n\n Upravo ste registrovani kao pacijent na sajt Klinickog centra!");
 	}
+
 
 	@PostMapping(value = "/odbijen", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public void Odbijen(@RequestBody String email, @RequestBody String text) {
