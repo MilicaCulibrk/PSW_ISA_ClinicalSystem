@@ -41,6 +41,7 @@ public class KlinikaService {
 	}
 	
 	public Klinika findOne(Long id) {
+		System.out.println("izvolte "+id);
 		return klinikaRepository.findById(id).orElseGet(null);
 	}
 

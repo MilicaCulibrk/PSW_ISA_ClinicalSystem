@@ -24,8 +24,12 @@ public class LekarDTO {
 	   private String drzava;
 		
 	   private String telefon;
+	   
+	   private Integer pocetak;
+	   
+	   private Integer kraj;
 
-	
+	   private Long idKlinike;	
 
 	   public LekarDTO() {
 			super();
@@ -62,6 +66,20 @@ public class LekarDTO {
 		this.drzava = lekar.getDrzava();
 		this.telefon = lekar.getTelefon();
 		this.jmbg = lekar.getJmbg();
+		this.pocetak = lekar.getPocetak();
+		this.kraj = lekar.getKraj();
+	}
+
+
+
+	public Long getIdKlinike() {
+		return idKlinike;
+	}
+
+
+
+	public void setIdKlinike(Long idKlinike) {
+		this.idKlinike = idKlinike;
 	}
 
 
@@ -72,6 +90,30 @@ public class LekarDTO {
 
 
 
+
+
+
+	public Integer getPocetak() {
+		return pocetak;
+	}
+
+
+
+	public void setPocetak(Integer pocetak) {
+		this.pocetak = pocetak;
+	}
+
+
+
+	public Integer getKraj() {
+		return kraj;
+	}
+
+
+
+	public void setKraj(Integer kraj) {
+		this.kraj = kraj;
+	}
 
 
 

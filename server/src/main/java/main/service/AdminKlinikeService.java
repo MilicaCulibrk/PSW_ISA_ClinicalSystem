@@ -65,6 +65,8 @@ public class AdminKlinikeService {
 		adminKlinikeRepository.save(ak);
 		//SendEmailTLS.main(administratorDTO.getEmail());
 		AdminKlinikeDTO administratordto =new AdminKlinikeDTO(ak);
+		//klinikaRepository.getOne(administratorDTO.getIdKlinike()).administratorKlinike.add(ak);
+
 		return administratordto;
 	}
 	
