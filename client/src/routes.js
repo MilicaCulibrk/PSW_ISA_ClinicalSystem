@@ -13,7 +13,7 @@ import pocetnaAdministratorKC from './components/pocetnaAdministratorKC.vue';
 import pocetnaMedicinskeSestre from './components/pocetnaMedicinskeSestre.vue';
 import pocetnaLekara from './components/pocetnaLekara.vue';
 import pocetnaPacijenta from './components/pocetnaPacijenta.vue';
-
+import vidiLokaciju from './components/vidiLokaciju.vue';
 const routes = [
     { path: '/', component: pocetna},
     { path: '/login', component: login},
@@ -24,7 +24,8 @@ const routes = [
     { path: '/pocetnaMedicinskeSestre', component: pocetnaMedicinskeSestre},
     { path: '/pocetnaAdministratorKC', component: pocetnaAdministratorKC},
     { path: '/pocetnaPacijenta', component: pocetnaPacijenta},
-    { path: '/pocetnaLekara', component: pocetnaLekara}
+    { path: '/pocetnaLekara', component: pocetnaLekara},
+    { path: '/vidiLokaciju', component: vidiLokaciju}
 ]
 
 const router = new VueRouter({

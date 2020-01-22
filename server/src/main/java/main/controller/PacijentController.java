@@ -22,6 +22,7 @@ import main.dto.KlinikaDTO;
 import main.dto.PacijentDTO;
 import main.model.Klinika;
 import main.model.Pacijent;
+import main.model.Sala;
 import main.service.PacijentService;
 
 
@@ -86,5 +87,8 @@ public class PacijentController {
 		
 		return new ResponseEntity<>(listaPacijenataDTO, HttpStatus.OK);
 	}
+	
+
+	
 }
 
