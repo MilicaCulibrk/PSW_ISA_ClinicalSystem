@@ -1,6 +1,8 @@
 package main.model;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,7 +11,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 
 @Entity
@@ -20,62 +26,75 @@ public class TipPregleda {
 	private Long id;
 	
 	@Column(name = "naziv", nullable = false)
-   private String naziv;
-   
+    private String naziv;
 	
-	 @OneToMany(mappedBy = "tipPregleda", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
-   public java.util.Collection<Pregled> pregled;
+	@Column(name = "oznaka", nullable = false)
+	private String oznaka;
+	
+	@Column(name = "cena", nullable = false)
+	private String cena;
 
+	@ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+	private Klinika klinika;
+	
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OneToMany(mappedBy = "tipPregleda", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
+	private Set<Lekar> lekar = new HashSet<Lekar>();
 
 	public TipPregleda() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-
-	public TipPregleda(Long id, String naziv, Collection<Pregled> pregled) {
-		super();
-		this.id = id;
-		this.naziv = naziv;
-		this.pregled = pregled;
-	}
-
-
 	public Long getId() {
 		return id;
 	}
-
 
 	public void setId(Long id) {
 		this.id = id;
 	}
 
-
 	public String getNaziv() {
 		return naziv;
 	}
-
 
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
 	}
 
+	public String getOznaka() {
+		return oznaka;
+	}
 
-	public java.util.Collection<Pregled> getPregled() {
-		return pregled;
+	public void setOznaka(String oznaka) {
+		this.oznaka = oznaka;
+	}
+
+	public String getCena() {
+		return cena;
+	}
+
+	public void setCena(String cena) {
+		this.cena = cena;
+	}
+
+	public Klinika getKlinika() {
+		return klinika;
+	}
+
+	public void setKlinika(Klinika klinika) {
+		this.klinika = klinika;
+	}
+
+	public Set<Lekar> getLekar() {
+		return lekar;
+	}
+
+	public void setLekar(Set<Lekar> lekar) {
+		this.lekar = lekar;
 	}
 
 
-	public void setPregled(java.util.Collection<Pregled> pregled) {
-		this.pregled = pregled;
-	}
-
-
-	@Override
-	public String toString() {
-		return "TipPregleda [id=" + id + ", naziv=" + naziv + ", pregled=" + pregled + "]";
-	}
-   
-   
+	
   
 }

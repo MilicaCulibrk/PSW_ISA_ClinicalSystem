@@ -1,15 +1,11 @@
 package main.service;
 
-import javax.persistence.EntityNotFoundException;
-import javax.validation.ValidationException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import main.dto.LekarDTO;
-import main.dto.PacijentDTO;
-import main.model.AdministratorKlinike;
-import main.model.Lekar;
 import main.model.Lekar;
 import main.repository.LekarRepository;
 
@@ -40,6 +36,10 @@ public class LekarService {
 		
 		return lekar;
 }
+	
+	public List<Lekar> findAll() {
+		return lekarRepository.findAll();
+	}
 	
 	
 

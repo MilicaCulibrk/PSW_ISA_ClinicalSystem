@@ -62,9 +62,7 @@ public class Pacijent implements UserDetails{
 	@Column(name = "aktiviran_nalog", nullable = false)
 	private boolean aktiviranNalog;
    
-	@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
-   public java.util.Collection<Pregled> pregled;
- 
+
 	@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
    public java.util.Collection<Operacija> operacija;
    
@@ -212,13 +210,7 @@ public void setJmbg(String jmbg) {
 	this.jmbg = jmbg;
 }
 
-public java.util.Collection<Pregled> getPregled() {
-	return pregled;
-}
 
-public void setPregled(java.util.Collection<Pregled> pregled) {
-	this.pregled = pregled;
-}
 
 public java.util.Collection<Operacija> getOperacija() {
 	return operacija;
@@ -250,14 +242,6 @@ public java.util.Collection<Izvestaj> getIzvestaj() {
 
 public void setIzvestaj(java.util.Collection<Izvestaj> izvestaj) {
 	this.izvestaj = izvestaj;
-}
-
-@Override
-public String toString() {
-	return "Pacijent [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", lozinka=" + lozinka
-			+ ", adresa=" + adresa + ", grad=" + grad + ", drzava=" + drzava + ", telefon=" + telefon + ", jmbg=" + jmbg
-			+ ", pregled=" + pregled + ", operacija=" + operacija + ", zdravstveniKarton=" + zdravstveniKarton
-			+ ", klinika=" + klinika + ", izvestaj=" + izvestaj + "]";
 }
 
 public void setAuthorities(List<Authority> authorities) {

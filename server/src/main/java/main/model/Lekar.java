@@ -74,6 +74,9 @@ public class Lekar implements UserDetails{
 	@JoinColumn(name = "klinika_id", referencedColumnName = "id")
 	 public Klinika klinika;
 	 
+	 @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+	 private TipPregleda tipPregleda;
+	 
 	 @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "radniKalendar_id", referencedColumnName = "id")
 	  public RadniKalendar radniKalendar;
@@ -327,6 +330,14 @@ public boolean isEnabled() {
 	return true;
 
 }
+public TipPregleda getTipPregleda() {
+	return tipPregleda;
+}
+public void setTipPregleda(TipPregleda tipPregleda) {
+	this.tipPregleda = tipPregleda;
+}
+
+
     
   
 
