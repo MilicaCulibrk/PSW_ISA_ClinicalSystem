@@ -52,9 +52,5 @@ public class PacijentService {
 		return pacijentRepository.findAll();
 	}
 
-	public List<Pacijent> findAll() {
-		// TODO Auto-generated method stub
-		return pacijentRepository.findAll();
-	}
 
 }
