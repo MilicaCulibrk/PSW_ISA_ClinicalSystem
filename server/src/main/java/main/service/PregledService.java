@@ -1,10 +1,13 @@
 package main.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import main.dto.PregledDTO;
 import main.model.Pregled;
+import main.model.Sala;
 import main.repository.LekarRepository;
 import main.repository.PregledRepository;
 import main.repository.SalaRepository;
@@ -42,6 +45,10 @@ public class PregledService {
 		
 		PregledDTO pregleddto = new PregledDTO(pregled);
 		return pregleddto;
+	}
+	
+	public List<Pregled> findAll() {
+		return pregledRepository.findAll();
 	}
 
 }

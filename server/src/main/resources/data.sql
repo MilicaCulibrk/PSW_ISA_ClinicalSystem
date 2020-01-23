@@ -24,14 +24,14 @@ INSERT INTO public.tip_pregleda(naziv, oznaka, cena, klinika_id)
 INSERT INTO public.tip_pregleda(naziv, oznaka, cena, klinika_id)
 	VALUES ('Kardio', 'krd', ' 3000', 1);
 	
-INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmpg, lozinka, ocena, prezime, telefon, tip_pregleda_id, klinika_id)
-	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'pb@gmail.com', 'Novi Sad', 'Peca', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 1, 1);
+INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmpg, lozinka, ocena, prezime, telefon, tip_pregleda_id, klinika_id, pocetak, kraj)
+	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'pb@gmail.com', 'Novi Sad', 'Peca', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 1, 1, 10, 13);
 	
-INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmpg, lozinka, ocena, prezime, telefon, tip_pregleda_id, klinika_id)
-	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'bb@gmail.com', 'Novi Sad', 'Bojana', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 2, 1);
+INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmpg, lozinka, ocena, prezime, telefon, tip_pregleda_id, klinika_id, pocetak, kraj)
+	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'bb@gmail.com', 'Novi Sad', 'Bojana', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 2, 1, 9, 10);
 	
 INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id)
-	VALUES ('5000', '22/01/2019', null, 1, '13:00', 1, 1, 1);
+	VALUES ('5000', '22/01/2019', null, 1, '13', 1, 1, 1);
 	
 INSERT INTO public.administrator_klinike(adresa, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon, klinika_id)
 	VALUES ('Marsala Tita 58','Srbija', 'an@gmail.com', 'Novi Sad', 'Ana', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Nikolasevic', '+381/61-5534209', 1);
