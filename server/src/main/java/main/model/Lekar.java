@@ -64,6 +64,12 @@ public class Lekar implements UserDetails{
 	@Column(name = "ocena", nullable = false)
    private int ocena;
 	
+	@Column(name = "pocetak", nullable = false)
+	private Integer pocetak;
+	
+	@Column(name = "kraj", nullable = false)
+	private Integer kraj;
+	
 	@Column(name = "brojRecenzija", nullable = false)
    private int brojRecenzija;
    
@@ -73,6 +79,9 @@ public class Lekar implements UserDetails{
 	 @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "klinika_id", referencedColumnName = "id")
 	 public Klinika klinika;
+	 
+	 @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+	 private TipPregleda tipPregleda;
 	 
 	 @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "radniKalendar_id", referencedColumnName = "id")
@@ -119,6 +128,9 @@ public Lekar(String ime, String prezime, String email, String lozinka, String ad
 	this.brojRecenzija = brojRecenzija;
 	this.izvestaj = izvestaj;
 }
+
+
+
 public Long getId() {
 	return id;
 }
@@ -233,6 +245,22 @@ public java.util.Collection<Recept> getRecept() {
 public void setRecept(java.util.Collection<Recept> recept) {
 	this.recept = recept;
 }
+
+
+
+
+public Integer getPocetak() {
+	return pocetak;
+}
+public void setPocetak(Integer pocetak) {
+	this.pocetak = pocetak;
+}
+public Integer getKraj() {
+	return kraj;
+}
+public void setKraj(Integer kraj) {
+	this.kraj = kraj;
+}
 @Override
 public String toString() {
 	return "Lekar [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", lozinka=" + lozinka
@@ -327,6 +355,14 @@ public boolean isEnabled() {
 	return true;
 
 }
+public TipPregleda getTipPregleda() {
+	return tipPregleda;
+}
+public void setTipPregleda(TipPregleda tipPregleda) {
+	this.tipPregleda = tipPregleda;
+}
+
+
     
   
 

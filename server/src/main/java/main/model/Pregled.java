@@ -1,5 +1,6 @@
 package main.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Pregled {
@@ -16,129 +18,135 @@ public class Pregled {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "datumVreme", nullable = false)
-   private long datumVreme;
+	@Column(name = "datum", nullable = false)
+    private String datum;
+	
+	@Column(name = "vreme", nullable = false)
+    private String vreme;
+	
 	
 	@Column(name = "trajanje", nullable = false)
-   private long trajanje;
+    private Double trajanje;
 	
 	@Column(name = "cena", nullable = false)
-   private double cena;
+    private double cena;
    
-   @ManyToOne(fetch = FetchType.LAZY)
-   @JoinColumn(name = "pacijent_id", referencedColumnName = "id")
-   public Pacijent pacijent;
+	@Column(name = "id_pacijenta", nullable = true, unique = false)
+	private Long idPacijenta;
+   
+    @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+	@JoinColumn(name = "lekar_id")
+	private Lekar lekar;
+    
+    @OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+	@JoinColumn(name = "sala_id")
+	private Sala sala;
+	
+	@OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+	@JoinColumn(name = "tip_pregleda_id")
+	private TipPregleda tipPregleda;
+	
 
-public Pregled() {
-	super();
-	// TODO Auto-generated constructor stub
-}
-
-public Pregled(Long id, long datumVreme, long trajanje, double cena, Pacijent pacijent) {
-	super();
-	this.id = id;
-	this.datumVreme = datumVreme;
-	this.trajanje = trajanje;
-	this.cena = cena;
-	this.pacijent = pacijent;
-}
-   
-   
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "klinika_id", referencedColumnName = "id")
-     public Klinika klinika;
-     
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "lekar_id", referencedColumnName = "id")
-	public Lekar lekar;
-     
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "tipPregleda_id", referencedColumnName = "id")
-   public TipPregleda tipPregleda;
-   
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "sala_id", referencedColumnName = "id")
-   public Sala sala;
-
+	public Pregled() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	
 	public Long getId() {
 		return id;
 	}
-
+	
+	
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public long getDatumVreme() {
-		return datumVreme;
+	
+	
+	public String getDatum() {
+		return datum;
 	}
-
-	public void setDatumVreme(long datumVreme) {
-		this.datumVreme = datumVreme;
+	
+	
+	public void setDatum(String datum) {
+		this.datum = datum;
 	}
-
-	public long getTrajanje() {
+	
+	
+	
+	
+	
+	
+	public Double getTrajanje() {
 		return trajanje;
 	}
 
-	public void setTrajanje(long trajanje) {
+
+	public void setTrajanje(Double trajanje) {
 		this.trajanje = trajanje;
 	}
+
 
 	public double getCena() {
 		return cena;
 	}
-
+	
+	
 	public void setCena(double cena) {
 		this.cena = cena;
 	}
-
-	public Pacijent getPacijent() {
-		return pacijent;
+	
+	
+	public Long getIdPacijenta() {
+		return idPacijenta;
 	}
-
-	public void setPacijent(Pacijent pacijent) {
-		this.pacijent = pacijent;
+	
+	
+	public void setIdPacijenta(Long idPacijenta) {
+		this.idPacijenta = idPacijenta;
 	}
-
-	public Klinika getKlinika() {
-		return klinika;
-	}
-
-	public void setKlinika(Klinika klinika) {
-		this.klinika = klinika;
-	}
-
+	
+	
 	public Lekar getLekar() {
 		return lekar;
 	}
-
+	
+	
 	public void setLekar(Lekar lekar) {
 		this.lekar = lekar;
 	}
-
+	
+	
+	public Sala getSala() {
+		return sala;
+	}
+	
+	
+	public void setSala(Sala sala) {
+		this.sala = sala;
+	}
+	
+	
 	public TipPregleda getTipPregleda() {
 		return tipPregleda;
 	}
-
+	
+	
 	public void setTipPregleda(TipPregleda tipPregleda) {
 		this.tipPregleda = tipPregleda;
 	}
 
-	public Sala getSala() {
-		return sala;
+
+	public String getVreme() {
+		return vreme;
 	}
 
-	public void setSala(Sala sala) {
-		this.sala = sala;
-	}
 
-	@Override
-	public String toString() {
-		return "Pregled [id=" + id + ", datumVreme=" + datumVreme + ", trajanje=" + trajanje + ", cena=" + cena
-				+ ", pacijent=" + pacijent + ", klinika=" + klinika + ", lekar=" + lekar + ", tipPregleda="
-				+ tipPregleda + ", sala=" + sala + "]";
+	public void setVreme(String vreme) {
+		this.vreme = vreme;
 	}
-   
-    
+	
+	
+
   
 }

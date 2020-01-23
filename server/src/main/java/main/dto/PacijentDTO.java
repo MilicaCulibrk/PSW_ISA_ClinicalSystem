@@ -150,5 +150,8 @@ public String getJmbg() {
 public void setJmbg(String jmbg) {
 	this.jmbg = jmbg;
 }
+
+
+
   
 }

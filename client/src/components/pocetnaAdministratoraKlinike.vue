@@ -8,20 +8,27 @@
                       
         <ul class="nav">
           <a href="#">
-              <i v-on:click="otvoriFormu" >    PROFIL          
+              <i v-on:click="otvoriProfil" >    PROFIL          
               </i>
           </a>
           <a href="#">
-              <i v-on:click="otvoriKliniku"> IZMENA KLINIKE </i>
+              <i v-on:click="otvoriIzmenaKlinike"> IZMENA KLINIKE </i>
           </a>
           <a href="#">
-             <i class="zmdi zmdi-link">  DEFINISANJE PREGLEDA</i> 
+              <i v-on:click="otvoriDodajLekara"> DODAJ LEKARA </i>
+          </a>
+          <a href="#">
+              <i v-on:click="otvoriLekariKlinike"> LEKARI KLINIKE </i>
+          </a>
+          <a href="#">
+             <i v-on:click="otvoriDefinisanjePregleda" class="zmdi zmdi-link">  DEFINISANJE PREGLEDA</i> 
           </a>
             <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
 	                </i>     
                                 
-	              </a>	    	  
+	              </a>	
+	       
         </ul>
                     
       </div>
@@ -32,10 +39,11 @@
         </div>
       </div>
     </div>
-    
-                  <form v-if="prikaz"   class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+    			
+                  <form v-if="prikazProfil"   class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+ 
                         <div >
-                                
+                                 
                             
                               <div  class="container d-flex justify-content-center" style="margin-top: 30px">
                             
@@ -114,7 +122,120 @@
                               </div>
                               </div>
                   </form>
-                  <form v-if="prikazKlinike"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+                  
+                  <form v-if="prikazDefinisanjePregleda" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+                        <div >
+                                
+                            
+                              <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+                            
+                                
+                                <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+
+                                  <div class="form-group">
+                            
+                                    <div class="card-body mx-4 mt-4">
+                                      <div class="row">
+                            
+                                        <div class="col">
+                                        <div class="md-form">
+                                          <label for="Form-username" style="color: #b3b3b3;">Datum</label>
+                                          <input type="text" v-model="pregled.datum" id="Form-username" class="form-control" >
+                                          
+                                           <label for="Form-username" style="color: #b3b3b3;">Vreme pocetka (sati)</label>
+                                            <b-form-select v-model="pregled.vreme">
+							                    <option
+							                      v-for="v in vremena"
+							                    
+							                    >{{v}}</option>
+							                  </b-form-select>
+                                          
+                                          <label for="Form-ime" style="color: #b3b3b3;">Trajanje (sati)</label>
+                                           <b-form-select v-model="pregled.trajanjePregleda">
+							                    <option
+							                      v-for="t in trajanja"
+							                      
+							                    >{{t}}</option>
+							                  </b-form-select>
+                                          
+                                        
+                                          
+                                          <label for="Form-email4" style="color: #b3b3b3;">Cena</label>
+                                          <input type="text" v-model="pregled.cena" id="Form-email4" class="form-control" >
+
+                                        
+                                          
+                            
+                                        </div>
+                                        </div>
+                                        <div class="col">
+                                        <div class="md-form pb-3">
+                            
+                            
+                            			      
+							              <label for="Form-phone" style="color: #b3b3b3;">Sala</label>
+                                          <b-form-select v-model="selektovanaSala">
+							                    <option
+							                      v-for="s in sale"
+							                      :value="s.id"
+							                      :key="s.id"
+							                    >{{s.naziv}}</option>
+							                  </b-form-select>
+                                          
+                                          <label for="Form-email4" style="color: #b3b3b3;">Tip</label>
+                                             <b-form-select v-model="selektovaniTip" @change="getLekari()">
+							                    <option
+							                      v-for="tipp in tipovi"
+							                      :value="tipp.id"
+							                      :key="tipp.id"
+							                    >{{tipp.naziv}}</option>
+							                  </b-form-select>
+                  
+							               <label for="Form-email4" style="color: #b3b3b3;">Lekar</label>
+							                 <b-form-select v-model="selektovaniLekar" >
+							                    <option
+							                      v-for="le in lekari"
+							                      :value="le.id"
+							                      :key="le.id"
+							                    >{{le.ime}}</option>
+							                  </b-form-select>
+							                                            
+							            
+                                       			
+			                                      <div class="text-center mb-4 mt-4">
+			                                        <template>
+			                                        <button   type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);" v-on:click="dodajSalu()">Dodaj</button>
+			                                        </template>
+			                                        
+			                                        
+			                                         <template>
+			                                        <button   type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);" v-on:click="odustaniDodajPregled()">Odustani</button>
+			                                        </template>
+			                                    
+			                                       
+			                                      </div>
+			                            
+
+                                        </div>
+                                        </div>
+                                      </div>
+                                      
+                            
+                            
+                                    </div>
+                            
+                                  </div>
+                            
+                            
+                                </div>
+                                
+                            
+                              </div>
+                              </div>
+                  </form>
+                  
+                  
+                  <form v-if="prikazIzmenaKlinike"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
 
                        <div>
                                 
@@ -182,6 +303,7 @@
                                         <template>
                                         <button v-if="izmeniKliniku" type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="sacuvajKlinika">Sacuvaj</button>
                                         <button v-if="izmeniKliniku" type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustaniKlinika">Odustani</button>
+                                        <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="vidiLokaciju">Vidi lok</button>
                                         </template>
                                       </div>
                             
@@ -196,33 +318,277 @@
                               </div>
                               </div>
                 </form>
-                  
+				<form v-if="prikazDodajLekara"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+
+                       <div>
+                                
+                            
+                              <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+                            
+                                
+                                <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+
+                                  <div class="form-group">
+                            
+                                    <div class="card-body mx-4 mt-4">
+                                      <div class="row">
+                            
+                                        <div class="col">
+                                        <div class="md-form">
+
+                                          
+                                          <label for="Form-ime" style="color: #b3b3b3;">Ime</label>
+                                          <input type="text" v-model="lekar.ime" id="Form-ime" class="form-control">
+                                          
+										  <label for="Form-ime" style="color: #b3b3b3;">Prezime</label>
+                                          <input type="text" v-model="lekar.prezime" id="Form-ime" class="form-control">
+                                          
+                                           <label for="Form-username" style="color: #b3b3b3;">E-mail</label>
+                                          <input type="text" v-model="lekar.email" id="Form-username" class="form-control" >
+
+                                          <label for="Form-username" style="color: #b3b3b3;">Lozinka</label>
+                                          <input type="text" v-model="lekar.lozinka" id="Form-username" class="form-control" >
+                                          
+                                          <label for="Form-phone" style="color: #b3b3b3;">Telefon</label>
+                                          <input type="text" v-model="lekar.telefon" id="Form-phone" class="form-control" >
+                                          
+                                          <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
+                                          <input type="text" v-model="lekar.adresa" id="Form-email4" class="form-control">
+
+
+                                        </div>
+                                        </div>
+                                        <div class="col">
+                                        <div class="md-form pb-3">
+                            
+                                          <label for="Form-email4" style="color: #b3b3b3;">Grad</label>
+                                          <input type="text" v-model="lekar.grad" id="Form-email4" class="form-control" >
+                                        
+                                          <label for="Form-email4" style="color: #b3b3b3;">Drzava</label>
+                                          <input type="text" v-model="lekar.drzava" id="Form-email4" class="form-control" >                                        
+                            
+                                          <label for="Form-email4" style="color: #b3b3b3;">Jmbg</label>
+                                          <input type="text" v-model="lekar.jmbg" id="Form-email4" class="form-control" >        
+                                          
+                                          <label for="Form-email4" style="color: #b3b3b3;">Pocetak radnog vremena</label>
+                                          <form >
+											  <select v-model="lekar.pocetak" name="cars">
+											    <option value=9>09:00</option>
+											    <option value=10>10:00</option>
+											    <option value=11>11:00</option>
+											    <option value=12>12:00</option>
+											  </select>
+									      </form> 
+									    
+									      <label for="Form-email4" style="color: #b3b3b3;">Kraj radnog vremena</label>
+                                          <form >
+											  <select v-model="lekar.kraj" name="cars">
+											    <option value=9>09:00</option>
+											    <option value=10>10:00</option>
+											    <option value=11>11:00</option>
+											    <option value=12>12:00</option>
+											  </select>
+									      </form> 
+                                               
+                                          <label for="Form-email4" style="color: #b3b3b3;">Ocena</label>
+                                          <input type="text" v-model="lekar.ocena" id="Form-email4" class="form-control" >                                        
+                            
+                                          <label for="Form-email4" style="color: #b3b3b3;">Broj recenzija</label>
+                                          <input type="text" v-model="lekar.brojRecenzija" id="Form-email4" class="form-control" >
+                                        </div>
+                                        </div>
+                                      </div>
+                                      
+                            
+                            
+                                      <div class="text-center mb-4 mt-4">
+                                        <template>
+                                        <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajLekara">Dodaj</button>
+                                        <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustaniDodajLekara">Odustani</button>
+                                        </template>
+                                      </div>
+                            
+                                    </div>
+                            
+                                  </div>
+                            
+                            
+                                </div>
+                                
+                            
+                              </div>
+                              </div>
+                </form>
+
+                <form   v-if="prikazLekariKlinike" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+		          <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+		            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+
+						  <table style="width: 500px;">
+			                  <tr>
+			                    <th class="bg-info  text-white">Ime</th>
+			                    <th class="bg-info  text-white">Prezime</th>
+			                    <th class="bg-info  text-white">Radno vreme</th>
+			                    <th class="bg-info  text-white">Obrisi</th>
+			                  </tr>
+			                  <tr v-for="k,i in lekari.length">
+			                    <td>{{lekari[i].ime}}</td>
+			                    <td>{{lekari[i].prezime}}</td>
+								<td>{{lekari[i].pocetak}}:00h - {{lekari[i].kraj}}:00h</td>
+			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiLekara(lekari[i].id)"><i class="fa fa-trash">Obrisi</i></button>
+			                    </td>
+			                  </tr>
+			              </table>
+	
+       
+		          </div>
+		          </div>        
+		       </form>
 </div>
 
 </template>
 
 <script>
 import axios from 'axios'
-    export default {
+
+export default {
  data() {
      return {
       korisnik: {},
       klinika: {},
-      prikaz:false,
-      prikazKlinike: false,
+        pregled: {
+        datum: "",
+        vreme: "",
+        trajanjePregleda: "",
+        cena: "",
+        tipPregleda: {},
+        lekar: {},
+        sala: {}
+        },
+      vremena: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+	  trajanja: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      tipovi: [],
+      sale: [],
+      lekari: [],
+      selektovaniTip: "",
+      selektovanaSala: "",
+      selektovaniLekar: "",
+      prikazProfil:false,
+      prikazIzmenaKlinike: false,
+      prikazDodajLekara: false,
+      prikazLekariKlinike: false,
+      prikazDefinisanjePregleda: false,
       izmeni:false,
-      izmeniKliniku:false,
+      idKlinike: {},
+      lekar: {},
       id: 2
       }
-  },
+ },
   methods: {
-        otvoriFormu(){
-            this.prikaz=!this.prikaz;
-            this.prikazKlinike=false;
+        otvoriProfil(){
+             this.prikazProfil = !this.prikazProfil;
+		     this.prikazIzmenaKlinike = false;
+		     this.prikazDodajLekara = false;
+		     this.prikazLekariKlinike = false;
+		     this.prikazDefinisanjePregleda = false;
         },
+        otvoriDefinisanjePregleda(){
+          
+           this.prikazProfil = false,
+	       this.prikazIzmenaKlinike = false,
+	       this.prikazDodajLekara = false,
+	       this.prikazLekariKlinike = false,
+	       this.prikazDefinisanjePregleda = !this.prikazDefinisanjePregleda
+        },
+        vidiLokaciju(){
+			this.$router.push("/vidiLokaciju");
+            },
+
         izmena() {
-        this.izmeni = true
+        	this.izmeni = true
         },
+    
+        otvoriLekariKlinike(){
+            
+            
+              this.prikazProfil = false,
+		      this.prikazIzmenaKlinike = false,
+		      this.prikazDodajLekara = false,
+		      this.prikazLekariKlinike = !this.prikazLekariKlinike,
+		      this.prikazDefinisanjePregleda = false,
+            
+            axios
+		      .get("/lekar/izlistaj/" + this.idKlinike)
+		      .then(lekar =>{
+		        this.lekari = lekar.data;
+		        
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+        },    
+        otvoriDodajLekara(){
+             
+              this.prikazProfil = false,
+		      this.prikazIzmenaKlinike = false,
+		      this.prikazDodajLekara = !this.prikazDodajLekara,
+		      this.prikazLekariKlinike = false,
+		      this.prikazDefinisanjePregleda = false
+        },
+        
+        dodajLekara(){
+			 if(this.lekar.ime=="" || this.lekar.prezime=="" || this.lekar.email==""  || this.lekar.lozinka=="" ||
+			         this.lekar.adresa=="" || this.lekar.grad=="" || this.lekar.drzava=="" ||
+			         this.lekar.telefon=="" || this.lekar.jmbg=="")
+			         {
+			          alert("Molimo vas popunite sva polja.");
+			          return;
+			         }
+			this.lekar.idKlinike = this.korisnik.idKlinike;
+	        axios
+	        .post("/lekar/dodaj", this.lekar)
+	        .then(lekar => {
+	          this.lekar.ime="";
+	          this.lekar.prezime="";
+	          this.lekar.email="";
+	          this.lekar.lozinka="";
+	          this.lekar.adresa="";
+	          this.lekar.grad="";
+	          this.lekar.drzava="";
+	          this.lekar.telefon="";
+	          this.lekar.jmbg="";
+	          alert("Dodat lekar!");
+       
+	        })
+	        .catch(error => {
+				alert("Lekar sa ovim email-om vec postoji.");
+	        });
+        },
+        
+        odustaniDodajLekara(){
+              this.lekar.ime="";
+	          this.lekar.prezime="";
+	          this.lekar.email="";
+	          this.lekar.lozinka="";
+	          this.lekar.adresa="";
+	          this.lekar.grad="";
+	          this.lekar.drzava="";
+	          this.lekar.telefon="";
+	          this.lekar.jmbg="";
+        },
+        
+          odustaniDodajPregled(){
+               this.pregled.naziv = "";
+	          this.pregled.vreme = "";
+	          this.pregled.cena = "";
+	          this.pregled.broj = "";
+	          this.pregled.datum = "";
+	          this.pregled.trajanjePregleda = "";
+	          this.selektovaniTip = "";
+	          this.selektovanaSala = "";
+	          this.selektovaniLekar = "";
+        },
+        
       odustani() {
         this.izmeni = false
         axios
@@ -233,6 +599,7 @@ import axios from 'axios'
       .catch(error => {
           console.log(error)
       });
+   
       },
       sacuvaj() {
       if(this.korisnik.ime === "" || this.korisnik.prezime === "" || this.korisnik.adresa === "" || this.korisnik.grad === "" || this.korisnik.drzava === ""
@@ -256,18 +623,32 @@ import axios from 'axios'
           console.log(error)
       });
     },
-    otvoriKliniku(){
+    otvoriIzmenaKlinike(){
    	   axios
-      .get("/klinika/pronadjiKliniku/" + this.id)
+      .get("/klinika/pronadjiKliniku/" + this.idKlinike)
       .then(klinika =>{
         this.klinika = klinika.data;
       })
       .catch(error => {
           console.log(error)
       });
-    	this.prikazKlinike = !this.prikazKlinike;
-    	this.prikaz = false;
+    	 this.prikazProfil = false;
+	     this.prikazIzmenaKlinike = !this.prikazIzmenaKlinike;
+	     this.prikazDodajLekara = false,
+	     this.prikazLekariKlinike = false,
+	     this.prikazDefinisanjePregleda = false
 
+    },
+      getLekari() {
+          
+      axios
+        .get("/tipPregleda/TipoviLekara/" + this.selektovaniTip)
+        .then(leka => {
+          this.lekari = leka.data;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
       odjava(){
                 localStorage.removeItem("jwt");
@@ -284,52 +665,145 @@ import axios from 'axios'
       odustaniKlinika() {
         this.izmeniKliniku = false
         axios
-        .get("/klinika/pronadjiKliniku/{id}")
+        .get("/klinika/pronadjiKliniku/{korisnik.idKlinike}")
         .then(klinika =>{
           this.klinika = klinika.data;
-      })
-      .catch(error => {
-          console.log(error)
-      });
+	      })
+	      .catch(error => {
+	          console.log(error)
+	      });
       },
       sacuvajKlinika() {
-      if(this.klinika.naziv === "" || this.klinika.opis === "" || this.klinika.adresa === "" || this.klinika.grad === "" || this.klinika.drzava === ""
-      || this.klinika.telefon === "") {
-        alert("Polja ne smeju biti prazna!");
-        return;
-      }
-      var rex = /^\+381\/6[0-9]-?[0-9]+(-[0-9]+)?$/;
-      if (!rex.test(String(this.klinika.telefon.trim()))) {
-        alert("Broj telefona treba da bude oblika +381/65-504205");
+	      if(this.klinika.naziv === "" || this.klinika.opis === "" || this.klinika.adresa === "" || this.klinika.grad === "" || this.klinika.drzava === ""
+	      || this.klinika.telefon === "") {
+	        alert("Polja ne smeju biti prazna!");
+	        return;
+	      }
+	      var rex = /^\+381\/6[0-9]-?[0-9]+(-[0-9]+)?$/;
+	      if (!rex.test(String(this.klinika.telefon.trim()))) {
+	        alert("Broj telefona treba da bude oblika +381/65-504205");
+	
+	        return;
+	      }
+	      axios
+		      .put("/klinika/izmeni", this.klinika)
+		      .then(klinika =>{
+		        this.klinika = klinika.data;
+		        this.izmeniKliniku = false;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+      }, 
+      
+      obrisiLekara(idLekara){
+      		axios
+		      .post("/lekar/obrisi/" + idLekara)
+		      .then(lekari => {
+			        this.lekari = lekari.data;
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+      },
 
-        return;
-      }
+      izmenaKlinika(){
+        axios
+        .put("/klinika/izmeni", this.klinika)
+        .then(klinika =>{
+          this.klinika = klinika.data;
+          this.izmeniKliniku = false;
+        })
+        .catch(error => {
+            console.log(error)
+        });
+      },
+
+	 dodajSalu() {
+     
+      if (this.pregled.datum === "" || this.pregled.vreme === "" || this.pregled.trajanjePregleda === "" || this.pregled.selektovanaSala === "" || this.pregled.selektovaniLekar === "" || this.pregled.cena === ""){
+         alert("Morate uneti sva polja!");
+         return;
+       }
+    
+      
+      
+     this.tipovi.forEach(tipPregleda => {
+        if (tipPregleda.id === this.selektovaniTip) {
+          this.pregled.tipPregleda = tipPregleda;
+        }
+      });
+      this.lekari.forEach(lekar => {
+        if (lekar.id === this.selektovaniLekar) {
+          this.pregled.lekar = lekar;
+        }
+      });
+      this.sale.forEach(sala => {
+        if (sala.id === this.selektovanaSala) {
+          this.pregled.sala = sala;
+        }
+      });
       axios
-      .put("/klinika/izmeni", this.klinika)
-      .then(klinika =>{
-        this.klinika = klinika.data;
-        this.izmeniKliniku = false;
+        .post(
+          "/pregled/dodajPregled",
+          this.pregled
+        )
+        .then(pregled => {
+          this.pregled.naziv = "";
+          this.pregled.vreme = "";
+          this.pregled.cena = "";
+          this.pregled.broj = "";
+          this.pregled.datum = "";
+          this.pregled.trajanjePregleda = "";
+          this.selektovaniTip = "";
+          this.selektovanaSala = "";
+          this.selektovaniLekar = "";
+        
+        })
+        .catch(error => {
+          console.log(error);
+      	  alert("Vec postoji termin u tom periodu i za tu salu i lekara");
+          
+        });
+    },
+  },
+ mounted() {
+ 	  axios
+      .get("/tipPregleda/TipoviKlinike/" + this.$store.state.user.id)
+      .then(tipovi => {
+        this.tipovi = tipovi.data;
       })
       .catch(error => {
-          console.log(error)
+        console.log(error);
       });
-      }
-    },
- mounted() {
+    
       axios
       .get("/adminKlinike/get/"  + this.$store.state.user.id)
       .then(adminKlinike =>{
         this.korisnik = adminKlinike.data;
+        this.idKlinike = this.korisnik.idKlinike;
       })
       .catch(error => {
           console.log(error)
+      });
+      
+       axios
+      .get("/sala/getSale/" + this.$store.state.user.id)
+      .then(sale => {
+        this.sale = sale.data;
+      })
+      .catch(error => {
+        console.log(error);
       });
   }
 };
 
 </script>
 
-<style scoped>
+
+
+
+  <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');
 
 body {
@@ -424,7 +898,12 @@ body {
   color: #555585;
 }
 
-
+.google-map {
+  width: 800px;
+  height: 600px;
+  margin: 0 auto;
+  background: gray;
+}
 
 </style>
 
