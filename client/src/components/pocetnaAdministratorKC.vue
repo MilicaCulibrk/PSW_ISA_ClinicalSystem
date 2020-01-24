@@ -24,6 +24,12 @@
              <i  v-on:click="listaAdmina" class="zmdi zmdi-link"> LISTA ADMINISTRATORA</i> 
           </a>
            <a href="#">
+             <i  v-on:click="listaLekova" class="zmdi zmdi-link"> LEKOVI</i> 
+          </a>
+          <a href="#">
+             <i  v-on:click="listaDijagnoza" class="zmdi zmdi-link">  DIJAGNOZE</i> 
+          </a>
+           <a href="#">
              <i v-on:click="pogledajZahteve" class="zmdi zmdi-link" style="color: rgba(130, 206, 209, 0.733); " >ZAHTEVI ZA REGISTRACIJU : {{zahtevi.length}}</i> 
           </a>
            <a href="#">
@@ -234,7 +240,108 @@
           </div>
           </div>        
        </form>
-                  
+       <form   v-if="prikazListaLekova" class="message-form" style="position: relative; top: 10px; left: 400px; width: 40%; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+          <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+						  <table style="width: 100%;">
+			                  <tr>
+			                    <th class="bg-info  text-white">Sifra</th>
+			                    <th class="bg-info  text-white">Naziv</th>
+			                    <th class="bg-info  text-white">Obrisi</th>
+			                  </tr>
+			                  <tr v-for="k,i in lekovi.length">
+			                    <td>{{lekovi[i].sifra}}</td>
+			                    <td>{{lekovi[i].naziv}}</td>
+			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiLek(lekovi[i].id)"><i class="fa fa-trash">Obrisi</i></button>
+			                    </td>
+			                  </tr>
+			              </table>     
+          	</div>
+          </div>   
+          <form class="message-form" style="position: relative; top: -70px; left: 700px; width: 40%; height: 58%;  background-color: rgba(130, 206, 209, 0.733); ">
+                <div>
+                  <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+                   <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+                      <div class="form-group">                        
+                        <div class="card-body mx-4 mt-4">
+                          <div class="row">                            
+                            <div class="col">
+                            <div class="md-form">
+                              
+                              <label for="Form-ime" style="color: #b3b3b3;">Sifra</label>
+                              <input type="text" id="Form-ime" class="form-control" v-model="lek.sifra">
+                
+                              <label for="Form-email4" style="color: #b3b3b3;">Naziv</label>
+                              <input type="text"  id="Form-email4" class="form-control" v-model="lek.naziv">
+                            
+                            </div>
+                            </div>
+                          </div>
+                          <div class="text-center mb-4 mt-4">
+                            <template>
+                            <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajLek">Dodaj</button>
+                            <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustani">Odustani</button>
+                            </template>
+                          </div>                            
+                        </div>                         
+                      </div>
+                   </div>
+                  </div>
+                  </div>
+                </form>          
+       </form>
+       <form v-if="prikazListaDijagnoza" class="message-form" style="position: relative; top: 10px; left: 400px; width: 40%; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+          <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+						  <table style="width: 100%;">
+			                  <tr>
+			                    <th class="bg-info  text-white">Sifra</th>
+			                    <th class="bg-info  text-white">Naziv</th>
+			                    <th class="bg-info  text-white">Obrisi</th>
+			                  </tr>
+			                  <tr v-for="k,i in dijagnoze.length">
+			                    <td>{{dijagnoze[i].sifra}}</td>
+			                    <td>{{dijagnoze[i].naziv}}</td>
+			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiDijagnozu(dijagnoze[i].id)"><i class="fa fa-trash">Obrisi</i></button>
+			                    </td>
+			                  </tr>
+			              </table>     
+          	</div>
+          	
+          </div>        
+          <form class="message-form" style="position: relative; top: -45px; left: 700px; width: 40%; height: 58%;  background-color: rgba(130, 206, 209, 0.733); ">
+                <div>
+                  <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+                   <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+                      <div class="form-group">                        
+                        <div class="card-body mx-4 mt-4">
+                          <div class="row">                            
+                            <div class="col">
+                            <div class="md-form">
+                              
+                              <label for="Form-ime" style="color: #b3b3b3;">Sifra</label>
+                              <input type="text" id="Form-ime" class="form-control" v-model="dijagnoza.sifra">
+                
+                              <label for="Form-email4" style="color: #b3b3b3;">Naziv</label>
+                              <input type="text"  id="Form-email4" class="form-control" v-model="dijagnoza.naziv">
+                            
+                            </div>
+                            </div>
+                          </div>
+                          <div class="text-center mb-4 mt-4">
+                            <template>
+                            <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajDijagnozu" >Dodaj</button>
+                            <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustani" >Odustani</button>
+                            </template>
+                          </div>                            
+                        </div>                         
+                      </div>
+                   </div>
+                  </div>
+                  </div>
+                </form>         
+       </form>
+		         
 </div>
 
 </template>
@@ -258,6 +365,12 @@ import axios from 'axios'
       prikazListaAdmina: false,
       prikazListaKlinika: false,
       admini: {},
+      prikazListaLekova: false,
+      prikazListaDijagnoza: false,
+      lekovi: [],
+      dijagnoze: [],
+      lek: {},
+      dijagnoza: {},
       }
   },
   methods: {
@@ -282,6 +395,8 @@ import axios from 'axios'
            	this.$router.push("/dodajKliniku");
         },
      prikaziZahtev(zahtev){
+     	 	this.prikazListaLekova = false;
+	 		this.prikazListaDijagnoza = false;
             this.prikaz = false;
             this.prikaz1 = false;
             this.prikazZ = true;
@@ -326,6 +441,8 @@ import axios from 'axios'
 
         },
         pogledajZahteve(){
+        	this.prikazListaLekova = false;
+	 		this.prikazListaDijagnoza = false;
           this.prikaz = false;
           this.prikazZ = false;
           this.prikaz1=!this.prikaz1;
@@ -336,8 +453,10 @@ import axios from 'axios'
            	this.$router.push("/dodajAdministratora");
         },
         otvoriFormu(){
-           this.prikaz1 = false;
-           this.prikazZ = false;
+        	this.prikazListaLekova = false;
+	 		this.prikazListaDijagnoza = false;
+            this.prikaz1 = false;
+            this.prikazZ = false;
             this.prikaz=!this.prikaz;
         },
         izmena() {
@@ -386,6 +505,8 @@ import axios from 'axios'
           this.$router.push("/");
             },
 	 listaAdmina(){
+	 	this.prikazListaLekova = false;
+	 	this.prikazListaDijagnoza = false;
 	 	this.prikazListaAdmina=true;
         this.prikaz = false;
         this.prikaz1 = false;
@@ -400,6 +521,8 @@ import axios from 'axios'
 		      });
 	 },
 	 listaKlinika(){
+	 	this.prikazListaLekova = false;
+	 	this.prikazListaDijagnoza = false;
 	 	this.prikazListaKlinika=true;
         this.prikaz = false;
         this.prikaz1 = false;
@@ -414,6 +537,94 @@ import axios from 'axios'
 		          console.log(error)
 		      });
 	 },
+	 listaLekova(){
+	 	this.prikazListaLekova = true;
+	 	this.prikazListaDijagnoza = false;
+	 	this.prikazListaKlinika=false;
+        this.prikaz = false;
+        this.prikaz1 = false;
+        this.prikazZ = false;	
+        this.prikazListaAdmina = false;
+             axios
+		      .get('/lek/izlistaj')
+		      .then(lekovi =>{
+		        this.lekovi = lekovi.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+	 },
+	 listaDijagnoza(){
+	 	this.prikazListaDijagnoza = true;
+	 	this.prikazListaLekova = false;
+	 	this.prikazListaKlinika=false;
+        this.prikaz = false;
+        this.prikaz1 = false;
+        this.prikazZ = false;	
+        this.prikazListaAdmina = false; 
+             axios
+		      .get('/dijagnoza/izlistaj')
+		      .then(dijagnoze =>{
+		        this.dijagnoze = dijagnoze.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+	 },
+	 dodajLek(){
+			 if(this.lek.sifra=="" || this.lek.naziv=="")
+	         {
+	          alert("Molimo vas popunite sva polja.");
+	          return;
+	         }
+	        axios
+	        .post("/lek/dodaj", this.lek)
+	        .then(lek => {
+	          this.lek.sifra="";
+	          this.lek.naziv="";
+	          alert("Dodat lek!");
+       		  this.listaLekova();
+	        })
+	        .catch(error => {
+				alert("Lek sa ovom sifrom vec postoji.");
+	        });
+	        
+	 },
+	 dodajDijagnozu(){
+			 if(this.dijagnoza.sifra=="" || this.dijagnoza.naziv=="")
+	         {
+	          alert("Molimo vas popunite sva polja.");
+	          return;
+	         }
+	        axios
+	        .post("/dijagnoza/dodaj", this.dijagnoza)
+	        .then(dijagnoza => {
+	          this.dijagnoza.sifra="";
+	          this.dijagnoza.naziv="";
+	          alert("Dodata dijagnoza!");
+       		  this.listaDijagnoza();
+	        })
+	        .catch(error => {
+				alert("Dijagnoza sa ovom sifrom vec postoji.");
+	        });
+	        
+	 },
+	 odustani(){
+	 	          this.dijagnoza.sifra="";
+	          this.dijagnoza.naziv="";
+	          	          this.lek.sifra="";
+	          this.lek.naziv="";
+	 },
+	 obrisiLek(idLek){
+      		axios
+		      .post("/lek/obrisi/" + idLek)
+		      .then(lek => {
+			        this.lek = lek.data;
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+      },
 },
  mounted() {
       axios

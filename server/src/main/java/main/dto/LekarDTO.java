@@ -30,6 +30,8 @@ public class LekarDTO {
 	   private Integer kraj;
 
 	   private Long idKlinike;	
+	   
+	   private Long idTipaPregleda;	
 
 	   public LekarDTO() {
 			super();
@@ -68,6 +70,19 @@ public class LekarDTO {
 		this.jmbg = lekar.getJmbg();
 		this.pocetak = lekar.getPocetak();
 		this.kraj = lekar.getKraj();
+		this.idTipaPregleda = lekar.getTipPregleda().getId();
+	}
+
+
+
+	public Long getIdTipaPregleda() {
+		return idTipaPregleda;
+	}
+
+
+
+	public void setIdTipaPregleda(Long idTipaPregleda) {
+		this.idTipaPregleda = idTipaPregleda;
 	}
 
 

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -74,9 +75,7 @@ public class PacijentController {
 	
 	
 	@GetMapping(value = "/izlistaj")
-
-	@PreAuthorize("hasAuthority('LEKAR')")
-
+	@PreAuthorize("hasAnyAuthority('LEKAR,MEDICINSKA_SESTRA')")
 	public ResponseEntity<List<PacijentDTO>> getIzlistaj() {
 		
 		List<Pacijent> listaPacijenata = pacijentService.findAll();
@@ -88,7 +87,18 @@ public class PacijentController {
 		return new ResponseEntity<>(listaPacijenataDTO, HttpStatus.OK);
 	}
 	
-
+	@PutMapping(value = "/azuriraj")
+	@PreAuthorize("hasAnyAuthority('LEKAR,MEDICINSKA_SESTRA')")
+	public ResponseEntity<List<PacijentDTO>> getAzuriraj(@RequestBody String sortBy) {
+		
+		List<Pacijent> listaPacijenata = pacijentService.sortiraj(sortBy);
+		List<PacijentDTO> listaPacijenataDTO = new ArrayList<PacijentDTO>();
+		for (Pacijent k : listaPacijenata) {
+			listaPacijenataDTO.add(new PacijentDTO(k));
+		}
+		
+		return new ResponseEntity<>(listaPacijenataDTO, HttpStatus.OK);
+	}
 	
 }
 

@@ -13,7 +13,7 @@
 				  </a>
 	             
 	              <a href="#">
-	                <i v-on:click="otvoriListuKlinika"> LISTA KLINIKA
+	                <i v-on:click="otvoriListaPacijenata"> LISTA PACIJENATA
 	                </i>                   
 	              </a>	  
                   <a href="#">
@@ -104,19 +104,48 @@
           </div>
 
     </form>
-     <form v-if="prikazKlinika"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+     <form v-if="prikazListaPacijenata" >
 
 
- 		<div >	                    
+ 		<div style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px;  ">	                    
           <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
             <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
-				<li v-for="k,i in klinike.length">
- 					<a href="#" class="list-group-item list-group-item-action">{{klinike[i].naziv}}, {{klinike[i].adresa}}</a>		
-				</li>        
+	               <label for="Form-username" style="color: #b3b3b3;">Selektuj po:</label>
+	               <b-form-select  >
+	               	<option v-on:click="azuriraj('Id')">Id</option>
+	               	<option v-on:click="azuriraj('Ime')">Ime</option>
+	               	<option v-on:click="azuriraj('Prezime')">Prezime</option>
+	               	<option v-on:click="azuriraj('JMBG')">JMBG</option>
+	               	<option v-on:click="azuriraj('Email')">Email</option>
+	               </b-form-select>
+			</div>
+			</div>
+			<div  class="message-form" style="position: relative; top: 10px; left: 0px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+			<div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+			
+			<div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+						  <table style="width: 100%;">
+			                  <tr>
+			                  	<th class="bg-info  text-white">Id</th>
+			                    <th class="bg-info  text-white">Ime</th>
+			                    <th class="bg-info  text-white">Prezime</th>
+			                    <th class="bg-info  text-white">JMBG</th>
+			                    <th class="bg-info  text-white">Email</th>
+			                  </tr>
+			                  <tr v-for="k,i in pacijenti.length">
+			                    <td>{{pacijenti[i].id}}</td>
+			                    <td>{{pacijenti[i].ime}}</td>
+			                    <td>{{pacijenti[i].prezime}}</td>
+			                    <td>{{pacijenti[i].jmbg}}</td>
+			                    <td>{{pacijenti[i].email}}</td>
+			                    </td>
+			                  </tr>
+			              </table>    
+			 </div>
+			 </div>
           </div>
-          </div>        
-         
-         </div>
+   
+        </div>
         </form>
 
                   
@@ -134,10 +163,12 @@ export default {
 	data() {
 		return{
 			korisnik: {},
-			klinike: {},
+			pacijenti: {},
 			prikaz: false,
 			izmeni: false,
-			prikazKlinika: false,
+			prikazListaPacijenata: false,
+			selektovan: {},
+			sortBy: {},
 		}
 	},
 	methods: {
@@ -190,14 +221,34 @@ export default {
                 console.log(error)
             });
 	  	},
-	  	otvoriListuKlinika(){
+	  	otvoriListaPacijenata(){
 	  		this.prikaz=false
-	  		this.prikazKlinika=!this.prikazKlinika
+	  		this.prikazListaPacijenata=!this.prikazListaPacijenata
 	  	      axios
-		      .get('/klinika/izlistaj')
-		      .then(klinika =>{
-		        this.klinike = klinika.data;
+		      .get('/pacijent/izlistaj')
+		      .then(pacijent =>{
+		        this.pacijenti = pacijent.data;
 		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+	  	},
+	  	obrisiPacijenta(id){
+      		axios
+		      .post("/pacijent/obrisi/" + id)
+		      .then(pacijent => {
+			        this.pacijenti = pacijent.data;
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+      	},
+	  	azuriraj(nes){
+	  		axios
+		      .put("/pacijent/azuriraj", nes)
+		      .then(pacijent => {
+			        this.pacijenti = pacijent.data;
+			      })
 		      .catch(error => {
 		          console.log(error)
 		      });

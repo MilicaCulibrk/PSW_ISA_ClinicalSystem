@@ -480,6 +480,13 @@
 											  </select>
 									      </form> 
                                                
+                                          <label for="Form-email4" style="color: #b3b3b3;">Tip pregleda</label>
+                                          <form >
+											  <select v-model="lekar.idTipaPregleda"  name="cars">
+											    <option v-for="tip in tipovi" v-bind:value="tip.id">{{tip.naziv}}</option>
+											  </select>
+									      </form> 
+									      
                                           <label for="Form-email4" style="color: #b3b3b3;">Ocena</label>
                                           <input type="text" v-model="lekar.ocena" id="Form-email4" class="form-control" >                                        
                             

@@ -11,8 +11,10 @@ INSERT INTO public.pacijent(adresa, aktiviran_nalog, drzava,  email, grad, ime, 
 	VALUES ('Marsala Tita 58', 'false', 'Srbija', 'ss@gmail.com', 'Novi Sad', 'stasa', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Skoric', '+381/61-5534209');
 	
 INSERT INTO public.pacijent(adresa, aktiviran_nalog, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon)
-	VALUES ('Marsala Tita 58', 'false', 'Srbija', 'ms@gmail.com', 'Novi Sad', 'Milos', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Skoric', '+381/61-5534209');
+	VALUES ('Marsala Tita 58', 'false', 'Srbija', 'ms@gmail.com', 'Novi Sad', 'Milos', '512123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Skoric', '+381/61-5534209');
 	
+INSERT INTO public.pacijent(adresa, aktiviran_nalog, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon)
+	VALUES ('Marsala Tita 58', 'false', 'Srbija', 'am@gmail.com', 'Novi Sad', 'Amanda', '23091997', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Mirkovic', '+381/61-5534209');
 
 INSERT INTO public.medicinska_sestra( adresa, drzava,  email, grad, ime, jmbg, lozinka, ocena, prezime, telefon)
 	VALUES ('Marsala Tita 58','Srbija', 'mm@gmail.com', 'Novi Sad', 'Masa', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Matovic', '+381/61-5534209');
@@ -48,6 +50,8 @@ INSERT INTO public.administrator_klinike(adresa, drzava,  email, grad, ime, jmbg
 	VALUES ('Marsala Tita 58','Srbija', 'an@gmail.com', 'Novi Sad', 'Ana', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Nikolasevic', '+381/61-5534209', 1);
 	
 	
+INSERT INTO public.lek(sifra, naziv)
+	VALUES ('Kl130','Diklofenak');
 
 
 
@@ -60,6 +64,8 @@ INSERT INTO public.authority (uloga) VALUES ('ADMIN_KLINIKE');
 
 INSERT INTO public.pacijent_authority (pacijent_id, authority_id) VALUES (1, 1);
 INSERT INTO public.pacijent_authority (pacijent_id, authority_id) VALUES (2, 1);
+INSERT INTO public.pacijent_authority (pacijent_id, authority_id) VALUES (3, 1);
+
 INSERT INTO public.lekar_authority (lekar_id, authority_id) VALUES (1, 2);
 INSERT INTO public.lekar_authority (lekar_id, authority_id) VALUES (2, 2);
 INSERT INTO public.admink_authority (admink_id, authority_id) VALUES (1,5);
