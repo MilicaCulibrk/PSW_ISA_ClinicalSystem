@@ -84,6 +84,7 @@ public class KlinikaController {
 		return new ResponseEntity<>(listaKlinikaDTO, HttpStatus.OK);
 	}
 	
+	
 	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
 	@PutMapping(value = "/izmeni", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<KlinikaDTO> izmeni(@RequestBody KlinikaDTO klinikaDTO){

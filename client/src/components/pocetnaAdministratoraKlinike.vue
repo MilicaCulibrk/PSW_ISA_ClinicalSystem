@@ -24,6 +24,9 @@
              <i v-on:click="otvoriDefinisanjePregleda" class="zmdi zmdi-link">  DEFINISANJE PREGLEDA</i> 
           </a>
             <a href="#">
+              <i v-on:click="otvoriUpravljanjeSalama"> UPRAVLJANJE SALAMA </i>
+          </a>
+            <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
 	                </i>     
                                 
@@ -233,6 +236,93 @@
                               </div>
                               </div>
                   </form>
+                  
+                  <form v-if="prikazUpravljanjeSalama" class="message-form" style="position: relative; top: 10px; left: 300px; width: 550px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+                         <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+		            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+
+						  <table style="width: 500px;">
+			                 <tr>
+			                    <th class="bg-info  text-white">Naziv</th>
+			                    <th class="bg-info  text-white">Broj</th>
+			                    <th class="bg-info  text-white">Klinika</th
+			                 </tr>
+			                  <tr v-for="k,i in sale.length">
+			                    <td>{{sale[i].naziv}}</td>
+			                    <td>{{sale[i].broj}}</td>
+			                    <td>{{sale[i].klinika.naziv}}</td>
+			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="izaberiSaluZaIzmenu(sale[i])">IZMENI</button>
+			                  	<td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiSalu(sale[i])">OBRISI</button>
+			                    </td>
+			                  </tr>
+			              </table>
+			              
+			              </div>
+		          </div>
+			              
+			       <div>
+			              	<form class="message-form" style="position: relative; top: -110
+			              	px; left: 650px; width: 500px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+
+                       <div>
+                                
+                            
+                              <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+                            
+                                
+                                <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+
+                                  <div class="form-group">
+                            
+                                    <div class="card-body mx-4 mt-4">
+                                      <div class="row">
+                            
+                                        <div class="col">
+                                        <div class="md-form">
+
+                                          
+                                          <label for="Form-ime" style="color: #b3b3b3;">Naziv</label>
+                                          <input type="text" v-model="sala.naziv" id="Form-ime" class="form-control">
+                                          
+										  <label for="Form-ime" style="color: #b3b3b3;">Broj</label>
+                                          <input type="text" v-model="sala.broj" id="Form-ime" class="form-control">
+                                          
+                                           <label for="Form-username" style="color: #b3b3b3;">Klinika</label>
+                                           <button  id="Form-username" class="form-control"  disabled>{{sale[0].klinika.naziv}}</button>
+
+                                          
+
+                                        </div>
+                                        </div>
+                                      
+                                      </div>
+                                      
+                            
+                            
+                                      <div class="text-center mb-4 mt-4">
+                                        <template>
+                                        <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajNovuSalu">Dodaj</button>
+                                        <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustaniDodajSalu">Odustani</button>
+                                        <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="izmeniSalu">Izmeni</button>
+                                        </template>
+                                      </div>
+                            
+                                    </div>
+                            
+                                  </div>
+                            
+                            
+                                </div>
+                                
+                            
+                              </div>
+                              </div>
+                </form>
+	
+       </div>
+		                 
+                  </form>
+                  
                   
                   
                   <form v-if="prikazIzmenaKlinike"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
@@ -465,6 +555,12 @@ export default {
         lekar: {},
         sala: {}
         },
+        sala: {
+        	id: "",
+	        naziv: "",
+	        broj: "",
+	        klinika: {}
+        },
       vremena: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
 	  trajanja: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       tipovi: [],
@@ -478,7 +574,9 @@ export default {
       prikazDodajLekara: false,
       prikazLekariKlinike: false,
       prikazDefinisanjePregleda: false,
+      prikazUpravljanjeSalama: false,
       izmeni:false,
+      izmeniKliniku: false,
       idKlinike: {},
       lekar: {},
       id: 2
@@ -486,11 +584,30 @@ export default {
  },
   methods: {
         otvoriProfil(){
-             this.prikazProfil = !this.prikazProfil;
-		     this.prikazIzmenaKlinike = false;
-		     this.prikazDodajLekara = false;
-		     this.prikazLekariKlinike = false;
-		     this.prikazDefinisanjePregleda = false;
+             this.prikazProfil = !this.prikazProfil,
+		     this.prikazIzmenaKlinike = false,
+		     this.prikazDodajLekara = false,
+		     this.prikazLekariKlinike = false,
+		     this.prikazDefinisanjePregleda = false,
+		     this.prikazUpravljanjeSalama = false
+        },
+         otvoriUpravljanjeSalama(){
+             this.prikazProfil = false,
+		     this.prikazIzmenaKlinike = false,
+		     this.prikazDodajLekara = false,
+		     this.prikazLekariKlinike = false,
+		     this.prikazDefinisanjePregleda = false,
+		     this.prikazUpravljanjeSalama = !this.prikazUpravljanjeSalama
+		     
+		        axios
+		      .get("/sala/getSale/" +  this.$store.state.user.id)
+		      .then(sala =>{
+		        this.sale = sala.data;
+		        
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
         },
         otvoriDefinisanjePregleda(){
           
@@ -498,7 +615,8 @@ export default {
 	       this.prikazIzmenaKlinike = false,
 	       this.prikazDodajLekara = false,
 	       this.prikazLekariKlinike = false,
-	       this.prikazDefinisanjePregleda = !this.prikazDefinisanjePregleda
+	       this.prikazDefinisanjePregleda = !this.prikazDefinisanjePregleda,
+	        this.prikazUpravljanjeSalama = false
         },
         vidiLokaciju(){
 			this.$router.push("/vidiLokaciju");
@@ -516,6 +634,7 @@ export default {
 		      this.prikazDodajLekara = false,
 		      this.prikazLekariKlinike = !this.prikazLekariKlinike,
 		      this.prikazDefinisanjePregleda = false,
+		      this.prikazUpravljanjeSalama = false
             
             axios
 		      .get("/lekar/izlistaj/" + this.idKlinike)
@@ -533,10 +652,34 @@ export default {
 		      this.prikazIzmenaKlinike = false,
 		      this.prikazDodajLekara = !this.prikazDodajLekara,
 		      this.prikazLekariKlinike = false,
-		      this.prikazDefinisanjePregleda = false
+		      this.prikazDefinisanjePregleda = false,
+		      this.prikazUpravljanjeSalama = false
         },
         
-        dodajLekara(){
+        dodajNovuSalu(){
+			 if(this.sala.naziv=="" || this.sala.broj=="")
+			         {
+			          alert("Molimo vas popunite sva polja.");
+			          return;
+			         }
+	        axios
+	        .post("/sala/dodaj/" + this.$store.state.user.id, this.sala)
+	        .then(sala => {
+	          this.sala.naziv="";
+	          this.sala.broj="";
+	          alert("Dodata sala!");
+	          this.prikazUpravljanjeSalama = false;
+       		  this.otvoriUpravljanjeSalama();
+	        })
+	        .catch(error => {
+				alert("Lekar sa ovim email-om vec postoji.");
+				
+	        });
+	        
+	        
+        },
+        
+           dodajLekara(){
 			 if(this.lekar.ime=="" || this.lekar.prezime=="" || this.lekar.email==""  || this.lekar.lozinka=="" ||
 			         this.lekar.adresa=="" || this.lekar.grad=="" || this.lekar.drzava=="" ||
 			         this.lekar.telefon=="" || this.lekar.jmbg=="")
@@ -546,7 +689,7 @@ export default {
 			         }
 			this.lekar.idKlinike = this.korisnik.idKlinike;
 	        axios
-	        .post("/lekar/dodaj", this.lekar)
+	        .post("/lekar/dodaj" , this.lekar)
 	        .then(lekar => {
 	          this.lekar.ime="";
 	          this.lekar.prezime="";
@@ -575,6 +718,11 @@ export default {
 	          this.lekar.drzava="";
 	          this.lekar.telefon="";
 	          this.lekar.jmbg="";
+        },
+         odustaniDodajSalu(){
+              this.sala.naziv="";
+	          this.sala.broj="";
+	        
         },
         
           odustaniDodajPregled(){
@@ -623,22 +771,20 @@ export default {
           console.log(error)
       });
     },
-    otvoriIzmenaKlinike(){
-   	   axios
-      .get("/klinika/pronadjiKliniku/" + this.idKlinike)
-      .then(klinika =>{
-        this.klinika = klinika.data;
-      })
-      .catch(error => {
-          console.log(error)
-      });
-    	 this.prikazProfil = false;
-	     this.prikazIzmenaKlinike = !this.prikazIzmenaKlinike;
-	     this.prikazDodajLekara = false,
-	     this.prikazLekariKlinike = false,
-	     this.prikazDefinisanjePregleda = false
-
-    },
+     izmenaKlinika() {
+        this.izmeniKliniku = true
+        },
+      odustaniKlinika() {
+        this.izmeniKliniku = false
+        axios
+        .get("/klinika/pronadjiKliniku/{korisnik.idKlinike}")
+        .then(klinika =>{
+          this.klinika = klinika.data;
+	      })
+	      .catch(error => {
+	          console.log(error)
+	      });
+      },
       getLekari() {
           
       axios
@@ -659,21 +805,56 @@ export default {
           };
           this.$router.push("/");
             },
-      izmenaKlinika() {
-        this.izmeniKliniku = true
-        },
-      odustaniKlinika() {
-        this.izmeniKliniku = false
+       otvoriIzmenaKlinike(){
+   	   axios
+      .get("/klinika/pronadjiKliniku/" + this.idKlinike)
+      .then(klinika =>{
+        this.klinika = klinika.data;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+    	 this.prikazProfil = false;
+	     this.prikazIzmenaKlinike = !this.prikazIzmenaKlinike;
+	     this.prikazDodajLekara = false,
+	     this.prikazLekariKlinike = false,
+	     this.prikazDefinisanjePregleda = false
+    },
+       izaberiSaluZaIzmenu(sala) {
+       		this.sala.id = sala.id;
+     		this.sala.naziv = sala.naziv;
+	        this.sala.broj = sala.broj;
+	        this.sala.klinika = sala.klinika;
+       },
+         izmeniSalu(){
         axios
-        .get("/klinika/pronadjiKliniku/{korisnik.idKlinike}")
-        .then(klinika =>{
-          this.klinika = klinika.data;
-	      })
-	      .catch(error => {
-	          console.log(error)
-	      });
+        .put("/sala/izmeniSalu", this.sala)
+        .then(sala =>{
+          this.sala = sala.data;
+          this.prikazUpravljanjeSalama = false;
+       	  this.otvoriUpravljanjeSalama();
+        })
+        .catch(error => {
+            console.log(error)
+            alert("Ne mozete da izmenite salu koja je prethodno rezervisana za pregled!");
+        });
       },
-      sacuvajKlinika() {
+      
+        obrisiSalu(sala){
+        
+       	
+        axios
+        .delete("/sala/izbrisi/" + sala.id)
+      .then(sale => {
+        this.sale = sale.data;
+      })
+      .catch(error => {
+        console.log(error);
+        alert("Ne mozete obrisati salu jer je prethodno rezervisana za pregled!");
+      });
+      
+      },
+     sacuvajKlinika() {
 	      if(this.klinika.naziv === "" || this.klinika.opis === "" || this.klinika.adresa === "" || this.klinika.grad === "" || this.klinika.drzava === ""
 	      || this.klinika.telefon === "") {
 	        alert("Polja ne smeju biti prazna!");

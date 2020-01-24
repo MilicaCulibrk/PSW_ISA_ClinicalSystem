@@ -1,5 +1,8 @@
 INSERT INTO public.klinika(adresa, broj_recenzija, email, grad, drzava, naziv, ocena, opis, telefon)
-VALUES ('Jovana Obrenovica 83A', '5', 'klinika@klinika.com', 'Podgorica', 'Crna Gora',  'Bolnica', 3.5, 'Vrlo lepo', '+381/61-5534209');	
+VALUES ('Jovana Obrenovica 83A', '5', 'klinika@klinika.com', 'Podgorica', 'Crna Gora',  'Bolnica', 3.5, 'Vrlo lepo', '+381/61-5534209');
+
+INSERT INTO public.klinika(adresa, broj_recenzija, email, grad, drzava, naziv, ocena, opis, telefon)
+VALUES ('Jovana Obrenovica 83A', '5', 'klinika@klinika.com', 'Podgorica', 'Crna Gora',  'Infektivna', 3.5, 'Vrlo lepo', '+381/61-5534209');
 
 INSERT INTO public.administrator_klinickog_centra(adresa, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon)
 	VALUES ('Marsala Tita 58','Srbija', 'mc@gmail.com', 'Novi Sad', 'Milica', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Culibrk', '+381/61-5534209');
@@ -17,6 +20,14 @@ INSERT INTO public.medicinska_sestra( adresa, drzava,  email, grad, ime, jmbg, l
 INSERT INTO public.sala(
 	broj, naziv, klinika_id)
 	VALUES (5, 'Sala5', 1);
+	
+INSERT INTO public.sala(
+	broj, naziv, klinika_id)
+	VALUES (3, 'SalaZaPreglede', 1);
+
+INSERT INTO public.sala(
+	broj, naziv, klinika_id)
+	VALUES (10, 'InfektivnaSala', 2);
 	
 INSERT INTO public.tip_pregleda(naziv, oznaka, cena, klinika_id)
 	VALUES ('Pregled bubrega', 'bbr', ' 3000', 1);
