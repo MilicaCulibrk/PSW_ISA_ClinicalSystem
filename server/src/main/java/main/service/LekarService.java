@@ -14,6 +14,7 @@ import main.model.Lekar;
 import main.repository.AuthorityRepository;
 import main.repository.KlinikaRepository;
 import main.repository.LekarRepository;
+import main.repository.TipPregledaRepository;
 
 @Service
 public class LekarService {
@@ -23,6 +24,9 @@ public class LekarService {
 
 	@Autowired
 	private KlinikaRepository klinikaRepository;
+	
+	@Autowired
+	private TipPregledaRepository tipPregledaRepository;
 	
 	@Autowired
 	private AuthorityRepository authorityRepository;
@@ -73,6 +77,8 @@ public class LekarService {
 		l.setPocetak(lekarDTO.getPocetak());
 		l.setKraj(lekarDTO.getKraj());
 		l.setKlinika(klinikaRepository.getOne(lekarDTO.getIdKlinike()));
+		System.out.println(lekarDTO.getIdTipaPregleda());
+		l.setTipPregleda(tipPregledaRepository.getOne(lekarDTO.getIdTipaPregleda()));
 		//klinikaRepository.getOne(lekarDTO.getIdKlinike()).lekar.add(l);
 		for (Lekar k : lekarRepository.findAll()) {
 			if (l.getEmail().equals(k.getEmail())) {

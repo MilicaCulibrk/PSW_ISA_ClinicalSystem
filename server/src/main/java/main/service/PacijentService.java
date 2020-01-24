@@ -6,6 +6,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import main.dto.PacijentDTO;
@@ -13,7 +14,7 @@ import main.model.Pacijent;
 //import main.repository.PacijentRepository;
 import main.repository.PacijentRepository;
 import main.repository.ZdravstveniKartonRepository;
-
+import org.springframework.data.domain.Sort;
 @Service
 public class PacijentService {
 
@@ -51,5 +52,19 @@ public class PacijentService {
 		return pacijentRepository.findAll();
 	}
 
+	public List<Pacijent> sortiraj(String sortBy) {
+		if(sortBy.equals("Id"))
+			return pacijentRepository.findAllByOrderByIdAsc();
+		else if(sortBy.equals("Ime"))
+			return pacijentRepository.findAllByOrderByImeAsc();
+		else if(sortBy.equals("Prezime"))
+			return pacijentRepository.findAllByOrderByPrezimeAsc();
+		else if(sortBy.equals("JMBG"))
+			return pacijentRepository.findAllByOrderByJmbgAsc();
+		else if(sortBy.equals("Email"))
+			return pacijentRepository.findAllByOrderByEmailAsc();
+		return pacijentRepository.findAll();
+	}
+	
 
 }
