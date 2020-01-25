@@ -24,7 +24,8 @@ public class AdminKlinikeDTO {
    private String jmbg;
 
    private Long idKlinike;
-   
+   private Boolean promenjenaLozinka;
+  
 public AdminKlinikeDTO(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
 		String drzava, String telefon, String jmbg, Long idKlinike) {
 	super();
@@ -73,10 +74,19 @@ public AdminKlinikeDTO(AdministratorKlinike admin) {
 		this.idKlinike=null;
 	else
 	this.idKlinike = admin.getKlinika().getId(); 
+	this.promenjenaLozinka = admin.getPromenjenaLozinka();
 
 }
 
+public Boolean getPromenjenaLozinka() {
+	return promenjenaLozinka;
+}
 
+
+
+public void setPromenjenaLozinka(Boolean promenjenaLozinka) {
+	this.promenjenaLozinka = promenjenaLozinka;
+}
 public Long getIdKlinike() {
 	return idKlinike;
 }

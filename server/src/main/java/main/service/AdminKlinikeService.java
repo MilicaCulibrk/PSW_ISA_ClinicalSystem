@@ -24,6 +24,9 @@ public class AdminKlinikeService {
 	private AdminKlinikeRepository adminKlinikeRepository;
 	
 	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
 	private KlinikaRepository klinikaRepository;
 	public AdministratorKlinike findOne(Long id) {
 		return adminKlinikeRepository.findById(id).orElseGet(null);
@@ -33,10 +36,6 @@ public class AdminKlinikeService {
 	@Autowired
 	private AuthorityRepository authorityRepository;
 	
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
 	
 	public AdminKlinikeDTO dodajAdministratora(AdminKlinikeDTO administratorDTO) {
 		AdministratorKlinike ak = new AdministratorKlinike();
@@ -55,7 +54,7 @@ public class AdminKlinikeService {
 		ak.setEmail(administratorDTO.getEmail());
 		ak.setJmbg(administratorDTO.getJmbg());
 		ak.setLozinka(passwordEncoder.encode(administratorDTO.getLozinka()));
-	
+		ak.setPromenjenaLozinka(false);
 		ak.setKlinika(klinikaRepository.getOne(administratorDTO.getIdKlinike()));
 		for (AdministratorKlinike k : adminKlinikeRepository.findAll()) {
 			if (ak.getEmail().equals(k.getEmail())) {
@@ -84,6 +83,8 @@ public class AdminKlinikeService {
 			adminKlinike.setTelefon(adminKlinikeDTO.getTelefon());
 			adminKlinike.setGrad(adminKlinikeDTO.getGrad());
 			adminKlinike.setDrzava(adminKlinikeDTO.getDrzava());
+			adminKlinike.setPromenjenaLozinka(true);
+			adminKlinike.setLozinka(passwordEncoder.encode(adminKlinikeDTO.getLozinka()));
 			adminKlinikeRepository.save(adminKlinike);
 		} catch (EntityNotFoundException e) {
 			throw new ValidationException("Admin sa tim id-ijem ne postoji");
@@ -94,5 +95,14 @@ public class AdminKlinikeService {
 	public List<AdministratorKlinike> findAll() {
 		// TODO Auto-generated method stub
 		return adminKlinikeRepository.findAll();
+	}
+
+	public void izmeniLozinku(AdminKlinikeDTO adminKlinikeDTO) {
+		// TODO Auto-generated method stub
+		AdministratorKlinike adminKlinike = adminKlinikeRepository.findById(adminKlinikeDTO.getId()).orElse(null);
+		adminKlinike.setPromenjenaLozinka(true);
+		adminKlinike.setLozinka(passwordEncoder.encode(adminKlinikeDTO.getLozinka()));
+		adminKlinikeRepository.save(adminKlinike);
+
 	}
 }

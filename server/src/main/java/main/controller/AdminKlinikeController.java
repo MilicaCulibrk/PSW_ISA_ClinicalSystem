@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -69,20 +70,30 @@ public class AdminKlinikeController {
 		return new ResponseEntity<>(akDTO, HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/izmeni")
+	@PutMapping(value = "/izmeni")
 	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
 	public ResponseEntity<AdminKlinikeDTO> izmeni(@RequestBody AdminKlinikeDTO adminKlinikeDTO){
-		
+
 		try {
 			adminKlinikeService.izmeniAdminaKlinike(adminKlinikeDTO);
+		} catch (ValidationException e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<>(adminKlinikeDTO, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/izmeniLozinku")
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	public ResponseEntity<AdminKlinikeDTO> izmeniLozinku(@RequestBody AdminKlinikeDTO adminKlinikeDTO){
+		
+		try {
+			adminKlinikeService.izmeniLozinku(adminKlinikeDTO);
 		} catch (ValidationException e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		return new ResponseEntity<>(adminKlinikeDTO, HttpStatus.OK);
 	}
-	
-	
 	@GetMapping(value = "/izlistaj")
 	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
 	public ResponseEntity<List<AdminKlinikeDTO>> getIzlistaj() {

@@ -23,7 +23,17 @@ public class AdminKCDTO {
    private String telefon;
 	
    private String jmbg;
+   private Boolean promenjenaLozinka;
+   
+	public Boolean getPromenjenaLozinka() {
+		return promenjenaLozinka;
+	}
 
+
+
+	public void setPromenjenaLozinka(Boolean promenjenaLozinka) {
+		this.promenjenaLozinka = promenjenaLozinka;
+	}
 public Long getId() {
 	return id;
 }
@@ -135,6 +145,8 @@ public AdminKCDTO(AdministratorKlinickogCentra admin) {
 	this.drzava = admin.getDrzava();
 	this.telefon = admin.getTelefon();
 	this.jmbg = admin.getJmbg();
+	this.promenjenaLozinka = admin.getPromenjenaLozinka();
+
 }
 
    

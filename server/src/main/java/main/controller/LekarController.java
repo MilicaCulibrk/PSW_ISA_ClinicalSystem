@@ -75,6 +75,24 @@ public class LekarController {
 		return new ResponseEntity<>(newLekarDTO, HttpStatus.OK);
 	}
 	
+	@PutMapping(value = "/izmeniLozinku")
+	@PreAuthorize("hasAuthority('LEKAR')")
+	public ResponseEntity<?> izmeniLozinku(@RequestBody LekarDTO lekarDTO) {
+		
+		Lekar lekar = (Lekar) lekarService.findOne(lekarDTO.getId());
+		
+		if (lekar == null) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		
+		
+		Lekar izmenjenLekar = lekarService.izmeniLozinku(lekar, lekarDTO);
+
+		LekarDTO newLekarDTO = new LekarDTO(izmenjenLekar);
+
+		return new ResponseEntity<>(newLekarDTO, HttpStatus.OK);
+	}
+	
 	@PostMapping(value = "/dodaj", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
 	public ResponseEntity<LekarDTO> dodajLekara(@RequestBody LekarDTO lekarDTO) {
@@ -106,6 +124,21 @@ public class LekarController {
 		}
 		
 		return new ResponseEntity<>(listaLekaraDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/preuzmiInfo/{email}")
+	public ResponseEntity<Boolean> getIzlistajInfo(@PathVariable String email) {
+		
+		List<Lekar> listaLekara = lekarService.findAll();
+		Boolean flag =false;
+		for (Lekar l : listaLekara) {
+				if(l.getEmail().equals(email)) {
+					flag = l.getPromenjenaLozinka();
+				}
+
+		}
+		
+		return new ResponseEntity<>(flag, HttpStatus.OK);
 	}
 	
 	@PostMapping(value = "/obrisi/{id}")

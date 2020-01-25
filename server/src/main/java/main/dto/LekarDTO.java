@@ -32,6 +32,8 @@ public class LekarDTO {
 	   private Long idKlinike;	
 	   
 	   private Long idTipaPregleda;	
+	   
+	   private Boolean promenjenaLozinka;
 
 	   public LekarDTO() {
 			super();
@@ -71,6 +73,19 @@ public class LekarDTO {
 		this.pocetak = lekar.getPocetak();
 		this.kraj = lekar.getKraj();
 		this.idTipaPregleda = lekar.getTipPregleda().getId();
+		this.promenjenaLozinka = lekar.getPromenjenaLozinka();
+	}
+
+
+
+	public Boolean getPromenjenaLozinka() {
+		return promenjenaLozinka;
+	}
+
+
+
+	public void setPromenjenaLozinka(Boolean promenjenaLozinka) {
+		this.promenjenaLozinka = promenjenaLozinka;
 	}
 
 

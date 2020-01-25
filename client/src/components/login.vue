@@ -23,12 +23,14 @@ export default {
      user: {
         email: "",
         lozinka: "",
+        promenjenaLozinka: "",
       },
           token: null,
 		  neispravniPodaci: false,   
-       };
+    };
   },
   methods: {
+
 	   login(){
 	    	var temp = this;
 	        if (this.user.email=="" || this.user.lozinka==""){
@@ -52,7 +54,6 @@ export default {
           this.$store.state.user = VueJwtDecode.decode(
             localStorage.getItem("jwt")
           );
-    
              	 this.proveriUlogu();       
                 }) // Kad stigne odgovor od servera preuzmi objekat
                  .catch(error => {
@@ -67,25 +68,37 @@ export default {
 
                 } else if (this.$store.state.user.role.authority == "ADMIN_KLINIKE") {
 
-                    this.$router.push('/pocetnaAdministratoraKlinike')
+                    if(this.$store.state.user.promenjenaLozinka){
+                    	this.$router.push('/pocetnaAdministratoraKlinike')
+                    } else {
+                    	this.$router.push('/promenaLozinke')
+                    }
 
                 }else if (this.$store.state.user.role.authority == "LEKAR"){
-
-                    this.$router.push('/pocetnaLekara')
-                    
+                
+					if(this.$store.state.user.promenjenaLozinka){
+                    	this.$router.push('/pocetnaLekara')
+                    } else {
+                    	this.$router.push('/promenaLozinke')
+                    }
                 }else if(this.$store.state.user.role.authority == "ADMIN_CENTRA"){
 
-                    this.$router.push('/pocetnaAdministratorKC')
-                
+					if(this.$store.state.user.promenjenaLozinka){
+                    	this.$router.push('/pocetnaAdministratorKC')
+                    } else {
+                    	this.$router.push('/promenaLozinke')
+                    }                
 
                 }else if (this.$store.state.user.role.authority == "MEDICINSKA_SESTRA"){
 
-                    this.$router.push('/pocetnaMedicinskeSestre')
-
+					if(this.$store.state.user.promenjenaLozinka){
+                   		this.$router.push('/pocetnaMedicinskeSestre')
+                    } else {
+                    	this.$router.push('/promenaLozinke')
+                    }
                 }
 
-            }
-
+            },
         }    
 
     }

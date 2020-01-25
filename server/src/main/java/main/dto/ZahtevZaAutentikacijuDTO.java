@@ -7,7 +7,7 @@ public class ZahtevZaAutentikacijuDTO {
 
     private String lozinka;
 
-    
+    private Boolean promenjenaLozinka;
 
     public ZahtevZaAutentikacijuDTO() {
 
@@ -22,8 +22,19 @@ public class ZahtevZaAutentikacijuDTO {
         this.email = email;
 
         this.lozinka = lozinka;
-
     }
+
+
+
+	public Boolean getPromenjenaLozinka() {
+		return promenjenaLozinka;
+	}
+
+
+
+	public void setPromenjenaLozinka(Boolean promenjenaLozinka) {
+		this.promenjenaLozinka = promenjenaLozinka;
+	}
 
 
 
