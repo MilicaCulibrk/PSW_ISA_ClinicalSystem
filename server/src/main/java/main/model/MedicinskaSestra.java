@@ -86,7 +86,8 @@ public class MedicinskaSestra implements UserDetails{
 	
 	@Column(name = "jmbg", nullable = false)
    private String jmbg;
-   
+	@Column(name = "promenjenaLozinka", nullable = false)
+	private Boolean promenjenaLozinka;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "radniKalendar_id", referencedColumnName = "id")
@@ -105,7 +106,13 @@ public class MedicinskaSestra implements UserDetails{
 				inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
 		private List<Authority> authorities;
 	 
+	 public Boolean getPromenjenaLozinka() {
+			return promenjenaLozinka;
+		}
 
+		public void setPromenjenaLozinka(Boolean promenjenaLozinka) {
+			this.promenjenaLozinka = promenjenaLozinka;
+		}
 	public Long getId() {
 		return id;
 	}

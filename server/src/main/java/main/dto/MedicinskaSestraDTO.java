@@ -25,6 +25,7 @@ public class MedicinskaSestraDTO {
    private String telefon;
 	
    private String jmbg;
+   private Boolean promenjenaLozinka;
 
 public MedicinskaSestraDTO(String ime, String prezime, int ocena, String email, String lozinka, String adresa,
 		String grad, String drzava, String telefon, String jmbg) {
@@ -54,6 +55,8 @@ public MedicinskaSestraDTO(MedicinskaSestra ms) {
 	this.drzava = ms.getDrzava();
 	this.telefon = ms.getTelefon();
 	this.jmbg = ms.getJmbg();
+	this.promenjenaLozinka = ms.getPromenjenaLozinka();
+
 }
 
 
@@ -62,7 +65,15 @@ public MedicinskaSestraDTO() {
 	super();
 	// TODO Auto-generated constructor stub
 }
+public Boolean getPromenjenaLozinka() {
+	return promenjenaLozinka;
+}
 
+
+
+public void setPromenjenaLozinka(Boolean promenjenaLozinka) {
+	this.promenjenaLozinka = promenjenaLozinka;
+}
 public Long getId() {
 	return id;
 }

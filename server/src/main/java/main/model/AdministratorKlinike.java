@@ -53,7 +53,8 @@ public class AdministratorKlinike implements UserDetails{
 	
 	@Column(name = "jmbg", nullable = false)
    private String jmbg;
-   
+	@Column(name = "promenjenaLozinka", nullable = false)
+	private Boolean promenjenaLozinka;  
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "klinika_id", referencedColumnName = "id")
@@ -90,7 +91,13 @@ public class AdministratorKlinike implements UserDetails{
 		this.klinika = klinika;
 	}
 
+	public Boolean getPromenjenaLozinka() {
+		return promenjenaLozinka;
+	}
 
+	public void setPromenjenaLozinka(Boolean promenjenaLozinka) {
+		this.promenjenaLozinka = promenjenaLozinka;
+	}
 	public Long getId() {
 		return id;
 	}

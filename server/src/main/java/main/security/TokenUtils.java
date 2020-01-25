@@ -72,6 +72,7 @@ public class TokenUtils {
                 .setExpiration(generateExpirationDate())
                 .claim("role", role)
 				.claim("id", lekar.getId())
+				.claim("promenjenaLozinka", lekar.getPromenjenaLozinka())
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
     }
     
@@ -85,6 +86,7 @@ public class TokenUtils {
                 .setExpiration(generateExpirationDate())
                 .claim("role", role)
 				.claim("id", medicninskaSestra.getId())
+				.claim("promenjenaLozinka", medicninskaSestra.getPromenjenaLozinka())
                 .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
     }
  
@@ -98,6 +100,7 @@ public class TokenUtils {
              .setExpiration(generateExpirationDate())
              .claim("role", role)
 				.claim("id", adminKlinike.getId())
+				.claim("promenjenaLozinka", adminKlinike.getPromenjenaLozinka())
              .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
  }
  
@@ -111,6 +114,8 @@ public class TokenUtils {
              .setExpiration(generateExpirationDate())
              .claim("role", role)
 				.claim("id", adminCentra.getId())
+				.claim("promenjenaLozinka", adminCentra.getPromenjenaLozinka())
+
              .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
  }
     

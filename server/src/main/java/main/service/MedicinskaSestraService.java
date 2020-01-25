@@ -4,20 +4,19 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import main.dto.AdminKlinikeDTO;
 import main.dto.MedicinskaSestraDTO;
-import main.model.AdministratorKlinike;
 import main.model.MedicinskaSestra;
-import main.repository.AdminKlinikeRepository;
 import main.repository.MedicinskaSestraRepository;
 
 @Service
 public class MedicinskaSestraService {
 	@Autowired
 	private MedicinskaSestraRepository msr;
-	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	public MedicinskaSestra findOne(Long id) {
 		return msr.findById(id).orElseGet(null);
 	}
@@ -40,9 +39,12 @@ public class MedicinskaSestraService {
 			ms.setTelefon(msdto.getTelefon());
 			ms.setGrad(msdto.getGrad());
 			ms.setDrzava(msdto.getDrzava());
+			ms.setPromenjenaLozinka(true);
+			ms.setLozinka(passwordEncoder.encode(msdto.getLozinka()));			
 			msr.save(ms);
 		} catch (EntityNotFoundException e) {
 			throw new ValidationException("Admin sa tim id-ijem ne postoji");
 		}
 	}
+
 }

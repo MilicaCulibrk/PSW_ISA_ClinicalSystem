@@ -72,6 +72,9 @@ public class Lekar implements UserDetails{
 	
 	@Column(name = "brojRecenzija", nullable = false)
    private int brojRecenzija;
+
+	@Column(name = "promenjenaLozinka", nullable = false)
+	private Boolean promenjenaLozinka;
    
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
    public java.util.Collection<Izvestaj> izvestaj;
@@ -131,6 +134,13 @@ public Lekar(String ime, String prezime, String email, String lozinka, String ad
 
 
 
+
+public Boolean getPromenjenaLozinka() {
+	return promenjenaLozinka;
+}
+public void setPromenjenaLozinka(Boolean promenjenaLozinka) {
+	this.promenjenaLozinka = promenjenaLozinka;
+}
 public Long getId() {
 	return id;
 }

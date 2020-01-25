@@ -56,6 +56,13 @@ public class LekarService {
 		return lekar;
 }
 
+	public Lekar izmeniLozinku(Lekar lekar, LekarDTO lekarDTO) {
+		lekar.setPromenjenaLozinka(true);
+		lekar.setLozinka(passwordEncoder.encode(lekarDTO.getLozinka()));
+		lekarRepository.save(lekar);
+		
+		return lekar;
+}
 	public LekarDTO dodajLekara(LekarDTO lekarDTO) {
 		// TODO Auto-generated method stub
 		Lekar l = new Lekar();
@@ -79,6 +86,8 @@ public class LekarService {
 		l.setKlinika(klinikaRepository.getOne(lekarDTO.getIdKlinike()));
 		System.out.println(lekarDTO.getIdTipaPregleda());
 		l.setTipPregleda(tipPregledaRepository.getOne(lekarDTO.getIdTipaPregleda()));
+		l.setPromenjenaLozinka(false);
+		lekarDTO.setPromenjenaLozinka(false);
 		//klinikaRepository.getOne(lekarDTO.getIdKlinike()).lekar.add(l);
 		for (Lekar k : lekarRepository.findAll()) {
 			if (l.getEmail().equals(k.getEmail())) {
