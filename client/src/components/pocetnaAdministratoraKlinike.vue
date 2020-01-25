@@ -14,20 +14,19 @@
           <a href="#">
               <i v-on:click="otvoriIzmenaKlinike"> IZMENA KLINIKE </i>
           </a>
-          <a href="#">
-              <i v-on:click="otvoriDodajLekara"> DODAJ LEKARA </i>
-          </a>
+         
           <a href="#">
               <i v-on:click="otvoriLekariKlinike"> LEKARI KLINIKE </i>
           </a>
-          <a href="#">
-             <i v-on:click="otvoriDefinisanjePregleda" class="zmdi zmdi-link">  DEFINISANJE PREGLEDA</i> 
-          </a>
+        
             <a href="#">
               <i v-on:click="otvoriUpravljanjeSalama"> UPRAVLJANJE SALAMA </i>
           </a>
             <a href="#">
               <i v-on:click="otvoriUpravljanjeTipovimaPregleda"> UPRAVLJANJE TIPOVIMA PREGLEDA </i>
+          </a>
+            <a href="#">
+             <i v-on:click="otvoriDefinisanjePregleda" class="zmdi zmdi-link">  DEFINISANJE PREGLEDA</i> 
           </a>
             <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
@@ -394,7 +393,7 @@
                                       <div class="text-center mb-4 mt-4">
                                         <template>
                                         <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajNoviTipPregleda">Dodaj</button>
-                                        <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " >Odustani</button>
+                                        <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustaniDodajTipPregleda">Odustani</button>
                                         <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); "  v-on:click="izmeniTipPregleda">Izmeni</button>
                                         </template>
                                       </div>
@@ -495,7 +494,7 @@
                               </div>
                               </div>
                 </form>
-				<form v-if="prikazDodajLekara"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+				<form v-if="prikazLekariKlinike"  class="message-form" style="position: relative; top: 10px; left: 950px; width: 550px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
 
                        <div>
                                 
@@ -604,7 +603,7 @@
                               </div>
                 </form>
 
-                <form   v-if="prikazLekariKlinike" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+                <form   v-if="prikazLekariKlinike" class="message-form" style="position: relative; top: -650px; left: 300px; width: 550px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
 		          <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
 		            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
 
@@ -619,7 +618,7 @@
 			                    <td>{{lekari[i].ime}}</td>
 			                    <td>{{lekari[i].prezime}}</td>
 								<td>{{lekari[i].pocetak}}:00h - {{lekari[i].kraj}}:00h</td>
-			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiLekara(lekari[i].id)"><i class="fa fa-trash">Obrisi</i></button>
+			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiLekara(lekari[i])"><i class="fa fa-trash">Obrisi</i></button>
 			                    </td>
 			                  </tr>
 			              </table>
@@ -672,7 +671,6 @@ export default {
       
       prikazProfil:false,
       prikazIzmenaKlinike: false,
-      prikazDodajLekara: false,
       prikazLekariKlinike: false,
       prikazDefinisanjePregleda: false,
       prikazUpravljanjeSalama: false,
@@ -689,7 +687,6 @@ export default {
         otvoriProfil(){
              this.prikazProfil = !this.prikazProfil,
 		     this.prikazIzmenaKlinike = false,
-		     this.prikazDodajLekara = false,
 		     this.prikazLekariKlinike = false,
 		     this.prikazDefinisanjePregleda = false,
 		     this.prikazUpravljanjeSalama = false,
@@ -700,7 +697,6 @@ export default {
          otvoriUpravljanjeTipovimaPregleda(){
              this.prikazProfil = false,
 		     this.prikazIzmenaKlinike = false,
-		     this.prikazDodajLekara = false,
 		     this.prikazLekariKlinike = false,
 		     this.prikazDefinisanjePregleda = false,
 		     this.prikazUpravljanjeSalama = false,
@@ -718,7 +714,6 @@ export default {
          otvoriUpravljanjeSalama(){
              this.prikazProfil = false,
 		     this.prikazIzmenaKlinike = false,
-		     this.prikazDodajLekara = false,
 		     this.prikazLekariKlinike = false,
 		     this.prikazDefinisanjePregleda = false,
 		     this.prikazUpravljanjeSalama = !this.prikazUpravljanjeSalama,
@@ -738,7 +733,6 @@ export default {
           
            this.prikazProfil = false,
 	       this.prikazIzmenaKlinike = false,
-	       this.prikazDodajLekara = false,
 	       this.prikazLekariKlinike = false,
 	       this.prikazDefinisanjePregleda = !this.prikazDefinisanjePregleda,
 	       this.prikazUpravljanjeSalama = false,
@@ -756,7 +750,6 @@ export default {
             
               this.prikazProfil = false,
 		      this.prikazIzmenaKlinike = false,
-		      this.prikazDodajLekara = false,
 		      this.prikazLekariKlinike = !this.prikazLekariKlinike,
 		      this.prikazDefinisanjePregleda = false,
 		      this.prikazUpravljanjeSalama = false,
@@ -776,8 +769,7 @@ export default {
              
               this.prikazProfil = false,
 		      this.prikazIzmenaKlinike = false,
-		      this.prikazDodajLekara = !this.prikazDodajLekara,
-		      this.prikazLekariKlinike = false,
+		      this.prikazLekariKlinike = !this.prikazLekariKlinike,
 		      this.prikazDefinisanjePregleda = false,
 		      this.prikazUpravljanjeSalama = false,
 		      this.prikazUpravljanjeTipovimaPregleda =  false
@@ -877,6 +869,13 @@ export default {
 	        
         },
         
+          odustaniDodajTipPregleda(){
+              this.tipPregleda.naziv="";
+	          this.tipPregleda.oznaka="";
+	          this.tipPregleda.cena="";
+	        
+        },
+        
           odustaniDodajPregled(){
                this.pregled.naziv = "";
 	          this.pregled.vreme = "";
@@ -967,7 +966,6 @@ export default {
       });
     	 this.prikazProfil = false;
 	     this.prikazIzmenaKlinike = !this.prikazIzmenaKlinike;
-	     this.prikazDodajLekara = false,
 	     this.prikazLekariKlinike = false,
 	     this.prikazDefinisanjePregleda = false,
 	     this.prikazUpravljanjeSalama =  false,
@@ -1030,6 +1028,21 @@ export default {
       
       },
       
+          obrisiLekara(lekar){
+        
+       	
+        axios
+        .delete("/lekar/izbrisi/" + lekar.id)
+      .then(lekari => {
+        this.lekari = lekari.data;
+      })
+      .catch(error => {
+        console.log(error);
+        alert("Ne mozete obrisati lekara jer ima zakazane preglede!");
+      });
+      
+      },
+      
         obrisiTipPregleda(tipPregleda){
         
        	
@@ -1040,7 +1053,7 @@ export default {
       })
       .catch(error => {
         console.log(error);
-        alert("Ne mozete obrisati tip pregleda jer je prethodno rezervisan pregled tog tipa!");
+        alert("Ne mozete obrisati tip pregleda jer je prethodno rezervisan pregled tog tipa ili je tip dodeljen lekaru!");
       });
       
       },
@@ -1067,16 +1080,7 @@ export default {
 		      });
       }, 
       
-      obrisiLekara(idLekara){
-      		axios
-		      .post("/lekar/obrisi/" + idLekara)
-		      .then(lekari => {
-			        this.lekari = lekari.data;
-			      })
-		      .catch(error => {
-		          console.log(error)
-		      });
-      },
+     
       izmenaKlinika(){
         axios
         .put("/klinika/izmeni", this.klinika)
