@@ -27,6 +27,9 @@
               <i v-on:click="otvoriUpravljanjeSalama"> UPRAVLJANJE SALAMA </i>
           </a>
             <a href="#">
+              <i v-on:click="otvoriUpravljanjeTipovimaPregleda"> UPRAVLJANJE TIPOVIMA PREGLEDA </i>
+          </a>
+            <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
 	                </i>     
                                 
@@ -323,7 +326,91 @@
 		                 
                   </form>
                   
+                  <form v-if="prikazUpravljanjeTipovimaPregleda" class="message-form" style="position: relative; top: 10px; left: 300px; width: 550px; height: 480px; background-color: rgba(130, 206, 209, 0.733); ">
+                           <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+		            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+
+						  <table style="width: 500px;">
+			                 <tr>
+			                    <th class="bg-info  text-white">Naziv</th>
+			                    <th class="bg-info  text-white">Oznaka</th>
+			                    <th class="bg-info  text-white">Cena</th
+			                 </tr>
+			                  <tr v-for="k,i in tipovi.length">
+			                    <td>{{tipovi[i].naziv}}</td>
+			                    <td>{{tipovi[i].oznaka}}</td>
+			                    <td>{{tipovi[i].cena}}</td>
+			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="izaberiTipPregledaZaIzmenu(tipovi[i])">IZMENI</button>
+			                  	<td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiTipPregleda(tipovi[i])">OBRISI</button>
+			                    </td>
+			                  </tr>
+			              </table>
+			              
+			              </div>
+		          </div>
+			              
+			     
+                  </form>
                   
+             
+                   <form v-if="prikazUpravljanjeTipovimaPregleda" class="message-form" style="position: relative; top: -500px; left: 900px; width: 500px; height: 500px; background-color: rgba(130, 206, 209, 0.733); ">
+                         <div>
+                                
+                            
+                              <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+                            
+                                
+                                <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+
+                                  <div class="form-group">
+                            
+                                    <div class="card-body mx-4 mt-4">
+                                      <div class="row">
+                            
+                                        <div class="col">
+                                        <div class="md-form">
+
+                                          
+                                          <label for="Form-ime" style="color: #b3b3b3;">Naziv</label>
+                                          <input type="text" v-model="tipPregleda.naziv" id="Form-ime" class="form-control">
+                                          
+										  <label for="Form-ime" style="color: #b3b3b3;">Oznaka</label>
+                                          <input type="text" v-model="tipPregleda.oznaka" id="Form-ime" class="form-control">
+                                          
+                                            <label for="Form-ime" style="color: #b3b3b3;">Cena</label>
+                                          <input type="text" v-model="tipPregleda.cena" id="Form-ime" class="form-control">
+                                          
+                                      
+                                           <label for="Form-username" style="color: #b3b3b3;">Klinika</label>
+                                           <button  id="Form-username" class="form-control"  disabled>{{tipovi[0].klinika.naziv}}</button>
+
+                                        </div>
+                                        </div>
+                                      
+                                      </div>
+                                      
+                            
+                            
+                                      <div class="text-center mb-4 mt-4">
+                                        <template>
+                                        <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajNoviTipPregleda">Dodaj</button>
+                                        <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " >Odustani</button>
+                                        <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); "  v-on:click="izmeniTipPregleda">Izmeni</button>
+                                        </template>
+                                      </div>
+                            
+                                    </div>
+                            
+                                  </div>
+                            
+                            
+                                </div>
+                                
+                            
+                              </div>
+                              </div>
+                 	 </form>
+                 
                   
                   <form v-if="prikazIzmenaKlinike"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
 
@@ -547,7 +634,6 @@
 
 <script>
 import axios from 'axios'
-
 export default {
  data() {
      return {
@@ -568,6 +654,13 @@ export default {
 	        broj: "",
 	        klinika: {}
         },
+        tipPregleda: {
+        	id: "",
+	        naziv: "",
+	        oznaka: "",
+	        cena: "",
+	        klinika: {}
+        },
       vremena: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
 	  trajanja: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       tipovi: [],
@@ -576,12 +669,15 @@ export default {
       selektovaniTip: "",
       selektovanaSala: "",
       selektovaniLekar: "",
+      
       prikazProfil:false,
       prikazIzmenaKlinike: false,
       prikazDodajLekara: false,
       prikazLekariKlinike: false,
       prikazDefinisanjePregleda: false,
       prikazUpravljanjeSalama: false,
+      prikazUpravljanjeTipovimaPregleda: false,
+      
       izmeni:false,
       izmeniKliniku: false,
       idKlinike: {},
@@ -596,7 +692,28 @@ export default {
 		     this.prikazDodajLekara = false,
 		     this.prikazLekariKlinike = false,
 		     this.prikazDefinisanjePregleda = false,
-		     this.prikazUpravljanjeSalama = false
+		     this.prikazUpravljanjeSalama = false,
+		     this.prikazUpravljanjeTipovimaPregleda = false
+		     
+		     
+        },
+         otvoriUpravljanjeTipovimaPregleda(){
+             this.prikazProfil = false,
+		     this.prikazIzmenaKlinike = false,
+		     this.prikazDodajLekara = false,
+		     this.prikazLekariKlinike = false,
+		     this.prikazDefinisanjePregleda = false,
+		     this.prikazUpravljanjeSalama = false,
+		     this.prikazUpravljanjeTipovimaPregleda =  !this.prikazUpravljanjeTipovimaPregleda
+		     
+			  axios
+		      .get("/tipPregleda/TipoviKlinike/" + this.$store.state.user.id)
+		      .then(tipovi => {
+		        this.tipovi = tipovi.data;
+		      })
+		      .catch(error => {
+		        console.log(error);
+		      });
         },
          otvoriUpravljanjeSalama(){
              this.prikazProfil = false,
@@ -604,7 +721,8 @@ export default {
 		     this.prikazDodajLekara = false,
 		     this.prikazLekariKlinike = false,
 		     this.prikazDefinisanjePregleda = false,
-		     this.prikazUpravljanjeSalama = !this.prikazUpravljanjeSalama
+		     this.prikazUpravljanjeSalama = !this.prikazUpravljanjeSalama,
+		     this.prikazUpravljanjeTipovimaPregleda =  false
 		     
 		        axios
 		      .get("/sala/getSale/" +  this.$store.state.user.id)
@@ -623,12 +741,12 @@ export default {
 	       this.prikazDodajLekara = false,
 	       this.prikazLekariKlinike = false,
 	       this.prikazDefinisanjePregleda = !this.prikazDefinisanjePregleda,
-	        this.prikazUpravljanjeSalama = false
+	       this.prikazUpravljanjeSalama = false,
+		   this.prikazUpravljanjeTipovimaPregleda =  false
         },
         vidiLokaciju(){
 			this.$router.push("/vidiLokaciju");
             },
-
         izmena() {
         	this.izmeni = true
         },
@@ -641,7 +759,8 @@ export default {
 		      this.prikazDodajLekara = false,
 		      this.prikazLekariKlinike = !this.prikazLekariKlinike,
 		      this.prikazDefinisanjePregleda = false,
-		      this.prikazUpravljanjeSalama = false
+		      this.prikazUpravljanjeSalama = false,
+		      this.prikazUpravljanjeTipovimaPregleda =  false
             
             axios
 		      .get("/lekar/izlistaj/" + this.idKlinike)
@@ -660,10 +779,35 @@ export default {
 		      this.prikazDodajLekara = !this.prikazDodajLekara,
 		      this.prikazLekariKlinike = false,
 		      this.prikazDefinisanjePregleda = false,
-		      this.prikazUpravljanjeSalama = false
+		      this.prikazUpravljanjeSalama = false,
+		      this.prikazUpravljanjeTipovimaPregleda =  false
         },
         
-        dodajNovuSalu(){
+        dodajNoviTipPregleda(){
+			 if(this.tipPregleda.naziv=="" || this.tipPregleda.oznaka=="" || this.tipPregleda.cena=="")
+			         {
+			          alert("Molimo vas popunite sva polja.");
+			          return;
+			         }
+	        axios
+	        .post("/tipPregleda/dodaj/" + this.$store.state.user.id, this.tipPregleda)
+	        .then(tipPregleda => {
+	          this.tipPregleda.naziv="";
+	          this.tipPregleda.oznaka="";
+	          this.tipPregleda.cena="";
+	          alert("Dodat tip pregleda!");
+	          this.prikazUpravljanjeTipovimaPregleda = false;
+       		  this.otvoriUpravljanjeTipovimaPregleda();
+	        })
+	        .catch(error => {
+				alert("Lekar sa ovim email-om vec postoji.");
+				
+	        });
+	        
+	        
+        },
+        
+                dodajNovuSalu(){
 			 if(this.sala.naziv=="" || this.sala.broj=="")
 			         {
 			          alert("Molimo vas popunite sva polja.");
@@ -685,6 +829,7 @@ export default {
 	        
 	        
         },
+        
         
            dodajLekara(){
 			 if(this.lekar.ime=="" || this.lekar.prezime=="" || this.lekar.email==""  || this.lekar.lozinka=="" ||
@@ -765,7 +910,6 @@ export default {
       var rex = /^\+381\/6[0-9]-?[0-9]+(-[0-9]+)?$/;
       if (!rex.test(String(this.korisnik.telefon.trim()))) {
         alert("Broj telefona treba da bude oblika +381/65-504205");
-
         return;
       }
       axios
@@ -825,7 +969,9 @@ export default {
 	     this.prikazIzmenaKlinike = !this.prikazIzmenaKlinike;
 	     this.prikazDodajLekara = false,
 	     this.prikazLekariKlinike = false,
-	     this.prikazDefinisanjePregleda = false
+	     this.prikazDefinisanjePregleda = false,
+	     this.prikazUpravljanjeSalama =  false,
+	     this.prikazUpravljanjeTipovimaPregleda =  false
     },
        izaberiSaluZaIzmenu(sala) {
        		this.sala.id = sala.id;
@@ -847,6 +993,28 @@ export default {
         });
       },
       
+      izaberiTipPregledaZaIzmenu(tipPregleda) {
+       		this.tipPregleda.id = tipPregleda.id;
+     		this.tipPregleda.naziv = tipPregleda.naziv;
+	        this.tipPregleda.oznaka = tipPregleda.oznaka;
+	        this.tipPregleda.cena = tipPregleda.cena;
+	        this.tipPregleda.klinika = tipPregleda.klinika;
+       },
+         izmeniTipPregleda(){
+        axios
+        .put("/tipPregleda/izmeniTipPregleda", this.tipPregleda)
+        .then(tipPregleda =>{
+          this.tipPregleda = tipPregleda.data;
+          this.prikazUpravljanjeTipovimaPregleda = false;
+       	  this.otvoriUpravljanjeTipovimaPregleda();
+       	  alert("Pregled je izmenjen!");
+        })
+        .catch(error => {
+            console.log(error)
+             alert("Ne mozete da izmenite tip pregleda jer postoje zakazani pregledi tog tipa!");
+        });
+      },
+      
         obrisiSalu(sala){
         
        	
@@ -858,6 +1026,21 @@ export default {
       .catch(error => {
         console.log(error);
         alert("Ne mozete obrisati salu jer je prethodno rezervisana za pregled!");
+      });
+      
+      },
+      
+        obrisiTipPregleda(tipPregleda){
+        
+       	
+        axios
+        .delete("/tipPregleda/izbrisi/" + tipPregleda.id)
+      .then(tipovi => {
+        this.tipovi = tipovi.data;
+      })
+      .catch(error => {
+        console.log(error);
+        alert("Ne mozete obrisati tip pregleda jer je prethodno rezervisan pregled tog tipa!");
       });
       
       },
@@ -894,7 +1077,6 @@ export default {
 		          console.log(error)
 		      });
       },
-
       izmenaKlinika(){
         axios
         .put("/klinika/izmeni", this.klinika)
@@ -906,7 +1088,6 @@ export default {
             console.log(error)
         });
       },
-
 	 dodajSalu() {
      
       if (this.pregled.datum === "" || this.pregled.vreme === "" || this.pregled.trajanjePregleda === "" || this.pregled.selektovanaSala === "" || this.pregled.selektovaniLekar === "" || this.pregled.cena === ""){
@@ -985,7 +1166,6 @@ export default {
       });
   }
 };
-
 </script>
 
 
@@ -993,15 +1173,12 @@ export default {
 
   <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500');
-
 body {
   overflow-x: hidden;
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
 }
-
 /* Toggle Styles */
-
 #viewport {
   padding-left: 250px;
   -webkit-transition: all 0.5s ease;
@@ -1009,7 +1186,6 @@ body {
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
 }
-
 #content {
   width: 100%;
   position: relative;
@@ -1018,9 +1194,7 @@ body {
   background-color: #37474F;
   
 }
-
 /* Sidebar Styles */
-
 #sidebar {
   z-index: 1000;
   position: fixed;
@@ -1035,7 +1209,6 @@ body {
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
 }
-
 #sidebar header {
     background: url('https://i.ibb.co/FBXWKxW/doctor.jpg') center center no-repeat;
     background-size: cover;
@@ -1043,19 +1216,14 @@ body {
   line-height: 52px;
   
 }
-
 #sidebar header a {
   color: #fff;
   display: block;
   text-decoration: none;
 }
-
 #sidebar header a:hover {
   color: #fff;
 }
-
-
-
 #sidebar .nav a{
   background: none;
   border-bottom: 1px solid #455A64;
@@ -1063,17 +1231,14 @@ body {
   font-size: 14px;
   padding: 16px 24px;
 }
-
 #sidebar .nav a:hover{
   background: none;
   color: #b3b3b3;
 }
-
 #sidebar .nav a i{
   margin-right: 16px;
   
 }
-
 .popup-box {
   position: absolute;
   left: 50%;
@@ -1085,14 +1250,10 @@ body {
   padding: 40px;
   color: #555585;
 }
-
 .google-map {
   width: 800px;
   height: 600px;
   margin: 0 auto;
   background: gray;
 }
-
 </style>
-
-
