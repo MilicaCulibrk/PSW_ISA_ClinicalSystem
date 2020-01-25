@@ -21,13 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.LekarDTO;
-import main.dto.PregledDTO;
-import main.dto.SalaDTO;
 import main.dto.TipPregledaDTO;
 import main.model.AdministratorKlinike;
 import main.model.Lekar;
 import main.model.Pregled;
-import main.model.Sala;
 import main.model.TipPregleda;
 import main.service.AdminKlinikeService;
 import main.service.LekarService;
@@ -164,7 +161,16 @@ public class TipPregledaController {
 				}
 			}
 			
-			//tip pregleda mozemo da obrisemo samo ako on nije vezan za neki pregled
+			List<Lekar> lekari = lekarService.findAll();
+
+			for (Lekar l : lekari){
+				if (l.getTipPregleda().getId() == id) {
+					flag = 1;
+					break;
+				}
+			}
+			
+			//tip pregleda mozemo da obrisemo samo ako on nije vezan za neki pregled ili ako nije vezan za lekara
 			if(flag == 0) {
 				tipPregledaService.remove(id);
 				

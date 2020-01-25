@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,14 +20,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import main.dto.AdminKlinikeDTO;
-import main.dto.KlinikaDTO;
 import main.dto.LekarDTO;
-import main.dto.LekarDTO;
-import main.model.Klinika;
+import main.dto.TipPregledaDTO;
 import main.model.Lekar;
-import main.model.Lekar;
+import main.model.Pregled;
+import main.model.TipPregleda;
 import main.service.LekarService;
+import main.service.PregledService;
 
 @CrossOrigin
 @RestController
@@ -35,6 +35,10 @@ public class LekarController {
 
 	@Autowired
 	private LekarService lekarService;
+	
+	@Autowired
+	private PregledService pregledService;
+
 
 
 	@GetMapping(value = "/get/{id}")
@@ -117,4 +121,48 @@ public class LekarController {
 		//	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		
 	}
+	
+	@DeleteMapping(value = "/izbrisi/{id}")
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	public ResponseEntity<List<LekarDTO>> deletePregled(@PathVariable Long id) {
+
+		Lekar lekar = lekarService.findOne(id);
+		
+		List<LekarDTO> lekarDTO = new ArrayList<>();
+		
+		if (lekarDTO != null) {
+			
+			int flag = 0;
+			List<Pregled> pregledi = pregledService.findAll();
+
+			for (Pregled p : pregledi){
+				if (p.getLekar().getId() == id) {
+					flag = 1;
+					break;
+				}
+			}
+			
+		
+			
+			//lekara mozemo obrisati samo ako nema zakazane preglede
+			if(flag == 0) {
+				lekarService.remove(id);
+				
+				List<Lekar> lk = lekarService.findAll();
+
+				for (Lekar l : lk) {
+					if (l.getKlinika().getId() == lekar.getKlinika().getId()) {
+						lekarDTO.add(new LekarDTO(l));
+					}
+				}
+				return new ResponseEntity<>(lekarDTO, HttpStatus.OK);
+			}
+			
+		
+		}
+
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
+	
 }
