@@ -30,7 +30,7 @@ public class DijagnozaController {
 	private DijagnozaService dijagnozaService;
 	
 	@GetMapping(value = "/izlistaj")
-	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
+	@PreAuthorize("hasAnyAuthority('LEKAR,MEDICINSKA_SESTRA, ADMIN_CENTRA')")
 	public ResponseEntity<List<DijagnozaDTO>> getIzlistaj() {
 		
 		List<Dijagnoza> listaDijagnoza = dijagnozaService.findAll();

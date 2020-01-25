@@ -28,21 +28,8 @@ public class ZdravstveniKartonController {
 	@Autowired
 	private ZdravstveniKartonService zdravstveniKartonService;
 	
-	@GetMapping(value = "/get")
-
-	@PreAuthorize("hasAuthority('LEKAR')")
-
-	public ResponseEntity<ZdravstveniKartonDTO> getZdravstveniKarton() {
-		
-		ZdravstveniKarton zdravstveniKarton = zdravstveniKartonService.findOne((long) 1);
-		
-		ZdravstveniKartonDTO zdravstveniKartonDTO = new ZdravstveniKartonDTO(zdravstveniKarton);
-		
-		
-		return new ResponseEntity<>(zdravstveniKartonDTO, HttpStatus.OK);
-	}
 	@GetMapping(value = "/pronadjiZdravstveniKarton/{id}")
-
+	@PreAuthorize("hasAnyAuthority('LEKAR,MEDICINSKA_SESTRA')")
 	public ResponseEntity<ZdravstveniKartonDTO> getPronadjiZdravstveniKarton(@PathVariable Long id) {
 		
 		ZdravstveniKarton zdravstveniKarton = zdravstveniKartonService.findOne(id);
@@ -53,9 +40,7 @@ public class ZdravstveniKartonController {
 	}
 	
 	@PutMapping(value = "/izmeni", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
-
-	@PreAuthorize("hasAuthority('LEKAR')")
-
+	@PreAuthorize("hasAnyAuthority('LEKAR,MEDICINSKA_SESTRA')")
 	public ResponseEntity<ZdravstveniKartonDTO> izmeni(@RequestBody ZdravstveniKartonDTO zdravstveniKartonDTO){
 		
 		try {

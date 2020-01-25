@@ -128,19 +128,105 @@
                               </div>
                               </div>
                             </form>
-                <form  v-if="prikazPacijenata" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+                            <form v-if="prikazPacijenata" >
 
-                  <div >	                    
-                    <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
-                      <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
-                        <li v-for="k,i in pacijenti.length">
-                          <a href="#" class="list-group-item list-group-item-action" v-on:click="otvoriZK(pacijenti[i])">{{pacijenti[i].ime}} {{pacijenti[i].prezime}}</a>		
-                        </li>        
-                      </div>
-                    </div>        
-                   
+
+                              <div style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px;  ">	                    
+                                   <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+                                     <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+                                          <label for="Form-username" style="color: #b3b3b3;">Selektuj po:</label>
+                                          <b-form-select  >
+                                            <option v-on:click="azuriraj('Id')">Id</option>
+                                            <option v-on:click="azuriraj('Ime')">Ime</option>
+                                            <option v-on:click="azuriraj('Prezime')">Prezime</option>
+                                            <option v-on:click="azuriraj('JMBG')">JMBG</option>
+                                            <option v-on:click="azuriraj('Email')">Email</option>
+                                          </b-form-select>
+                               </div>
+                               </div>
+                               <div  class="message-form" style="position: relative; top: 10px; left: 0px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+                               <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+                               
+                               <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+                                       <table  id="tablePreview" class="table table-hover" style="width: 100%;">
+                                         <thead>
+                                           <tr>
+                                                   <th class="th-lg">Id</th>
+                                                   <th class="th-lg">Ime</th>
+                                                   <th class="th-lg">Prezime</th>
+                                                   <th class="th-lg">JMBG</th>
+                                                   <th class="th-lg">Email</th>
+                                                 </tr>
+                                                 </thead>
+                                                 <tbody>
+                                                 <tr v-for="k,i in pacijenti.length" v-on:click="otvoriPacijenta(pacijenti[i])">
+                                                   <td v-on:click="otvoriPacijenta(pacijenti[i])">{{pacijenti[i].id}}</td>
+                                                   <td>{{pacijenti[i].ime}}</td>
+                                                   <td>{{pacijenti[i].prezime}}</td>
+                                                   <td>{{pacijenti[i].jmbg}}</td>
+                                                   <td>{{pacijenti[i].email}}</td>
+                                                   
+                                                 </tr>
+                                                 </tbody>
+                                       </table>    
+                                </div>
+                                </div>
+                                   </div>
+                            
+                                 </div>
+                                 </form>
+
+                  <form v-if="prikazPacijenta" >
+                    <div style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; ">	                    
+                     <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+                       <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+                         <h1>Pacijent {{trenutniPacijent.ime}} {{trenutniPacijent.prezime}}</h1>
+                         <button v-on:click="zapocniPregled()">Zapocni pregled</button>
+                         <button v-on:click="otvoriZK(trenutniPacijent.idZdravstveniKarton)">Pregledaj zdravstveni karton</button>
+               
+                       </div>
+                     </div>
                    </div>
-                  </form>
+                 </form>
+
+                 <form  v-if="prikazZapocniPregled" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+                  <div >	                    
+                     <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+                        <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">      
+                           <div class="form-group">                    
+                             <div class="card-body mx-4 mt-4">
+                               <div class="row">
+                     
+                                 <div class="col">
+                                 <div class="md-form">
+                                   <label for="Form-dioptrija" style="color: #b3b3b3;">Dijagnoza</label>
+                                   <form >
+                                    <select name="cars">
+                                      <option v-for="d in dijagnoze" v-bind:value="d.id">{{d.naziv}}</option>
+                                    </select>
+                                    </form>                                    
+                                   <label for="Form-alergija" style="color: #b3b3b3;">Alergija</label>
+                                   <form >
+                                    <select name="cars">
+                                      <option v-for="l in lekovi" v-bind:value="l.id">{{l.naziv}}</option>
+                                    </select>
+                                    </form>                                    
+                              </div>
+                                 </div>
+                                
+                               </div>
+                               
+                               <div class="text-center mb-4 mt-4">
+                                   <template>
+                                   <button type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " >Sacuvaj</button>
+                                   </template>
+                                 </div>
+                            </div>                     
+                           </div>
+                        </div>                     
+                       </div>                   
+                    </div>
+               </form>
                   <form  v-if="prikazZK" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
   
 
@@ -217,6 +303,11 @@ import axios from 'axios'
       izmeni:false,
       izmeniZK:false,
       prikazPacijenata:false,
+      prikazPacijenta:false,
+      trenutniPacijent:{},
+      prikazZapocniPregled: false,
+      dijagnoze: [],
+      lekovi: [],
       }
   },
   methods: {
@@ -270,6 +361,7 @@ import axios from 'axios'
     },
     otvoriListuPacijenata(){
 	  		this.prikaz=false;
+        this.prikazZK=false;
 	  		this.prikazPacijenata=!this.prikazPacijenata;
 	  	      axios
 
@@ -282,17 +374,18 @@ import axios from 'axios'
 		          console.log(error)
 		      });
 	  	},
-    otvoriZK(pac){
+    otvoriZK(idzk){
       axios
 
-	        .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ pac.idZdravstveniKarton)
+	        .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ idzk)
 
 	        .then(z =>{
 	          this.zdravstveniK = z.data;
           })
-      this.prikazZK=!this.prikazZK;
+      this.prikazZK=true;
       this.prikazPacijenata=false;
-    
+      this.prikazPacijenta=false;
+
     },
     izmenaZK(){
       this.izmeniZK = true
@@ -324,9 +417,30 @@ import axios from 'axios'
           console.log(error)
       });
     },
+    azuriraj(nes){
+	  		axios
+		      .put("/pacijent/azuriraj", nes)
+		      .then(pacijent => {
+			        this.pacijenti = pacijent.data;
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+	  	},
+	  	otvoriPacijenta(pacijent){
+        this.prikazPacijenata = false;
+	  		this.trenutniPacijent = pacijent;
+	  		this.prikazPacijenta = true;
+	  	},
+      zapocniPregled(){
+        this.prikazZapocniPregled = true;
+        this.prikazPacijenta = false;
 
+
+      }
     },
  mounted() {
+   {
       axios
       .get("/lekar/get/" + this.$store.state.user.id)
       .then(lekar =>{
@@ -335,6 +449,25 @@ import axios from 'axios'
       .catch(error => {
           console.log(error)
       });
+   }{
+    axios
+      .get("/lek/izlistaj" )
+      .then(lek =>{
+        this.lekovi = lek.data;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+   }{
+    axios
+      .get("/dijagnoza/izlistaj")
+      .then(dijagnoza =>{
+        this.dijagnoze = dijagnoza.data;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+   }
   }
 };
 
