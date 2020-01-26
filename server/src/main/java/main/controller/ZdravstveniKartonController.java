@@ -42,7 +42,6 @@ public class ZdravstveniKartonController {
 	@PutMapping(value = "/izmeni", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyAuthority('LEKAR,MEDICINSKA_SESTRA')")
 	public ResponseEntity<ZdravstveniKartonDTO> izmeni(@RequestBody ZdravstveniKartonDTO zdravstveniKartonDTO){
-		
 		try {
 			zdravstveniKartonService.izmeniZdravstveniKarton(zdravstveniKartonDTO);
 		} catch (ValidationException e) {
