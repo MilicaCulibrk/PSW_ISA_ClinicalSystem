@@ -25,8 +25,12 @@
             <a href="#">
               <i v-on:click="otvoriUpravljanjeTipovimaPregleda"> UPRAVLJANJE TIPOVIMA PREGLEDA </i>
           </a>
+          
             <a href="#">
              <i v-on:click="otvoriDefinisanjePregleda" class="zmdi zmdi-link">  DEFINISANJE PREGLEDA</i> 
+          </a>
+            <a href="#">
+              <i v-on:click="otvoriPretragaIfiltriranjeSala"> PRETRAGA I FILTRIRANJE SALA </i>
           </a>
             <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
@@ -494,6 +498,96 @@
                               </div>
                               </div>
                 </form>
+                
+                </form>
+                  
+                  <form v-if="prikazPretragaIfiltriranjeSala" class="message-form" style="position: relative; top: 10px; left: 300px; width: 550px; height: 480px; background-color: rgba(130, 206, 209, 0.733); ">
+                            <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+		            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+
+						  <table style="width: 500px;">
+			                 <tr>
+			                    <th class="bg-info  text-white">Naziv</th>
+			                    <th class="bg-info  text-white">Broj</th>
+			                  
+			                 </tr>
+			                  <tr v-for="k,i in sale.length">
+			                    <td>{{sale[i].naziv}}</td>
+			                    <td>{{sale[i].broj}}</td>
+			                   
+			                    </td>
+			                  </tr>
+			              </table>
+			              
+			              </div>
+		          </div>
+			              
+                  </form>
+                  
+                   	<form v-if="prikazPretragaIfiltriranjeSala"  class="message-form" style="position: relative; top: -500px; left: 900px; width: 500px; height: 500px; background-color: rgba(130, 206, 209, 0.733); ">
+
+                       <div>
+                                
+                            
+                              <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+                            
+                                
+                                <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+
+                                  <div class="form-group">
+                            
+                                    <div class="card-body mx-4 mt-4">
+                                      <div class="row">
+                            
+                                        <div class="col">
+                                        <div class="md-form">
+
+                                          
+                                          <label for="Form-ime" style="color: #b3b3b3;">Naziv</label>
+                                          <input type="text" v-model="pretragaSale.naziv" id="Form-ime" class="form-control">
+                                          
+										  <label for="Form-ime" style="color: #b3b3b3;">Broj</label>
+                                          <input type="text" v-model="pretragaSale.broj" id="Form-ime" class="form-control">
+                                          
+                                            <label for="Form-ime" style="color: #b3b3b3;">Datum</label>
+                                          <input type="text" v-model="pretragaSale.datum" id="Form-ime" class="form-control">
+                                          
+                                            <label for="Form-ime" style="color: #b3b3b3;">Vreme</label>
+                                          <input type="text" v-model="pretragaSale.vreme" id="Form-ime" class="form-control">
+                                          
+                                          
+
+                                          
+
+                                        </div>
+                                        </div>
+                                      
+                                      </div>
+                                      
+                            
+                            
+                                      <div class="text-center mb-4 mt-4">
+                                        <template>
+                                        <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="pretragaSala">Pretraga</button>
+                                       
+                                        </template>
+                                      </div>
+                            
+                                    </div>
+                            
+                                  </div>
+                            
+                            
+                                </div>
+                                
+                            
+                              </div>
+                              </div>
+                </form>
+	
+                
+                
+                
 				<form v-if="prikazLekariKlinike"  class="message-form" style="position: relative; top: 10px; left: 950px; width: 550px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
 
                        <div>
@@ -660,6 +754,13 @@ export default {
 	        cena: "",
 	        klinika: {}
         },
+         pretragaSale: {
+	        naziv: "",
+	        broj: "",
+	        datum: "",
+			vreme: "",
+	        
+        },
       vremena: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
 	  trajanja: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       tipovi: [],
@@ -675,6 +776,7 @@ export default {
       prikazDefinisanjePregleda: false,
       prikazUpravljanjeSalama: false,
       prikazUpravljanjeTipovimaPregleda: false,
+      prikazPretragaIfiltriranjeSala: false,
       
       izmeni:false,
       izmeniKliniku: false,
@@ -690,7 +792,8 @@ export default {
 		     this.prikazLekariKlinike = false,
 		     this.prikazDefinisanjePregleda = false,
 		     this.prikazUpravljanjeSalama = false,
-		     this.prikazUpravljanjeTipovimaPregleda = false
+		     this.prikazUpravljanjeTipovimaPregleda = false,
+		     this.prikazPretragaIfiltriranjeSala = false
 		     
 		     
         },
@@ -701,6 +804,7 @@ export default {
 		     this.prikazDefinisanjePregleda = false,
 		     this.prikazUpravljanjeSalama = false,
 		     this.prikazUpravljanjeTipovimaPregleda =  !this.prikazUpravljanjeTipovimaPregleda
+		     this.prikazPretragaIfiltriranjeSala = false,
 		     
 			  axios
 		      .get("/tipPregleda/TipoviKlinike/" + this.$store.state.user.id)
@@ -717,8 +821,9 @@ export default {
 		     this.prikazLekariKlinike = false,
 		     this.prikazDefinisanjePregleda = false,
 		     this.prikazUpravljanjeSalama = !this.prikazUpravljanjeSalama,
-		     this.prikazUpravljanjeTipovimaPregleda =  false
-		     
+		     this.prikazUpravljanjeTipovimaPregleda =  false,
+ 		     this.prikazPretragaIfiltriranjeSala = false,		     
+		        
 		        axios
 		      .get("/sala/getSale/" +  this.$store.state.user.id)
 		      .then(sala =>{
@@ -736,7 +841,18 @@ export default {
 	       this.prikazLekariKlinike = false,
 	       this.prikazDefinisanjePregleda = !this.prikazDefinisanjePregleda,
 	       this.prikazUpravljanjeSalama = false,
-		   this.prikazUpravljanjeTipovimaPregleda =  false
+		   this.prikazUpravljanjeTipovimaPregleda =  false,
+		     this.prikazPretragaIfiltriranjeSala = false
+        },
+        otvoriPretragaIfiltriranjeSala(){
+          
+           this.prikazProfil = false,
+	       this.prikazIzmenaKlinike = false,
+	       this.prikazLekariKlinike = false,
+	       this.prikazDefinisanjePregleda = false,
+	       this.prikazUpravljanjeSalama = false,
+		   this.prikazUpravljanjeTipovimaPregleda =  false,
+		   this.prikazPretragaIfiltriranjeSala =  !this.prikazPretragaIfiltriranjeSala 
         },
         vidiLokaciju(){
 			this.$router.push("/vidiLokaciju");
@@ -753,7 +869,8 @@ export default {
 		      this.prikazLekariKlinike = !this.prikazLekariKlinike,
 		      this.prikazDefinisanjePregleda = false,
 		      this.prikazUpravljanjeSalama = false,
-		      this.prikazUpravljanjeTipovimaPregleda =  false
+		      this.prikazUpravljanjeTipovimaPregleda =  false,
+		        this.prikazPretragaIfiltriranjeSala = false,
             
             axios
 		      .get("/lekar/izlistaj/" + this.idKlinike)
@@ -765,14 +882,32 @@ export default {
 		          console.log(error)
 		      });
         },    
-        otvoriDodajLekara(){
+        
+           pretragaSala(){
+               axios
+		      .post("/sala/pretraga/" + this.$store.state.user.id, this.pretragaSale)
+		      .then(sale =>{
+		       this.sale = sale.data;
+		        
+		       this.pretragaSale.naziv = "", 
+		       this.pretragaSale.broj = "", 
+		       this.pretragaSale.datum = "", 
+		       this.pretragaSale.vreme = ""
+		        
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+        },    
+        otvoriDodajLekara(){	
              
               this.prikazProfil = false,
 		      this.prikazIzmenaKlinike = false,
 		      this.prikazLekariKlinike = !this.prikazLekariKlinike,
 		      this.prikazDefinisanjePregleda = false,
 		      this.prikazUpravljanjeSalama = false,
-		      this.prikazUpravljanjeTipovimaPregleda =  false
+		      this.prikazUpravljanjeTipovimaPregleda =  false,
+		      this.prikazPretragaIfiltriranjeSala = false
         },
         
         dodajNoviTipPregleda(){
@@ -969,7 +1104,8 @@ export default {
 	     this.prikazLekariKlinike = false,
 	     this.prikazDefinisanjePregleda = false,
 	     this.prikazUpravljanjeSalama =  false,
-	     this.prikazUpravljanjeTipovimaPregleda =  false
+	     this.prikazUpravljanjeTipovimaPregleda =  false,
+	       this.prikazPretragaIfiltriranjeSala = false
     },
        izaberiSaluZaIzmenu(sala) {
        		this.sala.id = sala.id;
