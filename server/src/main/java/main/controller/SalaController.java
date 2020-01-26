@@ -1,6 +1,7 @@
 package main.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.ValidationException;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import main.dto.PretragaSaleDTO;
 import main.dto.SalaDTO;
 import main.model.AdministratorKlinike;
 import main.model.Pregled;
@@ -157,4 +159,56 @@ public class SalaController {
 
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
+	
+	 @PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	 @PostMapping(value = "/pretraga/{id}",consumes = "application/json")
+     public ResponseEntity<?> pretragaSale(@RequestBody PretragaSaleDTO pretragaSaleDTO, @PathVariable Long id){
+
+
+	    	String naziv = null;
+	    	Integer broj = null;
+	    	String datum = null;
+	    	String vreme =  null;
+	    	
+
+	    	if(pretragaSaleDTO.getNaziv() != null) {
+	    		if(!pretragaSaleDTO.getNaziv().isEmpty()) {
+	    			System.out.println("Naziv: "+pretragaSaleDTO.getNaziv());
+	    			naziv = pretragaSaleDTO.getNaziv();
+	    		}
+	    	}
+
+	    	if(pretragaSaleDTO.getBroj() != null) {
+	    		if(!(pretragaSaleDTO.getBroj() < 0)) {
+	    			broj = pretragaSaleDTO.getBroj();
+	    		}
+	    	}
+	    	
+	    	if(pretragaSaleDTO.getDatum() != null) {
+	    		if(!pretragaSaleDTO.getDatum().equals("")){
+	    			datum = pretragaSaleDTO.getDatum();	    		
+	    		}
+	    	}
+	    	
+	    	if(pretragaSaleDTO.getVreme() != null) {
+	    		if(!pretragaSaleDTO.getVreme().equals("")){
+	    			vreme = pretragaSaleDTO.getVreme();	    		
+	    		}
+	    	}
+
+	    	AdministratorKlinike admin =  adminKlinikeService.findOne(id);
+
+	    	//slobodne sale koje vracam
+	    	List<Sala> sale = salaKlinikeService.pronadjiSale(admin.getKlinika().getId(), naziv, broj, datum, vreme);
+
+			List<SalaDTO> saleDTO = new ArrayList<>();
+			for (Sala s : sale) {
+				saleDTO.add(new SalaDTO(s));
+			}
+
+	    	return new ResponseEntity<>(saleDTO, HttpStatus.OK);
+
+
+	    }
+
 }
