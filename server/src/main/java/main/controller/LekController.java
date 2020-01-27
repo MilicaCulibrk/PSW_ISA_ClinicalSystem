@@ -32,7 +32,7 @@ public class LekController {
 	private LekService lekService;
 	
 	@GetMapping(value = "/izlistaj")
-	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
+	@PreAuthorize("hasAnyAuthority('LEKAR,MEDICINSKA_SESTRA, ADMIN_CENTRA')")
 	public ResponseEntity<List<LekDTO>> getIzlistaj() {
 		
 		List<Lek> listaLekova = lekService.findAll();

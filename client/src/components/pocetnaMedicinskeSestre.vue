@@ -15,7 +15,11 @@
 	              <a href="#">
 	                <i v-on:click="otvoriListaPacijenata"> LISTA PACIJENATA
 	                </i>                   
-	              </a>	  
+                </a>	  
+                <a href="#">
+	                <i v-on:click="otvoriRecepte"> OVERA RECEPATA
+	                </i>                   
+	              </a>	
                   <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
 	                </i>     
@@ -124,31 +128,135 @@
 			<div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
 			
 			<div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
-						  <table style="width: 100%;">
-			                  <tr>
-			                  	<th class="bg-info  text-white">Id</th>
-			                    <th class="bg-info  text-white">Ime</th>
-			                    <th class="bg-info  text-white">Prezime</th>
-			                    <th class="bg-info  text-white">JMBG</th>
-			                    <th class="bg-info  text-white">Email</th>
+						  <table  id="tablePreview" class="table table-hover" style="width: 100%;">
+                <thead>
+                  <tr>
+			                  	<th class="th-lg">Id</th>
+			                    <th class="th-lg">Ime</th>
+			                    <th class="th-lg">Prezime</th>
+			                    <th class="th-lg">JMBG</th>
+			                    <th class="th-lg">Email</th>
 			                  </tr>
-			                  <tr v-for="k,i in pacijenti.length">
-			                    <td>{{pacijenti[i].id}}</td>
+			                  </thead>
+			                  <tbody>
+			                  <tr v-for="k,i in pacijenti.length" v-on:click="otvoriPacijenta(pacijenti[i])">
+			                    <td v-on:click="otvoriPacijenta(pacijenti[i])">{{pacijenti[i].id}}</td>
 			                    <td>{{pacijenti[i].ime}}</td>
 			                    <td>{{pacijenti[i].prezime}}</td>
 			                    <td>{{pacijenti[i].jmbg}}</td>
 			                    <td>{{pacijenti[i].email}}</td>
-			                    </td>
+			                    
 			                  </tr>
-			              </table>    
+			                  </tbody>
+			        </table>    
 			 </div>
 			 </div>
           </div>
    
         </div>
         </form>
+  <form v-if="prikazPacijenta" >
+ 		<div style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; ">	                    
+      <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+        <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+          <h1>Pacijent {{trenutniPacijent.ime}} {{trenutniPacijent.prezime}}</h1>
+          <button>Zapocni pregled</button>
+          <button v-on:click="otvoriZK(trenutniPacijent.idZdravstveniKarton)">Pregledaj zdravstveni karton</button>
 
+			  </div>
+			</div>
+    </div>
+  </form>
+  <form  v-if="prikazZK" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+  
+
+    <div >	                    
+       <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+
+
+           <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+
+             <div class="form-group">
+       
+               <div class="card-body mx-4 mt-4">
+                 <div class="row">
+       
+                   <div class="col">
+                   <div class="md-form">
+                     <label for="Form-dioptrija" style="color: #b3b3b3;">Dioptrija</label>
+                     <input type="text" v-model="zdravstveniK.dioptrija" id="Form-username" class="form-control" :disabled="!izmeniZK">
+                     
+                     <label for="Form-alergija" style="color: #b3b3b3;">Alergija</label>
+                     <input type="text" v-model="zdravstveniK.alergije" id="Form-ime" class="form-control" :disabled="!izmeniZK">
+                     
+                     <label for="Form-visina" style="color: #b3b3b3;">Visina</label>
+                     <input type="text" v-model="zdravstveniK.visina" id="Form-phone" class="form-control" :disabled="!izmeniZK">
+                     
+                     <label for="Form-tezina" style="color: #b3b3b3;">Tezina</label>
+                     <input type="text" v-model="zdravstveniK.tezina" id="Form-email4" class="form-control" :disabled="!izmeniZK">
+
+                    
+                   </div>
+                   </div>
                   
+                 </div>
+                 
+                 <div class="text-center mb-4 mt-4">
+                     <template>
+                     <button v-if="!izmeniZK" type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="izmenaZK">Izmeni</button>
+                     </template>
+                     <template>
+                     <button v-if="izmeniZK" type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="sacuvajZK">Sacuvaj</button>
+                     <button v-if="izmeniZK" type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustaniZK">Odustani</button>
+                     </template>
+                   </div>
+       
+                 
+               </div>
+       
+             </div>
+       
+       
+           </div>
+           
+       
+         </div>
+      
+      </div>
+ </form>  
+ <form v-if="prikazRecepata" >
+
+
+  <div style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px;  ">	                    
+
+   <div  class="message-form" style="position: relative; top: 10px; left: 0px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+   <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+   
+   <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+           <table  id="tablePreview" class="table table-hover" style="width: 100%;">
+             <thead>
+               <tr>
+                       <th class="th-lg">Id recepta</th>
+                       <th class="th-lg">Lekovi</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     <tr v-for="k,i in recepti.length" >
+                       <td>{{recepti[i].id}}</td>
+                       <td>{{recepti[i].lekovi}}</td>
+                       <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="overiRecept(recepti[i])" ><i class="fa fa-trash">Overi</i></button>
+                       </td>
+                       
+                     </tr>
+                     </tbody>
+           </table>    
+    </div>
+    </div>
+       </div>
+
+     </div>
+     </form>
+              
 </div>
 
 
@@ -169,12 +277,18 @@ export default {
 			prikazListaPacijenata: false,
 			selektovan: {},
 			sortBy: {},
+			prikazPacijenta: false,
+			trenutniPacijent: {},
+      izmeni:false,
+      izmeniZK:false,
+      zdravstveniK: {},
+      recepti: {},
+      prikazRecepata: false,
 		}
 	},
 	methods: {
 		otvoriFormu(){
-			this.prikaz=!this.prikaz
-			this.prikazKlinika=false
+			this.prikaz=!this.prikaz;
 		},
 		izmena(){
 			this.izmeni = true
@@ -243,6 +357,49 @@ export default {
 		          console.log(error)
 		      });
       	},
+        otvoriZK(idzk){
+        axios
+
+            .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ idzk)
+
+            .then(z =>{
+              this.zdravstveniK = z.data;
+            })
+        this.prikazZK=true;
+        this.prikazPacijenata=false;
+        this.prikazPacijenta=false;
+
+      },
+      izmenaZK(){
+        this.izmeniZK = true
+      },
+      sacuvajZK(){
+        axios
+
+        .put("/zdravstveniKarton/izmeni", this.zdravstveniK)
+
+        .then(adminKlinike =>{
+          this.zdravstveniK = adminKlinike.data;
+          this.izmeniZK = false;
+        })
+        .catch(error => {
+            console.log(error)
+        });
+
+      },
+      odustaniZK(){
+        this.izmeniZK = false
+          axios
+
+          .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ this.zdravstveniK.id)
+
+            .then(z =>{
+              this.zdravstveniK = z.data;
+            })
+        .catch(error => {
+            console.log(error)
+        });
+      },
 	  	azuriraj(nes){
 	  		axios
 		      .put("/pacijent/azuriraj", nes)
@@ -252,7 +409,38 @@ export default {
 		      .catch(error => {
 		          console.log(error)
 		      });
-	  	}
+	  	},
+	  	otvoriPacijenta(pacijent){
+        this.prikazListaPacijenata = false;
+	  		this.trenutniPacijent = pacijent;
+	  		this.prikazPacijenta = true;
+	  	},
+      otvoriRecepte(){
+        this.prikazZK = false;
+        this.prikazPacijenta = false;
+        this.prikazListaPacijenata = false;
+        this.prikazRecepata = !this.prikazRecepata;
+        axios
+		      .get('/izvestaj/izlistaj')
+		      .then(odg =>{
+		        this.recepti = odg.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+      },
+      overiRecept(izvestaj){
+        izvestaj.idMedicinskeSestre = this.$store.state.user.id;
+        axios
+		      .put("/izvestaj/overi", izvestaj)
+		      .then(odg =>{
+		        this.recepti = odg.data;
+		      }
+		      )
+		      .catch(error => {
+		          console.log(error)
+		      });
+      }
 	},
 	mounted() {
       axios

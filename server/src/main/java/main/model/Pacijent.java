@@ -1,5 +1,6 @@
 package main.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -76,7 +77,7 @@ public class Pacijent implements UserDetails{
    public java.util.Collection<Klinika> klinika;
 
    @OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
-   public java.util.Collection<Izvestaj> izvestaj;
+   public java.util.Collection<Izvestaj> izvestaj = new ArrayList<Izvestaj>();
    
    
    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

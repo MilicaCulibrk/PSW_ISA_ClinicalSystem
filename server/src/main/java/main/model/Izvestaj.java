@@ -1,5 +1,8 @@
 package main.model;
 
+import java.util.ArrayList;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,7 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Izvestaj {
@@ -16,9 +21,15 @@ public class Izvestaj {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "datumVreme", nullable = false)
-   private int datumVreme;
-	
+/*	 @ManyToOne(fetch = FetchType.LAZY)
+	 @JoinColumn(name = "lek_id", referencedColumnName = "id")
+  public Lek lek;
+  */
+	 @ManyToOne(fetch = FetchType.LAZY)
+	 @JoinColumn(name = "dijagnoza_id", referencedColumnName = "id")
+  public Dijagnoza dijagnoza;
+	 @Column(name = "overenRecept", nullable = false)	 
+   private Boolean overenRecept;
 	@Column(name = "opis", nullable = false)
    private String opis;
    
@@ -29,11 +40,17 @@ public class Izvestaj {
 	 @ManyToOne(fetch = FetchType.LAZY)
 	 @JoinColumn(name = "lekar_id", referencedColumnName = "id")
    public Lekar lekar;
-   
+
+	 @ManyToOne(fetch = FetchType.LAZY)
+	 @JoinColumn(name = "ms_id", referencedColumnName = "id")
+   public MedicinskaSestra medicinskaSestra;
+	 
    @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "zdravstveniKarton_id", referencedColumnName = "id")
    public ZdravstveniKarton zdravstveniKarton;
    
+   @ManyToMany(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+   public java.util.Collection<Lek> lekovi = new ArrayList<Lek>();
    
    /** @pdGenerated default parent getter */
    public Pacijent getPacijent() {
@@ -45,12 +62,10 @@ public Izvestaj() {
 	// TODO Auto-generated constructor stub
 }
 
-public Izvestaj(Long id, int datumVreme, String opis, Pacijent pacijent) {
+public Izvestaj(Long id,  String opis) {
 	super();
 	this.id = id;
-	this.datumVreme = datumVreme;
 	this.opis = opis;
-	this.pacijent = pacijent;
 }
 
 public Long getId() {
@@ -61,12 +76,38 @@ public void setId(Long id) {
 	this.id = id;
 }
 
-public int getDatumVreme() {
-	return datumVreme;
+
+public MedicinskaSestra getMedicinskaSestra() {
+	return medicinskaSestra;
 }
 
-public void setDatumVreme(int datumVreme) {
-	this.datumVreme = datumVreme;
+public void setMedicinskaSestra(MedicinskaSestra medicinskaSestra) {
+	this.medicinskaSestra = medicinskaSestra;
+}
+
+public Boolean getOverenRecept() {
+	return overenRecept;
+}
+
+public void setOverenRecept(Boolean overenRecept) {
+	this.overenRecept = overenRecept;
+}
+
+/*
+public Lek getLek() {
+	return lek;
+}
+
+public void setLek(Lek lek) {
+	this.lek = lek;
+}
+*/
+public Dijagnoza getDijagnoza() {
+	return dijagnoza;
+}
+
+public void setDijagnoza(Dijagnoza dijagnoza) {
+	this.dijagnoza = dijagnoza;
 }
 
 public String getOpis() {
@@ -80,6 +121,7 @@ public void setOpis(String opis) {
 public Lekar getLekar() {
 	return lekar;
 }
+
 
 public void setLekar(Lekar lekar) {
 	this.lekar = lekar;
@@ -99,8 +141,16 @@ public void setPacijent(Pacijent pacijent) {
 
 @Override
 public String toString() {
-	return "Izvestaj [id=" + id + ", datumVreme=" + datumVreme + ", opis=" + opis + ", pacijent=" + pacijent
+	return "Izvestaj [id=" + id + ",  opis=" + opis + ", pacijent=" + pacijent
 			+ ", lekar=" + lekar + ", zdravstveniKarton=" + zdravstveniKarton + "]";
+}
+
+public java.util.Collection<Lek> getLekovi() {
+	return lekovi;
+}
+
+public void setLekovi(java.util.Collection<Lek> lekovi) {
+	this.lekovi = lekovi;
 }
    
    

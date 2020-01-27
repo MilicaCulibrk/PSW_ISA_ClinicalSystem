@@ -45,6 +45,7 @@ public class ZdravstveniKartonService {
 	}
 	
 	public void izmeniZdravstveniKarton(ZdravstveniKartonDTO zdravstveniKartonDTO) {
+
 		ZdravstveniKarton zdravstveniKarton = zdravstveniKartonRepository.findById(zdravstveniKartonDTO.getId()).orElse(null);
 		
 		if(zdravstveniKarton == null) {

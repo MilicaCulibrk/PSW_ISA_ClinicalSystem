@@ -56,9 +56,10 @@ export default {
           );
              	 this.proveriUlogu();       
                 }) // Kad stigne odgovor od servera preuzmi objekat
-                 .catch(error => {
-               
-                })
+          .catch(error => {
+               	          console.log(error)
+               alert("Pogresan email ili lozinka!");
+           })
             },
             proveriUlogu: function() {
 
