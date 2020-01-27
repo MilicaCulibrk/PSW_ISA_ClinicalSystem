@@ -111,6 +111,7 @@ public class IzvestajController {
 		System.out.println(izvestajDTO.getIdMedicinskeSestre());
 		Izvestaj iz = izvestajService.findOne(izvestajDTO.getId());
 		iz.setOverenRecept(true);
+		iz.setMedicinskaSestra(medicinskaSestraService.findOne(izvestajDTO.getIdMedicinskeSestre()));
 		izvestajRepository.save(iz);
 		List<Izvestaj> listaIzvestaj = izvestajService.findAll();
 		List<IzvestajDTO> listaIzvestajDTO = new ArrayList<IzvestajDTO>();

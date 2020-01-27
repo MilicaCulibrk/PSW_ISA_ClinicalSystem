@@ -238,6 +238,7 @@
                <tr>
                        <th class="th-lg">Id recepta</th>
                        <th class="th-lg">Lekovi</th>
+                       <th class="th-lg">Overa recepta</th>
                      </tr>
                      </thead>
                      <tbody>
