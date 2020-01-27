@@ -5,7 +5,7 @@ import main.model.Sala;
 public class SalaDTO {
 	private Long id;
 	private String naziv;
-	private String broj;
+	private Integer broj;
 	private KlinikaDTO klinika;
 	
 	public SalaDTO() {
@@ -19,7 +19,7 @@ public class SalaDTO {
 		klinika = new KlinikaDTO(salaKlinike.getKlinika());
 	}
 	
-	public SalaDTO(Long id, String naziv, String broj) {
+	public SalaDTO(Long id, String naziv, Integer broj) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -39,10 +39,10 @@ public class SalaDTO {
 	public void setNaziv(String naziv) {
 		this.naziv = naziv;
 	}
-	public String getBroj() {
+	public Integer getBroj() {
 		return broj;
 	}
-	public void setBroj(String broj) {
+	public void setBroj(Integer broj) {
 		this.broj = broj;
 	}
 

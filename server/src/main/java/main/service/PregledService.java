@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import main.dto.PregledDTO;
 import main.model.Pregled;
-import main.model.Sala;
 import main.repository.LekarRepository;
 import main.repository.PregledRepository;
 import main.repository.SalaRepository;
@@ -50,5 +49,6 @@ public class PregledService {
 	public List<Pregled> findAll() {
 		return pregledRepository.findAll();
 	}
+
 
 }

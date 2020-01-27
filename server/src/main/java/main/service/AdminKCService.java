@@ -4,6 +4,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import main.dto.AdminKCDTO;
@@ -17,6 +18,9 @@ public class AdminKCService {
 	
 	@Autowired
 	private AdminKCRepository adminKCRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	public AdministratorKlinickogCentra findOne(Long id) {
 		return adminKCRepository.findById(id).orElseGet(null);
@@ -36,6 +40,8 @@ public class AdminKCService {
 			adminKlinike.setTelefon(adminKCDTO.getTelefon());
 			adminKlinike.setGrad(adminKCDTO.getGrad());
 			adminKlinike.setDrzava(adminKCDTO.getDrzava());
+			adminKlinike.setPromenjenaLozinka(true);
+			adminKlinike.setLozinka(passwordEncoder.encode(adminKCDTO.getLozinka()));
 			adminKCRepository.save(adminKlinike);
 		} catch (EntityNotFoundException e) {
 			throw new ValidationException("Admin sa tim id-ijem ne postoji");

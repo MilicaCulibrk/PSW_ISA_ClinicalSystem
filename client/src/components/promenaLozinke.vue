@@ -38,30 +38,98 @@
 	                  return;
                   }
                   this.korisnik.lozinka=this.lozinka;
-		      axios
-			      .put("/lekar/izmeniLozinku", this.korisnik)
-			      .then(lekar =>{
-			        this.korisnik = lekar.data;
-					this.$router.push('/pocetnaLekara')
-			        
-			      })
-			      .catch(error => {
-			          console.log(error)
-			      });
+                  if(this.$store.state.user.role.authority == "LEKAR"){
+			      	axios
+				      .put("/lekar/izmeniLozinku", this.korisnik)
+				      .then(lekar =>{
+				        this.korisnik = lekar.data;
+						this.$router.push('/pocetnaLekara')
+				        
+				      })
+				      .catch(error => {
+				          console.log(error)
+				      });
+				  } else if (this.$store.state.user.role.authority == "ADMIN_KLINIKE"){
+			      	axios
+				      .put("/adminKlinike/izmeni", this.korisnik)
+				      .then(admin =>{
+				        this.korisnik = admin.data;
+						this.$router.push('/pocetnaAdministratoraKlinike')
+				        
+				      })
+				      .catch(error => {
+				          console.log(error)
+				      });
+				  } else if (this.$store.state.user.role.authority == "ADMIN_CENTRA"){
+			      	axios
+				      .put("/adminKlinickogCentra/izmeni", this.korisnik)
+				      .then(admin =>{
+				        this.korisnik = admin.data;
+						this.$router.push('/pocetnaAdministratorKC')
+				        
+				      })
+				      .catch(error => {
+				          console.log(error)
+				      });
+				  } else if (this.$store.state.user.role.authority == "MEDICINSKA_SESTRA"){
+			      	axios
+				      .put("/medicinska_sestra/izmeni", this.korisnik)
+				      .then(ms =>{
+				        this.korisnik = ms.data;
+						this.$router.push('/pocetnaMedicinskeSestre')
+				        
+				      })
+				      .catch(error => {
+				          console.log(error)
+				      });
+				  }
+          
           
                 }
             },
            mounted() {
-		         axios
-		      .get("/lekar/get/" + this.$store.state.user.id)
-		      .then(lekar =>{
-		        this.korisnik = lekar.data;
-		      })
-		      .catch(error => {
-		          console.log(error)
-		      });
+           		if (this.$store.state.user.role.authority == "LEKAR"){
+			         axios
+			      .get("/lekar/get/" + this.$store.state.user.id)
+			      .then(lekar =>{
+			        this.korisnik = lekar.data;
+			      })
+			      .catch(error => {
+			          console.log(error)
+			      });
+		      	} else if (this.$store.state.user.role.authority == "ADMIN_KLINIKE"){
+			         axios
+			      .get("/adminKlinike/get/" + this.$store.state.user.id)
+			      .then(admin =>{
+			        this.korisnik = admin.data;
+			      })
+			      .catch(error => {
+			          console.log(error)
+			      });
+		      	} else if (this.$store.state.user.role.authority == "ADMIN_CENTRA"){
+			         axios
+			      .get("/adminKlinickogCentra/get/" + this.$store.state.user.id)
+			      .then(admin =>{
+			        this.korisnik = admin.data;
+			      })
+			      .catch(error => {
+			          console.log(error)
+			      });
+		      	} else if (this.$store.state.user.role.authority == "MEDICINSKA_SESTRA"){
+			         axios
+			      .get("/medicinska_sestra/get/" + this.$store.state.user.id)
+			      .then(ms =>{
+			        this.korisnik = ms.data;
+			      })
+			      .catch(error => {
+			          console.log(error)
+			      });
+		      	}
+		      	
+		      	
+		      	
 		  }    
-		        }     
+}     
     </script>
     
     

@@ -25,7 +25,7 @@ public class Sala {
    private String naziv;
    
 	@Column(name = "broj", nullable = false)
-	private String broj;
+	private Integer broj;
 
 	
 
@@ -58,13 +58,13 @@ public class Sala {
 
 
 
-		public String getBroj() {
+		public Integer getBroj() {
 			return broj;
 		}
 
 
 
-		public void setBroj(String broj) {
+		public void setBroj(Integer broj) {
 			this.broj = broj;
 		}
 

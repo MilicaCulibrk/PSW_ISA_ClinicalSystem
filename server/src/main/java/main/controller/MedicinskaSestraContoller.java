@@ -58,4 +58,5 @@ public class MedicinskaSestraContoller {
 		
 		return new ResponseEntity<>(msdto, HttpStatus.OK);
 	}
+	
 }
