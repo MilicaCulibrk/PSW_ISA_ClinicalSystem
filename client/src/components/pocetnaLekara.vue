@@ -242,7 +242,7 @@
                                               <td>{{izvestaji[i].id}}</td>
                                               <td>{{izvestaji[i].opis}}</td>
                                               <td>{{izvestaji[i].dijagnoza}}</td>
-                                              <td>{{izvestaji[i].lek}}</td>
+                                              <td>{{izvestaji[i].lekovi}}</td>
                                               
                                             </tr>
                                             </tbody>
@@ -271,11 +271,11 @@
 							                    >{{d.naziv}}</option>
 							                  </b-form-select>
                                  
-                                <label for="Form-alergija" style="color: #b3b3b3;">Alergija</label>
+                                <label for="Form-alergija" style="color: #b3b3b3;">Lek</label>
                                 <form >
-                                 <select v-model="izvestaj.lek" class="form-control" name="cars">
+                                 <b-form-select v-model="izabraniLekovi"  multiple="" class="ui fluid dropdown">
                                    <option v-for="l in lekovi" v-bind:value="l.sifra">{{l.naziv}}</option>
-                                 </select>
+                                 </b-form-select v-model="izabraniLekovi">
                                  </form>  
                                  <label for="Form-dioptrija" style="color: #b3b3b3;">Opis</label>
                                  <input type="text" v-model="izvestaj.opis" id="Form-phone" class="form-control" >
@@ -339,6 +339,7 @@ import axios from 'axios'
         dijagnoza: "",
       },
       izvestaji: {},
+      izabraniLekovi: [],
       }
   },
   methods: {
@@ -473,7 +474,7 @@ import axios from 'axios'
       dodajIzvestaj(){
         this.izvestaj.idPacijenta = this.trenutniPacijent.id;
         this.izvestaj.idLekara = this.$store.state.user.id;
-
+        this.izvestaj.lekovi = this.izabraniLekovi;
         this.prikazZapocniPregled = false;
         axios
 		      .post("/izvestaj/dodaj", this.izvestaj)

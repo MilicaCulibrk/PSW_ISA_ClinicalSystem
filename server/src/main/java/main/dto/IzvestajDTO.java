@@ -1,5 +1,8 @@
 package main.dto;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import main.model.Dijagnoza;
 import main.model.Izvestaj;
 import main.model.Lek;
@@ -7,11 +10,12 @@ import main.model.Lek;
 public class IzvestajDTO {
 	
 	private Long id;
-	private String lek;
+	private Collection<String> lekovi = new ArrayList<String>();
 	private String dijagnoza;
 	private String opis;
 	private Long idPacijenta;
 	private Long idLekara;
+	private Long idMedicinskeSestre;
 	public IzvestajDTO() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -19,12 +23,23 @@ public class IzvestajDTO {
 	public IzvestajDTO(Izvestaj i) {
 		super();
 		this.id = i.getId();
-		this.lek = i.getLek().getSifra();
+		for (Lek l : i.getLekovi()) {
+			this.lekovi.add(l.getSifra());
+		}
 		this.dijagnoza = i.getDijagnoza().getSifra();
 		this.opis = i.getOpis();
+		this.idLekara = i.getLekar().getId();
+		this.idPacijenta = i.getPacijent().getId();
+		//this.idMedicinskeSestre = i.getMedicinskaSestra().getId();
 	}
 	
 
+	public Long getIdMedicinskeSestre() {
+		return idMedicinskeSestre;
+	}
+	public void setIdMedicinskeSestre(Long idMedicinskeSestre) {
+		this.idMedicinskeSestre = idMedicinskeSestre;
+	}
 	public Long getIdPacijenta() {
 		return idPacijenta;
 	}
@@ -45,11 +60,12 @@ public class IzvestajDTO {
 	}
 
 
-	public String getLek() {
-		return lek;
+
+	public Collection<String> getLekovi() {
+		return lekovi;
 	}
-	public void setLek(String lek) {
-		this.lek = lek;
+	public void setLekovi(Collection<String> lekovi) {
+		this.lekovi = lekovi;
 	}
 	public String getDijagnoza() {
 		return dijagnoza;

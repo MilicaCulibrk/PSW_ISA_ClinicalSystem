@@ -1,12 +1,15 @@
 package main.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import main.dto.IzvestajDTO;
 import main.model.Izvestaj;
+import main.model.Lek;
 import main.model.Pacijent;
 import main.repository.DijagnozaRepository;
 import main.repository.IzvestajRepository;
@@ -33,10 +36,14 @@ public class IzvestajService {
 		Izvestaj izvestaj = new Izvestaj();
 		
 		izvestaj.setOpis(izvestajDTO.getOpis());
-		izvestaj.setLek(lr.findBySifra(izvestajDTO.getLek()));
+		izvestaj.setLekovi(new ArrayList<Lek>());
+		for (String lek : izvestajDTO.getLekovi()) {
+			izvestaj.getLekovi().add(lr.findBySifra(lek));
+		}
 		izvestaj.setDijagnoza(dr.findBySifra(izvestajDTO.getDijagnoza()));
 		izvestaj.setPacijent(pr.getOne(izvestajDTO.getIdPacijenta()));
 		izvestaj.setLekar(lekarr.getOne(izvestajDTO.getIdLekara()));
+		izvestaj.setOverenRecept(false);
 		Pacijent pacijent = new Pacijent();
 		pacijent = pr.getOne(izvestajDTO.getIdPacijenta());
 		izvestajRepository.save(izvestaj);
@@ -49,5 +56,10 @@ public class IzvestajService {
 	public List<Izvestaj> findAll() {
 		// TODO Auto-generated method stub
 		return izvestajRepository.findAll();
+	}
+
+	public Izvestaj findOne(Long id) {
+		// TODO Auto-generated method stub
+		return izvestajRepository.getOne(id);
 	}
 }

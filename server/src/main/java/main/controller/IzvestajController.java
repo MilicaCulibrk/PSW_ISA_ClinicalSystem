@@ -14,15 +14,16 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.IzvestajDTO;
-import main.dto.LekarDTO;
 import main.model.Izvestaj;
-import main.model.Lekar;
+import main.repository.IzvestajRepository;
 import main.service.IzvestajService;
+import main.service.MedicinskaSestraService;
 
 @CrossOrigin
 @RestController
@@ -30,6 +31,11 @@ import main.service.IzvestajService;
 public class IzvestajController {
 	@Autowired
 	private IzvestajService izvestajService;
+	@Autowired
+	private IzvestajRepository izvestajRepository;
+	
+	@Autowired
+	private MedicinskaSestraService medicinskaSestraService;
 	
 	@PreAuthorize("hasAuthority('LEKAR')")
 	@PostMapping(value = "/dodaj", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -57,6 +63,59 @@ public class IzvestajController {
 		List<IzvestajDTO> listaIzvestajDTO = new ArrayList<IzvestajDTO>();
 		for (Izvestaj i : listaIzvestaj) {
 				if(i.getPacijent().getId().equals(idPacijenta)) {
+					listaIzvestajDTO.add(new IzvestajDTO(i));
+				}
+
+		}
+		
+		return new ResponseEntity<>(listaIzvestajDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/izlistaj")
+	@PreAuthorize("hasAnyAuthority('LEKAR, MEDICINSKA_SESTRA')")
+	public ResponseEntity<List<IzvestajDTO>> getIzlistaj() {
+		
+		List<Izvestaj> listaIzvestaj = izvestajService.findAll();
+		List<IzvestajDTO> listaIzvestajDTO = new ArrayList<IzvestajDTO>();
+		for (Izvestaj i : listaIzvestaj) {
+				if(!i.getOverenRecept()) {
+					listaIzvestajDTO.add(new IzvestajDTO(i));
+				}
+
+		}
+		
+		return new ResponseEntity<>(listaIzvestajDTO, HttpStatus.OK);
+	}
+	/*
+	@PreAuthorize("hasAuthority('MEDICINSKA_SESTRA')")
+	@PutMapping(value = "/overi", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<IzvestajDTO>> getOveri(Long idPacijenta) {
+		System.out.println("uslo u kontroler");
+		Izvestaj iz = izvestajService.findOne(idPacijenta);
+		iz.setOverenRecept(false);
+		List<Izvestaj> listaIzvestaj = izvestajService.findAll();
+		List<IzvestajDTO> listaIzvestajDTO = new ArrayList<IzvestajDTO>();
+		for (Izvestaj i : listaIzvestaj) {
+				if(!i.getOverenRecept()) {
+					listaIzvestajDTO.add(new IzvestajDTO(i));
+				}
+
+		}
+		
+		return new ResponseEntity<>(listaIzvestajDTO, HttpStatus.OK);
+	}*/
+	
+	@PreAuthorize("hasAuthority('MEDICINSKA_SESTRA')")
+	@PutMapping(value = "/overi", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<IzvestajDTO>> overi(@RequestBody IzvestajDTO izvestajDTO) {
+		System.out.println(izvestajDTO.getIdMedicinskeSestre());
+		Izvestaj iz = izvestajService.findOne(izvestajDTO.getId());
+		iz.setOverenRecept(true);
+		izvestajRepository.save(iz);
+		List<Izvestaj> listaIzvestaj = izvestajService.findAll();
+		List<IzvestajDTO> listaIzvestajDTO = new ArrayList<IzvestajDTO>();
+		for (Izvestaj i : listaIzvestaj) {
+				if(!i.getOverenRecept()) {
 					listaIzvestajDTO.add(new IzvestajDTO(i));
 				}
 

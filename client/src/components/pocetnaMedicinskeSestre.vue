@@ -15,7 +15,11 @@
 	              <a href="#">
 	                <i v-on:click="otvoriListaPacijenata"> LISTA PACIJENATA
 	                </i>                   
-	              </a>	  
+                </a>	  
+                <a href="#">
+	                <i v-on:click="otvoriRecepte"> OVERA RECEPATA
+	                </i>                   
+	              </a>	
                   <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
 	                </i>     
@@ -219,7 +223,40 @@
          </div>
       
       </div>
- </form>                  
+ </form>  
+ <form v-if="prikazRecepata" >
+
+
+  <div style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px;  ">	                    
+
+   <div  class="message-form" style="position: relative; top: 10px; left: 0px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+   <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+   
+   <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+           <table  id="tablePreview" class="table table-hover" style="width: 100%;">
+             <thead>
+               <tr>
+                       <th class="th-lg">Id recepta</th>
+                       <th class="th-lg">Lekovi</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     <tr v-for="k,i in recepti.length" >
+                       <td>{{recepti[i].id}}</td>
+                       <td>{{recepti[i].lekovi}}</td>
+                       <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="overiRecept(recepti[i])" ><i class="fa fa-trash">Overi</i></button>
+                       </td>
+                       
+                     </tr>
+                     </tbody>
+           </table>    
+    </div>
+    </div>
+       </div>
+
+     </div>
+     </form>
+              
 </div>
 
 
@@ -245,7 +282,8 @@ export default {
       izmeni:false,
       izmeniZK:false,
       zdravstveniK: {},
-
+      recepti: {},
+      prikazRecepata: false,
 		}
 	},
 	methods: {
@@ -376,7 +414,33 @@ export default {
         this.prikazListaPacijenata = false;
 	  		this.trenutniPacijent = pacijent;
 	  		this.prikazPacijenta = true;
-	  	}
+	  	},
+      otvoriRecepte(){
+        this.prikazZK = false;
+        this.prikazPacijenta = false;
+        this.prikazListaPacijenata = false;
+        this.prikazRecepata = !this.prikazRecepata;
+        axios
+		      .get('/izvestaj/izlistaj')
+		      .then(odg =>{
+		        this.recepti = odg.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+      },
+      overiRecept(izvestaj){
+        izvestaj.idMedicinskeSestre = this.$store.state.user.id;
+        axios
+		      .put("/izvestaj/overi", izvestaj)
+		      .then(odg =>{
+		        this.recepti = odg.data;
+		      }
+		      )
+		      .catch(error => {
+		          console.log(error)
+		      });
+      }
 	},
 	mounted() {
       axios
