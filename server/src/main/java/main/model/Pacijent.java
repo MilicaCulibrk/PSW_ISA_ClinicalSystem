@@ -66,6 +66,8 @@ public class Pacijent implements UserDetails{
 
 	@OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
    public java.util.Collection<Operacija> operacija;
+	
+	
    
    @OneToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
    @JoinColumn(name = "zdrastveniKarton_id", referencedColumnName = "id")
@@ -210,6 +212,8 @@ public String getJmbg() {
 public void setJmbg(String jmbg) {
 	this.jmbg = jmbg;
 }
+
+
 
 
 

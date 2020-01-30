@@ -1,7 +1,9 @@
 package main.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +12,30 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import main.dto.AdminKlinikeDTO;
+import main.dto.KlinikaDTO;
+import main.dto.MedicinskaSestraDTO;
+import main.dto.PacijentDTO;
 import main.dto.PregledDTO;
+import main.model.AdministratorKlinike;
+import main.model.Klinika;
+import main.model.MedicinskaSestra;
+import main.model.Pacijent;
 import main.model.Pregled;
+import main.model.ZahtevZaRegistraciju;
+import main.repository.MedicinskaSestraRepository;
+import main.repository.PregledRepository;
+import main.service.KlinikaService;
+import main.service.MedicinskaSestraService;
+import main.service.PacijentService;
 import main.service.PregledService;
 
 @CrossOrigin
@@ -26,6 +45,48 @@ public class PregledController {
 	
 	@Autowired
 	private PregledService pregledService;
+
+
+	
+	
+	@GetMapping(value = "/izlistajUDP/{idKlinike}")
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<List<PregledDTO>> getIzlistajUDP(@PathVariable Long idKlinike) {
+		
+		List<Pregled> listaPregleda = pregledService.findAll();
+		List<PregledDTO> listaPregledaDTO = new ArrayList<PregledDTO>();
+		
+		
+		for (Pregled p : listaPregleda) {
+			if( p.getIdPacijenta() == null)
+				if(p.getLekar().getKlinika().getId().equals(idKlinike))
+					
+			listaPregledaDTO.add(new PregledDTO(p));
+			
+										}
+		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
+	}
+	@PostMapping(value = "/zakaziPregled/{idPacijenta}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<PregledDTO> zakaziPregled( @RequestBody PregledDTO pregledDTO, @PathVariable Long idPacijenta) {
+		
+		Pregled pregled = (Pregled) pregledService.findOne(pregledDTO.getId());
+
+				
+		if (pregled == null) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+		
+		Pregled zakazanPregled = pregledService.zakaziPregled(idPacijenta, pregled);
+		PregledDTO newPregledDTO = new PregledDTO(zakazanPregled);
+
+
+		return new ResponseEntity<>( newPregledDTO, HttpStatus.OK);
+		
+	}
+	
+	
+	
 	
 	//dodaj predefinisani pregled kao administrator klinike sa ogranicenjima
 	@PostMapping(value = "/dodajPregled", consumes = MediaType.APPLICATION_JSON_VALUE)

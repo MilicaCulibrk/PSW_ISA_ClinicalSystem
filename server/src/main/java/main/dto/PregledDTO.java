@@ -22,7 +22,7 @@ public class PregledDTO {
 	public PregledDTO(Pregled pregled) {
 		this.id = pregled.getId();
 		this.datum = pregled.getDatum();
-		this.datum = pregled.getVreme();
+		this.vreme = pregled.getVreme();
 		this.sala = new SalaDTO(pregled.getSala());
 		this.tipPregleda = new TipPregledaDTO(pregled.getTipPregleda());
 		this.lekar = new LekarDTO(pregled.getLekar());
