@@ -185,7 +185,7 @@
 							              <label for="Form-phone" style="color: #b3b3b3;">Sala</label>
                                           <b-form-select v-model="selektovanaSala">
 							                    <option
-							                      v-for="s in sale"
+							                      v-for="s in pomocna"
 							                      :value="s.id"
 							                      :key="s.id"
 							                    >{{s.naziv}}</option>
@@ -253,12 +253,12 @@
 			                    <th class="bg-info  text-white">Broj</th>
 			                    <th class="bg-info  text-white">Klinika</th
 			                 </tr>
-			                  <tr v-for="k,i in sale.length">
-			                    <td>{{sale[i].naziv}}</td>
-			                    <td>{{sale[i].broj}}</td>
-			                    <td>{{sale[i].klinika.naziv}}</td>
-			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="izaberiSaluZaIzmenu(sale[i])">IZMENI</button>
-			                  	<td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiSalu(sale[i])">OBRISI</button>
+			                  <tr v-for="k,i in pomocna.length">
+			                    <td>{{pomocna[i].naziv}}</td>
+			                    <td>{{pomocna[i].broj}}</td>
+			                    <td>{{pomocna[i].klinika.naziv}}</td>
+			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="izaberiSaluZaIzmenu(pomocna[i])">IZMENI</button>
+			                  	<td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiSalu(pomocna[i])">OBRISI</button>
 			                    </td>
 			                  </tr>
 			              </table>
@@ -569,7 +569,8 @@
                                       <div class="text-center mb-4 mt-4">
                                         <template>
                                         <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="pretragaSala">Pretraga</button>
-                                       
+                                         <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="ponistiPretraguSala">Ponisti</button>
+                                         
                                         </template>
                                       </div>
                             
@@ -584,9 +585,21 @@
                               </div>
                               </div>
                 </form>
-	
-                
-                
+	 		
+	 		      	<form v-if="prikazPretragaIfiltriranjeSala"  class="message-form" style="position: relative; top: -500px; left: 450px; width: 600px; height: 50px;  ">
+	 		
+                   <div   class="text-center mb-4 mt-4">
+                                       <label for="Form-phone" style=" color: #b3b3b3;">Filtritaj po</label>
+                                          <b-form-select v-model="selektovaniFilter" style= "position: relative; width: 300px;" >
+							                    <option
+							                      v-for="f in filteri"
+							                     
+							                   >{{f}}</option>
+							                  </b-form-select>
+							            <input type="text" v-model="filterString" id="Form-ime" class="form-control" style="position: relative; width: 300px; left: 185px;" >
+                    					     <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; position: relative; left: 185px; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="ponistiFiltriranjeSala">Ponisti</button>
+                    </div>
+                 </form>
                 
 				<form v-if="prikazLekariKlinike"  class="message-form" style="position: relative; top: 10px; left: 950px; width: 550px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
 
@@ -763,13 +776,24 @@ export default {
         },
       vremena: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
 	  trajanja: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+	  filteri: ['Naziv sale', 'Broj sale'],
+	  filter: "",
+	  filterString: "",
       tipovi: [],
       sale: [],
+      rezultatiPretrage: [],
+      pomocna: [],
+      pomocnaRezultatiPretrage: [],
       lekari: [],
       selektovaniTip: "",
       selektovanaSala: "",
+      selektovaniFilter: "",
       selektovaniLekar: "",
       
+      ukljucenaPretraga: false,
+     
+      
+      flag: 0,
       prikazProfil:false,
       prikazIzmenaKlinike: false,
       prikazLekariKlinike: false,
@@ -777,6 +801,7 @@ export default {
       prikazUpravljanjeSalama: false,
       prikazUpravljanjeTipovimaPregleda: false,
       prikazPretragaIfiltriranjeSala: false,
+     
       
       izmeni:false,
       izmeniKliniku: false,
@@ -793,8 +818,9 @@ export default {
 		     this.prikazDefinisanjePregleda = false,
 		     this.prikazUpravljanjeSalama = false,
 		     this.prikazUpravljanjeTipovimaPregleda = false,
-		     this.prikazPretragaIfiltriranjeSala = false
-		     
+		     this.prikazPretragaIfiltriranjeSala = false, 
+		     this.ponistiPretraguSala(),
+		     this.ponistiFiltriranjeSala()
 		     
         },
          otvoriUpravljanjeTipovimaPregleda(){
@@ -805,6 +831,8 @@ export default {
 		     this.prikazUpravljanjeSalama = false,
 		     this.prikazUpravljanjeTipovimaPregleda =  !this.prikazUpravljanjeTipovimaPregleda
 		     this.prikazPretragaIfiltriranjeSala = false,
+		     this.ponistiPretraguSala(),
+		     this.ponistiFiltriranjeSala()
 		     
 			  axios
 		      .get("/tipPregleda/TipoviKlinike/" + this.$store.state.user.id)
@@ -822,7 +850,9 @@ export default {
 		     this.prikazDefinisanjePregleda = false,
 		     this.prikazUpravljanjeSalama = !this.prikazUpravljanjeSalama,
 		     this.prikazUpravljanjeTipovimaPregleda =  false,
- 		     this.prikazPretragaIfiltriranjeSala = false,		     
+ 		     this.prikazPretragaIfiltriranjeSala = false,	
+ 		     this.ponistiPretraguSala(),	  
+ 		     this.ponistiFiltriranjeSala()   
 		        
 		        axios
 		      .get("/sala/getSale/" +  this.$store.state.user.id)
@@ -842,7 +872,9 @@ export default {
 	       this.prikazDefinisanjePregleda = !this.prikazDefinisanjePregleda,
 	       this.prikazUpravljanjeSalama = false,
 		   this.prikazUpravljanjeTipovimaPregleda =  false,
-		     this.prikazPretragaIfiltriranjeSala = false
+		   this.prikazPretragaIfiltriranjeSala = false,
+		   this.ponistiPretraguSala(),
+		   this.ponistiFiltriranjeSala()
         },
         otvoriPretragaIfiltriranjeSala(){
           
@@ -852,7 +884,9 @@ export default {
 	       this.prikazDefinisanjePregleda = false,
 	       this.prikazUpravljanjeSalama = false,
 		   this.prikazUpravljanjeTipovimaPregleda =  false,
-		   this.prikazPretragaIfiltriranjeSala =  !this.prikazPretragaIfiltriranjeSala 
+		   this.prikazPretragaIfiltriranjeSala =  !this.prikazPretragaIfiltriranjeSala ,
+		   this.ponistiPretraguSala(),
+		   this.ponistiFiltriranjeSala()
         },
         vidiLokaciju(){
 			this.$router.push("/vidiLokaciju");
@@ -871,7 +905,8 @@ export default {
 		      this.prikazUpravljanjeSalama = false,
 		      this.prikazUpravljanjeTipovimaPregleda =  false,
 		        this.prikazPretragaIfiltriranjeSala = false,
-            
+                this.ponistiPretraguSala(),
+                 this.ponistiFiltriranjeSala()
             axios
 		      .get("/lekar/izlistaj/" + this.idKlinike)
 		      .then(lekar =>{
@@ -884,21 +919,59 @@ export default {
         },    
         
            pretragaSala(){
-               axios
-		      .post("/sala/pretraga/" + this.$store.state.user.id, this.pretragaSale)
-		      .then(sale =>{
-		       this.sale = sale.data;
-		        
-		       this.pretragaSale.naziv = "", 
-		       this.pretragaSale.broj = "", 
-		       this.pretragaSale.datum = "", 
-		       this.pretragaSale.vreme = ""
-		        
+           
+           	  if(this.pretragaSale.datum == "" && this.pretragaSale.vreme != ""){
+          
+           	  	alert("Ne mozete uneti vreme bez datuma!");
+           	  
+           	  }else if(this.pretragaSale.datum != "" && this.pretragaSale.vreme == ""){
+           	    alert("Ne mozete uneti datum bez vremena!");
+           	  }else if(this.pretragaSale.datum == "" && this.pretragaSale.vreme == ""){
+           	  	alert("Morate uneti datum i vreme da vidite da li je sala slobodna!")
+           	  }else{
+           	  
+	           	  axios
+			      .post("/sala/pretraga/" + this.$store.state.user.id, this.pretragaSale)
+			      .then(sale =>{
+			       this.sale = sale.data;
+			       	 this.rezultatiPretrage = sale.data;
+			   
+			       	  this.ukljucenaPretraga = true;
+			       
 		      })
 		      .catch(error => {
 		          console.log(error)
 		      });
+           	  }
+           
         },    
+        
+     
+      
+        ponistiPretraguSala(){
+        
+	          axios
+	      .get("/sala/getSale/" + this.$store.state.user.id)
+	      .then(sale => {
+	        this.sale = sale.data;
+	
+	        this.pretragaSale.naziv = "", 
+		       this.pretragaSale.broj = "", 
+		       this.pretragaSale.datum = "", 
+		       this.pretragaSale.vreme = "",
+		        
+		        this.ukljucenaPretraga = false;
+	      })
+	      .catch(error => {
+	        console.log(error);
+	      });
+            
+        },
+        
+         ponistiFiltriranjeSala(){
+	           this.filterString = ""
+            
+        },
         otvoriDodajLekara(){	
              
               this.prikazProfil = false,
@@ -1156,6 +1229,7 @@ export default {
         .delete("/sala/izbrisi/" + sala.id)
       .then(sale => {
         this.sale = sale.data;
+       
       })
       .catch(error => {
         console.log(error);
@@ -1276,7 +1350,177 @@ export default {
         });
     },
   },
+  beforeUpdate(){
+  
+  	if(this.ukljucenaPretraga === false){
+  		if(this.selektovaniFilter === 'Naziv sale'){
+  			  for( var i = 0; i < this.sale.length; i++){ 
+  			     if ( !this.sale[i].naziv.includes(this.filterString)) {
+			   	 	this.sale.splice(i, 1); 
+			     	i--;
+			     }
+  		      }	
+         }      
+      
+  
+	      axios
+	      .get("/sala/getSale/" + this.$store.state.user.id)
+	      .then(sale => {
+	        this.pomocna = sale.data;
+	    	
+	      })
+	      .catch(error => {
+	        console.log(error);
+	      });
+	     
+        
+	        if(this.selektovaniFilter === 'Naziv sale'){
+  			  for( var i = 0; i < this.pomocna.length; i++){ 
+		    
+			   if (this.pomocna[i].naziv.includes(this.filterString)) {
+			  
+			   var flag = 0;
+				   	for(var j = 0; j < this.sale.length; j++){
+				   		if(this.sale[j].naziv === this.pomocna[i].naziv){
+				   		
+				   			flag = 1;
+				   			break;
+				   		}
+				   	}
+					   			
+				    if(flag == 0){
+						 this.sale.push(this.pomocna[i]);
+				   	}
+				   			
+			      }
+			}
+  		}
+  		
+  			if(this.selektovaniFilter === 'Broj sale'){
+  			  for( var i = 0; i < this.sale.length; i++){ 
+  			     if ( !this.sale[i].broj.toString().includes(this.filterString)) {
+			   	 	this.sale.splice(i, 1); 
+			     	i--;
+			     }
+  		      }	
+         }      
+     
+	      	  axios
+	      .get("/sala/getSale/" + this.$store.state.user.id)
+	      .then(sale => {
+	        this.pomocna = sale.data;
+	    	
+	      })
+	      .catch(error => {
+	        console.log(error);
+	      });
+  
+	  
+	      
+	      if(this.selektovaniFilter === 'Broj sale'){
+  			  for( var i = 0; i < this.pomocna.length; i++){ 
+		    
+			   if (this.pomocna[i].broj.toString().includes(this.filterString)) {
+			    
+			   var flag = 0;
+				   	for(var j = 0; j < this.sale.length; j++){
+				   		if(this.sale[j].broj === this.pomocna[i].broj){
+				   		
+				   			flag = 1;
+				   			break;
+				   		}
+				   	}
+					   			
+				    if(flag == 0){
+						 this.sale.push(this.pomocna[i]);
+				   	}
+				   			
+			      }
+			}
+  		}	
+      	
+	      
+  	}else{
+ 
+  			if(this.selektovaniFilter === 'Naziv sale'){
+  			  for( var i = 0; i < this.rezultatiPretrage.length; i++){ 
+  			     if ( !this.rezultatiPretrage[i].naziv.includes(this.filterString)) {
+  			        var temp = this.rezultatiPretrage[i];
+  			        this.pomocnaRezultatiPretrage.push(temp);
+			   	 	this.rezultatiPretrage.splice(i, 1); 
+			     	i--;
+			     }
+  		      }	
+         }      
+  	
+  			 if(this.selektovaniFilter === 'Naziv sale'){
+  		
+  			  for( var i = 0; i < this.pomocnaRezultatiPretrage.length; i++){ 
+		    
+			   if (this.pomocnaRezultatiPretrage[i].naziv.includes(this.filterString)) {
+			   console.log('USAO');
+			   var flag = 0;
+				   	for(var j = 0; j < this.rezultatiPretrage.length; j++){
+				   		if(this.rezultatiPretrage[j].naziv === this.pomocnaRezultatiPretrage[i].naziv){
+				   		 
+				   			flag = 1;
+				   			break;
+				   		}
+				   	}
+					   			
+				    if(flag === 0){
+				         
+				          this.sale.push(this.pomocnaRezultatiPretrage[i]);
+				   	}
+				   			
+			      }
+			}
+			
+  		}
+  	
+  	
+  		if(this.selektovaniFilter === 'Broj sale'){
+  			  for( var i = 0; i < this.rezultatiPretrage.length; i++){ 
+  			     if ( !this.rezultatiPretrage[i].broj.toString().includes(this.filterString)) {
+  			        var temp = this.rezultatiPretrage[i];
+  			        this.pomocnaRezultatiPretrage.push(temp);
+			   	 	this.rezultatiPretrage.splice(i, 1); 
+			     	i--;
+			     }
+  		      }	
+         }      
+  	
+  			 if(this.selektovaniFilter === 'Broj sale'){
+  		
+  			  for( var i = 0; i < this.pomocnaRezultatiPretrage.length; i++){ 
+		    
+			   if (this.pomocnaRezultatiPretrage[i].broj.toString().includes(this.filterString)) {
+		
+			   var flag = 0;
+				   	for(var j = 0; j < this.rezultatiPretrage.length; j++){
+				   		if(this.rezultatiPretrage[j].broj === this.pomocnaRezultatiPretrage[i].broj){
+				   		 
+				   			flag = 1;
+				   			break;
+				   		}
+				   	}
+					   			
+				    if(flag === 0){
+				         
+				          this.sale.push(this.pomocnaRezultatiPretrage[i]);
+				   	}
+				   			
+			      }
+			}
+			
+  		}
+  	
+  	
+  	
+    }  
+  },
  mounted() {
+            
  	  axios
       .get("/tipPregleda/TipoviKlinike/" + this.$store.state.user.id)
       .then(tipovi => {
@@ -1300,6 +1544,8 @@ export default {
       .get("/sala/getSale/" + this.$store.state.user.id)
       .then(sale => {
         this.sale = sale.data;
+      
+    	
       })
       .catch(error => {
         console.log(error);
