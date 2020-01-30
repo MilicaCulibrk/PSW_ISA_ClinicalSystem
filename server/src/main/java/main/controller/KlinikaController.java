@@ -71,9 +71,32 @@ public class KlinikaController {
 		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/pronadjiKliniku1/{id}")
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<KlinikaDTO> getPronadjiKliniku1(@PathVariable Long id) {
+		
+		Klinika klinika = klinikaService.findOne(id);
+		
+		KlinikaDTO klinikaDTO = new KlinikaDTO(klinika);
+		
+		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);
+	}
+	
 	@GetMapping(value = "/izlistaj")
 	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
 	public ResponseEntity<List<KlinikaDTO>> getIzlistaj() {
+		
+		List<Klinika> listaKlinika = klinikaService.findAll();
+		List<KlinikaDTO> listaKlinikaDTO = new ArrayList<KlinikaDTO>();
+		for (Klinika k : listaKlinika) {
+			listaKlinikaDTO.add(new KlinikaDTO(k));
+		}
+		
+		return new ResponseEntity<>(listaKlinikaDTO, HttpStatus.OK);
+	}
+	@GetMapping(value = "/izlistajK")
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<List<KlinikaDTO>> getIzlistajK() {
 		
 		List<Klinika> listaKlinika = klinikaService.findAll();
 		List<KlinikaDTO> listaKlinikaDTO = new ArrayList<KlinikaDTO>();

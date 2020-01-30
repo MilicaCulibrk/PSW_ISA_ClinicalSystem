@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import main.dto.PacijentDTO;
 import main.dto.PregledDTO;
+import main.model.Pacijent;
 import main.model.Pregled;
 import main.repository.LekarRepository;
 import main.repository.PregledRepository;
@@ -26,6 +28,21 @@ public class PregledService {
 	
 	@Autowired
 	private TipPregledaRepository tipPregledaRepository;
+	
+	public Pregled findOne(Long id) {
+		return pregledRepository.findById(id).orElseGet(null);
+	}
+	
+	public Pregled zakaziPregled(Long idPacijent, Pregled pregled) {
+		  
+		pregled.setIdPacijenta(idPacijent);
+		
+
+		pregledRepository.save(pregled);
+		
+		return pregled;
+}
+
 	
 	public PregledDTO dodajPregled(PregledDTO pregledDTO) {
 		Pregled pregled = new Pregled();

@@ -66,12 +66,25 @@ public class PacijentController {
 			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 		}
 		
-		Pacijent izmenjenPacijent = pacijentService.izmeniPacijenta(pacijent, pacijentDTO);
+		Pacijent izmenjenPacijent = pacijentService.izmeniPacijenta( pacijentDTO);
 
 		PacijentDTO newPacijentDTO = new PacijentDTO(izmenjenPacijent);
 
 		return new ResponseEntity<>(newPacijentDTO, HttpStatus.OK);
+		
+		
+		/*try {
+			pacijentService.izmeniPacijenta(pacijentDTO);
+		} catch (ValidationException e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<>(pacijentDTO, HttpStatus.OK);*/
 	}
+	
+	
+	
+	
 	
 	
 	@GetMapping(value = "/izlistaj")
