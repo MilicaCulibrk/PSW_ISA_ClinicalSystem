@@ -21,7 +21,7 @@ const routes = [
     { path: '/registration', component: registration},
     { path: '/dodajKliniku', component: dodajKliniku},
     { path: '/dodajAdministratora', component: dodajAdministratora},
-    { path: '/pocetnaAdministratoraKlinike', component: pocetnaAdministratoraKlinike},
+    { path: '/pocetnaAdministratoraKlinike', component: pocetnaAdministratoraKlinike },
     { path: '/pocetnaMedicinskeSestre', component: pocetnaMedicinskeSestre},
     { path: '/pocetnaAdministratorKC', component: pocetnaAdministratorKC},
     { path: '/pocetnaPacijenta', component: pocetnaPacijenta},
