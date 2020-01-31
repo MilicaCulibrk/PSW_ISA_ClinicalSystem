@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.KlinikaDTO;
 import main.dto.PacijentDTO;
+import main.dto.PretragaPacijentaDTO;
+import main.dto.SalaDTO;
+import main.model.AdministratorKlinike;
 import main.model.Klinika;
 import main.model.Pacijent;
 import main.model.Sala;
@@ -112,6 +116,51 @@ public class PacijentController {
 		
 		return new ResponseEntity<>(listaPacijenataDTO, HttpStatus.OK);
 	}
+	
+	@PreAuthorize("hasAuthority('LEKAR')")
+	@PostMapping(value = "/pretraga/{id}",consumes = "application/json")
+    public ResponseEntity<?> pretragaPacijenta(@RequestBody PretragaPacijentaDTO pretragaPacijentaDTO, @PathVariable Long id){
+
+
+	    	String ime = null;
+	    	String prezime = null;
+	    	String jmbg =  null;
+	    	
+
+	    	if(pretragaPacijentaDTO.getIme() != null) {
+	    		if(!pretragaPacijentaDTO.getIme().isEmpty()) {
+	    		
+	    			ime = pretragaPacijentaDTO.getIme();
+	    		}
+	    	}
+	    	
+	    	if(pretragaPacijentaDTO.getPrezime() != null) {
+	    		if(!pretragaPacijentaDTO.getPrezime().equals("")){
+	    			prezime = pretragaPacijentaDTO.getPrezime();	    		
+	    		}
+	    	}
+	    	
+	    	if(pretragaPacijentaDTO.getJmbg() != null) {
+	    		if(!pretragaPacijentaDTO.getJmbg().equals("")){
+	    			jmbg = pretragaPacijentaDTO.getJmbg();	    		
+	    		}
+	    	}
+
+	    	Pacijent pacijent =  pacijentService.findOne(id);
+
+	    	//pacijenti koje vracam
+	    	List<Pacijent> pacijenti = pacijentService.pronadjiPacijente(ime, prezime, jmbg);
+
+			List<PacijentDTO> pacijentDTO = new ArrayList<>();
+			for (Pacijent p : pacijenti) {
+				pacijentDTO.add(new PacijentDTO(p));
+			}
+
+	    	return new ResponseEntity<>(pacijentDTO, HttpStatus.OK);
+
+
+	    }
+
 	
 }
 
