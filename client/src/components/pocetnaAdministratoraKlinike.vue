@@ -253,12 +253,12 @@
 			                    <th class="bg-info  text-white">Broj</th>
 			                    <th class="bg-info  text-white">Klinika</th
 			                 </tr>
-			                  <tr v-for="k,i in pomocna.length">
-			                    <td>{{pomocna[i].naziv}}</td>
-			                    <td>{{pomocna[i].broj}}</td>
-			                    <td>{{pomocna[i].klinika.naziv}}</td>
-			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="izaberiSaluZaIzmenu(pomocna[i])">IZMENI</button>
-			                  	<td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiSalu(pomocna[i])">OBRISI</button>
+			                  <tr v-for="k,i in sale.length">
+			                    <td>{{sale[i].naziv}}</td>
+			                    <td>{{sale[i].broj}}</td>
+			                    <td>{{sale[i].klinika.naziv}}</td>
+			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="izaberiSaluZaIzmenu(sale[i])">IZMENI</button>
+			                  	<td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiSalu(sale[i])">OBRISI</button>
 			                    </td>
 			                  </tr>
 			              </table>
@@ -552,8 +552,13 @@
                                             <label for="Form-ime" style="color: #b3b3b3;">Datum</label>
                                           <input type="text" v-model="pretragaSale.datum" id="Form-ime" class="form-control">
                                           
-                                            <label for="Form-ime" style="color: #b3b3b3;">Vreme</label>
-                                          <input type="text" v-model="pretragaSale.vreme" id="Form-ime" class="form-control">
+                                            <label for="Form-ime" style="color: #b3b3b3;">Vreme pocetka (sati)</label>
+                                         <b-form-select v-model="pretragaSale.vreme">
+							                    <option
+							                      v-for="v in vremena"
+							                    
+							                    >{{v}}</option>
+							                  </b-form-select>
                                           
                                           
 
@@ -1352,7 +1357,9 @@ export default {
   },
   beforeUpdate(){
   
-  	if(this.ukljucenaPretraga === false){
+    if(this.prikazPretragaIfiltriranjeSala){
+    console.log('USAO');
+    if(this.ukljucenaPretraga === false){
   		if(this.selektovaniFilter === 'Naziv sale'){
   			  for( var i = 0; i < this.sale.length; i++){ 
   			     if ( !this.sale[i].naziv.includes(this.filterString)) {
@@ -1518,6 +1525,8 @@ export default {
   	
   	
     }  
+    }
+  	
   },
  mounted() {
             

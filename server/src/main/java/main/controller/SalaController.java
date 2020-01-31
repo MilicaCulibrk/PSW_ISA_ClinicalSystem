@@ -57,7 +57,7 @@ public class SalaController {
 			if (s.getKlinika().getId() == adm.getKlinika().getId()) {
 				SalaDTO sdto = new SalaDTO(s);
 				salaDTO.add(sdto);
-				System.out.println(sdto.getId());
+				
 			}
 		}
 
@@ -99,7 +99,7 @@ public class SalaController {
 	@PutMapping(value = "/izmeniSalu", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SalaDTO> izmeniSalu(@RequestBody SalaDTO salaDTO) {
 	
-		System.out.println(salaDTO.getId());
+	
 
 	
 			int flag = 0;
@@ -173,7 +173,7 @@ public class SalaController {
 
 	    	if(pretragaSaleDTO.getNaziv() != null) {
 	    		if(!pretragaSaleDTO.getNaziv().isEmpty()) {
-	    			System.out.println("Naziv: "+pretragaSaleDTO.getNaziv());
+	    		
 	    			naziv = pretragaSaleDTO.getNaziv();
 	    		}
 	    	}

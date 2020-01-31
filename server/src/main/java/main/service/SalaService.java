@@ -122,7 +122,7 @@ public class SalaService {
 			
 			if(naziv == null) {
 				if(broj == null) {
-					System.out.println("JAAA");
+				
 					//samo po datumu i vremenu
 					List<Sala> sale =  salaRepository.pronadjiSalePoIdKlinike(klinika_id);
 					
@@ -151,20 +151,20 @@ public class SalaService {
 						
 					}
 				}else {
-					System.out.println("USAO");
+				
 					//po datumu i broju
 					List<Sala> sale = salaRepository.pronadjiSaluPoBrojuiIDKlinike(broj, klinika_id);
 					
 					for(Sala s : sale) {
 						boolean imaSlobodanPregled = true;
-						System.out.println(s.getNaziv());
+			
 						
 					
 						for(Pregled p: pregledi) {
 							if(s.getId() == p.getSala().getId() &&  p.getDatum().equals(datum)) {
 								
 								
-								System.out.println("I OVDE");
+						
 								double pregledPocetak =  Double.parseDouble(p.getVreme());
 			
 								//pregled ne sme da pocne u terminu drugog pregleda

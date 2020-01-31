@@ -434,9 +434,11 @@
             this.prikazUDPREGLEDI=false;
             this.prikazKlinike=false;
     axios
+    
       .get('/klinika/izlistajK')
       .then(klinika =>{
         this.klinike = klinika.data;
+        console.log('USAO');
       })
       .catch(error => {
           console.log(error)

@@ -1,5 +1,6 @@
 package main.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Service;
 import main.dto.PacijentDTO;
 import main.model.AdministratorKlinickogCentra;
 import main.model.Pacijent;
+import main.model.Pregled;
+import main.model.Sala;
 //import main.repository.PacijentRepository;
 import main.repository.PacijentRepository;
 import main.repository.ZdravstveniKartonRepository;
@@ -72,6 +75,64 @@ public class PacijentService {
 			return pacijentRepository.findAllByOrderByEmailAsc();
 		return pacijentRepository.findAll();
 	}
+	
+	public List<Pacijent> pronadjiPacijente( String ime, String prezime, String jmbg){
+		
+		//lista pacijenata koju vracam
+		List<Pacijent> ret = new ArrayList<Pacijent>();
+		
+		List<Pacijent> sviPacijenti = pacijentRepository.findAll();
+		
+	
+		if(ime == null && prezime == null && jmbg == null) {
+			ret = sviPacijenti;
+		}else if(ime == null && prezime == null && jmbg != null){
+			for(Pacijent p : sviPacijenti) {
+				if(p.getJmbg().equals(jmbg)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime == null && prezime != null && jmbg == null){
+			for(Pacijent p : sviPacijenti) {
+				if(p.getPrezime().equals(prezime)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime == null && jmbg == null){
+			for(Pacijent p : sviPacijenti) {
+				if(p.getIme().equals(ime)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime != null && jmbg == null){
+			for(Pacijent p : sviPacijenti) {
+				if(p.getIme().equals(ime) && p.getPrezime().equals(prezime)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime == null && jmbg != null){
+			for(Pacijent p : sviPacijenti) {
+				if(p.getIme().equals(ime) && p.getJmbg().equals(jmbg)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime == null && prezime != null && jmbg != null){
+			for(Pacijent p : sviPacijenti) {
+				if(p.getPrezime().equals(prezime) && p.getJmbg().equals(jmbg)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime != null && jmbg != null){
+			for(Pacijent p : sviPacijenti) {
+				if(p.getPrezime().equals(prezime) && p.getJmbg().equals(jmbg)  && p.getIme().equals(ime)) {
+					ret.add(p);
+				}
+			}
+		}
+		
+	
+		return ret;
+		}
 	
 
 }

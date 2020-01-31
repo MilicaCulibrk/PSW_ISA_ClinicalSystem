@@ -127,11 +127,13 @@
                             
                               </div>
                               </div>
-                            </form>
+                      
+                 </form>
+                
                             <form v-if="prikazPacijenata" >
 
 
-                              <div style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px;  ">	                    
+                              <div  style="position: relative; top: 10px; left: 300px; width: 650px; height: 100px; background-color: rgba(130, 206, 209, 0.733); ">	                    
                                    <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
                                      <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
                                           <label for="Form-username" style="color: #b3b3b3;">Selektuj po:</label>
@@ -144,7 +146,7 @@
                                           </b-form-select>
                                </div>
                                </div>
-                               <div  class="message-form" style="position: relative; top: 10px; left: 0px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+                               <div  class="message-form"  style="position: relative; top: 10px; width: 650px; height: 480px; background-color: rgba(130, 206, 209, 0.733); ">
                                <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
                                
                                <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
@@ -304,9 +306,78 @@
                      </div>
                    </div>
                  </form>
+	
+	<form v-if="prikazPacijenata"  class="message-form" style="position: relative; top: -120px; left: 1100px; width: 350px; height: 405px; background-color: rgba(130, 206, 209, 0.733); ">
 
+                       <div>
+                                
+                            
+                              <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+                            
+                                
+                                <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+
+                                  <div class="form-group">
+                            
+                                    <div class="card-body">
+                                      <div class="row">
+                            
+                                        <div class="col">
+                                        <div class="md-form">
+
+                                          
+                                          <label for="Form-ime" style="color: #b3b3b3;">Ime</label>
+                                          <input type="text" v-model="pretragaPacijenta.ime" id="Form-ime" class="form-control">
+                                          
+										  <label for="Form-ime" style="color: #b3b3b3;">Prezime</label>
+                                          <input type="text" v-model="pretragaPacijenta.prezime" id="Form-ime" class="form-control">
+                                          
+                                            <label for="Form-ime" style="color: #b3b3b3;">JMBG</label>
+                                          <input type="text" v-model="pretragaPacijenta.jmbg" id="Form-ime" class="form-control">
+
+
+                                        </div>
+                                        </div>
+                                      
+                                      </div>
+                                      
+                            
+                            
+                                      <div class="text-center mb-4 mt-4">
+                                        <template>
+                                        <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="pretragaPacijenata">Pretraga</button>
+                                         <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="ponistiPretraguPacijenata">Ponisti</button>
+                                         
+                                        </template>
+                                      </div>
+                            
+                                    </div>
+                            
+                                  </div>
+                            
+                            
+                                </div>
+                                
+                            
+                              </div>
+                              </div>
+                </form>
+	 		      </form>
+                              	<form v-if="prikazPacijenata"  class="message-form" style="position: relative; top: -100px; left: 980px; width: 580px; height: 50px;  ">
+	 		
+                   <div   class="text-center mb-4 mt-4">
+                                       <label for="Form-phone" style=" color: #b3b3b3;">Filtritaj po</label>
+                                          <b-form-select v-model="selektovaniFilter" style= "position: relative; width: 280px;" >
+							                    <option
+							                      v-for="f in filteri"
+							                     
+							                   >{{f}}</option>
+							                  </b-form-select>
+							            <input type="text" v-model="filterString" id="Form-ime" class="form-control" style="position: relative; width: 280px; left: 188px;" >
+                    					     <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; position: relative; left: 185px; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="ponistiFiltriranje">Ponisti</button>
+                    </div>
  
-                  
+             </form>     
 </div>
 
 </template>
@@ -319,11 +390,18 @@ import axios from 'axios'
      return {
       korisnik: {},
       pacijenti: {},
+      rezultatiPretrage: [],
+         pretragaPacijenta: {
+	        ime: "",
+	        prezime: "",
+	        jmbg: "",
+        },
       zdravstveniK: {},
       prikazZK: false,
       prikaz:false,
       izmeni:false,
       izmeniZK:false,
+      ukljucenaPretraga: false,
       prikazPacijenata:false,
       prikazPacijenta:false,
       trenutniPacijent:{},
@@ -338,13 +416,22 @@ import axios from 'axios'
         lek: "",
         dijagnoza: "",
       },
+      filteri: ['Ime', 'Prezime'],
+	  filter: "",
+	  filterString: "",
+	  selektovaniFilter: "",
       izvestaji: {},
       izabraniLekovi: [],
+      pomocna: [],
+      rezultatiPretrage: [],
+      pomocnaRezultatiPretrage: [],
       }
   },
+  
   methods: {
         otvoriFormu(){
             this.prikaz=!this.prikaz;
+            this.ponistiPretraguPacijenata();
         },
         izmena() {
         this.izmeni = true
@@ -360,7 +447,28 @@ import axios from 'axios'
           console.log(error)
       });
       },
-       odjava(){
+        ponistiPretraguPacijenata(){
+        
+	         axios
+		      .get('/pacijent/izlistaj')
+		      .then(pacijent =>{
+		        this.pacijenti = pacijent.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+	
+	           this.pretragaPacijenta.ime = "", 
+		       this.pretragaPacijenta.prezime = "", 
+		       this.pretragaPacijenta.jmbg = "", 
+		  	   this.ukljucenaPretraga = false
+		  
+	    
+        },
+        ponistiFiltriranje(){
+        	this.filterString = ""
+        },
+        odjava(){
                 localStorage.removeItem("jwt");
                 this.$store.state.user = {
                 role: {
@@ -396,6 +504,7 @@ import axios from 'axios'
         this.prikazZK=false;
 	  		this.prikazPacijenata=!this.prikazPacijenata;
         this.prikazPacijenta = false;
+        this.ponistiPretraguPacijenata();
 	  	      axios
 
 		      .get('/pacijent/izlistaj')
@@ -407,6 +516,23 @@ import axios from 'axios'
 		          console.log(error)
 		      });
 	  	},
+	  	 pretragaPacijenata(){
+          
+	           	  axios
+			      .post("/pacijent/pretraga/" + this.$store.state.user.id, this.pretragaPacijenta)
+			      .then(pacijenti =>{
+			       this.pacijenti = pacijenti.data;
+			       	 this.rezultatiPretrage = pacijenti.data;
+			   
+			       	  this.ukljucenaPretraga = true;
+			       
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+           
+        },    
+        
     otvoriZK(idzk){
       axios
 
@@ -418,6 +544,7 @@ import axios from 'axios'
       this.prikazZK=!this.prikazZK;
       this.prikazPacijenata=false;
      // this.prikazPacijenta=false;
+        this.ponistiPretraguPacijenata();
 
     },
     izmenaZK(){
@@ -466,6 +593,7 @@ import axios from 'axios'
 	  		this.prikazPacijenta = true;
         this.prikazZK = false;
         this.prikazZapocniPregled = false;
+           this.ponistiPretraguPacijenata();
 	  	},
       zapocniPregled(){
         this.prikazZapocniPregled = !this.prikazZapocniPregled;
@@ -476,6 +604,7 @@ import axios from 'axios'
         this.izvestaj.idLekara = this.$store.state.user.id;
         this.izvestaj.lekovi = this.izabraniLekovi;
         this.prikazZapocniPregled = false;
+           this.ponistiPretraguPacijenata();
         axios
 		      .post("/izvestaj/dodaj", this.izvestaj)
 		      .then(odgovor => {
@@ -499,6 +628,181 @@ import axios from 'axios'
 		      });
       }
     },
+ beforeUpdate(){
+  
+    if(this.prikazPacijenata){
+    console.log('USAO');
+    if(this.ukljucenaPretraga === false){
+  		if(this.selektovaniFilter === 'Ime'){
+  			  for( var i = 0; i < this.pacijenti.length; i++){ 
+  			     if ( !this.pacijenti[i].ime.includes(this.filterString)) {
+			   	 	this.pacijenti.splice(i, 1); 
+			     	i--;
+			     }
+  		      }	
+         }      
+      
+  
+	      axios
+	      .get("/pacijent/izlistaj")
+	      .then(pacijenti => {
+	        this.pomocna = pacijenti.data;
+	    	
+	      })
+	      .catch(error => {
+	        console.log(error);
+	      });
+	     
+        
+	        if(this.selektovaniFilter === 'Ime'){
+  			  for( var i = 0; i < this.pomocna.length; i++){ 
+		    
+			   if (this.pomocna[i].ime.includes(this.filterString)) {
+			  
+			   var flag = 0;
+				   	for(var j = 0; j < this.pacijenti.length; j++){
+				   		if(this.pacijenti[j].ime === this.pomocna[i].ime  && this.pacijenti[j].prezime === this.pomocna[i].prezime){
+				   		
+				   			flag = 1;
+				   			break;
+				   		}
+				   	}
+					   			
+				    if(flag == 0){
+						 this.pacijenti.push(this.pomocna[i]);
+				   	}
+				   			
+			      }
+			}
+  		}
+  		
+  			if(this.selektovaniFilter === 'Prezime'){
+  			  for( var i = 0; i < this.pacijenti.length; i++){ 
+  			     if ( !this.pacijenti[i].prezime.includes(this.filterString)) {
+			   	 	this.pacijenti.splice(i, 1); 
+			     	i--;
+			     }
+  		      }	
+         }      
+     
+	      	  axios
+	      .get("/pacijent/izlistaj")
+	      .then(pacijenti => {
+	        this.pomocna = pacijenti.data;
+	    	
+	      })
+	      .catch(error => {
+	        console.log(error);
+	      });
+  
+	  
+	      
+	      if(this.selektovaniFilter === 'Prezime'){
+  			  for( var i = 0; i < this.pomocna.length; i++){ 
+		    
+			   if (this.pomocna[i].prezime.includes(this.filterString)) {
+			    
+			   var flag = 0;
+				   	for(var j = 0; j < this.pacijenti.length; j++){
+				   		if(this.pacijenti[j].prezime === this.pomocna[i].prezime  && this.pacijenti[j].ime === this.pomocna[i].ime ){
+				   		
+				   			flag = 1;
+				   			break;
+				   		}
+				   		
+				   	
+				   	}
+					   			
+				    if(flag == 0){
+						 this.pacijenti.push(this.pomocna[i]);
+				   	}
+				   			
+			      }
+			}
+  		}	
+      	
+      
+  		
+	      
+  	}else{
+ 
+  			if(this.selektovaniFilter === 'Ime'){
+  			  for( var i = 0; i < this.rezultatiPretrage.length; i++){ 
+  			     if ( !this.rezultatiPretrage[i].ime.includes(this.filterString)) {
+  			        var temp = this.rezultatiPretrage[i];
+  			        this.pomocnaRezultatiPretrage.push(temp);
+			   	 	this.rezultatiPretrage.splice(i, 1); 
+			     	i--;
+			     }
+  		      }	
+         }      
+  	
+  			 if(this.selektovaniFilter === 'Ime'){
+  		
+  			  for( var i = 0; i < this.pomocnaRezultatiPretrage.length; i++){ 
+		    
+			   if (this.pomocnaRezultatiPretrage[i].ime.includes(this.filterString)) {
+			   console.log('USAO');
+			   var flag = 0;
+				   	for(var j = 0; j < this.rezultatiPretrage.length; j++){
+				   		if(this.rezultatiPretrage[j].ime === this.pomocnaRezultatiPretrage[i].ime && this.rezultatiPretrage[j].prezime === this.pomocnaRezultatiPretrage[i].prezime){
+				   		 
+				   			flag = 1;
+				   			break;
+				   		}
+				   	}
+					   			
+				    if(flag === 0){
+				         
+				          this.pacijenti.push(this.pomocnaRezultatiPretrage[i]);
+				   	}
+				   			
+			      }
+			}
+			
+  		}
+  	
+  	
+  		if(this.selektovaniFilter === 'Prezime'){
+  			  for( var i = 0; i < this.rezultatiPretrage.length; i++){ 
+  			     if ( !this.rezultatiPretrage[i].prezime.includes(this.filterString)) {
+  			        var temp = this.rezultatiPretrage[i];
+  			        this.pomocnaRezultatiPretrage.push(temp);
+			   	 	this.rezultatiPretrage.splice(i, 1); 
+			     	i--;
+			     }
+  		      }	
+         }      
+  	
+  			 if(this.selektovaniFilter === 'Prezime'){
+  		
+  			  for( var i = 0; i < this.pomocnaRezultatiPretrage.length; i++){ 
+		    
+			   if (this.pomocnaRezultatiPretrage[i].prezime.includes(this.filterString)) {
+		
+			   var flag = 0;
+				   	for(var j = 0; j < this.rezultatiPretrage.length; j++){
+				   		if(this.rezultatiPretrage[j].prezime === this.pomocnaRezultatiPretrage[i].prezime && this.rezultatiPretrage[j].ime === this.pomocnaRezultatiPretrage[i].ime){
+				   		 
+				   			flag = 1;
+				   			break;
+				   		}
+				   	}
+					   			
+				    if(flag === 0){
+				         
+				          this.pacijenti.push(this.pomocnaRezultatiPretrage[i]);
+				   	}
+				   			
+			      }
+			}
+			
+  		}
+  	
+  		}
+    }
+  	
+  },
  mounted() {
    {
       axios
