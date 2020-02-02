@@ -13,7 +13,7 @@
           </a>
           <a></a>
           <a href="#">
-              <i class="zmdi zmdi-view-dashboard">KALENDAR</i>
+              <i v-on:click="otvoriKalendar">KALENDAR</i>
           </a>
           <a href="#">
              <i class="zmdi zmdi-link">LISTA PREGLEDA</i> 
@@ -188,7 +188,10 @@
                             <button class="btn btn-light" style="background-color: #eeeeee; width: 395px; height: 100px; font-size : 30px;" v-on:click="otvoriZK(trenutniPacijent.idZdravstveniKarton)">Zdravstveni karton</button>
                           </div>                 
                           <div class="column" >
-                            <button class="btn btn-light" style="background-color: #eeeeee; width: 395px; height: 100px; font-size : 30px;" v-on:click="zapocniPregled()">Zapocni pregled</button>
+                            <button class="btn btn-light" style="background-color: #eeeeee; width: 395px; height: 100px; font-size : 30px;" v-on:click="zapocniPregled">Zapocni pregled</button>
+                          </div>
+                                                    <div class="column" >
+                            <button class="btn btn-light" style="background-color: #eeeeee; width: 395px; height: 100px; font-size : 30px;" v-on:click="probaj">Proba</button>
                           </div>
 
                           </div>
@@ -378,6 +381,18 @@
                     </div>
  
              </form>     
+             <form v-if="prikazKalendara" >
+                  <vue-cal style="height: 400px; width: 100%; " selected-date="2018-11-19"
+                  class="vuecal--blue-theme"
+                    :time-from="8 * 60"
+                    :time-to="23 * 60"
+                    :disable-views="['years']"
+                    editable-events
+                    resize-x
+                    :events="events">
+                  </vue-cal>
+
+             </form>
 </div>
 
 </template>
@@ -385,7 +400,10 @@
 
 <script>
 import axios from 'axios'
-    export default {
+import VueCal from 'vue-cal'
+import 'vue-cal/dist/vuecal.css'
+export default {
+  components: { VueCal },
  data() {
      return {
       korisnik: {},
@@ -425,6 +443,31 @@ import axios from 'axios'
       pomocna: [],
       rezultatiPretrage: [],
       pomocnaRezultatiPretrage: [],
+            prikazKalendara: false,
+      events: [
+    {
+      start: '2018-11-16 10:00',
+      end: '2018-11-20 12:37',
+      title: 'Running Marathon',
+      content: '<i class="v-icon material-icons">directions_run</i>',
+      class: 'sport'
+    },
+    {
+      start: '2018-11-20 10:00',
+      end: '2018-11-20 10:25',
+      title: 'Drink water!',
+      content: '<i class="v-icon material-icons">local_drink</i>',
+      class: 'health',
+    },
+    {
+      start: '2018-11-21 19:00',
+      end: '2018-11-23 11:30',
+      title: 'Trip to India',
+      content: '<i class="v-icon material-icons">flight</i>',
+      class: 'leisure'
+    }
+  ]
+      
       }
   },
   
@@ -446,6 +489,13 @@ import axios from 'axios'
       .catch(error => {
           console.log(error)
       });
+      },
+      
+      otvoriKalendar(){
+        this.prikazKalendara = true;
+        this.prikazPacijenata = false;
+        this.prikazPacijenta = false;
+        this.prikaz = false;
       },
         ponistiPretraguPacijenata(){
         
@@ -504,6 +554,8 @@ import axios from 'axios'
         this.prikazZK=false;
 	  		this.prikazPacijenata=!this.prikazPacijenata;
         this.prikazPacijenta = false;
+                this.prikazKalendara = false;
+        
         this.ponistiPretraguPacijenata();
 	  	      axios
 
@@ -591,6 +643,8 @@ import axios from 'axios'
         this.prikazPacijenata = false;
 	  		this.trenutniPacijent = pacijent;
 	  		this.prikazPacijenta = true;
+	  		        this.prikazKalendara = false;
+	  		
         this.prikazZK = false;
         this.prikazZapocniPregled = false;
            this.ponistiPretraguPacijenata();
@@ -598,6 +652,9 @@ import axios from 'axios'
       zapocniPregled(){
         this.prikazZapocniPregled = !this.prikazZapocniPregled;
       //  this.prikazPacijenta = false;
+      },
+      probaj(){
+		console.log('da vidimo jel radi');
       },
       dodajIzvestaj(){
         this.izvestaj.idPacijenta = this.trenutniPacijent.id;
