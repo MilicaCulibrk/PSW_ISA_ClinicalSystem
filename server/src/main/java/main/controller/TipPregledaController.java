@@ -21,9 +21,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.LekarDTO;
+import main.dto.PacijentDTO;
+import main.dto.PretragaTipaPregledaDTO;
 import main.dto.TipPregledaDTO;
 import main.model.AdministratorKlinike;
 import main.model.Lekar;
+import main.model.Pacijent;
 import main.model.Pregled;
 import main.model.TipPregleda;
 import main.service.AdminKlinikeService;
@@ -189,6 +192,52 @@ public class TipPregledaController {
 
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
+	
+
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	@PostMapping(value = "/pretraga/{id}",consumes = "application/json")
+    public ResponseEntity<?> pretragaPacijenta(@RequestBody PretragaTipaPregledaDTO pretragaTipaPregledaDTO, @PathVariable Long id){
+
+
+	    	String naziv = null;
+	    	String oznaka = null;
+	    	String cena =  null;
+	    	
+
+	    	if(pretragaTipaPregledaDTO.getNaziv() != null) {
+	    		if(!pretragaTipaPregledaDTO.getNaziv().isEmpty()) {
+	    		
+	    			naziv = pretragaTipaPregledaDTO.getNaziv();
+	    		}
+	    	}
+	    	
+	    	if(pretragaTipaPregledaDTO.getOznaka() != null) {
+	    		if(!pretragaTipaPregledaDTO.getOznaka().equals("")){
+	    			oznaka = pretragaTipaPregledaDTO.getOznaka();	    		
+	    		}
+	    	}
+	    	
+	    	if(pretragaTipaPregledaDTO.getCena() != null) {
+	    		if(!pretragaTipaPregledaDTO.getCena().equals("")){
+	    			cena = pretragaTipaPregledaDTO.getCena();	    		
+	    		}
+	    	}
+
+	    	TipPregleda tipPregleda =  tipPregledaService.findOne(id);
+
+	    	//tipovi pregleda koje vracam
+	    	List<TipPregleda> tipovi = tipPregledaService.pronadjiPreglede(naziv, oznaka, cena);
+
+			List<TipPregledaDTO> tipPregledaDTO = new ArrayList<>();
+			for (TipPregleda tp : tipovi) {
+				tipPregledaDTO.add(new TipPregledaDTO(tp));
+			}
+
+	    	return new ResponseEntity<>(tipPregledaDTO, HttpStatus.OK);
+
+
+	    }
+
 	
 	
 
