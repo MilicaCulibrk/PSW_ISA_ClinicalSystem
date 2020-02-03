@@ -63,15 +63,15 @@ public class PacijentService {
 	}
 
 	public List<Pacijent> sortiraj(String sortBy) {
-		if(sortBy.equals("Id"))
+		if(sortBy.equals("id"))
 			return pacijentRepository.findAllByOrderByIdAsc();
-		else if(sortBy.equals("Ime"))
+		else if(sortBy.equals("ime"))
 			return pacijentRepository.findAllByOrderByImeAsc();
-		else if(sortBy.equals("Prezime"))
+		else if(sortBy.equals("prezime"))
 			return pacijentRepository.findAllByOrderByPrezimeAsc();
 		else if(sortBy.equals("JMBG"))
 			return pacijentRepository.findAllByOrderByJmbgAsc();
-		else if(sortBy.equals("Email"))
+		else if(sortBy.equals("email"))
 			return pacijentRepository.findAllByOrderByEmailAsc();
 		return pacijentRepository.findAll();
 	}

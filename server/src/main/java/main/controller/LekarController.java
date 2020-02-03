@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.LekarDTO;
+import main.dto.PregledDTO;
 import main.dto.TipPregledaDTO;
 import main.model.Lekar;
 import main.model.Pregled;
@@ -39,7 +40,22 @@ public class LekarController {
 	@Autowired
 	private PregledService pregledService;
 
-
+	@GetMapping(value = "/izlistajLekare/{idKlinike}")
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<List<LekarDTO>> getIzlistajLekare(@PathVariable Long idKlinike) {
+		
+		List<Lekar> listaLekara = lekarService.findAll();
+		List<LekarDTO> listaLekaraDTO = new ArrayList<LekarDTO>();
+		
+		
+		for (Lekar l : listaLekara) {
+				if(l.getKlinika().getId().equals(idKlinike))
+					
+			listaLekaraDTO.add(new LekarDTO(l));
+			
+										}
+		return new ResponseEntity<>(listaLekaraDTO, HttpStatus.OK);
+	}
 
 	@GetMapping(value = "/get/{id}")
 	@PreAuthorize("hasAuthority('LEKAR')")

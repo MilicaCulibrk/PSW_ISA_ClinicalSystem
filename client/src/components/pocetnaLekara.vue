@@ -137,12 +137,10 @@
                                    <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
                                      <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
                                           <label for="Form-username" style="color: #b3b3b3;">Selektuj po:</label>
-                                          <b-form-select  >
-                                            <option v-on:click="azuriraj('Id')">Id</option>
-                                            <option v-on:click="azuriraj('Ime')">Ime</option>
-                                            <option v-on:click="azuriraj('Prezime')">Prezime</option>
-                                            <option v-on:click="azuriraj('JMBG')">JMBG</option>
-                                            <option v-on:click="azuriraj('Email')">Email</option>
+                                          <b-form-select v-model="odabirSortiranja" @change="azuriraj()" >
+                                            <option 
+                                              v-for="i in sortiranje"
+                                            >{{i}}</option>
                                           </b-form-select>
                                </div>
                                </div>
@@ -409,7 +407,9 @@ import axios from 'axios'
       dijagnoze: [],
       lekovi: [],
       dijagnoza: {},
+      odabirSortiranja: "",
       lek: {},
+      sortiranje: ['id', 'ime', 'prezime', 'JMBG', 'email' ],
       izvestaj: {
         idPacijenta: "",
         idLekara: "",
@@ -500,6 +500,7 @@ import axios from 'axios'
       });
     },
     otvoriListuPacijenata(){
+	event.preventDefault();
 	  		this.prikaz=false;
         this.prikazZK=false;
 	  		this.prikazPacijenata=!this.prikazPacijenata;
@@ -509,8 +510,8 @@ import axios from 'axios'
 
 		      .get('/pacijent/izlistaj')
 
-		      .then(pacijent =>{
-		        this.pacijenti = pacijent.data;
+		      .then(pacijenti =>{
+		        this.pacijenti = pacijenti.data;
 		      })
 		      .catch(error => {
 		          console.log(error)
@@ -534,6 +535,7 @@ import axios from 'axios'
         },    
         
     otvoriZK(idzk){
+	event.preventDefault();
       axios
 
 	        .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ idzk)
@@ -577,11 +579,14 @@ import axios from 'axios'
           console.log(error)
       });
     },
-    azuriraj(nes){
+ 
+    azuriraj(){
+      console.log('azuriraj');
+      console.log(this.odabirSortiranja);
 	  		axios
-		      .put("/pacijent/azuriraj", nes)
-		      .then(pacijent => {
-			        this.pacijenti = pacijent.data;
+		      .put("/pacijent/azuriraj", this.odabirSortiranja)
+		      .then(pacijenti => {
+			        this.pacijenti = pacijenti.data;
 			      })
 		      .catch(error => {
 		          console.log(error)
@@ -596,6 +601,7 @@ import axios from 'axios'
            this.ponistiPretraguPacijenata();
 	  	},
       zapocniPregled(){
+	event.preventDefault();
         this.prikazZapocniPregled = !this.prikazZapocniPregled;
       //  this.prikazPacijenta = false;
       },
@@ -630,8 +636,8 @@ import axios from 'axios'
     },
  beforeUpdate(){
   
+ 
     if(this.prikazPacijenata){
-    console.log('USAO');
     if(this.ukljucenaPretraga === false){
   		if(this.selektovaniFilter === 'Ime'){
   			  for( var i = 0; i < this.pacijenti.length; i++){ 
