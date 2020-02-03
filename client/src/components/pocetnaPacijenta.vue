@@ -16,7 +16,7 @@
                 </i>                   
               </a>
               <a href="#">
-                <i v-on:click="listaKlinika" class="zmdi zmdi-view-dashboard"> LISTA KLINIKA
+                <i v-on:click="listaKlinika();izlistajTipove()" class="zmdi zmdi-view-dashboard"> LISTA KLINIKA
                 </i>                   
                 </a>
                 <a href="#">
@@ -135,7 +135,7 @@
                 </div>
                 </div>
   </form>
-  <form v-if="prikazZK"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 390px; background-color: rgba(130, 206, 209, 0.733); ">
+  <form v-if="prikazZK"  class="message-form" style=" box-shadow: 25px 25px 50px 0 white inset, -25px -25px 50px 0 white inset; position: relative; top: 10px; left: 400px; width: 800px; height: 390px; background-color: rgba(130, 206, 209, 0.733); ">
     <div>
             
         
@@ -169,15 +169,9 @@
                     <div class="col">
                     <div class="md-form pb-3">
         
-                      
-
                     </div>
                     </div>
-                  </div>
-                  
-        
-        
-                  
+                  </div>   
                 </div>
         
               </div>
@@ -192,11 +186,11 @@
 <form v-if="prikazPREGLED"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 690px; height: 260px; background-color: rgba(130, 206, 209, 0.733); ">
 
 </form>
-<form v-if="prikazUDPREGLEDI"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 40%; height: 600px; background-color: rgba(130, 206, 209, 0.733); ">
+<form v-if="prikazUDPREGLEDI"  class="message-form" style="position: relative; top: 10px; left: 400px; width: fit-content; height: 600px; background-color: rgba(130, 206, 209, 0.733); ">
   <button v-on:click="otvoriKliniku(klinika)" class="btn btn-warning" style=" margin-left: 15px; margin-top: 10px; height: 40px; width: 250px; border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash"> 	&#8592; Vrati se na profil klinike</i></button>
   <div  class="container d-flex justify-content-center" >	                        
-    <div class="card" style="width: 99.5%; height: 99.5%;margin-top: 20px; margin-bottom: 5px">	
-      <table style="width: 100%;">
+    <div class="card" style="width: 99.5%; height: 99.5%;margin-top: 20px; margin-bottom: 5px; overflow-x:auto" >	
+      <table style="width: 100%;" class="table table-hover table-fixed">
        
                 <tr>
                   <th class="bg-info  text-white">Datum</th>
@@ -208,15 +202,15 @@
                   <th class="bg-info  text-white">Popust</th>
                   <th class="bg-info  text-white"></th>
                 </tr>
-                <tr v-for="k,i in pregledi.length" >
-                  <td>{{pregledi[i].datum}}</td>
-                  <td>{{pregledi[i].vreme}}</td>
-                  <td>{{pregledi[i].sala.naziv}}</td>
-                  <td>{{pregledi[i].lekar.ime}}</td>
-                  <td>{{pregledi[i].tipPregleda.naziv}}</td>
-                  <td>{{pregledi[i].cena}}</td>
+                <tr v-for="k,i in udpregledi.length" >
+                  <td align="center" >{{udpregledi[i].datum}}</td>
+                  <td align="center" >{{udpregledi[i].vreme}}</td>
+                  <td align="center" >{{udpregledi[i].sala.naziv}}</td>
+                  <td align="center" >{{udpregledi[i].lekar.ime}}</td>
+                  <td align="center" >{{udpregledi[i].tipPregleda.naziv}}</td>
+                  <td align="center" >{{udpregledi[i].cena}}</td>
                   <td></td>
-                  <td style="text-align: center">   <button v-on:click="zakaziPregled(pregledi[i])" class="btn btn-warning" style=" border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash">Zakazi pregled</i></button>
+                  <td style="text-align: center">   <button v-on:click="zakaziUDPregled(udpregledi[i])" class="btn btn-warning" style=" border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash">Zakazi pregled</i></button>
                   </td>
                 </tr>
             </table>     
@@ -224,81 +218,161 @@
   </div>   
 </form>
 
-<form   v-if="prikazListaKlinika" class="message-form" style="position: relative; top: 10px; left: 400px; width: 40%; height: 600px; background-color: rgba(130, 206, 209, 0.733); ">
+<form   v-if="prikazListaKlinika" class="message-form position: relative; " style="  border-radius: 25px; box-shadow: 20px 20px 20px 0 white inset, -20px -20px 20px 0 white inset; position: relative; top: 50px; left: 400px; width: 40%; background-color: rgba(130, 206, 209, 0.733); ">
  
   <div  class="container d-flex justify-content-center" >	                        
-    <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
-      <table style="width: 100%;">
+    <div class="card" style="width: 93%; height: 93%; margin-top: 30px; margin-bottom: 30px">	
+      <table style="width: 100%;" class="table table-hover table-fixed">
        
                 <tr>
-                  <th class="bg-info  text-white">Naziv Klinike</th>
+                  <th class="bg-info  text-white" >Naziv Klinike</th>
                   <th class="bg-info  text-white">Adresa Klinike</th>
+                  <th class="bg-info  text-white">Ocena Klinike</th>
+                  <th class="bg-info  text-white">Cena pregleda</th>
                   <th class="bg-info  text-white"></th>
                 </tr>
                 <tr v-for="k,i in klinike.length">
-                  <td>{{klinike[i].naziv}}</td>
-                  <td>{{klinike[i].adresa}}</td>
-                  <td style="text-align: center">   <button v-on:click="otvoriKliniku(klinike[i])" class="btn btn-warning" style=" border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash">Prikazi profil klinike</i></button>
+                  <td align="center" >{{klinike[i].naziv}}</td>
+                  <td align="center" >{{klinike[i].adresa}}</td>
+                  <td align="center" >{{klinike[i].ocena}}</td>
+                  <td></td>
+                  <td style="text-align: center">   <button v-on:click="prikazLekara(klinike[i]); otvoriKliniku(klinike[i])" class="btn btn-warning" style=" border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash">Prikazi profil klinike</i></button>
                   </td>
                 </tr>
             </table>     
     </div>
   </div>   
   </form>
-  <form   v-if="prikazKlinike" class="message-form" style="position: relative; top: 10px; left: 400px; width: 40%; height: 600px; background-color: rgba(130, 206, 209, 0.733); ">
-    <button v-on:click="listaKlinika" class="btn btn-warning" style=" margin-left: 15px; margin-top: 10px; height: 40px; width: 250px; border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash"> 	&#8592; Vrati se na listu klinika</i></button>
 
-    <div  class="container d-flex justify-content-center" >	  
-                      
-      <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 20px; margin-bottom: 5px">	
+  <form v-if="prikazListaKlinika" class="message-form" style="position: relative;  border-radius: 25px; box-shadow: 20px 20px 20px 0 white inset, -20px -20px 20px 0 white inset; top: -250px; left: 1050px; width: 450px; height: 300px; border-color:rgba(130, 206, 209, 0.733); background-color:white ">
+    <div  class="container d-flex justify-content-center" style="margin-top: 30px; ">	                        
+<div class="card" style="border-color: rgba(130, 206, 209, 0.733); width: 93%; height: 93%; margin-top: 30px; margin-bottom: 30px">	
 
-        <table style="width: 100%; " class="table table-striped" >
+<table style="width: 100%; " class="table table-hover table-fixed">
+
+  <tr>
+    <th  >Izaberi tip pregleda</th>
+    
+
+  <td>
+    <b-form-select  v-model="pretragaKlinika.tipPregleda">
+      <option
+        v-for="tipp in tipovi"
+        :value="tipp.naziv"
+        :key="tipp.id"
+      >{{tipp.naziv}}</option>
+    </b-form-select>
+</b-form-select>
+  
+  </td>
+  </tr>
+  <tr>
+    <th  > Izaberi datum pregleda</th>
+<td >
+  <input type="text"  class="form-control"  v-model="pretragaKlinika.datum" >
+
+</td>
+  </tr>
+  <tr>
+    <th > 
+      <button  type="button"  class="btn btn-warning"  style="border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;"  v-on:click="pretragaKlinike">Pretraga</button>
+  
+    </th>
+    <td align="center" >  
+      <button  type="button"  class="btn btn-warning"  style=" border-color: rgb(233, 233, 233);  background-color: rgb(233, 233, 233); color: #37474F;" v-on:click="ponistiPretraguKlinika">Ponisti</button>
+  
+    </td>
+  </tr>
+</table>
+
+</div>
+
+</div>
+
+</form>
+
+  <form   v-if="prikazKlinike" class="message-form" style=" border-radius: 25px; box-shadow: 20px 20px 20px 0 white inset, -20px -20px 20px 0 white inset;  position: relative; top: 10px; left: 290px; width: 75%; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+    
+    <button v-on:click="listaKlinika" class="btn btn-warning" style=" margin-left: 30px; margin-top: 20px; height: 40px; width: 250px; border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash"> 	&#8592; Vrati se na listu klinika</i></button>
+
+    
+      <div class="card" style="width: 45%; height: 450px; margin-top: 30px; margin-left: 30px;   ">	
+
+        <table style="width: 100%;   " class="table table-striped" >
           <tbody>
                   <tr >
                     <th  >Naziv: </th>
-                    <th >{{klinika.naziv}}</th>
+                    <td align="center" >{{klinika.naziv}}</td>
                   </tr>
                   <tr>
                     <th >Adresa: </th>
-                    <th >{{klinika.adresa}}</th>
+                    <td align="center" >{{klinika.adresa}}</td>
                   </tr>
                   <tr>
                     <th>Email: </th>
-                    <th>{{klinika.email}}</th>
+                    <td align="center" >{{klinika.email}}</td>
                   </tr>
                   <tr>
                     <th >Grad: </th>
-                    <th >{{klinika.grad}}</th>
+                    <td align="center"  >{{klinika.grad}}</td>
 
                   </tr>
                   <tr>
                     <th >Drzava: </th>
-                    <th >{{klinika.drzava}}</th>
+                    <td align="center"  >{{klinika.drzava}}</td>
                   </tr>
                   <tr>
                     <th >Telefon: </th>
-                    <th >{{klinika.telefon}}</th>
+                    <td align="center" >{{klinika.telefon}}</td>
                   </tr>
                   <tr>
                     <th>Opis: </th>
-                    <th >{{klinika.opis}}</th>
+                    <td align="center" >{{klinika.opis}}</td>
                   </tr>
                   <tr>
                     <th>Ocena: </th>
-                    <th >{{klinika.ocena}}</th>
+                    <td align="center" >{{klinika.ocena}}</td>
                   </tr>
                   <tr>
                     <th>Broj recenzija: </th>
-                    <th >{{klinika.brojRecenzija}}</th>
+                    <td align="center" >{{klinika.brojRecenzija}}</td>
                   </tr>
                 </tbody>
               </table>     
-      </div>
-    </div>   
-    <button v-on:click="udpregledi(klinika)" class="btn btn-warning" style=" margin-left: 270px; margin-top: 10px; height: 40px; width: 330px; border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash"> Prikazi unapred definisane preglede &#8594;</i></button>
+            
+              <button v-on:click="prikazudpregledi(klinika)" class="btn btn-warning" style=" margin-left: 180px; margin-top: 10px; height: 40px; width: 330px; border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash"> Prikazi unapred definisane preglede &#8594;</i></button>
+            </div>
 
+            <div class="card" style="width: 45%;  margin-top: -450px; margin-left: 600px;   ">	
+
+
+        <table style="width: 100%; " class="table table-striped" >
+          <tbody>
+            <tr>
+              <th ></th>
+              <th>Ime</th>
+              <th >Prezime</th>
+              <th >Ocena</th>
+              <th >Lista vremena</th>
+              <th ></th>
+            </tr>
+            <tr v-for="k,i in lekari.length">
+              <td></td>
+              <td>{{lekari[i].ime}}</td>
+              <td>{{lekari[i].prezime}}</td>
+              <td>{{lekari[i].ocena}}</td>
+              <td></td>
+              <td style="text-align: center">   <button v-on:click="" class="btn btn-warning" style=" border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash">Dalje</i></button>
+              </td>
+            </tr>
+                </tbody>
+              </table>     
+      
+    </div>   
+  
     </form>
-     
+  </div>   
+
 </div>
 
 
@@ -308,7 +382,7 @@
 
 <script>
   import axios from 'axios'
-      export default {
+  export default {
    data() {
        return {
 
@@ -318,8 +392,16 @@
         klinika: {},
         zdravstveniK: {},
         korisnik: {},
-        pregledi: {},
-        pregled: {},
+        udpregledi: {},
+        udpregled: {},
+        lekari: {},
+        tipovi: {},
+        rezultatiPretrage: [],
+        pretragaKlinika: {
+	        tipPregleda: "",
+	        datum: "",
+        },
+        ukljucenaPretraga: false,
         prikaz:false,
         prikazZK:false,
         prikazPREGLED:false,
@@ -327,7 +409,8 @@
         prikazListaKlinika: false,
         prikazKlinike: false,
         izmeni:false,
-        id: 1
+        id: 1,
+        filteri: ['Tip pregleda', 'Datum pregleda'],
 
         }
     },
@@ -369,11 +452,13 @@
                },
 
   otvoriKliniku(k){
+    
       axios
 
 	        .get("/klinika/pronadjiKliniku1/"+ k.id)
 
 	        .then(kl =>{
+
 	          this.klinika = kl.data;
           })
               this.prikazKlinike=!this.prikazKlinike; 
@@ -382,11 +467,67 @@
               this.prikaz=false;
               this.prikazZK=false;
               this.prikazUDPREGLEDI=false;
-    
     },
-   zakaziPregled(p){
+
+  pretragaKlinike(){
+          
+             axios
+        .post("/klinika/pretraga/" + this.$store.state.user.id, this.pretragaKlinika)
+        .then(klinike =>{
+         this.klinike = klinike.data;
+            this.rezultatiPretrage = klinike.data;
+            this.ukljucenaPretraga = true;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+           
+       
+    },    
+    ponistiPretraguKlinika(){
+        
         axios
-        .post("/pregled/zakaziPregled/"+this.$store.state.user.id,p)
+        axios
+      .get('/klinika/izlistajK')
+      .then(klinika =>{
+        this.klinike = klinika.data;
+      
+       this.pretragaKlinika.datum = "", 
+       this.pretragaKlinika.tipPregleda = "",
+        
+        this.ukljucenaPretraga = false;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+        
+    },
+  prikazLekara(k) {
+
+        axios
+        .get('/lekar/izlistajLekare/'+ k.id)
+        .then(lekari =>{
+            this.lekari = lekari.data;
+          })
+        .catch(error => {
+            console.log(error)
+      });
+    },
+
+  izlistajTipove() {
+        axios
+		    .get("/tipPregleda/TipoviKlinike1/")
+		    .then(tipovi => {
+		        this.tipovi = tipovi.data;
+		      })
+		    .catch(error => {
+		        console.log(error);
+	      });
+    },
+
+   zakaziUDPregled(p){
+        axios
+        .post("/pregled/zakaziUDPregled/"+this.$store.state.user.id,p)
         .then(() => {
               alert('Uspesno ste zakazali pregled');
 	        })
@@ -408,7 +549,7 @@
   izmena() {
               this.izmeni = true;
   },
-  udpregledi(klinika) {
+  prikazudpregledi(klinika) {
               this.prikaz=false;
               this.prikazUDPREGLEDI=!this.prikazUDPREGLEDI;
               this.prikazListaKlinika=false;
@@ -418,13 +559,14 @@
 
     axios
       .get('/pregled/izlistajUDP/'+ klinika.id)
-      .then(pregledi =>{
-        this.pregledi = pregledi.data;
+      .then(udpregledi =>{
+        this.udpregledi = udpregledi.data;
       })
       .catch(error => {
           console.log(error)
       });
   },
+ 
   listaKlinika(){
 	 	
             this.prikazListaKlinika=!this.prikazListaKlinika;
@@ -434,11 +576,9 @@
             this.prikazUDPREGLEDI=false;
             this.prikazKlinike=false;
     axios
-    
       .get('/klinika/izlistajK')
       .then(klinika =>{
         this.klinike = klinika.data;
-        console.log('USAO');
       })
       .catch(error => {
           console.log(error)
@@ -476,9 +616,10 @@
         .catch(error => {
             console.log(error)
         });
-      }
-      },
-     
+
+  }
+    },
+    
    mounted() {
      
         axios
@@ -504,6 +645,12 @@ font-family: 'Roboto', sans-serif;
 font-size: 16px;
 }
 
+th {
+  display: table-cell;
+  vertical-align: inherit;
+  font-weight: bold;
+  text-align: center;
+}
 /* Toggle Styles */
 
 #viewport {

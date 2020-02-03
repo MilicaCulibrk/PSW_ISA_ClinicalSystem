@@ -271,14 +271,7 @@ public Integer getKraj() {
 public void setKraj(Integer kraj) {
 	this.kraj = kraj;
 }
-@Override
-public String toString() {
-	return "Lekar [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", lozinka=" + lozinka
-			+ ", adresa=" + adresa + ", grad=" + grad + ", drzava=" + drzava + ", telefon=" + telefon + ", jmbg=" + jmbg
-			+ ", ocena=" + ocena + ", brojRecenzija=" + brojRecenzija + ", izvestaj=" + izvestaj + ", klinika="
-			+ klinika + ", radniKalendar=" + radniKalendar + ", pregled=" + pregled + ", operacija=" + operacija
-			+ ", zahtevZaOdmor=" + zahtevZaOdmor + ", recept=" + recept + "]";
-}
+
 
 
 

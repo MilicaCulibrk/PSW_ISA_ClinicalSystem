@@ -92,6 +92,22 @@ public class TipPregledaController {
 
 		return new ResponseEntity<>(tipoviDTO, HttpStatus.OK);
 	}
+	@GetMapping(value = "/TipoviKlinike1")
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<List<TipPregledaDTO>> getTipovi1() {
+		
+		List<TipPregleda> tipoviPregleda = tipPregledaService.findAll();
+
+		List<TipPregledaDTO> tipoviDTO = new ArrayList<>();
+		
+		
+		for (TipPregleda tip : tipoviPregleda) {
+			tipoviDTO.add(new TipPregledaDTO(tip));
+		    }
+		
+
+		return new ResponseEntity<>(tipoviDTO, HttpStatus.OK);
+	}
 	
 	@PostMapping(value = "/dodaj/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
