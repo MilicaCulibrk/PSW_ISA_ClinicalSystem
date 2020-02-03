@@ -46,6 +46,8 @@ public class PregledController {
 	@Autowired
 	private PregledService pregledService;
 
+	@Autowired
+	private PregledRepository pregledRepository;
 
 	
 	
@@ -66,7 +68,50 @@ public class PregledController {
 										}
 		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
 	}
-	@PostMapping(value = "/zakaziPregled/{idPacijenta}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	
+	@GetMapping(value = "/izlistaj")
+	@PreAuthorize("hasAuthority('LEKAR')")
+	public ResponseEntity<List<PregledDTO>> getPreglede() {
+		
+		List<Pregled> listaPregleda = pregledService.findAll();
+		List<PregledDTO> listaPregledaDTO = new ArrayList<PregledDTO>();
+		
+		
+		for (Pregled p : listaPregleda) {
+					
+			listaPregledaDTO.add(new PregledDTO(p));
+		}	
+										
+		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/zavrsi")
+	@PreAuthorize("hasAuthority('LEKAR')")
+	public ResponseEntity<List<PregledDTO>> zavrsiPregled( @RequestBody PregledDTO pregledDTO) {
+		
+		List<Pregled> listaPregleda = pregledService.findAll();
+		List<PregledDTO> listaPregledaDTO = new ArrayList<PregledDTO>();
+		
+		
+		for (Pregled p : listaPregleda) {
+			if(p.getId() == pregledDTO.getId()) {
+				p.setZavrsen(true);
+				pregledRepository.save(p);
+				break;
+			}
+		}	
+		
+		List<Pregled> listaPregleda2 = pregledService.findAll();
+		
+		for (Pregled p : listaPregleda2) {
+			listaPregledaDTO.add(new PregledDTO(p));
+		}	
+										
+		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
+	}
+	
+	
+	@PostMapping(value = "/zakaziUDPregled/{idPacijenta}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('PACIJENT')")
 	public ResponseEntity<PregledDTO> zakaziPregled( @RequestBody PregledDTO pregledDTO, @PathVariable Long idPacijenta) {
 		
@@ -84,8 +129,6 @@ public class PregledController {
 		return new ResponseEntity<>( newPregledDTO, HttpStatus.OK);
 		
 	}
-	
-	
 	
 	
 	//dodaj predefinisani pregled kao administrator klinike sa ogranicenjima

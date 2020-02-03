@@ -56,6 +56,7 @@ public class PregledService {
 		pregled.setTipPregleda(tipPregledaRepository.getOne(pregledDTO.getTipPregleda().getId()));
 		pregled.setTrajanje(pregledDTO.getTrajanjePregleda());
 		pregled.setIdPacijenta(null);
+		pregled.setZavrsen(false);
 		System.out.println(pregledDTO.getTrajanjePregleda());
 		pregledRepository.save(pregled);
 		

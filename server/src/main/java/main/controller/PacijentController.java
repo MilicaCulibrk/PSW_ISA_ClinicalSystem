@@ -92,7 +92,7 @@ public class PacijentController {
 	
 	
 	@GetMapping(value = "/izlistaj")
-	@PreAuthorize("hasAnyAuthority('LEKAR')")
+	@PreAuthorize("hasAnyAuthority('LEKAR, MEDICINSKA_SESTRA')")
 	public ResponseEntity<List<PacijentDTO>> getIzlistaj() {
 		
 		List<Pacijent> listaPacijenata = pacijentService.findAll();
@@ -105,7 +105,7 @@ public class PacijentController {
 	}
 	
 	@PutMapping(value = "/azuriraj")
-	@PreAuthorize("hasAnyAuthority('LEKAR')")
+	@PreAuthorize("hasAnyAuthority('LEKAR, MEDICINSKA_SESTRA')")
 	public ResponseEntity<List<PacijentDTO>> getAzuriraj(@RequestBody String sortBy) {
 		
 		List<Pacijent> listaPacijenata = pacijentService.sortiraj(sortBy);
