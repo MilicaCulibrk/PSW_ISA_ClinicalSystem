@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import main.dto.LekarDTO;
 import main.model.Authority;
 import main.model.Lekar;
+import main.model.Lekar;
 import main.repository.AuthorityRepository;
 import main.repository.KlinikaRepository;
 import main.repository.LekarRepository;
@@ -108,6 +109,40 @@ public class LekarService {
 		// TODO Auto-generated method stub
 		lekarRepository.deleteById(id);
 	}
+	
+public List<Lekar> pronadjiLekare( String ime, String prezime){
+		
+		//lista pregleda koju vracam
+		List<Lekar> ret = new ArrayList<Lekar>();
+		
+		List<Lekar> sviLekari = lekarRepository.findAll();
+		
+	
+		if(ime == null && prezime == null ) {
+			ret = sviLekari;
+		}else if(ime != null && prezime == null){
+			for(Lekar p : sviLekari) {
+				if(p.getIme().contains(ime)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime == null && prezime != null){
+			for(Lekar p : sviLekari) {
+				if(p.getPrezime().contains(prezime)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime != null){
+			for(Lekar p : sviLekari) {
+				if(p.getIme().contains(ime) && p.getPrezime().contains(prezime)) {
+					ret.add(p);
+				}
+			}
+		}
+		
+	
+		return ret;
+		}
 	
 
 	
