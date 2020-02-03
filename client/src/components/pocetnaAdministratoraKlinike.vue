@@ -185,7 +185,7 @@
 							              <label for="Form-phone" style="color: #b3b3b3;">Sala</label>
                                           <b-form-select v-model="selektovanaSala">
 							                    <option
-							                      v-for="s in pomocna"
+							                      v-for="s in sale"
 							                      :value="s.id"
 							                      :key="s.id"
 							                    >{{s.naziv}}</option>

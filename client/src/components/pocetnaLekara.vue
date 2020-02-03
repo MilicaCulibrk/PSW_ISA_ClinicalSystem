@@ -136,7 +136,7 @@
                               <div  style="position: relative; top: 10px; left: 300px; width: 650px; height: 100px; background-color: rgba(130, 206, 209, 0.733); ">	                    
                                    <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
                                      <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
-                                          <label for="Form-username" style="color: #b3b3b3;">Selektuj po:</label>
+                                          <label for="Form-username" style="color: #b3b3b3;">Sortiraj po:</label>
                                           <b-form-select v-model="odabirSortiranja" @change="azuriraj()" >
                                             <option 
                                               v-for="i in sortiranje"
@@ -188,9 +188,7 @@
                           <div class="column" >
                             <button class="btn btn-light" style="background-color: #eeeeee; width: 395px; height: 100px; font-size : 30px;" v-on:click="zapocniPregled">Zapocni pregled</button>
                           </div>
-                                                    <div class="column" >
-                            <button class="btn btn-light" style="background-color: #eeeeee; width: 395px; height: 100px; font-size : 30px;" v-on:click="probaj">Proba</button>
-                          </div>
+                          
 
                           </div>
                          <div class="row">
@@ -413,6 +411,7 @@ export default {
 	        jmbg: "",
         },
       zdravstveniK: {},
+      zapocetPregled: false,
       prikazZK: false,
       prikaz:false,
       izmeni:false,
@@ -424,6 +423,7 @@ export default {
       prikazZapocniPregled: false,
       dijagnoze: [],
       lekovi: [],
+      pregledi: [],
       dijagnoza: {},
       odabirSortiranja: "",
       lek: {},
@@ -587,19 +587,33 @@ export default {
         },    
         
     otvoriZK(idzk){
-	event.preventDefault();
-      axios
+  event.preventDefault();
 
-	        .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ idzk)
+       var flag = 0;
+       for(var i = 0; i < this.pregledi.length; i++){
+      
+          if((this.pregledi[i].idPacijenta == this.trenutniPacijent.id && this.pregledi[i].lekar.id == this.$store.state.user.id && this.pregledi[i].zavrsen == true) || (this.pregledi[i].idPacijenta == this.trenutniPacijent.id && this.pregledi[i].lekar.id == this.$store.state.user.id && this.pregledi[i].zavrsen == false && this.zapocetPregled == true)){
+            flag = 1;
+            break;
+          }  
+        }
+  
+      console.log(flag);
+      if(flag == 1){
+            axios
 
-	        .then(z =>{
-	          this.zdravstveniK = z.data;
+          .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ idzk)
+
+          .then(z =>{
+            this.zdravstveniK = z.data;
           })
-      this.prikazZK=!this.prikazZK;
-      this.prikazPacijenata=false;
-     // this.prikazPacijenta=false;
+          this.prikazZK=!this.prikazZK;
+          this.prikazPacijenata=false;
+          // this.prikazPacijenta=false;
         this.ponistiPretraguPacijenata();
-
+      }else{
+        alert('Niste nikad pregledali tog pacijenta!');
+      }
     },
     izmenaZK(){
       this.izmeniZK = true
@@ -653,16 +667,61 @@ export default {
         this.prikazZK = false;
         this.prikazZapocniPregled = false;
            this.ponistiPretraguPacijenata();
-	  	},
+      },
+      izlistajPreglede(){
+      
+      },
+
       zapocniPregled(){
-	event.preventDefault();
-        this.prikazZapocniPregled = !this.prikazZapocniPregled;
+     
+        event.preventDefault();
+
+        this.zapocetPregled = true;
+
+        var flag = 0;
+        for(var i = 0; i < this.pregledi.length; i++){
+          //samo ako postoji zakazan pregled kod tog pacijenta lekar moze da ga zapocne
+          if(this.pregledi[i].idPacijenta == this.trenutniPacijent.id && this.pregledi[i].lekar.id == this.$store.state.user.id && this.pregledi[i].zavrsen == false){
+            flag = 1;
+            break;
+          }  
+        }
+
+        if(flag == 1){
+          this.prikazZapocniPregled = !this.prikazZapocniPregled;
       //  this.prikazPacijenta = false;
+        }else{
+          alert('Nemate zakazan pregled kod tog pacijenta!');
+        }
+    
       },
       probaj(){
 		console.log('da vidimo jel radi');
       },
       dodajIzvestaj(){
+
+      event.preventDefault();
+
+      
+
+      var flag = 0;
+      for(var i = 0; i < this.pregledi.length; i++){
+        //samo ako postoji zakazan pregled kod tog pacijenta lekar moze da ga zapocne
+        if(this.pregledi[i].idPacijenta == this.trenutniPacijent.id && this.pregledi[i].lekar.id == this.$store.state.user.id && this.pregledi[i].zavrsen == false){
+          
+          axios
+		      .put("/pregled/zavrsi", this.pregledi[i])
+		      .then(pregledi => {
+			        this.pregledi = pregledi.data;
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+
+          break;
+        }  
+      }
+
         this.izvestaj.idPacijenta = this.trenutniPacijent.id;
         this.izvestaj.idLekara = this.$store.state.user.id;
         this.izvestaj.lekovi = this.izabraniLekovi;
@@ -868,6 +927,18 @@ export default {
   },
  mounted() {
    {
+         axios
+		      .get("/pregled/izlistaj")
+		      .then(pregledi => {
+              this.pregledi = pregledi.data;
+              
+              console.log(this.pregledi);
+              console.log(this.pregledi.length);
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+        }{
       axios
       .get("/lekar/get/" + this.$store.state.user.id)
       .then(lekar =>{

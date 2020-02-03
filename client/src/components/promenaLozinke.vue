@@ -28,6 +28,7 @@
       },
       methods: {
            login(){
+            event.preventDefault();
                 var temp = this;
                 if (this.lozinka2=="" || this.lozinka==""){
                     alert('Morate uneti sva polja!');
