@@ -92,6 +92,25 @@ public class TipPregledaController {
 
 		return new ResponseEntity<>(tipoviDTO, HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/nadjiTip/{id}")
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<TipPregledaDTO> nadjiTip(@PathVariable String id) {
+		
+		Long idLong = Long.parseLong(id);
+		Lekar lekar = lekarService.findOne(idLong);
+		
+		TipPregleda tipPregleda = lekar.getTipPregleda();
+		
+		TipPregledaDTO tipPregledaDTO = new TipPregledaDTO(tipPregleda);
+		
+		
+
+		return new ResponseEntity<>(tipPregledaDTO, HttpStatus.OK);
+	}
+	
+	
+	
 	@GetMapping(value = "/TipoviKlinike1")
 	@PreAuthorize("hasAuthority('PACIJENT')")
 	public ResponseEntity<List<TipPregledaDTO>> getTipovi1() {

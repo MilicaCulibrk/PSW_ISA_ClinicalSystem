@@ -40,7 +40,7 @@ INSERT INTO public.sala(
 	VALUES (10, 'InfektivnaSala', 2);
 	
 INSERT INTO public.tip_pregleda(naziv, oznaka, cena, klinika_id)
-	VALUES ('Pregled bubrega', 'bbr', ' 3000', 1);
+	VALUES ('Pregled bubrega', 'bbr', ' 1500', 1);
 	
 INSERT INTO public.tip_pregleda(naziv, oznaka, cena, klinika_id)
 	VALUES ('Kardio', 'krd', ' 3000', 1);

@@ -21,11 +21,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import main.dto.KlinikaDTO;
 import main.dto.LekarDTO;
 import main.dto.ZahtevZaOdmorDTO;
 import main.dto.PregledDTO;
+<<<<<<< HEAD
+import main.dto.PretragaKlinikeDTO;
+=======
+>>>>>>> 7134eec93aad06a6e172b7452917265ca08fe1de
 import main.dto.PretragaLekaraDTO;
 import main.dto.TipPregledaDTO;
+import main.model.Klinika;
 import main.model.Lekar;
 import main.model.Pregled;
 import main.model.ZahtevZaOdmor;
@@ -44,20 +50,47 @@ public class LekarController {
 	@Autowired
 	private PregledService pregledService;
 
+
 	@GetMapping(value = "/izlistajLekare/{idKlinike}")
 	@PreAuthorize("hasAuthority('PACIJENT')")
-	public ResponseEntity<List<LekarDTO>> getIzlistajLekare(@PathVariable Long idKlinike) {
+	public ResponseEntity<List<LekarDTO>> getIzlistajLekare(@PathVariable Long idKlinike) {      
 		
+
+    
+
 		List<Lekar> listaLekara = lekarService.findAll();
 		List<LekarDTO> listaLekaraDTO = new ArrayList<LekarDTO>();
-		
-		
+	
 		for (Lekar l : listaLekara) {
-				if(l.getKlinika().getId().equals(idKlinike))
-					
-			listaLekaraDTO.add(new LekarDTO(l));
+			if(l.getKlinika().getId().equals(idKlinike))
+				
+				listaLekaraDTO.add(new LekarDTO(l));
+	
+		}
+		
 			
-										}
+		return new ResponseEntity<>(listaLekaraDTO, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/izlistajLekarePoTP/{idKlinike}")
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<List<LekarDTO>> getIzlistajLekarePoTP(@RequestBody PretragaKlinikeDTO pretragaKlinikaDTO, @PathVariable Long idKlinike) {      
+		
+		
+		System.out.println(pretragaKlinikaDTO.getTipPregleda());
+
+   		List<Lekar> listaLekara = lekarService.findAll();
+		List<LekarDTO> listaLekaraDTO = new ArrayList<LekarDTO>();
+	
+		for (Lekar l : listaLekara) {
+			if(l.getKlinika().getId().equals(idKlinike) && l.getTipPregleda().getNaziv().equals(pretragaKlinikaDTO.getTipPregleda())) {
+				
+				listaLekaraDTO.add(new LekarDTO(l));
+			}
+	
+		}
+		
+			
 		return new ResponseEntity<>(listaLekaraDTO, HttpStatus.OK);
 	}
 
@@ -74,6 +107,22 @@ public class LekarController {
 		LekarDTO lekarDTO = new LekarDTO(lekar);
 
 		return new ResponseEntity<>(lekarDTO, HttpStatus.OK);
+	}
+	@GetMapping(value = "/get1/{id}")
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<LekarDTO> getLekar1(@PathVariable Long id) {
+	
+		Lekar lekar = lekarService.findOne(id);
+		String tipPregleda = lekar.getTipPregleda().getNaziv();
+		
+		if (lekar == null) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+
+		LekarDTO lekarDTO = new LekarDTO(lekar);
+
+		return new ResponseEntity<>(lekarDTO, HttpStatus.OK);
+		
 	}
 	
 	
@@ -240,6 +289,23 @@ public class LekarController {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
+<<<<<<< HEAD
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	 @PostMapping(value = "/pretraga/{id}",consumes = "application/json")
+   public ResponseEntity<?> pretragaLekara(@RequestBody PretragaLekaraDTO pretragaLekaraDTO, @PathVariable Long id){
+
+
+	    	
+	    	String ime = null;
+	    	String prezime =  null;
+	    	Double ocena = null;
+	    	
+
+	    	
+	    	if(pretragaLekaraDTO.getIme() != null) {
+	    		if(!pretragaLekaraDTO.getIme().equals("")){
+	    			ime = pretragaLekaraDTO.getIme();	    		
+=======
 	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
 	@PostMapping(value = "/pretraga/{id}",consumes = "application/json")
     public ResponseEntity<?> pretragaPacijenta(@RequestBody PretragaLekaraDTO pretragaLekaraDTO, @PathVariable Long id){
@@ -253,6 +319,7 @@ public class LekarController {
 	    		if(!pretragaLekaraDTO.getIme().isEmpty()) {
 	    		
 	    			ime = pretragaLekaraDTO.getIme();
+>>>>>>> 7134eec93aad06a6e172b7452917265ca08fe1de
 	    		}
 	    	}
 	    	
@@ -261,6 +328,28 @@ public class LekarController {
 	    			prezime = pretragaLekaraDTO.getPrezime();	    		
 	    		}
 	    	}
+<<<<<<< HEAD
+	    	
+	      	if(pretragaLekaraDTO.getOcena() != null) {
+	    		if(!pretragaLekaraDTO.getOcena().equals("")){
+	    			ocena = pretragaLekaraDTO.getOcena();	    		
+	    		}
+	    	}
+	    	
+
+	    	List<Lekar> lekari = lekarService.pronadjiLekare( ime,prezime,ocena);
+
+			List<LekarDTO> lekariDTO = new ArrayList<>();
+			
+			for (Lekar l : lekari) {
+				lekariDTO.add(new LekarDTO(l));
+			}
+
+	    	return new ResponseEntity<>(lekariDTO, HttpStatus.OK);
+
+
+	    }
+=======
 	    
 
 	    	Lekar lekar =  lekarService.findOne(id);
@@ -280,5 +369,6 @@ public class LekarController {
 
 	
 	
+>>>>>>> 7134eec93aad06a6e172b7452917265ca08fe1de
 	
 }

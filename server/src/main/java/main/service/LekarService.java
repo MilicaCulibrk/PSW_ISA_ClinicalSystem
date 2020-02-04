@@ -11,7 +11,11 @@ import org.springframework.stereotype.Service;
 import main.dto.LekarDTO;
 import main.model.Authority;
 import main.model.Lekar;
+<<<<<<< HEAD
+import main.model.Pacijent;
+=======
 import main.model.Lekar;
+>>>>>>> 7134eec93aad06a6e172b7452917265ca08fe1de
 import main.repository.AuthorityRepository;
 import main.repository.KlinikaRepository;
 import main.repository.LekarRepository;
@@ -145,6 +149,63 @@ public List<Lekar> pronadjiLekare( String ime, String prezime){
 		}
 	
 
+public List<Lekar> pronadjiLekare( String ime, String prezime, Double ocena){
+		
+		//lista lekara koju vracam
+		List<Lekar> ret = new ArrayList<Lekar>();
+		
+		List<Lekar> sviLekari = lekarRepository.findAll();
+		
+	
+		if(ime == null && prezime == null && ocena == null) {
+			ret = sviLekari;
+		}else if(ime == null && prezime == null && ocena != null){
+			for(Lekar p : sviLekari) {
+				if(p.getOcena()==ocena) {
+					ret.add(p);
+				}
+			}
+		}else if(ime == null && prezime != null && ocena == null){
+			for(Lekar p : sviLekari) {
+				if(p.getPrezime().equals(prezime)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime == null && ocena == null){
+			for(Lekar p : sviLekari) {
+				if(p.getIme().equals(ime)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime != null && ocena == null){
+			for(Lekar p : sviLekari) {
+				if(p.getIme().equals(ime) && p.getPrezime().equals(prezime)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime == null && ocena != null){
+			for(Lekar p : sviLekari) {
+				if(p.getIme().equals(ime) && p.getOcena()==ocena) {
+					ret.add(p);
+				}
+			}
+		}else if(ime == null && prezime != null && ocena != null){
+			for(Lekar p : sviLekari) {
+				if(p.getPrezime().equals(prezime) && p.getOcena()==ocena) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime != null && ocena != null){
+			for(Lekar p : sviLekari) {
+				if(p.getPrezime().equals(prezime) && p.getOcena()==ocena  && p.getIme().equals(ime)) {
+					ret.add(p);
+				}
+			}
+		}
+		
+	
+		return ret;
+		}
 	
 
 }
