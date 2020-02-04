@@ -149,6 +149,7 @@
 			                  </tr>
 			                  </tbody>
 			        </table>    
+			        <button v-on:click="pritisni">Pritisni me</button>
 			 </div>
 			 </div>
           </div>
@@ -347,6 +348,9 @@ export default {
 		      .catch(error => {
 		          console.log(error)
 		      });
+	  	},
+	  	pritisni(){
+        console.log('pritislo');
 	  	},
 	  	obrisiPacijenta(id){
       		axios

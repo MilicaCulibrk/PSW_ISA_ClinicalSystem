@@ -88,43 +88,43 @@ public class PacijentService {
 			ret = sviPacijenti;
 		}else if(ime == null && prezime == null && jmbg != null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getJmbg().equals(jmbg)) {
+				if(p.getJmbg().contains(jmbg)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime == null && prezime != null && jmbg == null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getPrezime().equals(prezime)) {
+				if(p.getPrezime().contains(prezime)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime != null && prezime == null && jmbg == null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getIme().equals(ime)) {
+				if(p.getIme().contains(ime)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime != null && prezime != null && jmbg == null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getIme().equals(ime) && p.getPrezime().equals(prezime)) {
+				if(p.getIme().contains(ime) && p.getPrezime().contains(prezime)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime != null && prezime == null && jmbg != null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getIme().equals(ime) && p.getJmbg().equals(jmbg)) {
+				if(p.getIme().contains(ime) && p.getJmbg().contains(jmbg)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime == null && prezime != null && jmbg != null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getPrezime().equals(prezime) && p.getJmbg().equals(jmbg)) {
+				if(p.getPrezime().contains(prezime) && p.getJmbg().contains(jmbg)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime != null && prezime != null && jmbg != null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getPrezime().equals(prezime) && p.getJmbg().equals(jmbg)  && p.getIme().equals(ime)) {
+				if(p.getPrezime().contains(prezime) && p.getJmbg().contains(jmbg)  && p.getIme().contains(ime)) {
 					ret.add(p);
 				}
 			}

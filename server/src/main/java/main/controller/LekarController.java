@@ -23,7 +23,10 @@ import org.springframework.web.bind.annotation.RestController;
 import main.dto.KlinikaDTO;
 import main.dto.LekarDTO;
 import main.dto.PregledDTO;
+<<<<<<< HEAD
 import main.dto.PretragaKlinikeDTO;
+=======
+>>>>>>> 7134eec93aad06a6e172b7452917265ca08fe1de
 import main.dto.PretragaLekaraDTO;
 import main.dto.TipPregledaDTO;
 import main.model.Klinika;
@@ -260,6 +263,7 @@ public class LekarController {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
+<<<<<<< HEAD
 	@PreAuthorize("hasAuthority('PACIJENT')")
 	 @PostMapping(value = "/pretraga/{id}",consumes = "application/json")
    public ResponseEntity<?> pretragaLekara(@RequestBody PretragaLekaraDTO pretragaLekaraDTO, @PathVariable Long id){
@@ -275,6 +279,21 @@ public class LekarController {
 	    	if(pretragaLekaraDTO.getIme() != null) {
 	    		if(!pretragaLekaraDTO.getIme().equals("")){
 	    			ime = pretragaLekaraDTO.getIme();	    		
+=======
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	@PostMapping(value = "/pretraga/{id}",consumes = "application/json")
+    public ResponseEntity<?> pretragaPacijenta(@RequestBody PretragaLekaraDTO pretragaLekaraDTO, @PathVariable Long id){
+
+
+	    	String ime = null;
+	    	String prezime = null;
+	    	    	
+
+	    	if(pretragaLekaraDTO.getIme() != null) {
+	    		if(!pretragaLekaraDTO.getIme().isEmpty()) {
+	    		
+	    			ime = pretragaLekaraDTO.getIme();
+>>>>>>> 7134eec93aad06a6e172b7452917265ca08fe1de
 	    		}
 	    	}
 	    	
@@ -283,6 +302,7 @@ public class LekarController {
 	    			prezime = pretragaLekaraDTO.getPrezime();	    		
 	    		}
 	    	}
+<<<<<<< HEAD
 	    	
 	      	if(pretragaLekaraDTO.getOcena() != null) {
 	    		if(!pretragaLekaraDTO.getOcena().equals("")){
@@ -303,5 +323,26 @@ public class LekarController {
 
 
 	    }
+=======
+	    
+
+	    	Lekar lekar =  lekarService.findOne(id);
+
+	    	//lekari koje vracam
+	    	List<Lekar> lekari = lekarService.pronadjiLekare(ime, prezime);
+
+			List<LekarDTO> lekarDTO = new ArrayList<>();
+			for (Lekar l : lekari) {
+				lekarDTO.add(new LekarDTO(l));
+			}
+
+	    	return new ResponseEntity<>(lekarDTO, HttpStatus.OK);
+
+
+	    }
+
+	
+	
+>>>>>>> 7134eec93aad06a6e172b7452917265ca08fe1de
 	
 }
