@@ -62,7 +62,7 @@ public class Lekar implements UserDetails{
    private String jmbg;
 	
 	@Column(name = "ocena", nullable = false)
-   private int ocena;
+   private double ocena;
 	
 	@Column(name = "pocetak", nullable = false)
 	private Integer pocetak;
@@ -116,7 +116,7 @@ public Lekar() {
 	// TODO Auto-generated constructor stub
 }
 public Lekar(String ime, String prezime, String email, String lozinka, String adresa, String grad, String drzava,
-		String telefon, String jmbg, int ocena, int brojRecenzija, Collection<Izvestaj> izvestaj) {
+		String telefon, String jmbg, Double ocena, int brojRecenzija, Collection<Izvestaj> izvestaj) {
 	super();
 	this.ime = ime;
 	this.prezime = prezime;
@@ -201,10 +201,10 @@ public String getJmbg() {
 public void setJmbg(String jmbg) {
 	this.jmbg = jmbg;
 }
-public int getOcena() {
+public double getOcena() {
 	return ocena;
 }
-public void setOcena(int ocena) {
+public void setOcena(double ocena) {
 	this.ocena = ocena;
 }
 public int getBrojRecenzija() {

@@ -55,7 +55,7 @@ public class Klinika {
    private String opis;
 	
 	@Column(name = "ocena", nullable = true)
-   private int ocena;
+   private double ocena;
 	
 	@Column(name = "brojRecenzija", nullable = true)
    private int brojRecenzija;
@@ -63,7 +63,7 @@ public class Klinika {
    
    
    public Klinika(Long id, String naziv, String adresa, String email, String grad, String drzava, String telefon,
-			String opis) {
+			String opis, Double ocena) {
 		super();
 		this.id = id;
 		this.naziv = naziv;
@@ -73,6 +73,7 @@ public class Klinika {
 		this.drzava = drzava;
 		this.telefon = telefon;
 		this.opis = opis;
+		this.ocena= ocena;
 	}
 
 
@@ -104,7 +105,7 @@ public class Klinika {
 
 	
 	public Klinika(Long id, String naziv, String adresa, String email, String grad, String drzava, String telefon,
-			String opis, int ocena, int brojRecenzija, Collection<Pacijent> pacijent, KlinickiCentar klinickiCentar,
+			String opis, Double ocena, int brojRecenzija, Collection<Pacijent> pacijent, KlinickiCentar klinickiCentar,
 			Collection<Cenovnik> cenovnik, Collection<MedicinskaSestra> medicinskaSestra,
 			Collection<AdministratorKlinike> administratorKlinike, Collection<Lekar> lekar, Collection<Pregled> pregled,
 			Collection<TipPregleda> tipPregleda) {
@@ -193,14 +194,16 @@ public class Klinika {
 		this.opis = opis;
 	}
 	
-	public int getOcena() {
+	
+	
+	public double getOcena() {
 		return ocena;
 	}
-	
-	public void setOcena(int ocena) {
+
+	public void setOcena(double ocena) {
 		this.ocena = ocena;
 	}
-	
+
 	public int getBrojRecenzija() {
 		return brojRecenzija;
 	}
