@@ -15,15 +15,13 @@
     "bootstrap-vue": "^2.1.0",
     "jquery": "^3.4.1",
     "vue": "^2.6.10",
-<<<<<<< HEAD
-    "vue-cal": "^2.21.0",
-=======
     "vue-cal": "^2.20.0",
->>>>>>> 7134eec93aad06a6e172b7452917265ca08fe1de
+    "vue-ctk-date-time-picker": "^2.4.0",
     "vue-jwt-decode": "^0.1.0",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.1.3",
     "vue-routing": "0.0.1",
+    "vue-simple-calendar": "^4.3.2",
     "vue2-datepicker": "^3.3.0"
   },
   "browserslist": [

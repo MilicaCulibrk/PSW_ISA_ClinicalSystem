@@ -30,6 +30,9 @@ public class Pregled {
 	
 	@Column(name = "cena", nullable = false)
     private double cena;
+	
+	@Column(name = "zavrsen", nullable = false)
+    private boolean zavrsen;
    
 	@Column(name = "id_pacijenta", nullable = true, unique = false)
 	private Long idPacijenta;
@@ -144,6 +147,16 @@ public class Pregled {
 
 	public void setVreme(String vreme) {
 		this.vreme = vreme;
+	}
+
+
+	public boolean isZavrsen() {
+		return zavrsen;
+	}
+
+
+	public void setZavrsen(boolean zavrsen) {
+		this.zavrsen = zavrsen;
 	}
 	
 	

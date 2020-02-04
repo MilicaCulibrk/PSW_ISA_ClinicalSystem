@@ -77,6 +77,9 @@ public class LekarDTO {
 		this.kraj = lekar.getKraj();
 		this.idTipaPregleda = lekar.getTipPregleda().getId();
 		this.promenjenaLozinka = lekar.getPromenjenaLozinka();
+    
+		this.idKlinike = lekar.getKlinika().getId();
+
 		this.ocena=lekar.getOcena();
 	}
 
@@ -90,6 +93,8 @@ public class LekarDTO {
 
 	public void setOcena(Double ocena) {
 		this.ocena = ocena;
+
+
 	}
 
 

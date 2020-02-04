@@ -811,7 +811,7 @@
 
    zakaziUDPregled(p){
         axios
-        .post("/pregled/zakaziUDPregled/"+this.$store.state.user.id,p)
+        .post("/pregled/zakaziUDPregled/"+this.$store.state.user.id, p)
         .then(() => {
               alert('Uspesno ste zakazali pregled');
 	        })
