@@ -188,7 +188,7 @@
 							              <label for="Form-phone" style="color: #b3b3b3;">Sala</label>
                                           <b-form-select v-model="selektovanaSala">
 							                    <option
-							                      v-for="s in pomocna"
+							                      v-for="s in sale"
 							                      :value="s.id"
 							                      :key="s.id"
 							                    >{{s.naziv}}</option>
@@ -380,19 +380,15 @@
                                           <label for="Form-ime" style="color: #b3b3b3;">Naziv</label>
                                           <input type="text" v-model="tipPregleda.naziv" id="Form-ime" class="form-control">
                                           
-										  <label for="Form-ime" style="color: #b3b3b3;">Oznaka</label>
+										                      <label for="Form-ime" style="color: #b3b3b3;">Oznaka</label>
                                           <input type="text" v-model="tipPregleda.oznaka" id="Form-ime" class="form-control">
                                           
                                             <label for="Form-ime" style="color: #b3b3b3;">Cena</label>
                                           <input type="text" v-model="tipPregleda.cena" id="Form-ime" class="form-control">
                                           
-                                      
-                                           <label for="Form-username" style="color: #b3b3b3;">Klinika</label>
-                                           <button  id="Form-username" class="form-control"  disabled>{{tipovi[0].klinika.naziv}}</button>
-
+                                    
                                         </div>
                                         </div>
-                                      
                                       </div>
                                       
                             
@@ -402,6 +398,8 @@
                                         <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajNoviTipPregleda">Dodaj</button>
                                         <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustaniDodajTipPregleda">Odustani</button>
                                         <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); "  v-on:click="izmeniTipPregleda">Izmeni</button>
+                                        <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="pretragaTipovaPregleda">Pretraga</button>
+                                        <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); "  v-on:click="ponistiPretraguTipovaPregleda">Ponisti</button>
                                         </template>
                                       </div>
                             
@@ -750,7 +748,7 @@
                               </div>
                 </form>
 
-                <form   v-if="prikazLekariKlinike" class="message-form" style="position: relative; top: -650px; left: 300px; width: 550px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+                <form v-if="prikazLekariKlinike" class="message-form" style="position: relative; top: -650px; left: 300px; width: 550px; height: 400px; background-color: rgba(130, 206, 209, 0.733); ">
 		          <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
 		            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
 
@@ -773,9 +771,29 @@
        
 		          </div>
 		          </div>        
-		       </form>
-
+           </form>
            
+           <form   v-if="prikazLekariKlinike" class="message-form" style="position: relative; top: -600px; left: 300px; width: 550px; height: 280px; background-color: rgba(130, 206, 209, 0.733); ">
+            <div  class="container d-flex justify-content-center" style="margin-top: 30px">	
+              <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	        
+              
+              <label for="Form-ime" style="color: #b3b3b3; ">Ime</label>
+              <input type="text" style="width: 300px" v-model="pretragaLekara.ime" id="Form-ime" class="form-control">
+              
+              <label for="Form-ime" style="color: #b3b3b3;">Prezime</label>
+              <input type="text" style="width: 300px" v-model="pretragaLekara.prezime" id="Form-ime" class="form-control">
+              
+              <div class="text-center mb-4 mt-4">
+              <template>
+                <button  type="button" class="btn btn-success btn-block z-depth-2"  style="color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);" v-on:click="pretraziLekare">Pretraga</button>
+                <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); "  v-on:click="ponistiPretraguLekara">Ponisti</button>
+              </template>
+            </div>
+            
+              </div>
+            </div>
+          </form>
+
 </div>
 
 </template>
@@ -815,6 +833,10 @@ export default {
 	        datum: "",
 			vreme: "",
 	        
+        },
+        pretragaLekara: {
+	        ime: "",
+	        prezime: "",
         },
       vremena: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
 	  trajanja: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -1030,6 +1052,70 @@ export default {
            
         },    
         
+        pretragaTipovaPregleda(){
+  
+             axios
+        .post("/tipPregleda/pretraga/" + this.$store.state.user.id, this.tipPregleda)
+        .then(tipovi =>{
+         this.tipovi = tipovi.data;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+           
+       
+    },  
+    
+    pretraziLekare(){
+  
+        axios
+      .post("/lekar/pretraga/" + this.$store.state.user.id, this.pretragaLekara)
+      .then(lekari =>{
+      this.lekari = lekari.data;
+      })
+      .catch(error => {
+      console.log(error)
+      });
+  },    
+
+
+
+     
+    ponistiPretraguTipovaPregleda(){
+        
+    axios
+    .get("/tipPregleda/TipoviKlinike/" + this.$store.state.user.id)
+    .then(tipovi => {
+      this.tipovi = tipovi.data;
+
+       this.tipPregleda.naziv = "", 
+       this.tipPregleda.oznaka = "", 
+       this.tipPregleda.cena = ""
+  
+    })
+    .catch(error => {
+      console.log(error);
+    });
+        
+    },
+
+    ponistiPretraguLekara(){
+        
+        axios
+        .get("/lekar/izlistaj/" + this.idKlinike)
+        .then(lekari => {
+          this.lekari = lekari.data;
+    
+           this.pretragaLekara.ime = "", 
+           this.pretragaLekara.prezime = ""
+         
+      
+        })
+        .catch(error => {
+          console.log(error);
+        });
+            
+        },
      
       
         ponistiPretraguSala(){

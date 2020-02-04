@@ -19,7 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.KlinikaDTO;
+import main.dto.PretragaKlinikeDTO;
+import main.dto.PretragaSaleDTO;
+import main.dto.SalaDTO;
+import main.model.AdministratorKlinike;
 import main.model.Klinika;
+import main.model.Sala;
 import main.service.KlinikaService;
 
 
@@ -120,4 +125,42 @@ public class KlinikaController {
 		
 		return new ResponseEntity<>(klinikaDTO, HttpStatus.OK);
 	}
+	
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	 @PostMapping(value = "/pretraga/{id}",consumes = "application/json")
+    public ResponseEntity<?> pretragaKlinike(@RequestBody PretragaKlinikeDTO pretragaKlinikeDTO, @PathVariable Long id){
+
+
+	    	
+	    	String datum = null;
+	    	String tipPregleda =  null;
+	    	
+
+	    	
+	    	if(pretragaKlinikeDTO.getDatum() != null) {
+	    		if(!pretragaKlinikeDTO.getDatum().equals("")){
+	    			datum = pretragaKlinikeDTO.getDatum();	    		
+	    		}
+	    	}
+	    	
+	    	if(pretragaKlinikeDTO.getTipPregleda() != null) {
+	    		if(!pretragaKlinikeDTO.getTipPregleda().equals("")){
+	    			tipPregleda = pretragaKlinikeDTO.getTipPregleda();	    		
+	    		}
+	    	}
+
+	    	//AdministratorKlinike admin =  adminKlinikeService.findOne(id);
+
+	    	List<Klinika> klinike = klinikaService.pronadjiKlinike( datum, tipPregleda);
+
+			List<KlinikaDTO> klinikeDTO = new ArrayList<>();
+			for (Klinika k : klinike) {
+				klinikeDTO.add(new KlinikaDTO(k));
+			}
+
+	    	return new ResponseEntity<>(klinikeDTO, HttpStatus.OK);
+
+
+	    }
+	
 }
