@@ -11,11 +11,8 @@ import org.springframework.stereotype.Service;
 import main.dto.LekarDTO;
 import main.model.Authority;
 import main.model.Lekar;
-<<<<<<< HEAD
 import main.model.Pacijent;
-=======
 import main.model.Lekar;
->>>>>>> 7134eec93aad06a6e172b7452917265ca08fe1de
 import main.repository.AuthorityRepository;
 import main.repository.KlinikaRepository;
 import main.repository.LekarRepository;
