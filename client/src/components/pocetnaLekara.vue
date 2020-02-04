@@ -8,7 +8,7 @@
                       
         <ul class="nav">
           <a href="#">
-              <i v-on:click="otvoriFormu" >    PROFIL          
+              <i v-on:click="otvoriFormu" > PROFIL          
               </i>
           </a>
           <a></a>
@@ -39,7 +39,6 @@
         </ul>
                     
       </div>
-
       <div id="content">
         <div class="container-fluid">
           <h1 style="color: #b3b3b3;">Lekar - {{ korisnik.ime }} {{ korisnik.prezime }} </h1>
@@ -287,7 +286,7 @@
                               </div>
                              
                             </div>
-                            <a href="">+Zakazi novi pregled</a>
+                            <button  type="button" class="btn btn-block z-depth-2" v-b-modal.zakazi>+Zakazi novi pregled</button>
                             <div class="text-center mb-4 mt-4">
                               
 
@@ -307,6 +306,37 @@
                      </div>
                    </div>
                  </form>
+
+                 <b-modal ref="my-modal" id="zakazi" hide-footer title="Zakazi novi pregled/operaciju">
+                 
+                  <label for="Form-ime" >Datum</label>
+                  <b-form-textarea id="textarea"  rows="1" style="height: 50px;" v-model="zahtevZaPregled.datum"></b-form-textarea>
+
+                  <label for="Form-ime" >Vreme</label>
+                  <b-form-select v-model="zahtevZaPregled.vreme">
+                    <option
+                      v-for="v in vremena"
+                    >{{v}}</option>
+                  </b-form-select>
+
+                  <label for="Form-ime" >Trajanje</label>
+                  <b-form-select v-model="zahtevZaPregled.trajanje">
+                    <option
+                      v-for="t in trajanja"
+                    >{{t}}</option>
+                  </b-form-select>
+
+                  <label for="Form-prezime">Vrsta pregleda</label>
+                  <b-form-select v-model="zahtevZaPregled.vrstaPregleda">
+                    <option
+                      v-for="vp in vrstePregleda"
+                    >{{vp}}</option>
+                  </b-form-select>
+               
+                  <b-button class="mt-2"  style=" color: #37474F;  border-color: rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);"  @click="zakaziPregled">Zakazi</b-button>
+                  <b-button class="mt-2"  style=" color: #37474F;  border-color: rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Odustani</b-button>
+                </b-modal>
+               
 	
 	<form v-if="prikazPacijenata"  class="message-form" style="position: relative; top: -120px; left: 1100px; width: 350px; height: 405px; background-color: rgba(130, 206, 209, 0.733); ">
 
@@ -433,6 +463,15 @@ export default {
 	        prezime: "",
 	        jmbg: "",
         },
+      zahtevZaPregled: {
+        datum: "",
+        vreme: "",
+        trajanje: "",
+        vrstaPregleda: "",
+      },
+      vremena: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+      trajanja: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      vrstePregleda: ['pregled', 'operacija'],
       zdravstveniK: {},
       zapocetPregled: false,
       prikazZK: false,
@@ -510,7 +549,32 @@ export default {
           console.log(error)
       });
       },
-      
+
+      zakaziPregled(){
+
+        var idPregleda = null;
+        for(var i = 0; i < this.pregledi.length; i++){
+          if(this.pregledi[i].idPacijenta == this.trenutniPacijent.id && this.pregledi[i].lekar.id == this.$store.state.user.id){
+             idPregleda = this.pregledi[i].id;
+          }
+        }
+
+
+        axios
+        .post("/pregled/podnesiZahtevLekar/" + idPregleda, this.zahtevZaPregled)
+        .then(response => {
+          this.zahtevZaPregled.datum = "";
+          this.zahtevZaPregled.vreme = "";
+          this.zahtevZaPregled.trajanje = "";
+          this.zahtevZaPregled.vrstaPregleda = "";
+          alert('Uspesno ste zakazali pregled!');
+        })
+        .catch(error => {
+            alert("Ne mozete da zakazete pregled u navedenom terminu!");
+        });
+       },
+
+
       otvoriKalendar(){
         this.prikazKalendara = !this.prikazKalendara;
         this.prikazPacijenata = false;

@@ -74,6 +74,7 @@ public class LekarDTO {
 		this.kraj = lekar.getKraj();
 		this.idTipaPregleda = lekar.getTipPregleda().getId();
 		this.promenjenaLozinka = lekar.getPromenjenaLozinka();
+		this.idKlinike = lekar.getKlinika().getId();
 	}
 
 

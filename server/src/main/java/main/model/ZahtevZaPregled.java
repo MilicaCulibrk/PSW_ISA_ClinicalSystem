@@ -1,5 +1,6 @@
 package main.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,112 +17,145 @@ public class ZahtevZaPregled {
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private Long id;
 		
-		@Column(name = "odobren", nullable = false)
-	    private boolean odobren;
+		@Column(name = "datum")
+		private String datum;
 		
-		@Column(name = "terminPregleda", nullable = false)
-	    private long terminPregleda;
+		@Column(name = "vreme")
+		private String vreme;
 		
-		@Column(name = "trajanje", nullable = false)
-	    private long trajanje;
+		@Column(name = "trajanje")
+		private String trajanje;
 		
-		@Column(name = "cena", nullable = false)
-	    private long cena;
-   
+		@Column(name = "vrstaPregleda")
+		private String vrstaPregleda;
+		
+
+		@Column(name = "cena")
+		private Double cena;
+		
+		@Column(name = "id_pacijenta")
+		private Long idPacijenta;
+		
+		@OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+		@JoinColumn(name = "sala_id")
+		private Sala sala;
+		
+		@OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+		@JoinColumn(name = "tip_pregleda_id")
+		private TipPregleda tipPregleda;
+		
+		@OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+		@JoinColumn(name = "lekar_id")
+		private Lekar lekar;
+		
+		@OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+		@JoinColumn(name = "lekar1_id")
+		private Lekar lekar1;
+		
+		@OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+		@JoinColumn(name = "lekar2_id")
+		private Lekar lekar2;
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public String getDatum() {
+			return datum;
+		}
+
+		public void setDatum(String datum) {
+			this.datum = datum;
+		}
+
+		public String getVreme() {
+			return vreme;
+		}
+
+		public void setVreme(String vreme) {
+			this.vreme = vreme;
+		}
+
+		public String getTrajanje() {
+			return trajanje;
+		}
+
+		public void setTrajanje(String trajanje) {
+			this.trajanje = trajanje;
+		}
+
+		public String getVrstaPregleda() {
+			return vrstaPregleda;
+		}
+
+		public void setVrstaPregleda(String vrstaPregleda) {
+			this.vrstaPregleda = vrstaPregleda;
+		}
+
+		public Double getCena() {
+			return cena;
+		}
+
+		public void setCena(Double cena) {
+			this.cena = cena;
+		}
+
+		public Long getIdPacijenta() {
+			return idPacijenta;
+		}
+
+		public void setIdPacijenta(Long idPacijenta) {
+			this.idPacijenta = idPacijenta;
+		}
+
+		public Lekar getLekar() {
+			return lekar;
+		}
+
+		public void setLekar(Lekar lekar) {
+			this.lekar = lekar;
+		}
+
+		public Lekar getLekar1() {
+			return lekar1;
+		}
+
+		public void setLekar1(Lekar lekar1) {
+			this.lekar1 = lekar1;
+		}
+
+		public Lekar getLekar2() {
+			return lekar2;
+		}
+
+		public void setLekar2(Lekar lekar2) {
+			this.lekar2 = lekar2;
+		}
+
+		public Sala getSala() {
+			return sala;
+		}
+
+		public void setSala(Sala sala) {
+			this.sala = sala;
+		}
+
+		public TipPregleda getTipPregleda() {
+			return tipPregleda;
+		}
+
+		public void setTipPregleda(TipPregleda tipPregleda) {
+			this.tipPregleda = tipPregleda;
+		}
+		
+		
  
-	   @OneToOne(fetch = FetchType.LAZY)
-	   @JoinColumn(name = "pacijent_id", referencedColumnName = "id")
-	   public Pacijent pacijent;
 
 
-	public Long getId() {
-		return id;
-	}
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-
-	public boolean isOdobren() {
-		return odobren;
-	}
-
-
-	public void setOdobren(boolean odobren) {
-		this.odobren = odobren;
-	}
-
-
-	public long getTerminPregleda() {
-		return terminPregleda;
-	}
-
-
-	public void setTerminPregleda(long terminPregleda) {
-		this.terminPregleda = terminPregleda;
-	}
-
-
-	public long getTrajanje() {
-		return trajanje;
-	}
-
-
-	public void setTrajanje(long trajanje) {
-		this.trajanje = trajanje;
-	}
-
-
-	public long getCena() {
-		return cena;
-	}
-
-
-	public void setCena(long cena) {
-		this.cena = cena;
-	}
-
-
-	public Pacijent getPacijent() {
-		return pacijent;
-	}
-
-
-	public void setPacijent(Pacijent pacijent) {
-		this.pacijent = pacijent;
-	}
-
-
-	public ZahtevZaPregled() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-
-	public ZahtevZaPregled(Long id, boolean odobren, long terminPregleda, long trajanje, long cena, Pacijent pacijent) {
-		super();
-		this.id = id;
-		this.odobren = odobren;
-		this.terminPregleda = terminPregleda;
-		this.trajanje = trajanje;
-		this.cena = cena;
-		this.pacijent = pacijent;
-	}
-	   
-	   /*@OneToOne(fetch = FetchType.LAZY)
-	   @JoinColumn(name = "sala_id", referencedColumnName = "id")
-	   public Sala sala;
-	 
-	   @OneToOne(fetch = FetchType.LAZY)
-	   @JoinColumn(name = "lekar_id", referencedColumnName = "id")
-	   public Lekar lekar;
-	  
-       @OneToOne(fetch = FetchType.LAZY)
-	   @JoinColumn(name = "tipPregleda_id", referencedColumnName = "id")
-	   public TipPregleda tipPregleda; */
-	   
 	   
 
 }
