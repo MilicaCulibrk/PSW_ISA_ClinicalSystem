@@ -32,6 +32,9 @@
             <a href="#">
               <i v-on:click="otvoriPretragaIfiltriranjeSala"> PRETRAGA I FILTRIRANJE SALA </i>
           </a>
+          <a href="#">
+              <i v-on:click="otvoriZahteveZaOdmor"> ZAHTEVI ZA ODMOR </i>
+          </a>
             <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
 	                </i>     
@@ -499,6 +502,38 @@
                               </div>
                 </form>
                 
+
+                <form v-if="prikazZahtevaZaOdmor"  class="message-form"  style="position: relative; top: 10px; left: 400px; width: 800px; height: 480px; background-color: rgba(130, 206, 209, 0.733); ">
+                  <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+                  
+                  <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+                    <table  id="tablePreview" class="table table-hover" style="width: 100%;">
+                      <thead>
+                        <tr>
+                          <th class="th-lg">Lekar</th>
+                          <th class="th-lg">Od</th>
+                          <th class="th-lg">Do</th>
+                          <th class="th-lg">Odobri</th>
+                          <th class="th-lg">Odbij</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <tr v-for="k,i in zahteviZaOdmor.length">
+                        <td>{{zahteviZaOdmor[i].lekar}}</td>
+                        <td>{{zahteviZaOdmor[i].start}}</td>
+                        <td>{{zahteviZaOdmor[i].end}}</td>
+                        <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="odobriZahtev(zahteviZaOdmor[i])"><i class="fa fa-trash">Odobri</i></button>
+                        </td>
+                        <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="odbijZahtev(zahteviZaOdmor[i])"><i class="fa fa-trash">Odbij</i></button>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+		          </div>
+		          </div>        
+		       </form>
+
+
                 </form>
                   
                   <form v-if="prikazPretragaIfiltriranjeSala" class="message-form" style="position: relative; top: 10px; left: 300px; width: 550px; height: 480px; background-color: rgba(130, 206, 209, 0.733); ">
@@ -739,6 +774,8 @@
 		          </div>
 		          </div>        
 		       </form>
+
+           
 </div>
 
 </template>
@@ -812,10 +849,52 @@ export default {
       izmeniKliniku: false,
       idKlinike: {},
       lekar: {},
-      id: 2
+      id: 2,
+
+      zahteviZaOdmor: {},
+      prikazZahtevaZaOdmor: false,
       }
  },
   methods: {
+        odobriZahtev(zahtev){
+          event.preventDefault();
+            axios
+          .put("/zahtevZaOdmor/odobri", zahtev)
+          .then(odgovor =>{
+            alert("Odobrili ste odmor.");
+            this.prikazZahtevaZaOdmor=false;
+            this.otvoriZahteveZaOdmor();
+
+          })
+          .catch(error => {
+              console.log(error)
+              alert("Greska!");
+          });
+          
+        },
+        odbijZahtev(zahtev){
+          event.preventDefault();
+            axios
+          .put("/zahtevZaOdmor/odbij", zahtev)
+          .then(odgovor =>{
+            this.otvoriZahteveZaOdmor();
+          })
+          .catch(error => {
+              console.log(error)
+              alert("Greska!");
+          });
+        },
+        otvoriZahteveZaOdmor(){
+          this.prikazZahtevaZaOdmor = !this.prikazZahtevaZaOdmor;
+          axios
+		      .get("/adminKlinike/izlistajZahteveZaOdmor/" + this.$store.state.user.id)
+		      .then(odgovor => {
+		        this.zahteviZaOdmor = odgovor.data;
+		      })
+		      .catch(error => {
+		        console.log(error);
+		      });
+        },
         otvoriProfil(){
              this.prikazProfil = !this.prikazProfil,
 		     this.prikazIzmenaKlinike = false,

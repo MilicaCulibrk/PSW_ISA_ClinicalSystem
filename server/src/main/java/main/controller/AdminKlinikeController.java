@@ -1,6 +1,7 @@
 package main.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.validation.ValidationException;
@@ -22,9 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 import main.dto.AdminKlinikeDTO;
 import main.dto.KlinikaDTO;
 import main.dto.LekarDTO;
+import main.dto.ZahtevZaOdmorDTO;
 import main.model.AdministratorKlinike;
 import main.model.Klinika;
 import main.model.Lekar;
+import main.model.ZahtevZaOdmor;
 import main.service.AdminKlinikeService;
 
 
@@ -107,4 +110,25 @@ public class AdminKlinikeController {
 		return new ResponseEntity<>(adminKlinikeDTO, HttpStatus.OK);
 	}
 
+	@GetMapping(value = "/izlistajZahteveZaOdmor/{idAdmina}")
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	public ResponseEntity<List<ZahtevZaOdmorDTO>> getIzlistaj(@PathVariable Long idAdmina) {
+		Collection<ZahtevZaOdmor> listaZahteva = new ArrayList<ZahtevZaOdmor>();
+		List<ZahtevZaOdmorDTO> listaZahtevaDTO = new ArrayList<ZahtevZaOdmorDTO>();
+
+		List<AdministratorKlinike> admini = adminKlinikeService.findAll();
+		for (AdministratorKlinike administratorKlinike : admini) {
+			if(administratorKlinike.getId().equals(idAdmina)) {
+				listaZahteva = administratorKlinike.getZahtevZaOdmor();
+			}
+		}
+		
+		for (ZahtevZaOdmor zzo : listaZahteva) {
+			if(zzo.getOdobren()==null) {
+				listaZahtevaDTO.add(new ZahtevZaOdmorDTO(zzo));
+			}
+		}
+		
+		return new ResponseEntity<>(listaZahtevaDTO, HttpStatus.OK);
+	}
 }

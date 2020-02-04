@@ -1,5 +1,6 @@
 package main.model;
 
+import java.util.ArrayList;
 /***********************************************************************
  * Module:  Lekar.java
  * Author:  23nik
@@ -97,7 +98,7 @@ public class Lekar implements UserDetails{
 	 public java.util.Collection<Operacija> operacija;
 	 
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
-     public java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor;
+     public java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor = new ArrayList<ZahtevZaOdmor>();
 	 
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
      public java.util.Collection<Recept> recept;
@@ -271,14 +272,7 @@ public Integer getKraj() {
 public void setKraj(Integer kraj) {
 	this.kraj = kraj;
 }
-@Override
-public String toString() {
-	return "Lekar [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", lozinka=" + lozinka
-			+ ", adresa=" + adresa + ", grad=" + grad + ", drzava=" + drzava + ", telefon=" + telefon + ", jmbg=" + jmbg
-			+ ", ocena=" + ocena + ", brojRecenzija=" + brojRecenzija + ", izvestaj=" + izvestaj + ", klinika="
-			+ klinika + ", radniKalendar=" + radniKalendar + ", pregled=" + pregled + ", operacija=" + operacija
-			+ ", zahtevZaOdmor=" + zahtevZaOdmor + ", recept=" + recept + "]";
-}
+
 
 
 

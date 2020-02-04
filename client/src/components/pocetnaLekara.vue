@@ -33,7 +33,7 @@
         
 
           <a href="#">
-            <i v-on:click="otvoriListuPacijenata" class="zmdi zmdi-link">LISTA PACIJENATA</i> 
+            <i v-on:click="otvoriZahtevZaOdmor" class="zmdi zmdi-link">ZAHTEV ZA ODMOR</i> 
          </a>
 
         </ul>
@@ -137,7 +137,7 @@
                                    <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
                                      <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
                                           <label for="Form-username" style="color: #b3b3b3;">Selektuj po:</label>
-                                          <b-form-select  >
+                                          <b-form-select >
                                             <option v-on:click="azuriraj('Id')">Id</option>
                                             <option v-on:click="azuriraj('Ime')">Ime</option>
                                             <option v-on:click="azuriraj('Prezime')">Prezime</option>
@@ -382,28 +382,49 @@
  
              </form>     
              <form v-if="prikazKalendara" >
-                  <vue-cal style="height: 400px; width: 100%; " selected-date="2018-11-19"
+                  <vue-cal style="height: 400px; width: 100%; " selected-date="2020-02-03"
                   class="vuecal--blue-theme"
-                    :time-from="8 * 60"
+                    :time-from="8 * 60 "
                     :time-to="23 * 60"
                     :disable-views="['years']"
                     editable-events
                     resize-x
-                    :events="events">
+                    :events="events"
+                    >
                   </vue-cal>
 
              </form>
+             <form v-if="prikazZahtevZaOdmor" style="position: relative; top: 10px; left: 400px;">
+              <div>
+                <date-picker v-model="time3" range></date-picker>
+                <button v-on:click="posaljiZahtev">Posalji zahtev</button>
+              </div>
+
+            </form>
 </div>
 
 </template>
 
 
 <script>
-import axios from 'axios'
-import VueCal from 'vue-cal'
-import 'vue-cal/dist/vuecal.css'
+  import moment from 'moment'
+import axios from 'axios';
+import VueCal from 'vue-cal';
+import 'vue-cal/dist/vuecal.css';
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
 export default {
-  components: { VueCal },
+  components: { VueCal ,
+    DatePicker},
+  computed: {
+    disabledDates () {
+      const now = new Date()
+      const date = new Date(now)
+      date.setDate(now.getDate() +2)
+      return date
+    },
+
+},
  data() {
      return {
       korisnik: {},
@@ -424,6 +445,7 @@ export default {
       prikazPacijenta:false,
       trenutniPacijent:{},
       prikazZapocniPregled: false,
+      odmor: {},
       dijagnoze: [],
       lekovi: [],
       dijagnoza: {},
@@ -442,32 +464,28 @@ export default {
       izabraniLekovi: [],
       pomocna: [],
       rezultatiPretrage: [],
+      lista:{},
+      starti:{},
+      endi:{},
       pomocnaRezultatiPretrage: [],
-            prikazKalendara: false,
+      prikazKalendara: false,
+      prikazZahtevZaOdmor: false,
       events: [
     {
-      start: '2018-11-16 10:00',
-      end: '2018-11-20 12:37',
-      title: 'Running Marathon',
-      content: '<i class="v-icon material-icons">directions_run</i>',
-      class: 'sport'
-    },
-    {
-      start: '2018-11-20 10:00',
-      end: '2018-11-20 10:25',
-      title: 'Drink water!',
-      content: '<i class="v-icon material-icons">local_drink</i>',
-      class: 'health',
-    },
-    {
-      start: '2018-11-21 19:00',
-      end: '2018-11-23 11:30',
-      title: 'Trip to India',
-      content: '<i class="v-icon material-icons">flight</i>',
-      class: 'leisure'
+      startDate: new Date(),
+      endDate: new Date(),
+      title: 'Godisnji odmor',
+      //content: '<i class="v-icon material-icons">directions_run</i>',
+      //class: 'sport',
     }
-  ]
-      
+    
+    
+    ],
+    
+        time1: null,
+        time2: null,
+        time3: null,
+        
       }
   },
   
@@ -492,10 +510,23 @@ export default {
       },
       
       otvoriKalendar(){
-        this.prikazKalendara = true;
+        this.prikazKalendara = !this.prikazKalendara;
         this.prikazPacijenata = false;
         this.prikazPacijenta = false;
         this.prikaz = false;
+        axios
+		      .get("/lekar/izlistajOdmor/" + this.$store.state.user.id)
+		      .then(odgovor => {
+            //this.events = odgovor.data;
+            for (let i = 0; i < odgovor.data.length; i++) {
+              this.events[0].startDate = new Date(odgovor.data[i].start);
+              this.events[0].endDate = new Date(odgovor.data[i].end);
+             }
+   
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
       },
         ponistiPretraguPacijenata(){
         
@@ -683,7 +714,25 @@ export default {
 		      .catch(error => {
 		          console.log(error)
 		      });
-      }
+      },
+    otvoriZahtevZaOdmor(){
+      this.prikazZahtevZaOdmor = !this.prikazZahtevZaOdmor;
+    },
+    posaljiZahtev(){
+      event.preventDefault();
+      this.odmor.lekar = this.$store.state.user.id;
+
+      this.odmor.start = this.time3[0];
+      this.odmor.end = this.time3[1];
+      axios
+		      .post("/zahtevZaOdmor/zatrazi", this.odmor)
+		      .then(odgovor => {
+              alert("Poslat zahtev!");
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+    },
     },
  beforeUpdate(){
   
@@ -860,6 +909,7 @@ export default {
     }
   	
   },
+
  mounted() {
    {
       axios

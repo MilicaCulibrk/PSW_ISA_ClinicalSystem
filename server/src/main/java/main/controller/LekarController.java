@@ -1,6 +1,7 @@
 package main.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.validation.ValidationException;
@@ -21,12 +22,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.LekarDTO;
-import main.dto.TipPregledaDTO;
+import main.dto.ZahtevZaOdmorDTO;
 import main.model.Lekar;
 import main.model.Pregled;
-import main.model.TipPregleda;
+import main.model.ZahtevZaOdmor;
 import main.service.LekarService;
 import main.service.PregledService;
+import main.service.ZahtevZaOdmorService;
 
 @CrossOrigin
 @RestController
@@ -124,6 +126,29 @@ public class LekarController {
 		}
 		
 		return new ResponseEntity<>(listaLekaraDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/izlistajOdmor/{idLekara}")
+	@PreAuthorize("hasAuthority('LEKAR')")
+	public ResponseEntity<?> izlistajOdmor(@PathVariable Long idLekara) {
+	System.out.println("heloooo");
+		List<Lekar> listaLekara = lekarService.findAll();
+		Collection<ZahtevZaOdmor> listaOdmora = new ArrayList<ZahtevZaOdmor>();
+		List<ZahtevZaOdmorDTO> listaOdmoraDTO = new ArrayList<ZahtevZaOdmorDTO>();
+		for (Lekar l : listaLekara) {
+				if(l.getId().equals(idLekara)) {
+					listaOdmora = l.getZahtevZaOdmor();
+				}
+		}
+		for (ZahtevZaOdmor zahtevZaOdmor : listaOdmora) {
+			try{
+				if(zahtevZaOdmor.getOdobren()==true)
+					listaOdmoraDTO.add(new ZahtevZaOdmorDTO(zahtevZaOdmor));
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		return new ResponseEntity<>(listaOdmoraDTO, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/preuzmiInfo/{email}")
