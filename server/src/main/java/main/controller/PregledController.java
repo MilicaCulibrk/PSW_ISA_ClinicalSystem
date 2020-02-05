@@ -237,6 +237,21 @@ public class PregledController {
 		Double vreme = Double.parseDouble(zahtevZaPregledDTO.getVreme());
 		Double trajanje = Double.parseDouble(zahtevZaPregledDTO.getTrajanje());
 		
+		//ako je zakazan pre radnog vremena lekara ili posle
+		if(vreme < pregled.getLekar().getPocetak() || vreme >= pregled.getLekar().getKraj())
+		{
+			flag = true;
+			System.out.println(zahtevZaPregledDTO.getDatum());
+			System.out.println("USAO 3");
+		}
+		
+		//ako je zakazan unutar radnog vremena ali traje duze od radnog vremena
+		if(vreme >= pregled.getLekar().getPocetak() && vreme <= pregled.getLekar().getKraj() && (vreme + trajanje) >= pregled.getLekar().getKraj())
+		{
+			flag = true;
+			System.out.println("USAO 4");
+		}
+		
 		//ako hocu da rezervisem datum za koji vec imam preglede
 		for (Pregled p : pregledi) {
 			 if (zahtevZaPregledDTO.getDatum().equals(p.getDatum())
@@ -246,25 +261,18 @@ public class PregledController {
 					if(vreme >= Double.parseDouble(p.getVreme()) && vreme < (Double.parseDouble(p.getVreme()) + p.getTrajanje()))
 					{
 						flag = true;
+						
+						System.out.println("USAO 1");
 					}
 					
 					//ako hocemo da zakazemo pregled koji pocinje pre nekog ali se zavrsava posle njega
 					if(vreme <= Double.parseDouble(p.getVreme()) && (vreme + trajanje) >= Double.parseDouble(p.getVreme()))
 					{
 						flag = true;
+						System.out.println("USAO 2");
 					}
 					
-					//ako je zakazan pre radnog vremena lekara ili posle
-					if(vreme <= p.getLekar().getPocetak() || vreme >= p.getLekar().getKraj())
-					{
-						flag = true;
-					}
-					
-					//ako je zakazan unutar radnog vremena ali traje duze od radnog vremena
-					if(vreme >= p.getLekar().getPocetak() && (vreme + trajanje) >= p.getLekar().getKraj())
-					{
-						flag = true;
-					}
+				
 			 }
 				 
 		}
@@ -274,31 +282,22 @@ public class PregledController {
 		//ako hocu da rezervisem datum za koji vec imam zahteve za preglede
 		for(ZahtevZaPregled z : zahtevi) {
 
-			System.out.println("Nece uci");
+			
 			if(zahtevZaPregledDTO.getDatum().equals(z.getDatum()) && zahtevZaPregledDTO.getLekar().getId() == z.getLekar().getId()) {
 				 //ako hocemo da zakazemo pregled usred nekog drugog pregleda
 				if(vreme >= Double.parseDouble(z.getVreme()) && vreme < (Double.parseDouble(z.getVreme()) + Double.parseDouble(z.getTrajanje())))
 				{
 					flag = true;
+					System.out.println("USAO 5");
 				}
 				
 				//ako hocemo da zakazemo pregled koji pocinje pre nekog ali se zavrsava posle njega
 				if(vreme <= Double.parseDouble(z.getVreme()) && (vreme + trajanje) >= Double.parseDouble(z.getVreme()))
 				{
 					flag = true;
+					System.out.println("USAO 6");
 				}
 				
-				//ako je zakazan pre radnog vremena lekara ili posle
-				if(vreme <= z.getLekar().getPocetak() || vreme >= z.getLekar().getKraj())
-				{
-					flag = true;
-				}
-				
-				//ako je zakazan unutar radnog vremena ali traje duze od radnog vremena
-				if(vreme >= z.getLekar().getPocetak() && (vreme + trajanje) >= z.getLekar().getKraj())
-				{
-					flag = true;
-				}
 			}
 		}
 			
@@ -306,14 +305,14 @@ public class PregledController {
 		
 		//ne mozes tada da zakazes pregled
 		if (flag == true) {
-			System.out.println("USAO TRUE");
+		
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 		
 		
 		if(flag == false) {
-			System.out.println("USAO FALSE");
+		
 			pregledService.dodajZahtev(zahtevZaPregledDTO);
 			
 			List<AdministratorKlinike> adminiKlinika = adminKlinikeService.findAll();
