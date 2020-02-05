@@ -269,7 +269,13 @@
   <tr>
     <th  > Izaberi datum pregleda</th>
 <td >
-  <input type="text"  class="form-control"  v-model="pretragaKlinika.datum" >
+  <section>
+    <date-picker
+    v-model="pretragaKlinika.datum"
+    format="YYYY-MM-DD"
+    type="date"
+    placeholder="Select date"
+  ></date-picker>  </section>
 
 </td>
   </tr>
@@ -290,7 +296,7 @@
 </div>
 
 </form>
-<form v-if="prikazListaKlinika" class="message-form" style="position: fixed;  top: 350px; left: 1050px; width: 450px; height: 300px; background-color:white ">
+<form v-if="prikazListaKlinika" class="message-form" style="position: fixed;  top: 370px; left: 1050px; width: 450px; height: 300px; background-color:white ">
      
   
   <div  class="container d-flex justify-content-center" style="margin-top: 30px; ">	                        
@@ -557,8 +563,15 @@
 
 
 <script>
-  import axios from 'axios'
+  import axios from 'axios';
+  import VueCal from 'vue-cal';
+import 'vue-cal/dist/vuecal.css';
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
   export default {
+
+    components: { VueCal ,
+    DatePicker},
    data() {
        return {
 
@@ -585,6 +598,7 @@
 	        prezime: "",
           ocena: "",
         },
+        izabraniDate: new Date(),
         filterString: "",
         selektovaniFilter: "",
         filterString1: "",
@@ -723,11 +737,11 @@
       if(this.pretragaKlinika.tipPregleda=="" || this.pretragaKlinika.datum==""){
         alert('Morate popuniti oba polja pretrage')
       } else{
-    
              axios
         .post("/klinika/pretraga/" + this.$store.state.user.id, this.pretragaKlinika)
         .then(klinike =>{
          this.klinike = klinike.data;
+         console.log(this.klinike);
             this.rezultatiPretrage = klinike.data;
             this.ukljucenaPretraga = true;
             for( var i = 0; i < this.tipovi.length; i++){ 
