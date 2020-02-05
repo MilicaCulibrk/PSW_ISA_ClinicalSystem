@@ -55,10 +55,10 @@ INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmp
 	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'db@gmail.com', 'Novi Sad', 'Dimitrije', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 1, 1, 9, 10, false);
 	
 INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen)
-	VALUES ('5000', '22/01/2019', null, 1, '13', 1, 1, 1, 'false');
+	VALUES ('5000', '2020-02-20T00:00:00.000Z', null, 1, '13', 1, 1, 1, 'false');
 	
 INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen)
-	VALUES ('5000', '22/01/2019', null, 1, '13', 2, 1, 1, 'false');
+	VALUES ('5000', '2020-02-10T00:00:00.000Z', null, 1, '13', 2, 1, 1, 'false');
 	
 INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen)
 	VALUES ('5000', '22/01/2019', 1, 1, '12', 2, 1, 1, 'false');
@@ -67,7 +67,7 @@ INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id,
 	VALUES ('5000', '22/01/2019', 2, 1, '11', 2, 1, 1, 'false');	
 	
 INSERT INTO public.administrator_klinike(adresa, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon, klinika_id, promenjena_lozinka)
-	VALUES ('Marsala Tita 58','Srbija', '23nikolasevic@gmail.com', 'Novi Sad', 'Ana', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Nikolasevic', '+381/61-5534209', 1, false);
+	VALUES ('Marsala Tita 58','Srbija', 'an@gmail.com', 'Novi Sad', 'Ana', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Nikolasevic', '+381/61-5534209', 1, false);
 	
 	
 INSERT INTO public.lek(sifra, naziv)

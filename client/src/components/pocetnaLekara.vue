@@ -282,17 +282,57 @@
                                  <label for="Form-dioptrija" style="color: #b3b3b3;">Opis</label>
                                  <input type="text" v-model="izvestaj.opis" id="Form-phone" class="form-control" >
                                
+                                 <div class="text-center mb-4 mt-4">
+                                    <template>
+                                    <button v-if="!izmeniZK" type="button" class="btn btn-danger btn-block z-depth-2" style="color: #37474F; width: 200px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="dodajIzvestaj()">Dodaj Izvestaj</button>
+                                    </template>
+                                  </div>
+
+                              
+                                      <b-button v-b-toggle.collapse-1 variant="primary" v-on:click="nadjiDatume" style="background-color: #b3b3b3;">+Zakazi novi pregled</b-button>
+                                      <b-collapse id="collapse-1" class="mt-2">
+                                        <b-card>
+                                            <label for="Form-ime">Datum</label>
+                                            <section>
+                                            <date-picker :disabled-date="kadJeNaGodisnjem"
+                                               
+                                              v-model="zahtevZaPregled.datum"
+                                              format="YYYY-MM-DD"
+                                              type="date"
+                                              placeholder="Select date"
+                                            >
+                                              </date-picker>  
+                                            </section>
+                                            
+                                          <label for="Form-ime" >Vreme</label>
+                                            <b-form-select v-model="zahtevZaPregled.vreme">
+                                              <option
+                                                v-for="v in vremena"
+                                              >{{v}}</option>
+                                            </b-form-select>
+                          
+                                            <label for="Form-ime" >Trajanje</label>
+                                            <b-form-select v-model="zahtevZaPregled.trajanje">
+                                              <option
+                                                v-for="t in trajanja"
+                                              >{{t}}</option>
+                                            </b-form-select>
+                          
+                                            <label for="Form-prezime">Vrsta pregleda</label>
+                                            <b-form-select v-model="zahtevZaPregled.vrstaPregleda">
+                                              <option
+                                                v-for="vp in vrstePregleda"
+                                              >{{vp}}</option>
+                                            </b-form-select>
+                                         
+                                            <b-button class="mt-2"  style=" color: #37474F;  border-color: rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);"  @click="zakaziPregled">Zakazi</b-button>
+                                            <b-button class="mt-2"  style=" color: #37474F;  border-color: rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);" @click="odustaniOdZakazivanja">Odustani</b-button>
+                                        </b-card>
+                                      </b-collapse>
+                                   
                              
                               </div>
-                             
-                            </div>
-                            <button  type="button" class="btn btn-block z-depth-2" v-b-modal.zakazi>+Zakazi novi pregled</button>
-                            <div class="text-center mb-4 mt-4">
                               
-
-                              <template>
-                              <button type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 250px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="dodajIzvestaj()">Dodaj izvestaj</button>
-                              </template>
                            </div>
                   
                             </div>
@@ -305,38 +345,9 @@
                        </div>
                      </div>
                    </div>
-                 </form>
+                  </form>
 
-                 <b-modal ref="my-modal" id="zakazi" hide-footer title="Zakazi novi pregled/operaciju">
-                 
-                  <label for="Form-ime" >Datum</label>
-                  <b-form-textarea id="textarea"  rows="1" style="height: 50px;" v-model="zahtevZaPregled.datum"></b-form-textarea>
-
-                  <label for="Form-ime" >Vreme</label>
-                  <b-form-select v-model="zahtevZaPregled.vreme">
-                    <option
-                      v-for="v in vremena"
-                    >{{v}}</option>
-                  </b-form-select>
-
-                  <label for="Form-ime" >Trajanje</label>
-                  <b-form-select v-model="zahtevZaPregled.trajanje">
-                    <option
-                      v-for="t in trajanja"
-                    >{{t}}</option>
-                  </b-form-select>
-
-                  <label for="Form-prezime">Vrsta pregleda</label>
-                  <b-form-select v-model="zahtevZaPregled.vrstaPregleda">
-                    <option
-                      v-for="vp in vrstePregleda"
-                    >{{vp}}</option>
-                  </b-form-select>
-               
-                  <b-button class="mt-2"  style=" color: #37474F;  border-color: rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);"  @click="zakaziPregled">Zakazi</b-button>
-                  <b-button class="mt-2"  style=" color: #37474F;  border-color: rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Odustani</b-button>
-                </b-modal>
-               
+                
 	
 	<form v-if="prikazPacijenata"  class="message-form" style="position: relative; top: -120px; left: 1100px; width: 350px; height: 405px; background-color: rgba(130, 206, 209, 0.733); ">
 
@@ -435,7 +446,7 @@
 
 
 <script>
-  import moment from 'moment'
+import moment from 'moment'
 import axios from 'axios';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
@@ -486,6 +497,7 @@ export default {
       odmor: {},
       dijagnoze: [],
       lekovi: [],
+      datumi: [],
       pregledi: [],
       dijagnoza: {},
       odabirSortiranja: "",
@@ -573,6 +585,14 @@ export default {
             alert("Ne mozete da zakazete pregled u navedenom terminu!");
         });
        },
+
+odustaniOdZakazivanja(){
+
+  this.zahtevZaPregled.datum = "";
+  this.zahtevZaPregled.vreme = "";
+  this.zahtevZaPregled.trajanje = "";
+  this.zahtevZaPregled.vrstaPregleda = "";
+},
 
 
       otvoriKalendar(){
@@ -864,7 +884,46 @@ export default {
 		          console.log(error)
 		      });
     },
+
+    nadjiDatume() {
+
+      console.log('usao');
+
+      axios
+      .get("/zahtevZaOdmor/nadjiDatume/" + this.$store.state.user.id)
+      .then(datumi => {
+        this.datumi = datumi.data;
+
+        for(var i = 0; i < this.datumi.length; i++){
+            this.datumi[i] = new Date(this.datumi[i]);
+        }
+
+        })
+      .catch(error => {
+          console.log(error)
+      });
+ 
+      console.log(this.datumi[0]);
+
     },
+   
+    kadJeNaGodisnjem(date) {
+
+      if(date ===  this.datumi[0]){
+          console.log('jednaki');
+      }else{
+        console.log('razliciti');
+      }
+
+      console.log(date);
+      console.log(this.datumi[0]);
+
+    
+         return (date >= this.datumi[0] && date <= this.datumi[1]);
+      
+    
+    },
+  },
  beforeUpdate(){
   
  
@@ -1168,6 +1227,7 @@ body {
   margin-right: 16px;
   
 }
+
 
 .popup-box {
   position: absolute;

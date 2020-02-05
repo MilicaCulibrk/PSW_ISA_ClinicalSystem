@@ -75,7 +75,7 @@ public class PregledService {
 	
 	public void dodajZahtev(ZahtevZaPregledDTO zahtevZaPregledDTO) {
 
-		System.out.println("USAO2");
+	
 		ZahtevZaPregled zahtevZaPregled = new ZahtevZaPregled();
 
 		zahtevZaPregled.setLekar(lekarRepository.findById(zahtevZaPregledDTO.getLekar().getId()).orElse(null));
