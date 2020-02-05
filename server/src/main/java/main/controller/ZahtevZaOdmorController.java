@@ -1,18 +1,25 @@
 package main.controller;
 
+
 import java.text.ParseException;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.validation.ValidationException;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,15 +27,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.ZahtevZaOdmorDTO;
+import main.model.Lekar;
 import main.model.ZahtevZaOdmor;
+import main.service.LekarService;
 import main.service.ZahtevZaOdmorService;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/zahtevZaOdmor")
 public class ZahtevZaOdmorController {
+	
 	@Autowired
 	private ZahtevZaOdmorService zahtevZaOdmorService;
+	
+	@Autowired
+	private LekarService lekarService;
 	
 	@PostMapping(value = "/zatrazi", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyAuthority('LEKAR,MEDICINSKA_SESTRA')")
@@ -79,5 +92,26 @@ public class ZahtevZaOdmorController {
 		
 
 		return new ResponseEntity<>(true, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/nadjiDatume/{id}")
+	@PreAuthorize("hasAuthority('LEKAR')")
+	public ResponseEntity<List<String>> nadjiDatumeGodisnjeg(@PathVariable Long id) {
+		
+		Lekar lekar = lekarService.findOne(id);
+		
+		List<ZahtevZaOdmor> zahteviZaOdmor = (List<ZahtevZaOdmor>) lekar.getZahtevZaOdmor();
+		
+		List<String> datumi = new ArrayList<String>();
+		
+		
+		for(ZahtevZaOdmor zzo : zahteviZaOdmor) {
+			if(zzo.getOdobren() == true) {
+				datumi.add(zzo.getStartDate());
+				datumi.add(zzo.getEndDate());
+			}
+		}
+		
+		return new ResponseEntity<>(datumi, HttpStatus.OK);
 	}
 }

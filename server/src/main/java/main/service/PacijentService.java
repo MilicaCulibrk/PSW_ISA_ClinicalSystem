@@ -63,15 +63,15 @@ public class PacijentService {
 	}
 
 	public List<Pacijent> sortiraj(String sortBy) {
-		if(sortBy.equals("Id"))
+		if(sortBy.equals("id"))
 			return pacijentRepository.findAllByOrderByIdAsc();
-		else if(sortBy.equals("Ime"))
+		else if(sortBy.equals("ime"))
 			return pacijentRepository.findAllByOrderByImeAsc();
-		else if(sortBy.equals("Prezime"))
+		else if(sortBy.equals("prezime"))
 			return pacijentRepository.findAllByOrderByPrezimeAsc();
 		else if(sortBy.equals("JMBG"))
 			return pacijentRepository.findAllByOrderByJmbgAsc();
-		else if(sortBy.equals("Email"))
+		else if(sortBy.equals("email"))
 			return pacijentRepository.findAllByOrderByEmailAsc();
 		return pacijentRepository.findAll();
 	}
@@ -88,43 +88,43 @@ public class PacijentService {
 			ret = sviPacijenti;
 		}else if(ime == null && prezime == null && jmbg != null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getJmbg().equals(jmbg)) {
+				if(p.getJmbg().contains(jmbg)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime == null && prezime != null && jmbg == null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getPrezime().equals(prezime)) {
+				if(p.getPrezime().contains(prezime)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime != null && prezime == null && jmbg == null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getIme().equals(ime)) {
+				if(p.getIme().contains(ime)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime != null && prezime != null && jmbg == null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getIme().equals(ime) && p.getPrezime().equals(prezime)) {
+				if(p.getIme().contains(ime) && p.getPrezime().contains(prezime)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime != null && prezime == null && jmbg != null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getIme().equals(ime) && p.getJmbg().equals(jmbg)) {
+				if(p.getIme().contains(ime) && p.getJmbg().contains(jmbg)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime == null && prezime != null && jmbg != null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getPrezime().equals(prezime) && p.getJmbg().equals(jmbg)) {
+				if(p.getPrezime().contains(prezime) && p.getJmbg().contains(jmbg)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime != null && prezime != null && jmbg != null){
 			for(Pacijent p : sviPacijenti) {
-				if(p.getPrezime().equals(prezime) && p.getJmbg().equals(jmbg)  && p.getIme().equals(ime)) {
+				if(p.getPrezime().contains(prezime) && p.getJmbg().contains(jmbg)  && p.getIme().contains(ime)) {
 					ret.add(p);
 				}
 			}

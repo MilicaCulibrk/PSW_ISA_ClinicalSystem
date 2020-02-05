@@ -435,7 +435,7 @@ export default {
 		      });
 	  	},
 	  	pritisni(){
-	  		console.log('pritislo');
+        console.log('pritislo');
 	  	},
 	  	obrisiPacijenta(id){
       		axios

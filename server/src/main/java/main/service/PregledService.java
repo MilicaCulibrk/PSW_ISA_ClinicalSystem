@@ -6,20 +6,25 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import main.dto.PacijentDTO;
 import main.dto.PregledDTO;
-import main.model.Pacijent;
+import main.dto.ZahtevZaPregledDTO;
 import main.model.Pregled;
+import main.model.ZahtevZaPregled;
 import main.repository.LekarRepository;
 import main.repository.PregledRepository;
 import main.repository.SalaRepository;
 import main.repository.TipPregledaRepository;
+import main.repository.ZahtevZaPregledRepository;
 
 @Service
 public class PregledService {
 	
 	@Autowired
 	private PregledRepository pregledRepository;
+	
+	@Autowired
+	private ZahtevZaPregledRepository zahtevZaPregledRepository;
+	
 	
 	@Autowired
 	private LekarRepository lekarRepository;
@@ -57,6 +62,7 @@ public class PregledService {
 		pregled.setTipPregleda(tipPregledaRepository.getOne(pregledDTO.getTipPregleda().getId()));
 		pregled.setTrajanje(pregledDTO.getTrajanjePregleda());
 		pregled.setIdPacijenta(null);
+		pregled.setZavrsen(false);
 		System.out.println(pregledDTO.getTrajanjePregleda());
 		pregledRepository.save(pregled);
 		
@@ -66,6 +72,24 @@ public class PregledService {
 	
 	public List<Pregled> findAll() {
 		return pregledRepository.findAll();
+	}
+	
+	public void dodajZahtev(ZahtevZaPregledDTO zahtevZaPregledDTO) {
+
+	
+		ZahtevZaPregled zahtevZaPregled = new ZahtevZaPregled();
+
+		zahtevZaPregled.setLekar(lekarRepository.findById(zahtevZaPregledDTO.getLekar().getId()).orElse(null));
+		zahtevZaPregled.setIdPacijenta(zahtevZaPregledDTO.getIdPacijenta());
+		zahtevZaPregled.setCena(zahtevZaPregledDTO.getCena());
+		zahtevZaPregled.setDatum(zahtevZaPregledDTO.getDatum());
+		zahtevZaPregled.setVreme(zahtevZaPregledDTO.getVreme());
+		zahtevZaPregled.setTrajanje(zahtevZaPregledDTO.getTrajanje());
+		zahtevZaPregled.setVrstaPregleda(zahtevZaPregledDTO.getVrstaPregleda());
+		zahtevZaPregled.setTipPregleda(tipPregledaRepository.findById(zahtevZaPregledDTO.getTipPregleda().getId()).orElse(null));
+
+		zahtevZaPregledRepository.save(zahtevZaPregled);
+
 	}
 
 

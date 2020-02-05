@@ -32,6 +32,7 @@ export default {
   methods: {
 
 	   login(){
+      event.preventDefault();
 	    	var temp = this;
 	        if (this.user.email=="" || this.user.lozinka==""){
 	        	alert('Morate uneti sva polja!');
