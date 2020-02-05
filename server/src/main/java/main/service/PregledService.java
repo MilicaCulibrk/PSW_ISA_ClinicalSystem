@@ -1,5 +1,6 @@
 package main.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class PregledService {
 	public Pregled zakaziPregled(Long idPacijent, Pregled pregled) {
 		  
 		pregled.setIdPacijenta(idPacijent);
-		
+		pregled.getLekar().getPregled().add(pregled);
 
 		pregledRepository.save(pregled);
 		

@@ -1,5 +1,6 @@
 package main.controller;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -30,8 +31,8 @@ public class ZahtevZaOdmorController {
 	private ZahtevZaOdmorService zahtevZaOdmorService;
 	
 	@PostMapping(value = "/zatrazi", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasAuthority('LEKAR')")
-	public ResponseEntity<ZahtevZaOdmorDTO> zatrazi(@RequestBody ZahtevZaOdmorDTO zahtevZaOdmorDTO) {
+	@PreAuthorize("hasAnyAuthority('LEKAR,MEDICINSKA_SESTRA')")
+	public ResponseEntity<ZahtevZaOdmorDTO> zatrazi(@RequestBody ZahtevZaOdmorDTO zahtevZaOdmorDTO) throws ParseException {
 		
 		ZahtevZaOdmorDTO zzodto = new ZahtevZaOdmorDTO();
 		try {

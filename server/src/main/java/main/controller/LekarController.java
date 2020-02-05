@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.LekarDTO;
+import main.dto.PregledDTO;
 import main.dto.ZahtevZaOdmorDTO;
 import main.model.Lekar;
 import main.model.Pregled;
@@ -128,7 +129,7 @@ public class LekarController {
 		return new ResponseEntity<>(listaLekaraDTO, HttpStatus.OK);
 	}
 	
-	@GetMapping(value = "/izlistajOdmor/{idLekara}")
+	/*@GetMapping(value = "/izlistajOdmor/{idLekara}")
 	@PreAuthorize("hasAuthority('LEKAR')")
 	public ResponseEntity<?> izlistajOdmor(@PathVariable Long idLekara) {
 	System.out.println("heloooo");
@@ -149,6 +150,28 @@ public class LekarController {
 			}
 		}
 		return new ResponseEntity<>(listaOdmoraDTO, HttpStatus.OK);
+	}*/
+	
+	@GetMapping(value = "/izlistajOdmor/{idLekara}")
+	@PreAuthorize("hasAuthority('LEKAR')")
+	public ResponseEntity<?> izlistajPreglede(@PathVariable Long idLekara) {
+		List<Lekar> listaLekara = lekarService.findAll();
+		Collection<Pregled> listaPregleda = new ArrayList<Pregled>();
+		List<PregledDTO> listaPregledaDTO = new ArrayList<PregledDTO>();
+		for (Lekar l : listaLekara) {
+				if(l.getId().equals(idLekara)) {
+					listaPregleda = l.getPregled();
+				}
+		}
+		for (Pregled p : listaPregleda) {
+			try{
+				if(p.getIdPacijenta()!=null)
+					listaPregledaDTO.add(new PregledDTO(p));
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
 	}
 	
 	@GetMapping(value = "/preuzmiInfo/{email}")

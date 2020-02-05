@@ -19,7 +19,13 @@
                 <a href="#">
 	                <i v-on:click="otvoriRecepte"> OVERA RECEPATA
 	                </i>                   
-	              </a>	
+                </a>	
+                <a href="#">
+                  <i v-on:click="otvoriZahtevZaOdmor" class="zmdi zmdi-link">ZAHTEV ZA ODMOR</i> 
+               </a>
+               <a href="#">
+                <i v-on:click="otvoriKalendar">KALENDAR</i>
+            </a>
                   <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
 	                </i>     
@@ -168,6 +174,28 @@
 			</div>
     </div>
   </form>
+
+  <form v-if="prikazKalendara" >
+    <vue-cal style="height: 400px; width: 100%; " selected-date="2020-02-03"
+    class="vuecal--blue-theme"
+      :time-from="8 * 60 "
+      :time-to="23 * 60"
+      :disable-views="['years']"
+      editable-events
+      resize-x
+      :events="events"
+      >
+    </vue-cal>
+
+</form>
+<form v-if="prikazZahtevZaOdmor" style="position: relative; top: 10px; left: 400px;">
+<div>
+  <date-picker v-model="time3" range ></date-picker>
+  <button v-on:click="posaljiZahtev">Posalji zahtev</button>
+</div>
+
+</form>
+
   <form  v-if="prikazZK" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
   
 
@@ -269,26 +297,83 @@
 
 <script>
 import axios from 'axios'
+import VueCal from 'vue-cal';
+import 'vue-cal/dist/vuecal.css';
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
 export default {
+  components: { VueCal ,
+    DatePicker},
 	data() {
 		return{
 			korisnik: {},
 			pacijenti: {},
 			prikaz: false,
 			izmeni: false,
-			prikazListaPacijenata: false,
 			selektovan: {},
 			sortBy: {},
-			prikazPacijenta: false,
 			trenutniPacijent: {},
       izmeni:false,
       izmeniZK:false,
       zdravstveniK: {},
       recepti: {},
+
+			prikazListaPacijenata: false,
       prikazRecepata: false,
+      prikazPacijenta: false,
+      prikazKalendara: false,
+      prikazZahtevZaOdmor: false,
+      prikazZK: false,
+      time3: null,
+      odmor: {},
+      events: [
+      {
+        startDate: new Date(),
+        endDate: new Date(),
+        title: 'Godisnji odmor',
+        //content: '<i class="v-icon material-icons">directions_run</i>',
+        //class: 'sport',
+      }],
 		}
 	},
 	methods: {
+    otvoriKalendar(){
+        this.prikazKalendara = !this.prikazKalendara;
+        this.prikazPacijenata = false;
+        this.prikazPacijenta = false;
+        this.prikaz = false;
+        axios
+		      .get("/lekar/izlistajOdmor/" + this.$store.state.user.id)
+		      .then(odgovor => {
+            //this.events = odgovor.data;
+            for (let i = 0; i < odgovor.data.length; i++) {
+              this.events[0].startDate = new Date(odgovor.data[i].start);
+              this.events[0].endDate = new Date(odgovor.data[i].end);
+             }
+   
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+      },
+    otvoriZahtevZaOdmor(){
+      this.prikazZahtevZaOdmor = !this.prikazZahtevZaOdmor;
+    },
+    posaljiZahtev(){
+      event.preventDefault();
+      this.odmor.medicinskaSestra = this.$store.state.user.id;
+
+      this.odmor.start = this.time3[0];
+      this.odmor.end = this.time3[1];
+      axios
+		      .post("/zahtevZaOdmor/zatrazi", this.odmor)
+		      .then(odgovor => {
+              alert("Poslat zahtev!");
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+    },
 		otvoriFormu(){
 			this.prikaz=!this.prikaz;
 		},

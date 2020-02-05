@@ -45,6 +45,25 @@
           <h1 style="color: #b3b3b3;">Lekar - {{ korisnik.ime }} {{ korisnik.prezime }} </h1>
         </div>
       </div>
+      <form v-if="prikazKalendara" >
+        <vue-cal style="height: 700px; width: 100%; left: 400px;" selected-date="2020-02-03"
+        class="vuecal--blue-theme"
+          :time-from="8 * 60 "
+          :time-to="23 * 60"
+          :disable-views="['years']"
+          :events="events"
+          :on-event-click="onEventClick"
+          >
+        </vue-cal>
+  
+   </form>
+   <form v-if="prikazZahtevZaOdmor" style="position: relative; top: 10px; left: 400px;">
+    <div>
+      <date-picker v-model="time3" range ></date-picker>
+      <button v-on:click="posaljiZahtev">Posalji zahtev</button>
+    </div>
+  
+  </form>
     </div>
 
                   <form  v-if="prikaz" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
@@ -189,9 +208,6 @@
                           </div>                 
                           <div class="column" >
                             <button class="btn btn-light" style="background-color: #eeeeee; width: 395px; height: 100px; font-size : 30px;" v-on:click="zapocniPregled">Zapocni pregled</button>
-                          </div>
-                                                    <div class="column" >
-                            <button class="btn btn-light" style="background-color: #eeeeee; width: 395px; height: 100px; font-size : 30px;" v-on:click="probaj">Proba</button>
                           </div>
 
                           </div>
@@ -381,26 +397,7 @@
                     </div>
  
              </form>     
-             <form v-if="prikazKalendara" >
-                  <vue-cal style="height: 400px; width: 100%; " selected-date="2020-02-03"
-                  class="vuecal--blue-theme"
-                    :time-from="8 * 60 "
-                    :time-to="23 * 60"
-                    :disable-views="['years']"
-                    editable-events
-                    resize-x
-                    :events="events"
-                    >
-                  </vue-cal>
 
-             </form>
-             <form v-if="prikazZahtevZaOdmor" style="position: relative; top: 10px; left: 400px;">
-              <div>
-                <date-picker v-model="time3" range></date-picker>
-                <button v-on:click="posaljiZahtev">Posalji zahtev</button>
-              </div>
-
-            </form>
 </div>
 
 </template>
@@ -413,18 +410,10 @@ import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
+import Datepicker from 'vuejs-datepicker';
 export default {
   components: { VueCal ,
     DatePicker},
-  computed: {
-    disabledDates () {
-      const now = new Date()
-      const date = new Date(now)
-      date.setDate(now.getDate() +2)
-      return date
-    },
-
-},
  data() {
      return {
       korisnik: {},
@@ -457,39 +446,45 @@ export default {
         dijagnoza: "",
       },
       filteri: ['Ime', 'Prezime'],
-	  filter: "",
-	  filterString: "",
-	  selektovaniFilter: "",
+	    filter: "",
+	    filterString: "",
+	    selektovaniFilter: "",
       izvestaji: {},
       izabraniLekovi: [],
       pomocna: [],
       rezultatiPretrage: [],
       lista:{},
-      starti:{},
-      endi:{},
+
       pomocnaRezultatiPretrage: [],
       prikazKalendara: false,
       prikazZahtevZaOdmor: false,
-      events: [
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      title: 'Godisnji odmor',
-      //content: '<i class="v-icon material-icons">directions_run</i>',
-      //class: 'sport',
+      time3: null,
+
+      selectedEvent: {},
+
+      events: [],
+    
+
     }
-    
-    
-    ],
-    
-        time1: null,
-        time2: null,
-        time3: null,
-        
-      }
   },
   
   methods: {
+    onEventClick (event, e) {
+    this.selectedEvent = event
+    axios
+        .get("/pacijent/get/" + this.selectedEvent.pacijent)
+        .then(odgovor =>{
+          this.trenutniPacijent = odgovor.data;
+          this.prikazPacijenta = true;
+          this.prikazKalendara = false;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+
+    // Prevent navigating to narrower view (default vue-cal behavior).
+    e.stopPropagation()
+  },
         otvoriFormu(){
             this.prikaz=!this.prikaz;
             this.ponistiPretraguPacijenata();
@@ -518,11 +513,19 @@ export default {
 		      .get("/lekar/izlistajOdmor/" + this.$store.state.user.id)
 		      .then(odgovor => {
             //this.events = odgovor.data;
-            for (let i = 0; i < odgovor.data.length; i++) {
-              this.events[0].startDate = new Date(odgovor.data[i].start);
-              this.events[0].endDate = new Date(odgovor.data[i].end);
+            this.events.length = 0;
+            for (var i = 0; i < odgovor.data.length; i++) {
+              var obj = {};
+              var m = parseInt(odgovor.data[i].vreme) + odgovor.data[i].trajanjePregleda;
+
+              obj.startDate = new Date(odgovor.data[i].datum + 'T' + odgovor.data[i].vreme +':00');
+              obj.endDate = new Date(odgovor.data[i].datum + 'T' + m +':00');
+              obj.title = 'Pregled - ' + odgovor.data[i].tipPregleda.naziv;
+              obj.pacijent = odgovor.data[i].idPacijenta;
+
+              this.events.unshift(obj);
              }
-   
+             
 			      })
 		      .catch(error => {
 		          console.log(error)
@@ -730,6 +733,7 @@ export default {
               alert("Poslat zahtev!");
 			      })
 		      .catch(error => {
+            alert("Nije moguce traziti godisnji za izabrane datume! U tom periodu imate vec zakazan pregled/operaciju.")
 		          console.log(error)
 		      });
     },

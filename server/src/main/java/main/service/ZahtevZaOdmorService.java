@@ -1,22 +1,24 @@
 package main.service;
 
-import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import main.dto.LekarDTO;
 import main.dto.ZahtevZaOdmorDTO;
 import main.model.AdministratorKlinike;
-import main.model.Authority;
 import main.model.Lekar;
 import main.model.MedicinskaSestra;
+import main.model.Pregled;
 import main.model.ZahtevZaOdmor;
 import main.repository.AdminKlinikeRepository;
 import main.repository.LekarRepository;
 import main.repository.MedicinskaSestraRepository;
+import main.repository.PregledRepository;
 import main.repository.ZahtevZaOdmorRepository;
 
 @Service
@@ -34,8 +36,10 @@ public class ZahtevZaOdmorService {
 	
 	@Autowired
 	private AdminKlinikeRepository adminKlinikeRepository;
+	@Autowired
+	private PregledRepository pregledRepository;
 
-	public ZahtevZaOdmorDTO zatrazi(ZahtevZaOdmorDTO zahtevZaOdmorDTO) {
+	public ZahtevZaOdmorDTO zatrazi(ZahtevZaOdmorDTO zahtevZaOdmorDTO) throws ParseException {
 		// TODO Auto-generated method stub
 		ZahtevZaOdmor zzo = new ZahtevZaOdmor();
 		zzo.setStartDate(zahtevZaOdmorDTO.getStart());
@@ -43,7 +47,7 @@ public class ZahtevZaOdmorService {
 		List<Lekar> lekari = lekarRepository.findAll();
 		List<MedicinskaSestra> ms = medicinskaSestraRepository.findAll();
 		List<AdministratorKlinike> admini = adminKlinikeRepository.findAll();
-
+		Collection<Pregled> pregledi = pregledRepository.findAll();
 		Long idKlinike = null;
 		for (MedicinskaSestra medicinskaSestra : ms) {
 			if(medicinskaSestra.getId().equals(zahtevZaOdmorDTO.getMedicinskaSestra())) {
@@ -54,6 +58,7 @@ public class ZahtevZaOdmorService {
 		
 		for (Lekar l : lekari) {
 			if(l.getId().equals(zahtevZaOdmorDTO.getLekar())) {
+				pregledi = l.getPregled();
 				zzo.setLekar(l);
 				idKlinike = l.getKlinika().getId();
 			}
@@ -64,7 +69,23 @@ public class ZahtevZaOdmorService {
 				ak.getZahtevZaOdmor().add(zzo);
 			}
 		}
+		
 		zzo.setOdobren(null);
+		
+		String[] startS=zahtevZaOdmorDTO.getStart().split("'");
+		String[] endS=zahtevZaOdmorDTO.getEnd().split("'");
+
+		SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Date start = inFormat.parse(startS[0]);
+		Date end = inFormat.parse(endS[0]);	
+
+		for (Pregled pregled : pregledi) {
+			Date pregledDatum = inFormat.parse(pregled.getDatum());
+			if(pregledDatum.after(start)&& pregledDatum.before(end)) {
+				return null;
+			}
+		}
 		zahtevZaOdmorRepository.save(zzo);
 		ZahtevZaOdmorDTO zahtevZaOdmorDTO1 =new ZahtevZaOdmorDTO(zzo);
 		return zahtevZaOdmorDTO1;
