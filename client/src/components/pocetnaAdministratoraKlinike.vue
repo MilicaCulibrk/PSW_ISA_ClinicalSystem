@@ -583,7 +583,17 @@
                                           <input type="text" v-model="pretragaSale.broj" id="Form-ime" class="form-control">
                                           
                                             <label for="Form-ime" style="color: #b3b3b3;">Datum</label>
-                                          <input type="text" v-model="pretragaSale.datum" id="Form-ime" class="form-control">
+                                            <section>
+                                                <date-picker 
+                                                   
+                                                  v-model="pretragaSale.datum"
+                                                  format="YYYY-MM-DD"
+                                                  type="date"
+                                                  placeholder="Select date"
+                                                >
+                                                  </date-picker>  
+                                                </section>
+                                            
                                           
                                             <label for="Form-ime" style="color: #b3b3b3;">Vreme pocetka (sati)</label>
                                          <b-form-select v-model="pretragaSale.vreme">
@@ -799,8 +809,24 @@
 </template>
 
 <script>
+import moment from 'moment'
 import axios from 'axios'
+import VueCal from 'vue-cal';
+import 'vue-cal/dist/vuecal.css';
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
 export default {
+  components: { VueCal ,
+    DatePicker},
+  computed: {
+    disabledDates () {
+      const now = new Date()
+      const date = new Date(now)
+      date.setDate(now.getDate() +2)
+      return date
+    },
+
+},
  data() {
      return {
       korisnik: {},

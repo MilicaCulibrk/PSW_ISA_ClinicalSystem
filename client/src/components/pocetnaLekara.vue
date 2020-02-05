@@ -289,12 +289,12 @@
                                   </div>
 
                               
-                                      <b-button v-b-toggle.collapse-1 variant="primary" v-on:click="otvoriIzvestaje" style="background-color: #b3b3b3;">+Zakazi novi pregled</b-button>
+                                      <b-button v-b-toggle.collapse-1 variant="primary" v-on:click="nadjiDatume" style="background-color: #b3b3b3;">+Zakazi novi pregled</b-button>
                                       <b-collapse id="collapse-1" class="mt-2">
                                         <b-card>
                                             <label for="Form-ime">Datum</label>
                                             <section>
-                                            <date-picker 
+                                            <date-picker :disabled-date="kadJeNaGodisnjem"
                                                
                                               v-model="zahtevZaPregled.datum"
                                               format="YYYY-MM-DD"
@@ -497,6 +497,7 @@ export default {
       odmor: {},
       dijagnoze: [],
       lekovi: [],
+      datumi: [],
       pregledi: [],
       dijagnoza: {},
       odabirSortiranja: "",
@@ -883,7 +884,46 @@ odustaniOdZakazivanja(){
 		          console.log(error)
 		      });
     },
+
+    nadjiDatume() {
+
+      console.log('usao');
+
+      axios
+      .get("/zahtevZaOdmor/nadjiDatume/" + this.$store.state.user.id)
+      .then(datumi => {
+        this.datumi = datumi.data;
+
+        for(var i = 0; i < this.datumi.length; i++){
+            this.datumi[i] = new Date(this.datumi[i]);
+        }
+
+        })
+      .catch(error => {
+          console.log(error)
+      });
+ 
+      console.log(this.datumi[0]);
+
     },
+   
+    kadJeNaGodisnjem(date) {
+
+      if(date ===  this.datumi[0]){
+          console.log('jednaki');
+      }else{
+        console.log('razliciti');
+      }
+
+      console.log(date);
+      console.log(this.datumi[0]);
+
+    
+         return (date >= this.datumi[0] && date <= this.datumi[1]);
+      
+    
+    },
+  },
  beforeUpdate(){
   
  
