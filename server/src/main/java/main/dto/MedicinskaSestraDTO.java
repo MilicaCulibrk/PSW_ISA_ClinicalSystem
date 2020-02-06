@@ -23,7 +23,7 @@ public class MedicinskaSestraDTO {
    private String drzava;
 	
    private String telefon;
-	
+   private Long idKlinike;	
    private String jmbg;
    private Boolean promenjenaLozinka;
 
@@ -56,10 +56,17 @@ public MedicinskaSestraDTO(MedicinskaSestra ms) {
 	this.telefon = ms.getTelefon();
 	this.jmbg = ms.getJmbg();
 	this.promenjenaLozinka = ms.getPromenjenaLozinka();
-
 }
 
 
+
+public Long getIdKlinike() {
+	return idKlinike;
+}
+
+public void setIdKlinike(Long idKlinike) {
+	this.idKlinike = idKlinike;
+}
 
 public MedicinskaSestraDTO() {
 	super();

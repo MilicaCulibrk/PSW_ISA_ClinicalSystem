@@ -252,7 +252,7 @@
 			                  <tr v-for="k,i in lekovi.length">
 			                    <td>{{lekovi[i].sifra}}</td>
 			                    <td>{{lekovi[i].naziv}}</td>
-			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiLek(lekovi[i].id)"><i class="fa fa-trash">Obrisi</i></button>
+			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiLek(lekovi[i])"><i class="fa fa-trash">Obrisi</i></button>
 			                    </td>
 			                  </tr>
 			              </table>     
@@ -302,7 +302,7 @@
 			                  <tr v-for="k,i in dijagnoze.length">
 			                    <td>{{dijagnoze[i].sifra}}</td>
 			                    <td>{{dijagnoze[i].naziv}}</td>
-			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiDijagnozu(dijagnoze[i].id)"><i class="fa fa-trash">Obrisi</i></button>
+			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiDijagnozu(dijagnoze[i])"><i class="fa fa-trash">Obrisi</i></button>
 			                    </td>
 			                  </tr>
 			              </table>     
@@ -615,11 +615,21 @@ import axios from 'axios'
 	          	          this.lek.sifra="";
 	          this.lek.naziv="";
 	 },
-	 obrisiLek(idLek){
+	 obrisiLek(lek){
       		axios
-		      .post("/lek/obrisi/" + idLek)
+		      .delete("/lek/izbrisi/" + lek.id)
 		      .then(lek => {
-			        this.lek = lek.data;
+			        this.lekovi = lek.data;
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+      },
+      obrisiDijagnozu(dij){
+      		axios
+		      .delete("/dijagnoza/izbrisi/" + dij.id)
+		      .then(lek => {
+			        this.dijagnoze = lek.data;
 			      })
 		      .catch(error => {
 		          console.log(error)

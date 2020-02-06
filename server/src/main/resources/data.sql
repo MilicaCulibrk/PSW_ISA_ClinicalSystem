@@ -25,8 +25,8 @@ INSERT INTO public.pacijent(adresa, aktiviran_nalog, drzava,  email, grad, ime, 
 INSERT INTO public.pacijent(adresa, aktiviran_nalog, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon, zdrastveni_karton_id)
 	VALUES ('Marsala Tita 58', 'false', 'Srbija', 'am@gmail.com', 'Novi Sad', 'Amanda', '23091997', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Mirkovic', '+381/61-5534209', '3');
 
-INSERT INTO public.medicinska_sestra( adresa, drzava,  email, grad, ime, jmbg, lozinka, ocena, prezime, telefon, promenjena_lozinka)
-	VALUES ('Marsala Tita 58','Srbija', 'mm@gmail.com', 'Novi Sad', 'Masa', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Matovic', '+381/61-5534209', false);
+INSERT INTO public.medicinska_sestra( adresa, drzava,  email, grad, ime, jmbg, lozinka, ocena, prezime, telefon, klinika_id, promenjena_lozinka)
+	VALUES ('Marsala Tita 58','Srbija', 'mm@gmail.com', 'Novi Sad', 'Masa', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Matovic', '+381/61-5534209', 1, false);
 	
 INSERT INTO public.sala(
 	broj, naziv, klinika_id)
