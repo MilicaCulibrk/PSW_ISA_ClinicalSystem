@@ -11,7 +11,7 @@ public class PregledDTO {
 	private SalaDTO sala;
 	private TipPregledaDTO tipPregleda;
 	private LekarDTO lekar;
-	private Double cena;
+	private String cena;
 	private Long idPacijenta;
 	private Boolean zavrsen;
 
@@ -34,7 +34,8 @@ public class PregledDTO {
 	}
 
 	public PregledDTO(Long id, String datum, String vreme, Integer trajanjePregleda, SalaDTO sala, TipPregledaDTO tipPregleda,
-			LekarDTO lekar, Double cena, Long idPacijenta, Boolean zavrsen) {
+
+			LekarDTO lekar, String cena, Long idPacijenta, Boolean zavrsen) {
 		super();
 		this.id = id;
 		this.datum = datum;
@@ -96,11 +97,11 @@ public class PregledDTO {
 		this.lekar = lekar;
 	}
 
-	public Double getCena() {
+	public String getCena() {
 		return cena;
 	}
 
-	public void setCena(Double cena) {
+	public void setCena(String cena) {
 		this.cena = cena;
 	}
 

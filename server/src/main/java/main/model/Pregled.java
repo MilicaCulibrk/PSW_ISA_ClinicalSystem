@@ -29,7 +29,7 @@ public class Pregled {
     private Integer trajanje;
 	
 	@Column(name = "cena", nullable = false)
-    private double cena;
+    private String cena;
 	
 	@Column(name = "zavrsen", nullable = false)
     private boolean zavrsen;
@@ -90,12 +90,12 @@ public class Pregled {
 	}
 
 
-	public double getCena() {
+	public String getCena() {
 		return cena;
 	}
 	
 	
-	public void setCena(double cena) {
+	public void setCena(String cena) {
 		this.cena = cena;
 	}
 	

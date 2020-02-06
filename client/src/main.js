@@ -8,6 +8,7 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+
 axios.defaults.baseURL = "http://localhost:8081"
 
 axios.interceptors.request.use(config => {
@@ -18,6 +19,7 @@ axios.interceptors.request.use(config => {
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
+
 
 new Vue({
   router,
