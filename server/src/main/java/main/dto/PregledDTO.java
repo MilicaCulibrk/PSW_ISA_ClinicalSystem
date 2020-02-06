@@ -34,6 +34,7 @@ public class PregledDTO {
 	}
 
 	public PregledDTO(Long id, String datum, String vreme, Integer trajanjePregleda, SalaDTO sala, TipPregledaDTO tipPregleda,
+
 			LekarDTO lekar, String cena, Long idPacijenta, Boolean zavrsen) {
 		super();
 		this.id = id;

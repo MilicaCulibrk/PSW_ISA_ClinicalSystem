@@ -1,7 +1,11 @@
 package main.controller;
 
+
+import java.text.ParseException;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +44,8 @@ public class ZahtevZaOdmorController {
 	private LekarService lekarService;
 	
 	@PostMapping(value = "/zatrazi", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasAuthority('LEKAR')")
-	public ResponseEntity<ZahtevZaOdmorDTO> zatrazi(@RequestBody ZahtevZaOdmorDTO zahtevZaOdmorDTO) {
+	@PreAuthorize("hasAnyAuthority('LEKAR,MEDICINSKA_SESTRA')")
+	public ResponseEntity<ZahtevZaOdmorDTO> zatrazi(@RequestBody ZahtevZaOdmorDTO zahtevZaOdmorDTO) throws ParseException {
 		
 		ZahtevZaOdmorDTO zzodto = new ZahtevZaOdmorDTO();
 		try {
