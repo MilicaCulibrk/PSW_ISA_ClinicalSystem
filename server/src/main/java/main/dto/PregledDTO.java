@@ -7,7 +7,7 @@ public class PregledDTO {
 	private Long id;
 	private String datum;
 	private String vreme;
-	private Double trajanjePregleda;
+	private Integer trajanjePregleda;
 	private SalaDTO sala;
 	private TipPregledaDTO tipPregleda;
 	private LekarDTO lekar;
@@ -33,7 +33,7 @@ public class PregledDTO {
 		this.zavrsen = pregled.isZavrsen();
 	}
 
-	public PregledDTO(Long id, String datum, String vreme, Double trajanjePregleda, SalaDTO sala, TipPregledaDTO tipPregleda,
+	public PregledDTO(Long id, String datum, String vreme, Integer trajanjePregleda, SalaDTO sala, TipPregledaDTO tipPregleda,
 			LekarDTO lekar, Double cena, Long idPacijenta, Boolean zavrsen) {
 		super();
 		this.id = id;
@@ -113,11 +113,11 @@ public class PregledDTO {
 	}
 
 
-	public void setTrajanjePregleda(Double trajanjePregleda) {
+	public void setTrajanjePregleda(Integer trajanjePregleda) {
 		this.trajanjePregleda = trajanjePregleda;
 	}
 
-	public Double getTrajanjePregleda() {
+	public Integer getTrajanjePregleda() {
 		return trajanjePregleda;
 	}
 

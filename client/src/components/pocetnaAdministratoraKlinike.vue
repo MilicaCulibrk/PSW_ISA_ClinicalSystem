@@ -152,8 +152,16 @@
                                         <div class="col">
                                         <div class="md-form">
                                           <label for="Form-username" style="color: #b3b3b3;">Datum</label>
-                                          <input type="text" v-model="pregled.datum" id="Form-username" class="form-control" >
-                                          
+                                          <section>
+                                            <date-picker 
+                                               
+                                              v-model="pregled.datum"
+                                              format="YYYY-MM-DD"
+                                              type="date"
+                                              placeholder="Select date"
+                                            >
+                                              </date-picker>  
+                                            </section>
                                            <label for="Form-username" style="color: #b3b3b3;">Vreme pocetka (sati)</label>
                                             <b-form-select v-model="pregled.vreme">
 							                    <option

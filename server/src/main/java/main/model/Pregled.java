@@ -26,7 +26,7 @@ public class Pregled {
 	
 	
 	@Column(name = "trajanje", nullable = false)
-    private Double trajanje;
+    private Integer trajanje;
 	
 	@Column(name = "cena", nullable = false)
     private double cena;
@@ -80,12 +80,12 @@ public class Pregled {
 	
 	
 	
-	public Double getTrajanje() {
+	public Integer getTrajanje() {
 		return trajanje;
 	}
 
 
-	public void setTrajanje(Double trajanje) {
+	public void setTrajanje(Integer trajanje) {
 		this.trajanje = trajanje;
 	}
 

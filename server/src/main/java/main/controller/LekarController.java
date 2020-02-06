@@ -1,7 +1,10 @@
 package main.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.ValidationException;
@@ -32,6 +35,9 @@ import main.model.Klinika;
 import main.model.Lekar;
 import main.model.Pregled;
 import main.model.ZahtevZaOdmor;
+import main.repository.LekarRepository;
+import main.repository.PregledRepository;
+import main.repository.ZahtevZaOdmorRepository;
 import main.service.LekarService;
 import main.service.PregledService;
 import main.service.ZahtevZaOdmorService;
@@ -48,6 +54,17 @@ public class LekarController {
 	private PregledService pregledService;
 
 
+	@Autowired
+	private LekarRepository	lekarRepository;
+	
+	@Autowired
+	private PregledRepository	pregledRepository;
+	
+	
+	@Autowired
+	private ZahtevZaOdmorRepository	zahtevZaOdmorRepository;
+	
+	
 	@GetMapping(value = "/izlistajLekare/{idKlinike}")
 	@PreAuthorize("hasAuthority('PACIJENT')")
 	public ResponseEntity<List<LekarDTO>> getIzlistajLekare(@PathVariable Long idKlinike) {      
@@ -71,7 +88,7 @@ public class LekarController {
 	
 	@PostMapping(value = "/izlistajLekarePoTP/{idKlinike}")
 	@PreAuthorize("hasAuthority('PACIJENT')")
-	public ResponseEntity<List<LekarDTO>> getIzlistajLekarePoTP(@RequestBody PretragaKlinikeDTO pretragaKlinikaDTO, @PathVariable Long idKlinike) {      
+	public ResponseEntity<List<LekarDTO>> getIzlistajLekarePoTP(@RequestBody PretragaKlinikeDTO pretragaKlinikaDTO, @PathVariable Long idKlinike) throws ParseException {      
 		
 		
 		System.out.println(pretragaKlinikaDTO.getTipPregleda());
@@ -79,18 +96,166 @@ public class LekarController {
    		List<Lekar> listaLekara = lekarService.findAll();
 		List<LekarDTO> listaLekaraDTO = new ArrayList<LekarDTO>();
 	
+		
+		
+		String datumm=pretragaKlinikaDTO.getDatum();
+		
+		String[] datum1=pretragaKlinikaDTO.getDatum().split("'");
+		
+		SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		
+		
+			Date dtIn = inFormat.parse(datum1[0]);
+		
+			List<Lekar> lekari  =  new ArrayList<Lekar>();
+			lekari=lekarRepository.findAll();
+			
+			List<Pregled> pregledi  =  new ArrayList<Pregled>();
+			pregledi=pregledRepository.findAll();
+
+			List<ZahtevZaOdmor> zahtevi  =  new ArrayList<ZahtevZaOdmor>();
+			
+					
+					int radnoVreme=0;
+					int ukupnoTrajanje=0;
+		
+		
 		for (Lekar l : listaLekara) {
+			
 			if(l.getKlinika().getId().equals(idKlinike) && l.getTipPregleda().getNaziv().equals(pretragaKlinikaDTO.getTipPregleda())) {
 				
-				listaLekaraDTO.add(new LekarDTO(l));
+				
+				
+				radnoVreme = l.getKraj() - l.getPocetak();
+				zahtevi= (List<ZahtevZaOdmor>) l.zahtevZaOdmor;
+				
+				
+				if(!zahtevi.isEmpty()) {
+				
+					
+					
+				for(ZahtevZaOdmor z: zahtevi) {
+			
+					String[] pocetak=z.getStartDate().split("'");
+					SimpleDateFormat inFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+					Date p = inFormat1.parse(pocetak[0]);
+						
+					
+					String[] kraj=z.getEndDate().split("'");
+					SimpleDateFormat inFormat2 = new SimpleDateFormat("yyyy-MM-dd");
+					Date k = inFormat2.parse(kraj[0]);
+						
+
+					if( dtIn.after(k) || dtIn.before(p))  {
+						
+						System.out.println("ne nalazi se izmedju");
+						
+						
+						for(Pregled pr: pregledi) {
+							
+							if(pr.getLekar().getId().equals(l.getId()) && pr.getDatum().equals(datumm)) {
+							
+								System.out.println("pogresio za bojanu");
+							 ukupnoTrajanje=(int) (ukupnoTrajanje+pr.getTrajanje());
+							}
+							}
+					
+						System.out.println(ukupnoTrajanje);
+						System.out.println(radnoVreme);
+						
+						
+								if(radnoVreme - ukupnoTrajanje>=1) {
+
+									listaLekaraDTO.add(new LekarDTO(l));
+									
+									}
+								ukupnoTrajanje=0;
+				} else
+					System.out.println("nalazi se izmedju");
+			}
+	} 
+	
+	else {
+				
+		
+					
+					System.out.println("usao u else");
+						for(Pregled pr: pregledi) {
+							
+							if(pr.getLekar().getId().equals(l.getId()) && pr.getDatum().equals(datumm)) {
+								System.out.println("usao u dobro za pecu i dimija");
+							 ukupnoTrajanje=(int) (ukupnoTrajanje+pr.getTrajanje());
+							}
+							}
+					
+								if(radnoVreme- ukupnoTrajanje>=1) {
+				
+
+									listaLekaraDTO.add(new LekarDTO(l));
+						
+					}
+				} ukupnoTrajanje=0;
+	
+			}
+				
 			}
 	
-		}
 		
 			
 		return new ResponseEntity<>(listaLekaraDTO, HttpStatus.OK);
 	}
 
+	
+	@PostMapping(value = "/nadjiZauzetePreglede/{id}")
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<List<Integer>> nadjiZauzetePreglede (@PathVariable Long id, @RequestBody String datum ) {
+	
+		Lekar lekar = lekarService.findOne(id);
+		
+		if (lekar == null) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+
+		List<Integer> sati = new ArrayList<Integer>();
+
+		List<Pregled> pregledi  =  new ArrayList<Pregled>();
+		pregledi=pregledRepository.findAll();
+		Integer pocetak=0;
+		Integer kraj=0;
+		Integer razlika=0;
+		Integer i=0;
+		
+		for(Pregled pr: pregledi) {
+			System.out.println(pr.getDatum());
+			System.out.println(datum);
+			
+			String[] datumi = datum.split("\"");
+		
+			System.out.println(datumi[1]);
+			
+			if(pr.getLekar().getId().equals(id) && pr.getDatum().equals(datumi[1])) {
+				System.out.println("usaoooooooooooooooooooooooo");
+				pocetak=Integer.parseInt(pr.getVreme());
+				sati.add(pocetak);
+				kraj=pocetak+pr.getTrajanje();
+				razlika=kraj-pocetak;
+				if(razlika>1) {
+					for( i=1; i<razlika; i++) {
+						sati.add(pocetak+i);
+					}
+				}
+				
+			
+				}
+			}
+		System.out.println(sati);
+		
+		return new ResponseEntity<>(sati, HttpStatus.OK);
+		
+		
+	}
+	
 	@GetMapping(value = "/get/{id}")
 	@PreAuthorize("hasAuthority('LEKAR')")
 	public ResponseEntity<LekarDTO> getLekar(@PathVariable Long id) {
