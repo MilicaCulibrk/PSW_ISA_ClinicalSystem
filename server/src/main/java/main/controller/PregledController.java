@@ -328,10 +328,12 @@ public class PregledController {
 			
 			if(flag == false) {
 			
-				pregledService.dodajZahtev(zahtevZaPregledDTO);
+				
 				
 				List<AdministratorKlinike> adminiKlinika = adminKlinikeService.findAll();
-
+				AdministratorKlinike admin = new AdministratorKlinike();
+				
+				
 				for (AdministratorKlinike adminKlinike : adminiKlinika) {
 					System.out.println("Usao u listu admina klinike");
 					System.out.println(adminKlinike.getKlinika().getId());
@@ -341,8 +343,12 @@ public class PregledController {
 						String message = "Podneli ste zahtev za pregled/operaciju na Vasoj klinici od lekara "
 								+ zahtevZaPregledDTO.getLekar().getIme() + " " + zahtevZaPregledDTO.getLekar().getPrezime();
 						mailService.sendNotificaitionAsync(adminKlinike, message);
+						
+						admin = adminKlinike;
 					}
 				}
+				
+				pregledService.dodajZahtev(zahtevZaPregledDTO, admin);
 				
 			}
 			
@@ -358,7 +364,7 @@ public class PregledController {
 			
 	    throws MailException, InterruptedException {
 	
-			pregledService.dodajZahtev(zahtevZaPregledDTO);
+		
 			Pacijent pacijent = pacijentService.findOne(zahtevZaPregledDTO.getIdPacijenta());
 			List<AdministratorKlinike> adminiKlinika = adminKlinikeService.findAll();
 			AdministratorKlinike admin = new AdministratorKlinike();
@@ -373,9 +379,13 @@ public class PregledController {
 					String message = "Pacijent "
 							+ pacijent.getIme() + " " + pacijent.getPrezime() + " je podneo zahtev za pregled.";
 					mailService.sendNotificaitionAsync(adminKlinike, message);
+					
+					admin = adminKlinike;
 				}
 			}
 
+	     pregledService.dodajZahtev(zahtevZaPregledDTO, admin);		
+			
 		 return new ResponseEntity<>(null, HttpStatus.OK);
 			
 	}
