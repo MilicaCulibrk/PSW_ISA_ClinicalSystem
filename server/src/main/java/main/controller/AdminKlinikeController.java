@@ -21,13 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.AdminKlinikeDTO;
-import main.dto.KlinikaDTO;
-import main.dto.LekarDTO;
 import main.dto.ZahtevZaOdmorDTO;
+import main.dto.ZahtevZaPregledDTO;
 import main.model.AdministratorKlinike;
-import main.model.Klinika;
-import main.model.Lekar;
 import main.model.ZahtevZaOdmor;
+import main.model.ZahtevZaPregled;
 import main.service.AdminKlinikeService;
 
 
@@ -127,6 +125,26 @@ public class AdminKlinikeController {
 			if(zzo.getOdobren()==null) {
 				listaZahtevaDTO.add(new ZahtevZaOdmorDTO(zzo));
 			}
+		}
+		
+		return new ResponseEntity<>(listaZahtevaDTO, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/izlistajZahteveZaPregled/{idAdmina}")
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	public ResponseEntity<List<ZahtevZaPregledDTO>> getIzlistajZahteveZaPregled(@PathVariable Long idAdmina) {
+		Collection<ZahtevZaPregled> listaZahteva = new ArrayList<ZahtevZaPregled>();
+		List<ZahtevZaPregledDTO> listaZahtevaDTO = new ArrayList<ZahtevZaPregledDTO>();
+
+		List<AdministratorKlinike> admini = adminKlinikeService.findAll();
+		for (AdministratorKlinike administratorKlinike : admini) {
+			if(administratorKlinike.getId().equals(idAdmina)) {
+				listaZahteva = administratorKlinike.getZahtevZaPregled();
+			}
+		}
+		
+		for (ZahtevZaPregled zzp : listaZahteva) {
+				listaZahtevaDTO.add(new ZahtevZaPregledDTO(zzp));
 		}
 		
 		return new ResponseEntity<>(listaZahtevaDTO, HttpStatus.OK);

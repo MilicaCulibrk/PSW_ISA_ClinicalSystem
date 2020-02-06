@@ -88,7 +88,7 @@ public class SalaService {
 	}
 	
 	public List<Sala> pronadjiSale(Long klinika_id, String naziv, Integer broj, String datum, String vreme){
-		
+		System.out.println("heeejj -> " + datum +" ii  "+ vreme);
 		//lista slobodnoh sala koju vracam
 		List<Sala> ret= new ArrayList<Sala>();
 		
@@ -131,6 +131,7 @@ public class SalaService {
 						
 					
 						for(Pregled p: pregledi) {
+							System.out.println(p.getDatum() + "pregeld i novi datum "+datum);
 							if(s.getId() == p.getSala().getId() && p.getDatum().equals(datum)) {
 							
 								

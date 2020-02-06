@@ -43,7 +43,7 @@ public class PacijentController {
 
 	
 	@GetMapping(value = "/get/{id}")
-	@PreAuthorize("hasAuthority('PACIJENT')")
+	@PreAuthorize("hasAnyAuthority('PACIJENT, LEKAR')")
 	public ResponseEntity<PacijentDTO> getPostojeciPacijent(@PathVariable Long id) {
 
 		

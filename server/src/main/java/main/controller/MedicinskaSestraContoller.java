@@ -1,5 +1,9 @@
 package main.controller;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.LekarDTO;
 import main.dto.MedicinskaSestraDTO;
+import main.dto.ZahtevZaOdmorDTO;
 import main.model.Lekar;
 import main.model.MedicinskaSestra;
+import main.model.ZahtevZaOdmor;
 import main.service.MedicinskaSestraService;
 
 @CrossOrigin
@@ -57,6 +63,28 @@ public class MedicinskaSestraContoller {
 		}
 		
 		return new ResponseEntity<>(msdto, HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/izlistajOdmor/{idMS}")
+	@PreAuthorize("hasAuthority('MEDICINSKA_SESTRA')")
+	public ResponseEntity<?> izlistajOdmor(@PathVariable Long idMS) {
+		List<MedicinskaSestra> listaMS = mss.findAll();
+		Collection<ZahtevZaOdmor> listaOdmora = new ArrayList<ZahtevZaOdmor>();
+		List<ZahtevZaOdmorDTO> listaOdmoraDTO = new ArrayList<ZahtevZaOdmorDTO>();
+		for (MedicinskaSestra ms : listaMS) {
+				if(ms.getId().equals(idMS)) {
+					listaOdmora = ms.getZahtevZaOdmor();
+				}
+		}
+		for (ZahtevZaOdmor zahtevZaOdmor : listaOdmora) {
+			try{
+				if(zahtevZaOdmor.getOdobren()==true)
+					listaOdmoraDTO.add(new ZahtevZaOdmorDTO(zahtevZaOdmor));
+			}catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		return new ResponseEntity<>(listaOdmoraDTO, HttpStatus.OK);
 	}
 	
 }

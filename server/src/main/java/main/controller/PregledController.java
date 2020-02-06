@@ -26,6 +26,7 @@ import main.model.AdministratorKlinike;
 import main.model.Pacijent;
 import main.model.Pregled;
 import main.model.ZahtevZaPregled;
+import main.repository.AdminKlinikeRepository;
 import main.repository.PregledRepository;
 import main.service.AdminKlinikeService;
 import main.service.MailService;
@@ -53,6 +54,8 @@ public class PregledController {
 	@Autowired
 	private AdminKlinikeService adminKlinikeService;
 
+
+	
 	@Autowired
 	private MailService mailService;
 
@@ -354,13 +357,11 @@ public class PregledController {
 	public ResponseEntity<?> podnesiZahtevPacijent(@RequestBody ZahtevZaPregledDTO zahtevZaPregledDTO)
 			
 	    throws MailException, InterruptedException {
-		
-
+	
 			pregledService.dodajZahtev(zahtevZaPregledDTO);
-			
-			List<AdministratorKlinike> adminiKlinika = adminKlinikeService.findAll();
-			
 			Pacijent pacijent = pacijentService.findOne(zahtevZaPregledDTO.getIdPacijenta());
+			List<AdministratorKlinike> adminiKlinika = adminKlinikeService.findAll();
+			AdministratorKlinike admin = new AdministratorKlinike();
 
 			for (AdministratorKlinike adminKlinike : adminiKlinika) {
 				System.out.println("Usao u listu admina klinike");
@@ -368,6 +369,7 @@ public class PregledController {
 				System.out.println(zahtevZaPregledDTO.getLekar().getIdKlinike());
 				if (adminKlinike.getKlinika().getId() == zahtevZaPregledDTO.getLekar().getIdKlinike()) {
 					System.out.println("Nasao admina klinike");
+
 					String message = "Pacijent "
 							+ pacijent.getIme() + " " + pacijent.getPrezime() + " je podneo zahtev za pregled.";
 					mailService.sendNotificaitionAsync(adminKlinike, message);
