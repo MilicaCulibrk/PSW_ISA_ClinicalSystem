@@ -1,4 +1,5 @@
 package main.controller;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -128,7 +129,7 @@ public class KlinikaController {
 	
 	@PreAuthorize("hasAuthority('PACIJENT')")
 	 @PostMapping(value = "/pretraga/{id}",consumes = "application/json")
-    public ResponseEntity<?> pretragaKlinike(@RequestBody PretragaKlinikeDTO pretragaKlinikeDTO, @PathVariable Long id){
+    public ResponseEntity<?> pretragaKlinike(@RequestBody PretragaKlinikeDTO pretragaKlinikeDTO, @PathVariable Long id) throws ParseException {
 
 
 	    	
@@ -148,8 +149,6 @@ public class KlinikaController {
 	    			tipPregleda = pretragaKlinikeDTO.getTipPregleda();	    		
 	    		}
 	    	}
-
-	    	//AdministratorKlinike admin =  adminKlinikeService.findOne(id);
 
 	    	List<Klinika> klinike = klinikaService.pronadjiKlinike( datum, tipPregleda);
 
