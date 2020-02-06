@@ -25,6 +25,7 @@ import main.dto.ZahtevZaPregledDTO;
 import main.model.AdministratorKlinike;
 import main.model.Pregled;
 import main.model.ZahtevZaPregled;
+import main.repository.AdminKlinikeRepository;
 import main.repository.PregledRepository;
 import main.service.AdminKlinikeService;
 import main.service.MailService;
@@ -48,6 +49,8 @@ public class PregledController {
 	@Autowired
 	private AdminKlinikeService adminKlinikeService;
 
+
+	
 	@Autowired
 	private MailService mailService;
 
@@ -313,10 +316,9 @@ public class PregledController {
 		
 		if(flag == false) {
 		
-			pregledService.dodajZahtev(zahtevZaPregledDTO);
 			
 			List<AdministratorKlinike> adminiKlinika = adminKlinikeService.findAll();
-
+			AdministratorKlinike admin = new AdministratorKlinike();
 			for (AdministratorKlinike adminKlinike : adminiKlinika) {
 				System.out.println("Usao u listu admina klinike");
 				System.out.println(adminKlinike.getKlinika().getId());
@@ -325,9 +327,12 @@ public class PregledController {
 					System.out.println("Nasao admina klinike");
 					String message = "Podneli ste zahtev za pregled/operaciju na Vasoj klinici od lekara "
 							+ zahtevZaPregledDTO.getLekar().getIme() + " " + zahtevZaPregledDTO.getLekar().getPrezime();
-					mailService.sendNotificaitionAsync(adminKlinike, message);
+					//mailService.sendNotificaitionAsync(adminKlinike, message);
+					// cuvam admina
+					admin = adminKlinike;
 				}
 			}
+			pregledService.dodajZahtev(zahtevZaPregledDTO, admin);
 			
 		}
 		

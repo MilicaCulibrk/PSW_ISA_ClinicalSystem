@@ -1,6 +1,7 @@
 package main.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -21,9 +22,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import main.dto.PregledDTO;
 import main.dto.PretragaSaleDTO;
 import main.dto.SalaDTO;
 import main.model.AdministratorKlinike;
+import main.model.Lekar;
 import main.model.Pregled;
 import main.model.Sala;
 import main.service.AdminKlinikeService;
@@ -164,7 +167,7 @@ public class SalaController {
 	 @PostMapping(value = "/pretraga/{id}",consumes = "application/json")
      public ResponseEntity<?> pretragaSale(@RequestBody PretragaSaleDTO pretragaSaleDTO, @PathVariable Long id){
 
-
+System.out.println("helou ima li koga");
 	    	String naziv = null;
 	    	Integer broj = null;
 	    	String datum = null;
@@ -210,5 +213,27 @@ public class SalaController {
 
 
 	    }
+	 
+		@GetMapping(value = "/izlistajZauzece/{idSale}")
+		@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+		public ResponseEntity<?> izlistajZauzece(@PathVariable Long idSale) {
+			List<Sala> listaSala = salaKlinikeService.findAll();
+			Collection<Pregled> listaPregleda = new ArrayList<Pregled>();
+			List<PregledDTO> listaPregledaDTO = new ArrayList<PregledDTO>();
+			for (Sala s : listaSala) {
+					if(s.getId().equals(idSale)) {
+						listaPregleda = s.getPregledi();
+					}
+			}
+			for (Pregled p : listaPregleda) {
+				try{
+					if(p.getIdPacijenta()!=null)
+						listaPregledaDTO.add(new PregledDTO(p));
+				}catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+			return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
+		}
 
 }

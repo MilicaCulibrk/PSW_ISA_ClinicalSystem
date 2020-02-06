@@ -121,13 +121,12 @@
           <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
             <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
 	               <label for="Form-username" style="color: #b3b3b3;">Selektuj po:</label>
-	               <b-form-select  >
-	               	<option v-on:click="azuriraj('Id')">Id</option>
-	               	<option v-on:click="azuriraj('Ime')">Ime</option>
-	               	<option v-on:click="azuriraj('Prezime')">Prezime</option>
-	               	<option v-on:click="azuriraj('JMBG')">JMBG</option>
-	               	<option v-on:click="azuriraj('Email')">Email</option>
-	               </b-form-select>
+                 <b-form-select v-model="odabirSortiranja" @change="azuriraj()" >
+                  <option 
+                    v-for="i in sortiranje"
+                  >{{i}}</option>
+
+                </b-form-select>
 			</div>
 			</div>
 			<div  class="message-form" style="position: relative; top: 10px; left: 0px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
@@ -146,7 +145,7 @@
 			                  </thead>
 			                  <tbody>
 			                  <tr v-for="k,i in pacijenti.length" v-on:click="otvoriPacijenta(pacijenti[i])">
-			                    <td v-on:click="otvoriPacijenta(pacijenti[i])">{{pacijenti[i].id}}</td>
+			                    <td>{{pacijenti[i].id}}</td>
 			                    <td>{{pacijenti[i].ime}}</td>
 			                    <td>{{pacijenti[i].prezime}}</td>
 			                    <td>{{pacijenti[i].jmbg}}</td>
@@ -155,21 +154,88 @@
 			                  </tr>
 			                  </tbody>
 			        </table>    
-			        <button v-on:click="pritisni">Pritisni me</button>
 			 </div>
 			 </div>
           </div>
    
         </div>
         </form>
-  <form v-if="prikazPacijenta" >
- 		<div style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; ">	                    
-      <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
-        <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
-          <h1>Pacijent {{trenutniPacijent.ime}} {{trenutniPacijent.prezime}}</h1>
-          <button>Zapocni pregled</button>
-          <button v-on:click="otvoriZK(trenutniPacijent.idZdravstveniKarton)">Pregledaj zdravstveni karton</button>
+        <form v-if="prikazPacijenta" >
+          <div style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; ">	                    
+           <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+             <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+               <h1 style="text-align: center; background-color: rgba(179, 227, 233, 0.733); color: #37474F">Pacijent - {{trenutniPacijent.ime}} {{trenutniPacijent.prezime}}</h1>
+               <div class="row" >
+                <div class="column">
+                  <button class="btn btn-light" style="background-color: #eeeeee; width: 395px; height: 100px; font-size : 30px;" v-on:click="otvoriZK(trenutniPacijent.idZdravstveniKarton)">Zdravstveni karton</button>
+                </div>                 
+              
+                </div>
+               <div class="row">
+               <div class="column"  style="width:100%;">
+                <div v-if="prikazZK" >
+                  <div class="form-group">                    
+                    <div class="card-body mx-4 mt-4">
+                      <div class="row">
+        
+                    <div class="col">
+                      <label for="Form-dioptrija" style="color: #b3b3b3;">Dioptrija</label>
+                      <input type="text" v-model="zdravstveniK.dioptrija" id="Form-username" class="form-control" :disabled="!izmeniZK">
+                      
+                      <label for="Form-alergija" style="color: #b3b3b3;">Alergija</label>
+                      <input type="text" v-model="zdravstveniK.alergije" id="Form-ime" class="form-control" :disabled="!izmeniZK">
+                      
+                      <label for="Form-visina" style="color: #b3b3b3;">Visina</label>
+                      <input type="text" v-model="zdravstveniK.visina" id="Form-phone" class="form-control" :disabled="!izmeniZK">
+                      
+                      <label for="Form-tezina" style="color: #b3b3b3;">Tezina</label>
+                      <input type="text" v-model="zdravstveniK.tezina" id="Form-email4" class="form-control" :disabled="!izmeniZK">
 
+                        
+                    </div>
+                    
+                   
+                  </div>
+                  <div class="text-center mb-4 mt-4">
+                    <template>
+                    <button v-if="!izmeniZK" type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="izmenaZK">Izmeni</button>
+                    </template>
+                    <template>
+                    <button v-if="izmeniZK" type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="sacuvajZK">Sacuvaj</button>
+                    <button v-if="izmeniZK" type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustaniZK">Odustani</button>
+                    </template>
+                  </div>
+                  <div class="row">
+                    <b-button v-b-toggle.collapse-1 variant="primary" v-on:click="otvoriIzvestaje" style=" background-color: #b3b3b3;">Istorija bolesti</b-button>
+                    <b-collapse id="collapse-1" class="mt-2">
+                      <b-card>
+                        <table  id="tablePreview" class="table table-hover" style="width: 100%;">
+                          <thead>
+                            <tr>
+                                    <th class="th-lg">Id</th>
+                                    <th class="th-lg">Opis</th>
+                                    <th class="th-lg">Dijagnoza</th>
+                                    <th class="th-lg">Lek</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  <tr v-for="k,i in izvestaji.length">
+                                    <td>{{izvestaji[i].id}}</td>
+                                    <td>{{izvestaji[i].opis}}</td>
+                                    <td>{{izvestaji[i].dijagnoza}}</td>
+                                    <td>{{izvestaji[i].lekovi}}</td>
+                                    
+                                  </tr>
+                                  </tbody>
+                        </table>   
+                      </b-card>
+                    </b-collapse>
+                  </div>
+               </div>                     
+              </div>
+            </div>
+          </div>
+          </div>
 			  </div>
 			</div>
     </div>
@@ -196,63 +262,7 @@
 
 </form>
 
-  <form  v-if="prikazZK" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
-  
-
-    <div >	                    
-       <div  class="container d-flex justify-content-center" style="margin-top: 30px">
-
-
-           <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
-
-             <div class="form-group">
-       
-               <div class="card-body mx-4 mt-4">
-                 <div class="row">
-       
-                   <div class="col">
-                   <div class="md-form">
-                     <label for="Form-dioptrija" style="color: #b3b3b3;">Dioptrija</label>
-                     <input type="text" v-model="zdravstveniK.dioptrija" id="Form-username" class="form-control" :disabled="!izmeniZK">
-                     
-                     <label for="Form-alergija" style="color: #b3b3b3;">Alergija</label>
-                     <input type="text" v-model="zdravstveniK.alergije" id="Form-ime" class="form-control" :disabled="!izmeniZK">
-                     
-                     <label for="Form-visina" style="color: #b3b3b3;">Visina</label>
-                     <input type="text" v-model="zdravstveniK.visina" id="Form-phone" class="form-control" :disabled="!izmeniZK">
-                     
-                     <label for="Form-tezina" style="color: #b3b3b3;">Tezina</label>
-                     <input type="text" v-model="zdravstveniK.tezina" id="Form-email4" class="form-control" :disabled="!izmeniZK">
-
-                    
-                   </div>
-                   </div>
-                  
-                 </div>
-                 
-                 <div class="text-center mb-4 mt-4">
-                     <template>
-                     <button v-if="!izmeniZK" type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="izmenaZK">Izmeni</button>
-                     </template>
-                     <template>
-                     <button v-if="izmeniZK" type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="sacuvajZK">Sacuvaj</button>
-                     <button v-if="izmeniZK" type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustaniZK">Odustani</button>
-                     </template>
-                   </div>
-       
-                 
-               </div>
-       
-             </div>
-       
-       
-           </div>
-           
-       
-         </div>
-      
-      </div>
- </form>  
+ 
  <form v-if="prikazRecepata" >
 
 
@@ -307,7 +317,9 @@ export default {
 	data() {
 		return{
 			korisnik: {},
-			pacijenti: {},
+      pacijenti: {},
+      izvestaji: {},
+
 			prikaz: false,
 			izmeni: false,
 			selektovan: {},
@@ -317,6 +329,8 @@ export default {
       izmeniZK:false,
       zdravstveniK: {},
       recepti: {},
+      odabirSortiranja: {},
+      sortiranje: ['id', 'ime', 'prezime', 'JMBG', 'email' ],
 
 			prikazListaPacijenata: false,
       prikazRecepata: false,
@@ -448,16 +462,18 @@ export default {
 		      });
       	},
         otvoriZK(idzk){
+          event.preventDefault();
+
         axios
 
-            .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ idzk)
+            .get("/zdravstveniKarton/pronadjiZdravstveniKarton/" + idzk)
 
             .then(z =>{
               this.zdravstveniK = z.data;
             })
-        this.prikazZK=true;
+        this.prikazZK=!this.prikazZK;
         this.prikazPacijenata=false;
-        this.prikazPacijenta=false;
+        this.prikazPacijenta=true;
 
       },
       izmenaZK(){
@@ -490,11 +506,21 @@ export default {
             console.log(error)
         });
       },
-	  	azuriraj(nes){
+      otvoriIzvestaje(){
+        axios
+		      .get("/izvestaj/izlistaj/" + this.trenutniPacijent.id)
+		      .then(odgovor => {
+			        this.izvestaji = odgovor.data;
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+      },
+      azuriraj(){
 	  		axios
-		      .put("/pacijent/azuriraj", nes)
-		      .then(pacijent => {
-			        this.pacijenti = pacijent.data;
+		      .put("/pacijent/azuriraj", this.odabirSortiranja)
+		      .then(pacijenti => {
+			        this.pacijenti = pacijenti.data;
 			      })
 		      .catch(error => {
 		          console.log(error)

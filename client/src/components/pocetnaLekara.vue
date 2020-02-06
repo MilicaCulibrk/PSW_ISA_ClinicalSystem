@@ -606,9 +606,9 @@ odustaniOdZakazivanja(){
             for (var i = 0; i < odgovor.data.length; i++) {
               var obj = {};
               var m = parseInt(odgovor.data[i].vreme) + odgovor.data[i].trajanjePregleda;
-
-              obj.startDate = new Date(odgovor.data[i].datum + 'T' + odgovor.data[i].vreme +':00');
-              obj.endDate = new Date(odgovor.data[i].datum + 'T' + m +':00');
+              var s = odgovor.data[i].datum.split('T');
+              obj.startDate = new Date(s[0] + 'T' + odgovor.data[i].vreme +':00');
+              obj.endDate = new Date(s[0]+ 'T'+ m +':00');
               obj.title = 'Pregled - ' + odgovor.data[i].tipPregleda.naziv;
               obj.pacijent = odgovor.data[i].idPacijenta;
 

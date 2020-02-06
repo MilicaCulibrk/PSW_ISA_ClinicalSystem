@@ -65,6 +65,9 @@ public class AdministratorKlinike implements UserDetails{
 	 @OneToMany(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
      public java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor = new ArrayList<ZahtevZaOdmor>();
 
+	 @OneToMany(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+     public java.util.Collection<ZahtevZaPregled> zahtevZaPregled = new ArrayList<ZahtevZaPregled>();
+	 
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	@JoinTable(name = "admink_authority",
 			joinColumns = @JoinColumn(name = "admink_id", referencedColumnName = "id"),
@@ -101,6 +104,16 @@ public class AdministratorKlinike implements UserDetails{
 
 	public void setZahtevZaOdmor(java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor) {
 		this.zahtevZaOdmor = zahtevZaOdmor;
+	}
+
+
+	public java.util.Collection<ZahtevZaPregled> getZahtevZaPregled() {
+		return zahtevZaPregled;
+	}
+
+
+	public void setZahtevZaPregled(java.util.Collection<ZahtevZaPregled> zahtevZaPregled) {
+		this.zahtevZaPregled = zahtevZaPregled;
 	}
 
 
