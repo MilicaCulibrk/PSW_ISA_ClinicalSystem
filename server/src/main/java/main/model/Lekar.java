@@ -92,7 +92,7 @@ public class Lekar implements UserDetails{
 	  public RadniKalendar radniKalendar;
 	 
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
-	 public java.util.Collection<Pregled> pregled;
+	 public java.util.Collection<Pregled> pregled = new ArrayList<Pregled>();
 	 
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	 public java.util.Collection<Operacija> operacija;

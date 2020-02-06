@@ -1,5 +1,6 @@
 package main.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.CascadeType;
@@ -27,7 +28,8 @@ public class Sala {
 	@Column(name = "broj", nullable = false)
 	private Integer broj;
 
-	
+	 @OneToMany(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+     public java.util.Collection<Pregled> pregledi = new ArrayList<Pregled>();
 
 		@ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
 		private Klinika klinika;
@@ -78,6 +80,18 @@ public class Sala {
 
 		public void setKlinika(Klinika klinika) {
 			this.klinika = klinika;
+		}
+
+
+
+		public java.util.Collection<Pregled> getPregledi() {
+			return pregledi;
+		}
+
+
+
+		public void setPregledi(java.util.Collection<Pregled> pregledi) {
+			this.pregledi = pregledi;
 		}
 		
 	

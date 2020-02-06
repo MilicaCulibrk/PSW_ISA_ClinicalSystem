@@ -44,6 +44,25 @@
           <h1 style="color: #b3b3b3;">Lekar - {{ korisnik.ime }} {{ korisnik.prezime }} </h1>
         </div>
       </div>
+      <form v-if="prikazKalendara" >
+        <vue-cal style="height: 700px; width: 100%; left: 400px;" selected-date="2020-02-03"
+        class="vuecal--blue-theme"
+          :time-from="8 * 60 "
+          :time-to="23 * 60"
+          :disable-views="['years']"
+          :events="events"
+          :on-event-click="onEventClick"
+          >
+        </vue-cal>
+  
+   </form>
+   <form v-if="prikazZahtevZaOdmor" style="position: relative; top: 10px; left: 400px;">
+    <div>
+      <date-picker v-model="time3" range ></date-picker>
+      <button v-on:click="posaljiZahtev">Posalji zahtev</button>
+    </div>
+  
+  </form>
     </div>
 
                   <form  v-if="prikaz" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
@@ -289,12 +308,12 @@
                                   </div>
 
                               
-                                      <b-button v-b-toggle.collapse-1 variant="primary" v-on:click="otvoriIzvestaje" style="background-color: #b3b3b3;">+Zakazi novi pregled</b-button>
+                                      <b-button v-b-toggle.collapse-1 variant="primary" v-on:click="nadjiDatume" style="background-color: #b3b3b3;">+Zakazi novi pregled</b-button>
                                       <b-collapse id="collapse-1" class="mt-2">
                                         <b-card>
                                             <label for="Form-ime">Datum</label>
                                             <section>
-                                            <date-picker 
+                                            <date-picker :disabled-date="kadJeNaGodisnjem"
                                                
                                               v-model="zahtevZaPregled.datum"
                                               format="YYYY-MM-DD"
@@ -420,26 +439,7 @@
                     </div>
  
              </form>     
-             <form v-if="prikazKalendara" >
-                  <vue-cal style="height: 400px; width: 100%; " selected-date="2020-02-03"
-                  class="vuecal--blue-theme"
-                    :time-from="8 * 60 "
-                    :time-to="23 * 60"
-                    :disable-views="['years']"
-                    editable-events
-                    resize-x
-                    :events="events"
-                    >
-                  </vue-cal>
 
-             </form>
-             <form v-if="prikazZahtevZaOdmor" style="position: relative; top: 10px; left: 400px;">
-              <div>
-                <date-picker v-model="time3" range></date-picker>
-                <button v-on:click="posaljiZahtev">Posalji zahtev</button>
-              </div>
-
-            </form>
 </div>
 
 </template>
@@ -452,18 +452,10 @@ import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 import DatePicker from 'vue2-datepicker';
 import 'vue2-datepicker/index.css';
+import Datepicker from 'vuejs-datepicker';
 export default {
   components: { VueCal ,
     DatePicker},
-  computed: {
-    disabledDates () {
-      const now = new Date()
-      const date = new Date(now)
-      date.setDate(now.getDate() +2)
-      return date
-    },
-
-},
  data() {
      return {
       korisnik: {},
@@ -497,6 +489,7 @@ export default {
       odmor: {},
       dijagnoze: [],
       lekovi: [],
+      datumi: [],
       pregledi: [],
       dijagnoza: {},
       odabirSortiranja: "",
@@ -509,39 +502,45 @@ export default {
         dijagnoza: "",
       },
       filteri: ['Ime', 'Prezime'],
-	  filter: "",
-	  filterString: "",
-	  selektovaniFilter: "",
+	    filter: "",
+	    filterString: "",
+	    selektovaniFilter: "",
       izvestaji: {},
       izabraniLekovi: [],
       pomocna: [],
       rezultatiPretrage: [],
       lista:{},
-      starti:{},
-      endi:{},
+
       pomocnaRezultatiPretrage: [],
       prikazKalendara: false,
       prikazZahtevZaOdmor: false,
-      events: [
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      title: 'Godisnji odmor',
-      //content: '<i class="v-icon material-icons">directions_run</i>',
-      //class: 'sport',
+      time3: null,
+
+      selectedEvent: {},
+
+      events: [],
+    
+
     }
-    
-    
-    ],
-    
-        time1: null,
-        time2: null,
-        time3: null,
-        
-      }
   },
   
   methods: {
+    onEventClick (event, e) {
+    this.selectedEvent = event
+    axios
+        .get("/pacijent/get/" + this.selectedEvent.pacijent)
+        .then(odgovor =>{
+          this.trenutniPacijent = odgovor.data;
+          this.prikazPacijenta = true;
+          this.prikazKalendara = false;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+
+    // Prevent navigating to narrower view (default vue-cal behavior).
+    e.stopPropagation()
+  },
         otvoriFormu(){
             this.prikaz=!this.prikaz;
             this.ponistiPretraguPacijenata();
@@ -603,11 +602,19 @@ odustaniOdZakazivanja(){
 		      .get("/lekar/izlistajOdmor/" + this.$store.state.user.id)
 		      .then(odgovor => {
             //this.events = odgovor.data;
-            for (let i = 0; i < odgovor.data.length; i++) {
-              this.events[0].startDate = new Date(odgovor.data[i].start);
-              this.events[0].endDate = new Date(odgovor.data[i].end);
+            this.events.length = 0;
+            for (var i = 0; i < odgovor.data.length; i++) {
+              var obj = {};
+              var m = parseInt(odgovor.data[i].vreme) + odgovor.data[i].trajanjePregleda;
+              var s = odgovor.data[i].datum.split('T');
+              obj.startDate = new Date(s[0] + 'T' + odgovor.data[i].vreme +':00');
+              obj.endDate = new Date(s[0]+ 'T'+ m +':00');
+              obj.title = 'Pregled - ' + odgovor.data[i].tipPregleda.naziv;
+              obj.pacijent = odgovor.data[i].idPacijenta;
+
+              this.events.unshift(obj);
              }
-   
+             
 			      })
 		      .catch(error => {
 		          console.log(error)
@@ -880,10 +887,50 @@ odustaniOdZakazivanja(){
               alert("Poslat zahtev!");
 			      })
 		      .catch(error => {
+            alert("Nije moguce traziti godisnji za izabrane datume! U tom periodu imate vec zakazan pregled/operaciju.")
 		          console.log(error)
 		      });
     },
+
+    nadjiDatume() {
+
+      console.log('usao');
+
+      axios
+      .get("/zahtevZaOdmor/nadjiDatume/" + this.$store.state.user.id)
+      .then(datumi => {
+        this.datumi = datumi.data;
+
+        for(var i = 0; i < this.datumi.length; i++){
+            this.datumi[i] = new Date(this.datumi[i]);
+        }
+
+        })
+      .catch(error => {
+          console.log(error)
+      });
+ 
+      console.log(this.datumi[0]);
+
     },
+   
+    kadJeNaGodisnjem(date) {
+
+      if(date ===  this.datumi[0]){
+          console.log('jednaki');
+      }else{
+        console.log('razliciti');
+      }
+
+      console.log(date);
+      console.log(this.datumi[0]);
+
+    
+         return (date >= this.datumi[0] && date <= this.datumi[1]);
+      
+    
+    },
+  },
  beforeUpdate(){
   
  

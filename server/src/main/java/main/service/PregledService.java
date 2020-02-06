@@ -1,5 +1,6 @@
 package main.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,11 @@ import org.springframework.stereotype.Service;
 
 import main.dto.PregledDTO;
 import main.dto.ZahtevZaPregledDTO;
+import main.model.AdministratorKlinike;
 import main.model.Pregled;
+import main.model.Sala;
 import main.model.ZahtevZaPregled;
+import main.repository.AdminKlinikeRepository;
 import main.repository.LekarRepository;
 import main.repository.PregledRepository;
 import main.repository.SalaRepository;
@@ -34,6 +38,9 @@ public class PregledService {
 	@Autowired
 	private TipPregledaRepository tipPregledaRepository;
 	
+	@Autowired
+	private AdminKlinikeRepository adminKlinikeRepository;
+	
 	public Pregled findOne(Long id) {
 		return pregledRepository.findById(id).orElseGet(null);
 	}
@@ -41,7 +48,7 @@ public class PregledService {
 	public Pregled zakaziPregled(Long idPacijent, Pregled pregled) {
 		  
 		pregled.setIdPacijenta(idPacijent);
-		
+		pregled.getLekar().getPregled().add(pregled);
 
 		pregledRepository.save(pregled);
 		
@@ -64,7 +71,13 @@ public class PregledService {
 		pregled.setZavrsen(false);
 		System.out.println(pregledDTO.getTrajanjePregleda());
 		pregledRepository.save(pregled);
-		
+		for (Sala s : salaKlinikeRepository.findAll()) {
+			if(s.getId().equals(pregledDTO.getSala().getId())){
+				s.getPregledi().add(pregled);
+				salaKlinikeRepository.save(s);
+			}
+				
+		}
 		PregledDTO pregleddto = new PregledDTO(pregled);
 		return pregleddto;
 	}
@@ -73,7 +86,7 @@ public class PregledService {
 		return pregledRepository.findAll();
 	}
 	
-	public void dodajZahtev(ZahtevZaPregledDTO zahtevZaPregledDTO) {
+	public void dodajZahtev(ZahtevZaPregledDTO zahtevZaPregledDTO, AdministratorKlinike admin) {
 
 	
 		ZahtevZaPregled zahtevZaPregled = new ZahtevZaPregled();
@@ -88,8 +101,11 @@ public class PregledService {
 		zahtevZaPregled.setTipPregleda(tipPregledaRepository.findById(zahtevZaPregledDTO.getTipPregleda().getId()).orElse(null));
 
 		zahtevZaPregledRepository.save(zahtevZaPregled);
-
-	}
+		
+		admin.getZahtevZaPregled().add(zahtevZaPregled);
+		adminKlinikeRepository.save(admin);
+		
+}
 
 
 }
