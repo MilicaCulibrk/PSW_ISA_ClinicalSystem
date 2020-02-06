@@ -138,18 +138,33 @@ public class PregledController {
 	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
 	public ResponseEntity<PregledDTO> dodajPregled(@RequestBody PregledDTO pregledDTO) {
 
+		System.out.println("LALALALLA");
+		
 		PregledDTO pregleddto = new PregledDTO();
 		boolean flag = false;
 		
-		 int pocetakRV = pregledDTO.getLekar().getPocetak();
-		 int krajRV = pregledDTO.getLekar().getKraj();
+		System.out.println(pregledDTO.getLekar().getPocetak());
+		System.out.println(pregledDTO.getVreme());
+		
+		 Integer pocetakRV = pregledDTO.getLekar().getPocetak();
+		 Integer krajRV = pregledDTO.getLekar().getKraj();
 		 
 		 String pocetakPstr = pregledDTO.getVreme();
-		 double pocetakP = Double.parseDouble(pocetakPstr);
+		 Integer pocetakP = Integer.parseInt(pocetakPstr);
+		 Integer trajanjeP = pregledDTO.getTrajanjePregleda();
+	
+		 Integer krajP = pocetakP + trajanjeP;
 		 
-		 Double trajanjeP = pregledDTO.getTrajanjePregleda();
-		 System.out.println(trajanjeP);
-		 Double krajP = pocetakP + trajanjeP;
+			//termin ne sme pocinjati pre radnog vremena lekara i zavrsavati se posle radnog vremena lekara
+		    if(pocetakP < pocetakRV || pocetakP > krajRV) {
+				flag = true;
+			}
+			
+			//termin ne sme pocinjati posle radnog vremena lekara, a zavrsavati se posle radnog vremena lekara
+		    if(pocetakP > pocetakRV && krajP > krajRV) {
+				flag = true;
+			}
+			
 		 
 		 //ako postoji predefinisan pregled sa istom salom i datumom proverimo da li se vreme poklapa, jer ne sme
 		 List<Pregled> pregledi = pregledService.findAll();
@@ -157,46 +172,37 @@ public class PregledController {
 				
 				
 				String vremeStr = pregled.getVreme();
-				double pocetakPregleda =  Double.parseDouble(vremeStr);
-				double trajanjePregleda = pregledDTO.getTrajanjePregleda()*60;
-				double krajPregleda = pocetakPregleda + trajanjePregleda;
+				Integer pocetakPregleda =  Integer.parseInt(vremeStr);
+				Integer trajanjePregleda = pregledDTO.getTrajanjePregleda();
+				Integer krajPregleda = pocetakPregleda + trajanjePregleda;
 				
 				
-				if(pregledDTO.getDatum().equals(pregled.getDatum()) && pregled.getIdPacijenta() == null && pregled.getSala().getId() == pregledDTO.getSala().getId()) {
+				if(pregledDTO.getDatum().equals(pregled.getDatum()) && pregled.getSala().getId() == pregledDTO.getSala().getId()) {
 				
 					//pregled ne sme da pocne u terminu drugog pregleda
-					if(pocetakP >= pocetakPregleda && pocetakP <= krajPregleda) {
+					if(pocetakP > pocetakPregleda && pocetakP < krajPregleda) {
 						flag = true;
 					}
 					
 					//termin ne sme da pocne pre pocetka drugog pregleda a zavrsi se posle pocetka drugog pregleda
-					else if(pocetakP <= pocetakPregleda && krajP >= pocetakPregleda) {
+					else if(pocetakP <= pocetakPregleda && krajP > pocetakPregleda) {
 						flag = true;
 					}
 					
 				//ako postoji pregled sa istim datumom i razlicitom salom ali istim lekarom
-				}else if(pregledDTO.getDatum().equals(pregled.getDatum()) && pregled.getIdPacijenta() == null && pregled.getSala().getId() != pregledDTO.getSala().getId() && pregled.getLekar().getId() == pregledDTO.getLekar().getId()) {
+				}else if(pregledDTO.getDatum().equals(pregled.getDatum()) && pregled.getSala().getId() != pregledDTO.getSala().getId() && pregled.getLekar().getId() == pregledDTO.getLekar().getId()) {
 						
 				    //ako pregled pocinje u terminu drugog pregleda
-					if(pocetakP >= pocetakPregleda && pocetakP <= krajPregleda) {
+					if(pocetakP > pocetakPregleda && pocetakP < krajPregleda) {
 						flag = true;
 					}
 					
 					//termin ne sme da pocne pre pocetka drugog pregleda a zavrsi se posle pocetka drugog pregleda
-					else if(pocetakP <= pocetakPregleda && krajP >= pocetakPregleda) {
+					else if(pocetakP <= pocetakPregleda && krajP > pocetakPregleda) {
 						flag = true;
 					}
 					
-					//termin ne sme pocinjati pre radnog vremena lekara i zavrsavati se posle radnog vremena lekara
-					else if(pocetakP < pocetakRV || pocetakP > krajRV) {
-						flag = true;
-					}
-					
-					//termin ne sme pocinjati posle radnog vremena lekara, a zavrsavati se posle radnog vremena lekara
-					else if(pocetakP > pocetakRV && krajP > krajRV) {
-						flag = true;
-					}
-					
+			
 				}
 			}
 			
