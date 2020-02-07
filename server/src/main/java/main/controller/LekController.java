@@ -6,11 +6,13 @@ import java.util.List;
 import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.QueryByExampleExecutor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,8 +22,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.KlinikaDTO;
 import main.dto.LekDTO;
+import main.dto.MedicinskaSestraDTO;
 import main.model.Lek;
 import main.model.Lekar;
+import main.model.MedicinskaSestra;
+import main.repository.LekRepository;
 import main.service.LekService;
 
 @CrossOrigin
@@ -61,17 +66,24 @@ public class LekController {
 		return new ResponseEntity<>(lekdto, HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/obrisi/{id}")
+	@DeleteMapping(value = "/izbrisi/{id}")
 	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
-	public ResponseEntity<List<Lek>> obrisi(@PathVariable Long id) {
+	public ResponseEntity<List<LekDTO>> deleteLek(@PathVariable Long id) {
 
-		Lek lek = lekService.findOne(id);
-		List<Lek> lekDTO = new ArrayList<>();
-		lekService.remove(id);
-		lekDTO = lekService.findAll();
-		return new ResponseEntity<>(lekDTO,HttpStatus.OK);
-		
-		//	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		
+		Lek l = lekService.findOne(id);
+		List<LekDTO> lekDTO = new ArrayList<LekDTO>();
+		if (l != null) {
+			lekService.remove(id);
+			List<Lek> sk = lekService.findAll();
+
+			for (Lek lek : sk) {
+				lekDTO.add(new LekDTO(lek));
+
+			}
+			return new ResponseEntity<>(lekDTO, HttpStatus.OK);
+
+		}
+
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 }

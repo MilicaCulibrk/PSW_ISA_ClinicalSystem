@@ -21,6 +21,7 @@ public class DijagnozaDTO {
 		// TODO Auto-generated constructor stub
 		this.sifra = d.getSifra();
 		this.naziv = d.getNaziv();
+		this.id = d.getId();
 	}
 	public Long getId() {
 		return id;

@@ -21,6 +21,10 @@
               <b v-on:click="otvoriLekariKlinike" class="zmdi zmdi-link" v-if="prikazLekariKlinike" style="color:  rgba(130, 206, 209, 0.733)" > LEKARI KLINIKE </b> 
               <i v-on:click="otvoriLekariKlinike" v-else> LEKARI KLINIKE </i>
           </a>
+
+          <a href="#">
+            <i v-on:click="otvoriMedicinskeSestreKlinike"> MEDICINSKE SESTRE KLINIKE </i>
+        </a>
         
             <a href="#">
                 <b v-on:click="otvoriUpravljanjeSalama" class="zmdi zmdi-link" v-if="prikazUpravljanjeSalama" style="color:  rgba(130, 206, 209, 0.733)" > UPRAVLJANJE SALAMA </b> 
@@ -819,6 +823,110 @@
 		          </div>        
            </form>
            
+
+
+
+           <form v-if="prikazMedicinskeSestreKlinike"  class="message-form" style="position: relative; top: 10px; left: 950px; width: 550px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+
+            <div>
+                     
+                 
+                   <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+                 
+                     
+                     <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+
+                       <div class="form-group">
+                 
+                         <div class="card-body mx-4 mt-4">
+                           <div class="row">
+                 
+                             <div class="col">
+                             <div class="md-form">
+
+                               
+                               <label for="Form-ime" style="color: #b3b3b3;">Ime</label>
+                               <input type="text" v-model="medicinskaSestra.ime" id="Form-ime" class="form-control">
+                               
+                               <label for="Form-ime" style="color: #b3b3b3;">Prezime</label>
+                               <input type="text" v-model="medicinskaSestra.prezime" id="Form-ime" class="form-control">
+                               
+                                <label for="Form-username" style="color: #b3b3b3;">E-mail</label>
+                               <input type="text" v-model="medicinskaSestra.email" id="Form-username" class="form-control" >
+
+                               <label for="Form-username" style="color: #b3b3b3;">Lozinka</label>
+                               <input type="text" v-model="medicinskaSestra.lozinka" id="Form-username" class="form-control" >
+                               
+                               <label for="Form-phone" style="color: #b3b3b3;">Telefon</label>
+                               <input type="text" v-model="medicinskaSestra.telefon" id="Form-phone" class="form-control" >
+                               
+                               <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
+                               <input type="text" v-model="medicinskaSestra.adresa" id="Form-email4" class="form-control">
+
+
+                             </div>
+                             </div>
+                             <div class="col">
+                             <div class="md-form pb-3">
+                 
+                               <label for="Form-email4" style="color: #b3b3b3;">Grad</label>
+                               <input type="text" v-model="medicinskaSestra.grad" id="Form-email4" class="form-control" >
+                             
+                               <label for="Form-email4" style="color: #b3b3b3;">Drzava</label>
+                               <input type="text" v-model="medicinskaSestra.drzava" id="Form-email4" class="form-control" >                                        
+                 
+                               <label for="Form-email4" style="color: #b3b3b3;">Jmbg</label>
+                               <input type="text" v-model="medicinskaSestra.jmbg" id="Form-email4" class="form-control" >        
+
+                             </div>
+                             </div>
+                           </div>
+                           
+                 
+                 
+                           <div class="text-center mb-4 mt-4">
+                             <template>
+                             <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajMedicinskuSestru">Dodaj</button>
+                             <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustaniDodajMedicinskuSestru">Odustani</button>
+                             </template>
+                           </div>
+                 
+                         </div>
+                 
+                       </div>
+                 
+                 
+                     </div>
+                     
+                 
+                   </div>
+                   </div>
+     </form>
+
+     <form   v-if="prikazMedicinskeSestreKlinike" class="message-form" style="position: relative; top: -650px; left: 300px; width: 550px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+   <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+     <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+
+   <table style="width: 500px;">
+             <tr>
+               <th class="bg-info  text-white">Ime</th>
+               <th class="bg-info  text-white">Prezime</th>
+               <th class="bg-info  text-white">Obrisi</th>
+             </tr>
+             <tr v-for="k,i in medicinskeSestre.length">
+               <td>{{medicinskeSestre[i].ime}}</td>
+               <td>{{medicinskeSestre[i].prezime}}</td>
+               <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiMedicinskuSestru(medicinskeSestre[i])"><i class="fa fa-trash">Obrisi</i></button>
+               </td>
+             </tr>
+         </table>
+
+
+   </div>
+   </div>        
+</form>
+
+
            <form   v-if="prikazLekariKlinike" class="message-form" style="position: relative; top: -600px; left: 300px; width: 550px; height: 280px; background-color: rgba(130, 206, 209, 0.733); ">
             <div  class="container d-flex justify-content-center" style="margin-top: 30px">	
               <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	        
@@ -845,6 +953,7 @@
             <b-alert v-else show variant="success" class="d-flex justify-content-center">{{errormessage}}</b-alert>
           </b-modal>
          
+
 </div>
 
 </template>
@@ -920,6 +1029,7 @@ export default {
       pomocna: [],
       pomocnaRezultatiPretrage: [],
       lekari: [],
+      medicinskeSestre:[],
       selektovaniTip: "",
       selektovanaSala: "",
       selektovaniFilter: "",
@@ -937,14 +1047,18 @@ export default {
       prikazUpravljanjeSalama: false,
       prikazUpravljanjeTipovimaPregleda: false,
       prikazPretragaIfiltriranjeSala: false,
+      prikazMedicinskeSestreKlinike: false,
+      
       prikazZahtevaZaOdmor: false,
       prikazZahtevaZaPregled: false,
       prikazIzmenaKlinike: false,
       show: false,
+
       izmeni:false,
       izmeniKliniku: false,
       idKlinike: {},
       lekar: {},
+      medicinskaSestra:{},
       id: 2,
 
       zahteviZaOdmor: {},
@@ -1229,6 +1343,29 @@ export default {
 		          console.log(error)
 		      });
         },    
+
+        otvoriMedicinskeSestreKlinike(){
+            
+        this.prikazProfil = false,
+        this.prikazIzmenaKlinike = false,
+        this.prikazMedicinskeSestreKlinike = !this.prikazMedicinskeSestreKlinike,
+        this.prikazLekariKlinike = false,
+        this.prikazDefinisanjePregleda = false,
+        this.prikazUpravljanjeSalama = false,
+        this.prikazUpravljanjeTipovimaPregleda =  false,
+        this.prikazPretragaIfiltriranjeSala = false,
+        this.ponistiPretraguSala(),
+        this.ponistiFiltriranjeSala()
+          axios
+        .get("/medicinska_sestra/izlistaj/" + this.idKlinike)
+        .then(odgovor =>{
+          this.medicinskeSestre = odgovor.data;
+          
+        })
+        .catch(error => {
+            console.log(error)
+        });
+      },    
         
            pretragaSala(){
             this.pretragaSale.vreme = this.vremeS;
@@ -1402,7 +1539,7 @@ export default {
         },
         
         
-           dodajLekara(){
+      dodajLekara(){
 			 if(this.lekar.ime=="" || this.lekar.prezime=="" || this.lekar.email==""  || this.lekar.lozinka=="" ||
 			         this.lekar.adresa=="" || this.lekar.grad=="" || this.lekar.drzava=="" ||
 			         this.lekar.telefon=="" || this.lekar.jmbg=="")
@@ -1442,6 +1579,62 @@ export default {
 	          this.lekar.telefon="";
 	          this.lekar.jmbg="";
         },
+
+        dodajMedicinskuSestru(){
+			 if(this.medicinskaSestra.ime=="" || this.medicinskaSestra.prezime=="" || this.medicinskaSestra.email==""  || this.medicinskaSestra.lozinka=="" ||
+			         this.medicinskaSestra.adresa=="" || this.medicinskaSestra.grad=="" || this.medicinskaSestra.drzava=="" ||
+			         this.medicinskaSestra.telefon=="" || this.medicinskaSestra.jmbg=="")
+			         {
+			          alert("Molimo vas popunite sva polja.");
+			          return;
+			         }
+			this.medicinskaSestra.idKlinike = this.korisnik.idKlinike;
+	        axios
+	        .post("/medicinska_sestra/dodaj" , this.medicinskaSestra)
+	        .then(lekar => {
+	          this.medicinskaSestra.ime="";
+	          this.medicinskaSestra.prezime="";
+	          this.medicinskaSestra.email="";
+	          this.medicinskaSestra.lozinka="";
+	          this.medicinskaSestra.adresa="";
+	          this.medicinskaSestra.grad="";
+	          this.medicinskaSestra.drzava="";
+	          this.medicinskaSestra.telefon="";
+	          this.medicinskaSestra.jmbg="";
+	          alert("Dodata medicinska sestra!");
+       
+	        })
+	        .catch(error => {
+				alert("Medicinska sestra sa ovim email-om vec postoji.");
+          });
+          this.prikazMedicinskeSestreKlinike = false;
+          this.otvoriMedicinskeSestreKlinike();
+        },
+        
+        odustaniDodajMedicinskuSestru(){
+              this.medicinskaSestra.ime="";
+	          this.medicinskaSestra.prezime="";
+	          this.medicinskaSestra.email="";
+	          this.medicinskaSestra.lozinka="";
+	          this.medicinskaSestra.adresa="";
+	          this.medicinskaSestra.grad="";
+	          this.medicinskaSestra.drzava="";
+	          this.medicinskaSestra.telefon="";
+	          this.medicinskaSestra.jmbg="";
+        },
+
+        obrisiMedicinskuSestru(ms){
+            axios
+            .delete("/medicinska_sestra/izbrisi/" + ms.id)
+          .then(odgovor => {
+            this.medicinskeSestre = odgovor.data;
+          
+          })
+          .catch(error => {
+            console.log(error);
+            alert("Ne mozete obrisati medicinsku sestru");
+          });
+          },
          odustaniDodajSalu(){
               this.sala.naziv="";
 	          this.sala.broj="";
