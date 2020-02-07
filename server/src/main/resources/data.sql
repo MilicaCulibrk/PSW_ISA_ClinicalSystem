@@ -24,8 +24,14 @@ INSERT INTO public.pacijent(adresa, aktiviran_nalog, drzava,  email, grad, ime, 
 INSERT INTO public.pacijent(adresa, aktiviran_nalog, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon, zdrastveni_karton_id)
 	VALUES ('Marsala Tita 58', 'false', 'Srbija', 'am@gmail.com', 'Novi Sad', 'Amanda', '23091997', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Mirkovic', '+381/61-5534209', 3);
 
+INSERT INTO public.zahtev_za_registraciju(adresa, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon, status, admin_id)
+	VALUES ('Marsala Tita 58', 'Srbija', 'it@gmail.com', 'Novi Sad', 'Isidora', '23091997', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Tepic', '+381/61-5534209', 'NA_CEKANJU', 1);
+	
+INSERT INTO public.zahtev_za_registraciju(adresa, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon, status, admin_id)
+	VALUES ('Marsala Tita 58', 'Srbija', 'mg@gmail.com', 'Novi Sad', 'Milana', '23091997', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Galin', '+381/61-5534209', 'NA_CEKANJU', 1);
+
 INSERT INTO public.medicinska_sestra( adresa, drzava,  email, grad, ime, jmbg, lozinka, ocena, prezime, telefon, klinika_id, promenjena_lozinka)
-	VALUES ('Marsala Tita 58','Srbija', 'mm@gmail.com', 'Novi Sad', 'Masa', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Matovic', '+381/61-5534209', 1, false);
+	VALUES ('Marsala Tita 58','Srbija', 'mm@gmail.com', 'Novi Sad', 'Masa', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Matovic', '+381/61-5534209', 1, true);
 
 INSERT INTO public.sala(
 	broj, naziv, klinika_id)
@@ -55,20 +61,9 @@ INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmp
 INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmpg, lozinka, ocena, prezime, telefon, tip_pregleda_id, klinika_id, pocetak, kraj, promenjena_lozinka)
 	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'db@gmail.com', 'Novi Sad', 'Dimitrije', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 1, 1, 9, 10, false);
 	
-INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen)
-	VALUES ('5000', '2020-02-20T00:00:00.000Z', null, 2, '11', 1, 1, 1, 'false');
-	
-INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen)
-	VALUES ('5000', '2020-02-10T00:00:00.000Z', null, 1, '9', 2, 1, 1, 'false');
-	
-INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen)
-	VALUES ('5000', '22/01/2019', 1, 1, '9', 2, 1, 1, 'false');
-	
-INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen)
-	VALUES ('5000', '22/01/2019', 2, 2, '11', 1, 1, 1, 'false');	
 	
 INSERT INTO public.administrator_klinike(adresa, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon, klinika_id, promenjena_lozinka)
-	VALUES ('Marsala Tita 58','Srbija', '23nikolasevic@gmail.com', 'Novi Sad', 'Ana', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Nikolasevic', '+381/61-5534209', 1, false);
+	VALUES ('Marsala Tita 58','Srbija', 'an@gmail.com', 'Novi Sad', 'Ana', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Nikolasevic', '+381/61-5534209', 1, false);
 
 
 INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen)
@@ -82,11 +77,6 @@ INSERT INTO public.sala_pregledi(sala_id, pregledi_id)
 	
 INSERT INTO public.sala_pregledi(sala_id, pregledi_id)
 	VALUES (1,2);
-	
-INSERT INTO public.administrator_klinike(adresa, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon, klinika_id, promenjena_lozinka)
-	VALUES ('Marsala Tita 58','Srbija', 'an@gmail.com', 'Novi Sad', 'Ana', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Nikolasevic', '+381/61-5534209', 1, true);
-
-	
 	
 INSERT INTO public.lek(sifra, naziv)
 	VALUES ('Kl130','Diklofenak');

@@ -27,7 +27,7 @@
              <i  v-on:click="listaDijagnoza" class="zmdi zmdi-link">  DIJAGNOZE</i> 
           </a>
            <a href="#">
-             <i v-on:click="pogledajZahteve" class="zmdi zmdi-link" style="color: rgba(130, 206, 209, 0.733); " >ZAHTEVI ZA REGISTRACIJU : {{zahtevi.length}}</i> 
+             <i v-on:click="pogledajZahteve" class="zmdi zmdi-link" style="color: rgba(130, 206, 209, 0.733); " >ZAHTEVI ZA REGISTRACIJU </i> 
           </a>
            <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
@@ -192,7 +192,10 @@
                                         <button v-if="!obradjen"  type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="prihvatiZahtev">Prihvati</button>
                                         </template>
                                         <template>
-                                        <button v-if="!obradjen"   type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odbijZahtev">Odbij</button>
+                                        <button v-if="!obradjen"  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odbijZahtev">Odbij</button>
+                                        </template>
+                                        <template>
+                                        <button v-if="obradjen"  type="button" class="btn btn-success btn-block z-depth-2"  style="color: #37474F; width: 300px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="napraviZK">Napravi zdravstveni karton</button>
                                         </template>
                                       </div>
                 
@@ -458,6 +461,7 @@ import axios from 'axios'
       dijagnoze: [],
       lek: {},
       dijagnoza: {},
+      dodatZK: false,
       administrator: {
           ime: "",
           prezime: "",
@@ -471,6 +475,7 @@ import axios from 'axios'
           idKlinike: "",
         }
       }
+     
   },
   methods: {
          ucitajZahteve(){
@@ -494,23 +499,31 @@ import axios from 'axios'
            	this.$router.push("/dodajKliniku");
         },
      prikaziZahtev(zahtev){
-     	 	this.prikazListaLekova = false;
-	 		this.prikazListaDijagnoza = false;
-            this.prikaz = false;
-            this.prikaz1 = false;
-            this.prikazZ = true;
-            this.trenutni = zahtev;
-            axios
-	        .get("/zahtevZaReg/getPacijenta/"+ zahtev.id)
-	        .then(z =>{
-	          this.pacijent = z.data;
+      axios
+          .get("/zahtevZaReg/getPacijenta/"+ zahtev.id)
+          .then(z =>{
+            this.pacijent = z.data;
+              })
+          .catch(error => {
+              console.log(error)
+          });
+       if(zahtev.status=="NA_CEKANJU"){         
+        this.obradjen = false;
 
+       }else{
+          this.obradjen = true;
 
-      })
-      .catch(error => {
-          console.log(error)
-      });
-             
+        }
+          this.prikazListaLekova = false;
+          this.prikazListaDijagnoza = false;
+          this.prikaz = false;
+          this.prikaz1 = false;
+          this.prikazZ = true;
+          this.trenutni = zahtev;
+
+        
+
+            
         },
         odbijZahtev(){
         	this.trenutni.status = "ODBIJEN";
@@ -519,36 +532,60 @@ import axios from 'axios'
         	this.text = "Nazalost,"
                     + "\n\n vas zahtev je odbijen!" + "\n\nRazlog odbijanja: "+ razlog;
         	axios
-          .post("/registracija/odbijen", this.pacijent.email)
-        	
+          .post("/registracija/odbijen/" + this.trenutni.id +"/" + this.text, this.pacijent)
+          .then(() => {
+              alert('Odbili ste zahtev za registraciju pacijenta.');
+              this.pogledajZahteve();
+
+	        })
+	
+          .catch(function (error) {
+              alert('Neuspesno odbijanje!');
+          
+          });
+
         },
         prihvatiZahtev(){
         	this.trenutni.status = "PRIHVACEN";
-        	this.obradjen = true;
+          this.obradjen = true;
         	this.text = "Cestitamo,"
                     + "\n\n Upravo ste registrovani kao pacijent na sajt Klinickog centra!";
         	axios
-          .post("/registracija/register", this.pacijent)
+          .post("/registracija/register/" + this.trenutni.id, this.pacijent)
           .then(() => {
+              console.log(this.pacijent.id);
               alert('Pacijent uspesno registrovan!');
 	        })
 	
-		    .catch(function (error) {
-		        alert('Neuspesna registracija!');
-		    
-		    });
+          .catch(function (error) {
+              alert('Neuspesna registracija!');
+          
+          });
 
         },
         pogledajZahteve(){
         	this.prikazListaLekova = false;
-	 		this.prikazListaDijagnoza = false;
+	 		    this.prikazListaDijagnoza = false;
           this.prikaz = false;
           this.prikazZ = false;
           this.prikaz1=!this.prikaz1;
              
         },
 
+        napraviZK(){
+          console.log(this.pacijent.id);
+          axios
+          .post("/registracija/napraviZK", this.pacijent)
+          .then(() => {
+              //this.pacijent = odgovor;
+              alert('Uspesno ste napravili zdravstveni karton!');
+	        })
+          .catch(function (error) {
+              alert('Ovaj pacijent ima vec napravljen zdravstveni karton!');
+          
+          });
 
+        },
 
 
         dodajAdministratora(){

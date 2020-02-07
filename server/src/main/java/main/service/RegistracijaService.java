@@ -35,6 +35,10 @@ public class RegistracijaService {
 		@Autowired
 		private PacijentRepository pacijentRepository;
 		
+
+		@Autowired
+		private ZahtevZaRegRepository zahtevZaRegRepository;
+		
 		@Autowired
 		private ZdravstveniKartonRepository zdravstveniKartonRepository;
 		
@@ -52,7 +56,7 @@ public class RegistracijaService {
 
 
 	
-	public void register(PacijentDTO pacijentDTO) {
+	public PacijentDTO register(PacijentDTO pacijentDTO, Long zahtevId) {
 		
 		Pacijent pacijent = new Pacijent();
 
@@ -73,19 +77,65 @@ public class RegistracijaService {
 		pacijent.setJmbg(pacijentDTO.getJmbg());
 		pacijent.setLozinka(passwordEncoder.encode(pacijentDTO.getLozinka()));
 		
-		ZdravstveniKarton zk = new ZdravstveniKarton();
-		zk.setAlergije("ambrozija");
-		zk.setDioptrija("-1.5");
-		zk.setTezina("70");
-		zk.setVisina("180");
-		zdravstveniKartonRepository.save(zk);
-		pacijent.setZdravstveniKarton(zk);
-		zk.setPacijent(pacijent);
+		pacijent.setZdravstveniKarton(null);
+		
+		for (ZahtevZaRegistraciju zzr : zahtevZaRegRepository.findAll()) {
+			if(zzr.getId().equals(zahtevId)) {
+				zzr.setStatus("PRIHVACEN");
+				zahtevZaRegRepository.save(zzr);
+			}
+		}
 		
 		this.pacijentRepository.save(pacijent);
 		
+		PacijentDTO pacdto = new PacijentDTO(pacijent);
+		return pacdto;
+	}
 
 
+
+
+
+	public void odbijen(Long zahtevId) {
+		// TODO Auto-generated method stub
+		for (ZahtevZaRegistraciju zzr : zahtevZaRegRepository.findAll()) {
+			if(zzr.getId().equals(zahtevId)) {
+				zzr.setStatus("ODBIJEN");
+				zahtevZaRegRepository.save(zzr);
+			}
+		}
+	}
+
+
+
+
+
+	public boolean napraviZK(PacijentDTO korisnik) {
+		// TODO Auto-generated method stub
+		System.out.println("ovoa saljemo kada pravimo zk" + korisnik.getId());
+		Pacijent pacijent = new Pacijent();
+		ZdravstveniKarton zk = new ZdravstveniKarton();
+		zk.setAlergije("");
+		zk.setDioptrija("");
+		zk.setTezina("");
+		zk.setVisina("");
+
+		for (Pacijent p : pacijentRepository.findAll()) {
+			if(p.getEmail().equals(korisnik.getEmail())) {
+				System.out.println("ovo je zk " + p.getZdravstveniKarton());
+				if(p.getZdravstveniKarton()==null) {
+					pacijent = p;
+					zk.setPacijent(p);
+					zdravstveniKartonRepository.save(zk);
+					p.setZdravstveniKarton(zk);
+					pacijentRepository.save(p);
+				}else {
+					return false;
+				}
+			}
+		}
+		PacijentDTO pacijentDTO = new PacijentDTO(pacijent);
+		return true;
 	}
 	
 

@@ -99,8 +99,8 @@ public class TokenUtils {
              .setIssuedAt(timeProvider.now())
              .setExpiration(generateExpirationDate())
              .claim("role", role)
-				.claim("id", adminKlinike.getId())
-				.claim("promenjenaLozinka", adminKlinike.getPromenjenaLozinka())
+			 .claim("id", adminKlinike.getId())
+			 .claim("promenjenaLozinka", adminKlinike.getPromenjenaLozinka())
              .signWith(SIGNATURE_ALGORITHM, SECRET).compact();
  }
  

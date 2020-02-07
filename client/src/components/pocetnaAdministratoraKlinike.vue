@@ -523,6 +523,7 @@
                       <thead>
                         <tr>
                           <th class="th-lg">Lekar</th>
+                          <th class="th-lg">Medicinska sestra</th>
                           <th class="th-lg">Od</th>
                           <th class="th-lg">Do</th>
                           <th class="th-lg">Odobri</th>
@@ -531,7 +532,9 @@
                       </thead>
                       <tbody>
                       <tr v-for="k,i in zahteviZaOdmor.length">
-                        <td>{{zahteviZaOdmor[i].lekar}}{{zahteviZaOdmor[i].medicinskaSestra}}</td>
+                        <td>{{zahteviZaOdmor[i].lekar}}</td>
+                        <td>{{zahteviZaOdmor[i].medicinskaSestra}}</td>
+
                         <td>{{zahteviZaOdmor[i].start}}</td>
                         <td>{{zahteviZaOdmor[i].end}}</td>
                         <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="odobriZahtev(zahteviZaOdmor[i])"><i class="fa fa-trash">Odobri</i></button>

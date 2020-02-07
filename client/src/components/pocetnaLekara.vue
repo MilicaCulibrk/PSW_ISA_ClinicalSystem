@@ -600,7 +600,7 @@ odustaniOdZakazivanja(){
         this.prikazPacijenta = false;
         this.prikaz = false;
         axios
-		      .get("/lekar/izlistajOdmor/" + this.$store.state.user.id)
+		      .get("/lekar/izlistajPreglede/" + this.$store.state.user.id)
 		      .then(odgovor => {
             //this.events = odgovor.data;
             this.events.length = 0;
@@ -614,12 +614,34 @@ odustaniOdZakazivanja(){
               obj.pacijent = odgovor.data[i].idPacijenta;
 
               this.events.unshift(obj);
+              this.izlistajOdmor();
              }
              
 			      })
 		      .catch(error => {
 		          console.log(error)
-		      });
+          });
+        
+      },
+      izlistajOdmor(){
+        axios
+        .get("/lekar/izlistajOdmor/" + this.$store.state.user.id)
+		      .then(odgovor => {
+            //this.events = odgovor.data;
+            
+            for (var i = 0; i < odgovor.data.length; i++) {
+              var obj = {};
+              obj.startDate = new Date(odgovor.data[i].start);
+              obj.endDate = new Date(odgovor.data[i].end);
+              obj.title = 'Godisnji odmor';
+
+              this.events.unshift(obj);
+             }
+             
+			      })
+		      .catch(error => {
+		          console.log(error)
+          });
       },
         ponistiPretraguPacijenata(){
         
