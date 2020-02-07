@@ -62,6 +62,7 @@ public class MedicinskaSestraService {
 		}
 	}
 
+
 	public MedicinskaSestraDTO dodajLekara(MedicinskaSestraDTO msDTO) {
 		// TODO Auto-generated method stub
 		MedicinskaSestra l = new MedicinskaSestra();
@@ -94,14 +95,17 @@ public class MedicinskaSestraService {
 		return msdto;
 	}
 
+
 	public List<MedicinskaSestra> findAll() {
 		// TODO Auto-generated method stub
 		return msr.findAll();
 	}
 
+
 	public void remove(Long id) {
 		msr.deleteById(id);
 		
 	}
+
 
 }

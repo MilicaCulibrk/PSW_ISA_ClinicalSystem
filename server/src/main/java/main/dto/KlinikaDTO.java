@@ -20,7 +20,7 @@ public class KlinikaDTO {
 	
    private String opis;
 	
-   private int ocena;
+   private double ocena;
 	
    private int brojRecenzija;
    
@@ -133,11 +133,11 @@ public void setOpis(String opis) {
 	this.opis = opis;
 }
 
-public int getOcena() {
+public double getOcena() {
 	return ocena;
 }
 
-public void setOcena(int ocena) {
+public void setOcena(double ocena) {
 	this.ocena = ocena;
 }
 

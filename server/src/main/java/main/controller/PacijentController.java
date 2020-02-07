@@ -43,7 +43,7 @@ public class PacijentController {
 
 	
 	@GetMapping(value = "/get/{id}")
-	@PreAuthorize("hasAuthority('PACIJENT')")
+	@PreAuthorize("hasAnyAuthority('PACIJENT, LEKAR')")
 	public ResponseEntity<PacijentDTO> getPostojeciPacijent(@PathVariable Long id) {
 
 		
@@ -92,7 +92,7 @@ public class PacijentController {
 	
 	
 	@GetMapping(value = "/izlistaj")
-	@PreAuthorize("hasAnyAuthority('LEKAR,MEDICINSKA_SESTRA')")
+	@PreAuthorize("hasAnyAuthority('LEKAR, MEDICINSKA_SESTRA')")
 	public ResponseEntity<List<PacijentDTO>> getIzlistaj() {
 		
 		List<Pacijent> listaPacijenata = pacijentService.findAll();
@@ -105,7 +105,7 @@ public class PacijentController {
 	}
 	
 	@PutMapping(value = "/azuriraj")
-	@PreAuthorize("hasAnyAuthority('LEKAR,MEDICINSKA_SESTRA')")
+	@PreAuthorize("hasAnyAuthority('LEKAR, MEDICINSKA_SESTRA')")
 	public ResponseEntity<List<PacijentDTO>> getAzuriraj(@RequestBody String sortBy) {
 		
 		List<Pacijent> listaPacijenata = pacijentService.sortiraj(sortBy);

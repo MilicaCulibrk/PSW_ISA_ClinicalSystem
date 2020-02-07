@@ -1,5 +1,6 @@
 package main.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import main.dto.TipPregledaDTO;
 import main.model.AdministratorKlinike;
+import main.model.TipPregleda;
 import main.model.TipPregleda;
 import main.repository.AdminKlinikeRepository;
 import main.repository.TipPregledaRepository;
@@ -70,6 +72,64 @@ public class TipPregledaService {
 	public void remove(Long id) {
 		tipPregledaRepository.deleteById(id);
 	}
+	
+public List<TipPregleda> pronadjiPreglede( String naziv, String oznaka, String cena){
+		
+		//lista pregleda koju vracam
+		List<TipPregleda> ret = new ArrayList<TipPregleda>();
+		
+		List<TipPregleda> sviPregledi = tipPregledaRepository.findAll();
+		
+	
+		if(naziv == null && oznaka == null && cena == null) {
+			ret = sviPregledi;
+		}else if(naziv == null && oznaka == null && cena != null){
+			for(TipPregleda p : sviPregledi) {
+				if(p.getCena().contains(cena)) {
+					ret.add(p);
+				}
+			}
+		}else if(naziv == null && oznaka != null && cena == null){
+			for(TipPregleda p : sviPregledi) {
+				if(p.getOznaka().contains(oznaka)) {
+					ret.add(p);
+				}
+			}
+		}else if(naziv != null && oznaka == null && cena == null){
+			for(TipPregleda p : sviPregledi) {
+				if(p.getNaziv().contains(naziv)) {
+					ret.add(p);
+				}
+			}
+		}else if(naziv != null && oznaka != null && cena == null){
+			for(TipPregleda p : sviPregledi) {
+				if(p.getNaziv().contains(naziv) && p.getOznaka().contains(oznaka)) {
+					ret.add(p);
+				}
+			}
+		}else if(naziv != null && oznaka == null && cena != null){
+			for(TipPregleda p : sviPregledi) {
+				if(p.getNaziv().contains(naziv) && p.getCena().contains(cena)) {
+					ret.add(p);
+				}
+			}
+		}else if(naziv == null && oznaka != null && cena != null){
+			for(TipPregleda p : sviPregledi) {
+				if(p.getOznaka().contains(oznaka) && p.getCena().contains(cena)) {
+					ret.add(p);
+				}
+			}
+		}else if(naziv != null && oznaka != null && cena != null){
+			for(TipPregleda p : sviPregledi) {
+				if(p.getOznaka().contains(oznaka) && p.getCena().contains(cena)  && p.getNaziv().contains(naziv)) {
+					ret.add(p);
+				}
+			}
+		}
+		
+	
+		return ret;
+		}
 	
 
 }

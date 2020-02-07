@@ -1,5 +1,6 @@
 package main.model;
 
+import java.util.ArrayList;
 /***********************************************************************
  * Module:  Lekar.java
  * Author:  23nik
@@ -62,7 +63,7 @@ public class Lekar implements UserDetails{
    private String jmbg;
 	
 	@Column(name = "ocena", nullable = false)
-   private int ocena;
+   private double ocena;
 	
 	@Column(name = "pocetak", nullable = false)
 	private Integer pocetak;
@@ -91,13 +92,13 @@ public class Lekar implements UserDetails{
 	  public RadniKalendar radniKalendar;
 	 
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
-	 public java.util.Collection<Pregled> pregled;
+	 public java.util.Collection<Pregled> pregled = new ArrayList<Pregled>();
 	 
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	 public java.util.Collection<Operacija> operacija;
 	 
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
-     public java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor;
+     public java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor = new ArrayList<ZahtevZaOdmor>();
 	 
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
      public java.util.Collection<Recept> recept;
@@ -116,7 +117,7 @@ public Lekar() {
 	// TODO Auto-generated constructor stub
 }
 public Lekar(String ime, String prezime, String email, String lozinka, String adresa, String grad, String drzava,
-		String telefon, String jmbg, int ocena, int brojRecenzija, Collection<Izvestaj> izvestaj) {
+		String telefon, String jmbg, Double ocena, int brojRecenzija, Collection<Izvestaj> izvestaj) {
 	super();
 	this.ime = ime;
 	this.prezime = prezime;
@@ -201,10 +202,10 @@ public String getJmbg() {
 public void setJmbg(String jmbg) {
 	this.jmbg = jmbg;
 }
-public int getOcena() {
+public double getOcena() {
 	return ocena;
 }
-public void setOcena(int ocena) {
+public void setOcena(double ocena) {
 	this.ocena = ocena;
 }
 public int getBrojRecenzija() {
@@ -271,14 +272,7 @@ public Integer getKraj() {
 public void setKraj(Integer kraj) {
 	this.kraj = kraj;
 }
-@Override
-public String toString() {
-	return "Lekar [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email + ", lozinka=" + lozinka
-			+ ", adresa=" + adresa + ", grad=" + grad + ", drzava=" + drzava + ", telefon=" + telefon + ", jmbg=" + jmbg
-			+ ", ocena=" + ocena + ", brojRecenzija=" + brojRecenzija + ", izvestaj=" + izvestaj + ", klinika="
-			+ klinika + ", radniKalendar=" + radniKalendar + ", pregled=" + pregled + ", operacija=" + operacija
-			+ ", zahtevZaOdmor=" + zahtevZaOdmor + ", recept=" + recept + "]";
-}
+
 
 
 

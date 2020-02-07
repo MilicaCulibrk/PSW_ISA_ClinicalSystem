@@ -34,7 +34,10 @@
              <i v-on:click="otvoriDefinisanjePregleda" class="zmdi zmdi-link">  DEFINISANJE PREGLEDA</i> 
           </a>
             <a href="#">
-              <i v-on:click="otvoriPretragaIfiltriranjeSala"> PRETRAGA I FILTRIRANJE SALA </i>
+              <i v-on:click="otvoriZahteveZaPregled"> PRETRAGA I FILTRIRANJE SALA </i>
+          </a>
+          <a href="#">
+              <i v-on:click="otvoriZahteveZaOdmor"> ZAHTEVI ZA ODMOR </i>
           </a>
             <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
@@ -153,8 +156,16 @@
                                         <div class="col">
                                         <div class="md-form">
                                           <label for="Form-username" style="color: #b3b3b3;">Datum</label>
-                                          <input type="text" v-model="pregled.datum" id="Form-username" class="form-control" >
-                                          
+                                          <section>
+                                            <date-picker 
+                                               
+                                              v-model="pregled.datum"
+                                              format="YYYY-MM-DD"
+                                              type="date"
+                                              placeholder="Select date"
+                                            >
+                                              </date-picker>  
+                                            </section>
                                            <label for="Form-username" style="color: #b3b3b3;">Vreme pocetka (sati)</label>
                                             <b-form-select v-model="pregled.vreme">
 							                    <option
@@ -189,7 +200,7 @@
 							              <label for="Form-phone" style="color: #b3b3b3;">Sala</label>
                                           <b-form-select v-model="selektovanaSala">
 							                    <option
-							                      v-for="s in pomocna"
+							                      v-for="s in sale"
 							                      :value="s.id"
 							                      :key="s.id"
 							                    >{{s.naziv}}</option>
@@ -261,7 +272,8 @@
 			                    <td>{{sale[i].naziv}}</td>
 			                    <td>{{sale[i].broj}}</td>
 			                    <td>{{sale[i].klinika.naziv}}</td>
-			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="izaberiSaluZaIzmenu(sale[i])">IZMENI</button>
+                          <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="izaberiSaluZaIzmenu(sale[i])">IZMENI</button> 
+                          </td>
 			                  	<td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiSalu(sale[i])">OBRISI</button>
 			                    </td>
 			                  </tr>
@@ -347,7 +359,7 @@
 			                    <td>{{tipovi[i].naziv}}</td>
 			                    <td>{{tipovi[i].oznaka}}</td>
 			                    <td>{{tipovi[i].cena}}</td>
-			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="izaberiTipPregledaZaIzmenu(tipovi[i])">IZMENI</button>
+			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="izaberiTipPregledaZaIzmenu(tipovi[i])">IZMENI</button></td>
 			                  	<td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiTipPregleda(tipovi[i])">OBRISI</button>
 			                    </td>
 			                  </tr>
@@ -381,19 +393,15 @@
                                           <label for="Form-ime" style="color: #b3b3b3;">Naziv</label>
                                           <input type="text" v-model="tipPregleda.naziv" id="Form-ime" class="form-control">
                                           
-										  <label for="Form-ime" style="color: #b3b3b3;">Oznaka</label>
+										                      <label for="Form-ime" style="color: #b3b3b3;">Oznaka</label>
                                           <input type="text" v-model="tipPregleda.oznaka" id="Form-ime" class="form-control">
                                           
                                             <label for="Form-ime" style="color: #b3b3b3;">Cena</label>
                                           <input type="text" v-model="tipPregleda.cena" id="Form-ime" class="form-control">
                                           
-                                      
-                                           <label for="Form-username" style="color: #b3b3b3;">Klinika</label>
-                                           <button  id="Form-username" class="form-control"  disabled>{{tipovi[0].klinika.naziv}}</button>
-
+                                    
                                         </div>
                                         </div>
-                                      
                                       </div>
                                       
                             
@@ -403,6 +411,8 @@
                                         <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajNoviTipPregleda">Dodaj</button>
                                         <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustaniDodajTipPregleda">Odustani</button>
                                         <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); "  v-on:click="izmeniTipPregleda">Izmeni</button>
+                                        <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="pretragaTipovaPregleda">Pretraga</button>
+                                        <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); "  v-on:click="ponistiPretraguTipovaPregleda">Ponisti</button>
                                         </template>
                                       </div>
                             
@@ -419,7 +429,7 @@
                  	 </form>
                  
                   
-                  <form v-if="prikazIzmenaKlinike"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+                  <form v-if="ponistizmenaKlinike"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
 
                        <div>
                                 
@@ -503,6 +513,63 @@
                               </div>
                 </form>
                 
+
+                <form v-if="prikazZahtevaZaOdmor"  class="message-form"  style="position: relative; top: 10px; left: 400px; width: 800px; height: 480px; background-color: rgba(130, 206, 209, 0.733); ">
+                  <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+                  
+                  <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+                    <table  id="tablePreview" class="table table-hover" style="width: 100%;">
+                      <thead>
+                        <tr>
+                          <th class="th-lg">Lekar</th>
+                          <th class="th-lg">Od</th>
+                          <th class="th-lg">Do</th>
+                          <th class="th-lg">Odobri</th>
+                          <th class="th-lg">Odbij</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                      <tr v-for="k,i in zahteviZaOdmor.length">
+                        <td>{{zahteviZaOdmor[i].lekar}}{{zahteviZaOdmor[i].medicinskaSestra}}</td>
+                        <td>{{zahteviZaOdmor[i].start}}</td>
+                        <td>{{zahteviZaOdmor[i].end}}</td>
+                        <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="odobriZahtev(zahteviZaOdmor[i])"><i class="fa fa-trash">Odobri</i></button>
+                        </td>
+                        <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="odbijZahtev(zahteviZaOdmor[i])"><i class="fa fa-trash">Odbij</i></button>
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+		          </div>
+		          </div>        
+		       </form>
+
+           <form v-if="prikazZahtevaZaPregled"  class="message-form"  style="position: relative; top: 10px; left: 400px; width: 800px; height: 480px; background-color: rgba(130, 206, 209, 0.733); ">
+            <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+            
+            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+              <table  id="tablePreview" class="table table-hover" style="width: 100%;">
+                <thead>
+                  <tr>
+                    <th class="th-lg">Pregled/Operacija</th>
+                    <th class="th-lg">Datum</th>
+                    <th class="th-lg">Vreme</th>
+                    <th class="th-lg">Pristupi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr v-for="k,i in zahteviZaPregled.length">
+                  <td>{{zahteviZaPregled[i].vrstaPregleda
+                    }}</td>
+                  <td>{{zahteviZaPregled[i].datum}}</td>
+                  <td>{{zahteviZaPregled[i].vreme}}</td>
+                  <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="otvoriPretragaIfiltriranjeSala(zahteviZaPregled[i])"><i class="fa fa-trash">Pristupi</i></button></td>
+                </tr>
+                </tbody>
+              </table>
+        </div>
+        </div>        
+     </form>
                 </form>
                   
                   <form v-if="prikazPretragaIfiltriranjeSala" class="message-form" style="position: relative; top: 10px; left: 300px; width: 550px; height: 480px; background-color: rgba(130, 206, 209, 0.733); ">
@@ -513,16 +580,26 @@
 			                 <tr>
 			                    <th class="bg-info  text-white">Naziv</th>
 			                    <th class="bg-info  text-white">Broj</th>
-			                  
+                          <th class="bg-info  text-white">Kalendar</th>
 			                 </tr>
 			                  <tr v-for="k,i in sale.length">
 			                    <td>{{sale[i].naziv}}</td>
 			                    <td>{{sale[i].broj}}</td>
-			                   
-			                    </td>
+                          <td style="text-align: center"> <button  type="button" class="btn btn-block z-depth-2" @click="otvoriKalendar(sale[i])" >Kalendar</button></td>
+                          <b-modal v-model="show" hide-footer title="Kalendar sale">
+                            <vue-cal
+                            style="height: 300px;"
+                            xsmall
+                            hide-view-selector
+                            click-to-navigate
+                            default-view="month"
+                            :events="events"
+                            >
+                          </vue-cal>
+                         </b-modal>
 			                  </tr>
 			              </table>
-			              
+                    
 			              </div>
 		          </div>
 			              
@@ -553,14 +630,15 @@
 										  <label for="Form-ime" style="color: #b3b3b3;">Broj</label>
                                           <input type="text" v-model="pretragaSale.broj" id="Form-ime" class="form-control">
                                           
-                                            <label for="Form-ime" style="color: #b3b3b3;">Datum</label>
-                                          <input type="text" v-model="pretragaSale.datum" id="Form-ime" class="form-control">
+                                            <label for="Form-ime" style="color: #b3b3b3;">Datum </label>
+                                            <input v-model="datumS" class="form-control">
+                                                  
                                           
                                             <label for="Form-ime" style="color: #b3b3b3;">Vreme pocetka (sati)</label>
-                                         <b-form-select v-model="pretragaSale.vreme">
+                                         <b-form-select v-model="vremeS">
 							                    <option
 							                      v-for="v in vremena"
-							                    
+                                    
 							                    >{{v}}</option>
 							                  </b-form-select>
                                           
@@ -719,7 +797,7 @@
                               </div>
                 </form>
 
-                <form   v-if="prikazLekariKlinike" class="message-form" style="position: relative; top: -650px; left: 300px; width: 550px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+                <form v-if="prikazLekariKlinike" class="message-form" style="position: relative; top: -650px; left: 300px; width: 550px; height: 400px; background-color: rgba(130, 206, 209, 0.733); ">
 		          <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
 		            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
 
@@ -744,6 +822,7 @@
 		          </div>        
            </form>
            
+
 
 
            <form v-if="prikazMedicinskeSestreKlinike"  class="message-form" style="position: relative; top: 10px; left: 950px; width: 550px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
@@ -847,16 +926,56 @@
 </form>
 
 
+           <form   v-if="prikazLekariKlinike" class="message-form" style="position: relative; top: -600px; left: 300px; width: 550px; height: 280px; background-color: rgba(130, 206, 209, 0.733); ">
+            <div  class="container d-flex justify-content-center" style="margin-top: 30px">	
+              <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	        
+              
+              <label for="Form-ime" style="color: #b3b3b3; ">Ime</label>
+              <input type="text" style="width: 300px" v-model="pretragaLekara.ime" id="Form-ime" class="form-control">
+              
+              <label for="Form-ime" style="color: #b3b3b3;">Prezime</label>
+              <input type="text" style="width: 300px" v-model="pretragaLekara.prezime" id="Form-ime" class="form-control">
+              
+              <div class="text-center mb-4 mt-4">
+              <template>
+                <button  type="button" class="btn btn-success btn-block z-depth-2"  style="color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);" v-on:click="pretraziLekare">Pretraga</button>
+                <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); "  v-on:click="ponistiPretraguLekara">Ponisti</button>
+              </template>
+            </div>
+            
+              </div>
+            </div>
+          </form>
+
+
 </div>
 
 </template>
 
 <script>
+import moment from 'moment'
 import axios from 'axios'
+import VueCal from 'vue-cal';
+import 'vue-cal/dist/vuecal.css';
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
 export default {
+  components: { VueCal ,
+    DatePicker},
+  computed: {
+    disabledDates () {
+      const now = new Date()
+      const date = new Date(now)
+      date.setDate(now.getDate() +2)
+      return date
+    },
+
+},
  data() {
      return {
       korisnik: {},
+      datumS: {},
+      vremeS: {},
       klinika: {},
         pregled: {
         datum: "",
@@ -884,8 +1003,12 @@ export default {
 	        naziv: "",
 	        broj: "",
 	        datum: "",
-			vreme: "",
+			    vreme: "",
 	        
+        },
+        pretragaLekara: {
+	        ime: "",
+	        prezime: "",
         },
       vremena: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
 	  trajanja: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
@@ -909,7 +1032,7 @@ export default {
       
       flag: 0,
       prikazProfil:false,
-      prikazIzmenaKlinike: false,
+      ponistizmenaKlinike: false,
       prikazLekariKlinike: false,
       prikazDefinisanjePregleda: false,
       prikazUpravljanjeSalama: false,
@@ -917,112 +1040,180 @@ export default {
       prikazPretragaIfiltriranjeSala: false,
       prikazMedicinskeSestreKlinike: false,
       
-      
+      prikazZahtevaZaOdmor: false,
+      prikazZahtevaZaPregled: false,
+      show: false,
+
       izmeni:false,
       izmeniKliniku: false,
       idKlinike: {},
       lekar: {},
       medicinskaSestra:{},
-      id: 2
+      id: 2,
+
+      zahteviZaOdmor: {},
+      zahteviZaPregled: {},
+      trenutniZahtevZaPregled: {},
+
+      events: [],
       }
  },
   methods: {
-        otvoriProfil(){
-             this.prikazProfil = !this.prikazProfil,
-		     this.prikazIzmenaKlinike = false,
-		     this.prikazLekariKlinike = false,
-		     this.prikazDefinisanjePregleda = false,
-		     this.prikazUpravljanjeSalama = false,
-		     this.prikazUpravljanjeTipovimaPregleda = false,
-		     this.prikazPretragaIfiltriranjeSala = false, 
-		     this.ponistiPretraguSala(),
-		     this.ponistiFiltriranjeSala()
-		     
+    ponisti(){
+      this.prikazProfil = false;
+      this.prikazIzmenaKlinike = false;
+      this.prikazLekariKlinike = false;
+      this.prikazDefinisanjePregleda = false;
+      this.prikazUpravljanjeSalama = false;
+      this.prikazUpravljanjeTipovimaPregleda = false;
+      this.prikazPretragaIfiltriranjeSala = false;
+      this.prikazZahtevaZaOdmor = false;
+      this.prikazZahtevaZaPregled = false;
+    },
+        otvoriKalendar(sala){
+          this.show = true;
+          this.events.length = 0;
+          axios
+		      .get("/sala/izlistajZauzece/" + sala.id)
+		      .then(odgovor => {
+            //this.events = odgovor.data;
+            this.events.length = 0;
+            for (var i = 0; i < odgovor.data.length; i++) {
+              var obj = {};
+              var m = parseInt(odgovor.data[i].vreme) + odgovor.data[i].trajanjePregleda;
+              var s = odgovor.data[i].datum.split('T');
+              obj.startDate = new Date(s[0] + 'T' + odgovor.data[i].vreme +':00');
+              obj.endDate = new Date(s[0]+ 'T'+ m +':00');
+              obj.title = 'Pregled - ' + odgovor.data[i].tipPregleda.naziv;
+              obj.pacijent = odgovor.data[i].idPacijenta;
+
+              this.events.unshift(obj);
+             }
+             return 'modal';
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
         },
-         otvoriUpravljanjeTipovimaPregleda(){
-             this.prikazProfil = false,
-		     this.prikazIzmenaKlinike = false,
-		     this.prikazLekariKlinike = false,
-		     this.prikazDefinisanjePregleda = false,
-		     this.prikazUpravljanjeSalama = false,
-		     this.prikazUpravljanjeTipovimaPregleda =  !this.prikazUpravljanjeTipovimaPregleda
-		     this.prikazPretragaIfiltriranjeSala = false,
-		     this.ponistiPretraguSala(),
-		     this.ponistiFiltriranjeSala()
-		     
-			  axios
-		      .get("/tipPregleda/TipoviKlinike/" + this.$store.state.user.id)
-		      .then(tipovi => {
-		        this.tipovi = tipovi.data;
+        odobriZahtev(zahtev){
+          event.preventDefault();
+            axios
+          .put("/zahtevZaOdmor/odobri", zahtev)
+          .then(odgovor =>{
+            alert("Odobrili ste odmor.");
+            this.prikazZahtevaZaOdmor=false;
+            this.otvoriZahteveZaOdmor();
+
+          })
+          .catch(error => {
+              console.log(error)
+              alert("Greska!");
+          });
+          
+        },
+        odbijZahtev(zahtev){
+          event.preventDefault();
+            axios
+          .put("/zahtevZaOdmor/odbij", zahtev)
+          .then(odgovor =>{
+            this.otvoriZahteveZaOdmor();
+          })
+          .catch(error => {
+              console.log(error)
+              alert("Greska!");
+          });
+        },
+        otvoriZahteveZaPregled(){
+          this.ponisti();
+          this.prikazZahtevaZaPregled = true;
+          axios
+		      .get("/adminKlinike/izlistajZahteveZaPregled/" + this.$store.state.user.id)
+		      .then(odgovor => {
+		        this.zahteviZaPregled = odgovor.data;
 		      })
 		      .catch(error => {
 		        console.log(error);
 		      });
         },
-         otvoriUpravljanjeSalama(){
-             this.prikazProfil = false,
-		     this.prikazIzmenaKlinike = false,
-		     this.prikazLekariKlinike = false,
-		     this.prikazDefinisanjePregleda = false,
-		     this.prikazUpravljanjeSalama = !this.prikazUpravljanjeSalama,
-		     this.prikazUpravljanjeTipovimaPregleda =  false,
- 		     this.prikazPretragaIfiltriranjeSala = false,	
- 		     this.ponistiPretraguSala(),	  
- 		     this.ponistiFiltriranjeSala()   
-		        
-		        axios
-		      .get("/sala/getSale/" +  this.$store.state.user.id)
-		      .then(sala =>{
-		        this.sale = sala.data;
-		        
+        otvoriZahteveZaOdmor(){
+          this.ponisti();
+          this.prikazZahtevaZaOdmor=!this.prikazZahtevaZaOdmor;
+          axios
+		      .get("/adminKlinike/izlistajZahteveZaOdmor/" + this.$store.state.user.id)
+		      .then(odgovor => {
+		        this.zahteviZaOdmor = odgovor.data;
 		      })
 		      .catch(error => {
-		          console.log(error)
+		        console.log(error);
 		      });
         },
-        otvoriDefinisanjePregleda(){
-          
-           this.prikazProfil = false,
-	       this.prikazIzmenaKlinike = false,
-	       this.prikazLekariKlinike = false,
-	       this.prikazDefinisanjePregleda = !this.prikazDefinisanjePregleda,
-	       this.prikazUpravljanjeSalama = false,
-		   this.prikazUpravljanjeTipovimaPregleda =  false,
-		   this.prikazPretragaIfiltriranjeSala = false,
-		   this.ponistiPretraguSala(),
-		   this.ponistiFiltriranjeSala()
+        otvoriProfil(){
+          this.ponisti();
+          this.prikazProfil=!this.prikazProfil;
+		     this.ponistiPretraguSala(),
+		     this.ponistiFiltriranjeSala()
+		     
         },
-        otvoriPretragaIfiltriranjeSala(){
+         otvoriUpravljanjeTipovimaPregleda(){
+          this.ponisti();
+          this.prikazUpravljanjeTipovimaPregleda=!this.prikazUpravljanjeTipovimaPregleda;
+          this.ponistiPretraguSala(),
+          this.ponistiFiltriranjeSala()
           
-           this.prikazProfil = false,
-	       this.prikazIzmenaKlinike = false,
-	       this.prikazLekariKlinike = false,
-	       this.prikazDefinisanjePregleda = false,
-	       this.prikazUpravljanjeSalama = false,
-		   this.prikazUpravljanjeTipovimaPregleda =  false,
-		   this.prikazPretragaIfiltriranjeSala =  !this.prikazPretragaIfiltriranjeSala ,
-		   this.ponistiPretraguSala(),
-		   this.ponistiFiltriranjeSala()
+          axios
+            .get("/tipPregleda/TipoviKlinike/" + this.$store.state.user.id)
+            .then(tipovi => {
+              this.tipovi = tipovi.data;
+            })
+            .catch(error => {
+              console.log(error);
+            });
+        },
+         otvoriUpravljanjeSalama(){
+          this.ponisti();
+          this.prikazUpravljanjeSalama=!this.prikazUpravljanjeSalama;
+          this.ponistiPretraguSala(),	  
+          this.ponistiFiltriranjeSala()   
+              axios
+            .get("/sala/getSale/" +  this.$store.state.user.id)
+            .then(sala =>{
+              this.sale = sala.data;
+              
+            })
+            .catch(error => {
+                console.log(error)
+            });
+        },
+        otvoriDefinisanjePregleda(){
+          this.ponisti();
+          this.prikazDefinisanjePregleda=!this.prikazDefinisanjePregleda;
+          this.ponistiPretraguSala(),
+          this.ponistiFiltriranjeSala()
+        },
+        otvoriPretragaIfiltriranjeSala(trenutniZahtev) {
+          this.ponisti();
+          this.prikazPretragaIfiltriranjeSala=!this.prikazPretragaIfiltriranjeSala;
+          this.ponistiPretraguSala();
+
+          this.datumS = trenutniZahtev.datum.split('T')[0];
+          this.vremeS = trenutniZahtev.vreme;
+          this.ponistiFiltriranjeSala();
+
+
         },
         vidiLokaciju(){
-			this.$router.push("/vidiLokaciju");
-            },
+			    this.$router.push("/vidiLokaciju");
+        },
+
         izmena() {
         	this.izmeni = true
         },
     
         otvoriLekariKlinike(){
-            
-            
-              this.prikazProfil = false,
-		      this.prikazIzmenaKlinike = false,
-		      this.prikazLekariKlinike = !this.prikazLekariKlinike,
-		      this.prikazDefinisanjePregleda = false,
-		      this.prikazUpravljanjeSalama = false,
-		      this.prikazUpravljanjeTipovimaPregleda =  false,
-		        this.prikazPretragaIfiltriranjeSala = false,
-                this.ponistiPretraguSala(),
-                 this.ponistiFiltriranjeSala()
+          this.ponisti();
+          this.prikazLekariKlinike=!this.prikazLekariKlinike;
+          this.ponistiPretraguSala(),
+          this.ponistiFiltriranjeSala()
             axios
 		      .get("/lekar/izlistaj/" + this.idKlinike)
 		      .then(lekar =>{
@@ -1058,7 +1249,9 @@ export default {
       },    
         
            pretragaSala(){
-           
+            this.pretragaSale.vreme = this.vremeS;
+            this.pretragaSale.datum = new Date(this.datumS);
+            console.log(this.pretragaSale.datum);
            	  if(this.pretragaSale.datum == "" && this.pretragaSale.vreme != ""){
           
            	  	alert("Ne mozete uneti vreme bez datuma!");
@@ -1085,6 +1278,70 @@ export default {
            
         },    
         
+        pretragaTipovaPregleda(){
+  
+             axios
+        .post("/tipPregleda/pretraga/" + this.$store.state.user.id, this.tipPregleda)
+        .then(tipovi =>{
+         this.tipovi = tipovi.data;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+           
+       
+    },  
+    
+    pretraziLekare(){
+  
+        axios
+      .post("/lekar/pretraga/" + this.$store.state.user.id, this.pretragaLekara)
+      .then(lekari =>{
+      this.lekari = lekari.data;
+      })
+      .catch(error => {
+      console.log(error)
+      });
+  },    
+
+
+
+     
+    ponistiPretraguTipovaPregleda(){
+        
+    axios
+    .get("/tipPregleda/TipoviKlinike/" + this.$store.state.user.id)
+    .then(tipovi => {
+      this.tipovi = tipovi.data;
+
+       this.tipPregleda.naziv = "", 
+       this.tipPregleda.oznaka = "", 
+       this.tipPregleda.cena = ""
+  
+    })
+    .catch(error => {
+      console.log(error);
+    });
+        
+    },
+
+    ponistiPretraguLekara(){
+        
+        axios
+        .get("/lekar/izlistaj/" + this.idKlinike)
+        .then(lekari => {
+          this.lekari = lekari.data;
+    
+           this.pretragaLekara.ime = "", 
+           this.pretragaLekara.prezime = ""
+         
+      
+        })
+        .catch(error => {
+          console.log(error);
+        });
+            
+        },
      
       
         ponistiPretraguSala(){
@@ -1111,15 +1368,8 @@ export default {
 	           this.filterString = ""
             
         },
-        otvoriDodajLekara(){	
-             
-              this.prikazProfil = false,
-		      this.prikazIzmenaKlinike = false,
-		      this.prikazLekariKlinike = !this.prikazLekariKlinike,
-		      this.prikazDefinisanjePregleda = false,
-		      this.prikazUpravljanjeSalama = false,
-		      this.prikazUpravljanjeTipovimaPregleda =  false,
-		      this.prikazPretragaIfiltriranjeSala = false
+        otvoriDodajLekara(){	     
+          this.ponisti(this.prikazLekariKlinike);
         },
         
         dodajNoviTipPregleda(){
@@ -1367,13 +1617,7 @@ export default {
       .catch(error => {
           console.log(error)
       });
-    	 this.prikazProfil = false;
-	     this.prikazIzmenaKlinike = !this.prikazIzmenaKlinike;
-	     this.prikazLekariKlinike = false,
-	     this.prikazDefinisanjePregleda = false,
-	     this.prikazUpravljanjeSalama =  false,
-	     this.prikazUpravljanjeTipovimaPregleda =  false,
-	       this.prikazPretragaIfiltriranjeSala = false
+    	 this.ponisti(this.ponistizmenaKlinike);
     },
        izaberiSaluZaIzmenu(sala) {
        		this.sala.id = sala.id;

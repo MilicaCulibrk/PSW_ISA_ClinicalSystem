@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import main.dto.LekarDTO;
 import main.model.Authority;
 import main.model.Lekar;
+import main.model.Pacijent;
+import main.model.Lekar;
 import main.repository.AuthorityRepository;
 import main.repository.KlinikaRepository;
 import main.repository.LekarRepository;
@@ -109,7 +111,98 @@ public class LekarService {
 		lekarRepository.deleteById(id);
 	}
 	
+public List<Lekar> pronadjiLekare( String ime, String prezime){
+		
+		//lista pregleda koju vracam
+		List<Lekar> ret = new ArrayList<Lekar>();
+		
+		List<Lekar> sviLekari = lekarRepository.findAll();
+		
+	
+		if(ime == null && prezime == null ) {
+			ret = sviLekari;
+		}else if(ime != null && prezime == null){
+			for(Lekar p : sviLekari) {
+				if(p.getIme().contains(ime)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime == null && prezime != null){
+			for(Lekar p : sviLekari) {
+				if(p.getPrezime().contains(prezime)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime != null){
+			for(Lekar p : sviLekari) {
+				if(p.getIme().contains(ime) && p.getPrezime().contains(prezime)) {
+					ret.add(p);
+				}
+			}
+		}
+		
+	
+		return ret;
+		}
+	
 
+public List<Lekar> pronadjiLekare( String ime, String prezime, Double ocena){
+		
+		//lista lekara koju vracam
+		List<Lekar> ret = new ArrayList<Lekar>();
+		
+		List<Lekar> sviLekari = lekarRepository.findAll();
+		
+	
+		if(ime == null && prezime == null && ocena == null) {
+			ret = sviLekari;
+		}else if(ime == null && prezime == null && ocena != null){
+			for(Lekar p : sviLekari) {
+				if(p.getOcena()==ocena) {
+					ret.add(p);
+				}
+			}
+		}else if(ime == null && prezime != null && ocena == null){
+			for(Lekar p : sviLekari) {
+				if(p.getPrezime().equals(prezime)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime == null && ocena == null){
+			for(Lekar p : sviLekari) {
+				if(p.getIme().equals(ime)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime != null && ocena == null){
+			for(Lekar p : sviLekari) {
+				if(p.getIme().equals(ime) && p.getPrezime().equals(prezime)) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime == null && ocena != null){
+			for(Lekar p : sviLekari) {
+				if(p.getIme().equals(ime) && p.getOcena()==ocena) {
+					ret.add(p);
+				}
+			}
+		}else if(ime == null && prezime != null && ocena != null){
+			for(Lekar p : sviLekari) {
+				if(p.getPrezime().equals(prezime) && p.getOcena()==ocena) {
+					ret.add(p);
+				}
+			}
+		}else if(ime != null && prezime != null && ocena != null){
+			for(Lekar p : sviLekari) {
+				if(p.getPrezime().equals(prezime) && p.getOcena()==ocena  && p.getIme().equals(ime)) {
+					ret.add(p);
+				}
+			}
+		}
+		
+	
+		return ret;
+		}
 	
 
 }

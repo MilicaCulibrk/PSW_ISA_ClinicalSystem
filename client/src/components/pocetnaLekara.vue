@@ -8,12 +8,12 @@
                       
         <ul class="nav">
           <a href="#">
-              <i v-on:click="otvoriFormu" >    PROFIL          
+              <i v-on:click="otvoriFormu" > PROFIL          
               </i>
           </a>
           <a></a>
           <a href="#">
-              <i class="zmdi zmdi-view-dashboard">KALENDAR</i>
+              <i v-on:click="otvoriKalendar">KALENDAR</i>
           </a>
           <a href="#">
              <i class="zmdi zmdi-link">LISTA PREGLEDA</i> 
@@ -33,18 +33,36 @@
         
 
           <a href="#">
-            <i v-on:click="otvoriListuPacijenata" class="zmdi zmdi-link">LISTA PACIJENATA</i> 
+            <i v-on:click="otvoriZahtevZaOdmor" class="zmdi zmdi-link">ZAHTEV ZA ODMOR</i> 
          </a>
 
         </ul>
                     
       </div>
-
       <div id="content">
         <div class="container-fluid">
           <h1 style="color: #b3b3b3;">Lekar - {{ korisnik.ime }} {{ korisnik.prezime }} </h1>
         </div>
       </div>
+      <form v-if="prikazKalendara" >
+        <vue-cal style="height: 700px; width: 100%; left: 400px;" selected-date="2020-02-03"
+        class="vuecal--blue-theme"
+          :time-from="8 * 60 "
+          :time-to="23 * 60"
+          :disable-views="['years']"
+          :events="events"
+          :on-event-click="onEventClick"
+          >
+        </vue-cal>
+  
+   </form>
+   <form v-if="prikazZahtevZaOdmor" style="position: relative; top: 10px; left: 400px;">
+    <div>
+      <date-picker v-model="time3" range ></date-picker>
+      <button v-on:click="posaljiZahtev">Posalji zahtev</button>
+    </div>
+  
+  </form>
     </div>
 
                   <form  v-if="prikaz" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
@@ -136,13 +154,13 @@
                               <div  style="position: relative; top: 10px; left: 300px; width: 650px; height: 100px; background-color: rgba(130, 206, 209, 0.733); ">	                    
                                    <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
                                      <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
-                                          <label for="Form-username" style="color: #b3b3b3;">Selektuj po:</label>
-                                          <b-form-select  >
-                                            <option v-on:click="azuriraj('Id')">Id</option>
-                                            <option v-on:click="azuriraj('Ime')">Ime</option>
-                                            <option v-on:click="azuriraj('Prezime')">Prezime</option>
-                                            <option v-on:click="azuriraj('JMBG')">JMBG</option>
-                                            <option v-on:click="azuriraj('Email')">Email</option>
+
+                                          <label for="Form-username" style="color: #b3b3b3;">Sortiraj po:</label>
+                                          <b-form-select v-model="odabirSortiranja" @change="azuriraj()" >
+                                            <option 
+                                              v-for="i in sortiranje"
+                                            >{{i}}</option>
+
                                           </b-form-select>
                                </div>
                                </div>
@@ -188,8 +206,9 @@
                             <button class="btn btn-light" style="background-color: #eeeeee; width: 395px; height: 100px; font-size : 30px;" v-on:click="otvoriZK(trenutniPacijent.idZdravstveniKarton)">Zdravstveni karton</button>
                           </div>                 
                           <div class="column" >
-                            <button class="btn btn-light" style="background-color: #eeeeee; width: 395px; height: 100px; font-size : 30px;" v-on:click="zapocniPregled()">Zapocni pregled</button>
+                            <button class="btn btn-light" style="background-color: #eeeeee; width: 395px; height: 100px; font-size : 30px;" v-on:click="zapocniPregled">Zapocni pregled</button>
                           </div>
+                          
 
                           </div>
                          <div class="row">
@@ -282,17 +301,57 @@
                                  <label for="Form-dioptrija" style="color: #b3b3b3;">Opis</label>
                                  <input type="text" v-model="izvestaj.opis" id="Form-phone" class="form-control" >
                                
+                                 <div class="text-center mb-4 mt-4">
+                                    <template>
+                                    <button v-if="!izmeniZK" type="button" class="btn btn-danger btn-block z-depth-2" style="color: #37474F; width: 200px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="dodajIzvestaj()">Dodaj Izvestaj</button>
+                                    </template>
+                                  </div>
+
+                              
+                                      <b-button v-b-toggle.collapse-1 variant="primary" v-on:click="nadjiDatume" style="background-color: #b3b3b3;">+Zakazi novi pregled</b-button>
+                                      <b-collapse id="collapse-1" class="mt-2">
+                                        <b-card>
+                                            <label for="Form-ime">Datum</label>
+                                            <section>
+                                            <date-picker :disabled-date="kadJeNaGodisnjem"
+                                               
+                                              v-model="zahtevZaPregled.datum"
+                                              format="YYYY-MM-DD"
+                                              type="date"
+                                              placeholder="Select date"
+                                            >
+                                              </date-picker>  
+                                            </section>
+                                            
+                                          <label for="Form-ime" >Vreme</label>
+                                            <b-form-select v-model="zahtevZaPregled.vreme">
+                                              <option
+                                                v-for="v in vremena"
+                                              >{{v}}</option>
+                                            </b-form-select>
+                          
+                                            <label for="Form-ime" >Trajanje</label>
+                                            <b-form-select v-model="zahtevZaPregled.trajanje">
+                                              <option
+                                                v-for="t in trajanja"
+                                              >{{t}}</option>
+                                            </b-form-select>
+                          
+                                            <label for="Form-prezime">Vrsta pregleda</label>
+                                            <b-form-select v-model="zahtevZaPregled.vrstaPregleda">
+                                              <option
+                                                v-for="vp in vrstePregleda"
+                                              >{{vp}}</option>
+                                            </b-form-select>
+                                         
+                                            <b-button class="mt-2"  style=" color: #37474F;  border-color: rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);"  @click="zakaziPregled">Zakazi</b-button>
+                                            <b-button class="mt-2"  style=" color: #37474F;  border-color: rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);" @click="odustaniOdZakazivanja">Odustani</b-button>
+                                        </b-card>
+                                      </b-collapse>
+                                   
                              
                               </div>
-                             
-                            </div>
-                            <a href="">+Zakazi novi pregled</a>
-                            <div class="text-center mb-4 mt-4">
                               
-
-                              <template>
-                              <button type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 250px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="dodajIzvestaj()">Dodaj izvestaj</button>
-                              </template>
                            </div>
                   
                             </div>
@@ -305,7 +364,9 @@
                        </div>
                      </div>
                    </div>
-                 </form>
+                  </form>
+
+                
 	
 	<form v-if="prikazPacijenata"  class="message-form" style="position: relative; top: -120px; left: 1100px; width: 350px; height: 405px; background-color: rgba(130, 206, 209, 0.733); ">
 
@@ -378,14 +439,23 @@
                     </div>
  
              </form>     
+
 </div>
 
 </template>
 
 
 <script>
-import axios from 'axios'
-    export default {
+import moment from 'moment'
+import axios from 'axios';
+import VueCal from 'vue-cal';
+import 'vue-cal/dist/vuecal.css';
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+import Datepicker from 'vuejs-datepicker';
+export default {
+  components: { VueCal ,
+    DatePicker},
  data() {
      return {
       korisnik: {},
@@ -396,7 +466,17 @@ import axios from 'axios'
 	        prezime: "",
 	        jmbg: "",
         },
+      zahtevZaPregled: {
+        datum: "",
+        vreme: "",
+        trajanje: "",
+        vrstaPregleda: "",
+      },
+      vremena: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+      trajanja: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      vrstePregleda: ['pregled', 'operacija'],
       zdravstveniK: {},
+      zapocetPregled: false,
       prikazZK: false,
       prikaz:false,
       izmeni:false,
@@ -406,10 +486,15 @@ import axios from 'axios'
       prikazPacijenta:false,
       trenutniPacijent:{},
       prikazZapocniPregled: false,
+      odmor: {},
       dijagnoze: [],
       lekovi: [],
+      datumi: [],
+      pregledi: [],
       dijagnoza: {},
+      odabirSortiranja: "",
       lek: {},
+      sortiranje: ['id', 'ime', 'prezime', 'JMBG', 'email' ],
       izvestaj: {
         idPacijenta: "",
         idLekara: "",
@@ -417,18 +502,45 @@ import axios from 'axios'
         dijagnoza: "",
       },
       filteri: ['Ime', 'Prezime'],
-	  filter: "",
-	  filterString: "",
-	  selektovaniFilter: "",
+	    filter: "",
+	    filterString: "",
+	    selektovaniFilter: "",
       izvestaji: {},
       izabraniLekovi: [],
       pomocna: [],
       rezultatiPretrage: [],
+      lista:{},
+
       pomocnaRezultatiPretrage: [],
-      }
+      prikazKalendara: false,
+      prikazZahtevZaOdmor: false,
+      time3: null,
+
+      selectedEvent: {},
+
+      events: [],
+    
+
+    }
   },
   
   methods: {
+    onEventClick (event, e) {
+    this.selectedEvent = event
+    axios
+        .get("/pacijent/get/" + this.selectedEvent.pacijent)
+        .then(odgovor =>{
+          this.trenutniPacijent = odgovor.data;
+          this.prikazPacijenta = true;
+          this.prikazKalendara = false;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+
+    // Prevent navigating to narrower view (default vue-cal behavior).
+    e.stopPropagation()
+  },
         otvoriFormu(){
             this.prikaz=!this.prikaz;
             this.ponistiPretraguPacijenata();
@@ -446,6 +558,67 @@ import axios from 'axios'
       .catch(error => {
           console.log(error)
       });
+      },
+
+      zakaziPregled(){
+
+        var idPregleda = null;
+        for(var i = 0; i < this.pregledi.length; i++){
+          if(this.pregledi[i].idPacijenta == this.trenutniPacijent.id && this.pregledi[i].lekar.id == this.$store.state.user.id){
+             idPregleda = this.pregledi[i].id;
+          }
+        }
+
+
+        axios
+        .post("/pregled/podnesiZahtevLekar/" + idPregleda, this.zahtevZaPregled)
+        .then(response => {
+          this.zahtevZaPregled.datum = "";
+          this.zahtevZaPregled.vreme = "";
+          this.zahtevZaPregled.trajanje = "";
+          this.zahtevZaPregled.vrstaPregleda = "";
+          alert('Uspesno ste zakazali pregled!');
+        })
+        .catch(error => {
+            alert("Ne mozete da zakazete pregled u navedenom terminu!");
+        });
+       },
+
+odustaniOdZakazivanja(){
+
+  this.zahtevZaPregled.datum = "";
+  this.zahtevZaPregled.vreme = "";
+  this.zahtevZaPregled.trajanje = "";
+  this.zahtevZaPregled.vrstaPregleda = "";
+},
+
+
+      otvoriKalendar(){
+        this.prikazKalendara = !this.prikazKalendara;
+        this.prikazPacijenata = false;
+        this.prikazPacijenta = false;
+        this.prikaz = false;
+        axios
+		      .get("/lekar/izlistajOdmor/" + this.$store.state.user.id)
+		      .then(odgovor => {
+            //this.events = odgovor.data;
+            this.events.length = 0;
+            for (var i = 0; i < odgovor.data.length; i++) {
+              var obj = {};
+              var m = parseInt(odgovor.data[i].vreme) + odgovor.data[i].trajanjePregleda;
+              var s = odgovor.data[i].datum.split('T');
+              obj.startDate = new Date(s[0] + 'T' + odgovor.data[i].vreme +':00');
+              obj.endDate = new Date(s[0]+ 'T'+ m +':00');
+              obj.title = 'Pregled - ' + odgovor.data[i].tipPregleda.naziv;
+              obj.pacijent = odgovor.data[i].idPacijenta;
+
+              this.events.unshift(obj);
+             }
+             
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
       },
         ponistiPretraguPacijenata(){
         
@@ -500,17 +673,20 @@ import axios from 'axios'
       });
     },
     otvoriListuPacijenata(){
+	event.preventDefault();
 	  		this.prikaz=false;
         this.prikazZK=false;
 	  		this.prikazPacijenata=!this.prikazPacijenata;
         this.prikazPacijenta = false;
+                this.prikazKalendara = false;
+        
         this.ponistiPretraguPacijenata();
 	  	      axios
 
 		      .get('/pacijent/izlistaj')
 
-		      .then(pacijent =>{
-		        this.pacijenti = pacijent.data;
+		      .then(pacijenti =>{
+		        this.pacijenti = pacijenti.data;
 		      })
 		      .catch(error => {
 		          console.log(error)
@@ -534,18 +710,33 @@ import axios from 'axios'
         },    
         
     otvoriZK(idzk){
-      axios
+  event.preventDefault();
 
-	        .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ idzk)
+       var flag = 0;
+       for(var i = 0; i < this.pregledi.length; i++){
+      
+          if((this.pregledi[i].idPacijenta == this.trenutniPacijent.id && this.pregledi[i].lekar.id == this.$store.state.user.id && this.pregledi[i].zavrsen == true) || (this.pregledi[i].idPacijenta == this.trenutniPacijent.id && this.pregledi[i].lekar.id == this.$store.state.user.id && this.pregledi[i].zavrsen == false && this.zapocetPregled == true)){
+            flag = 1;
+            break;
+          }  
+        }
+  
+      console.log(flag);
+      if(flag == 1){
+            axios
 
-	        .then(z =>{
-	          this.zdravstveniK = z.data;
+          .get("/zdravstveniKarton/pronadjiZdravstveniKarton/"+ idzk)
+
+          .then(z =>{
+            this.zdravstveniK = z.data;
           })
-      this.prikazZK=!this.prikazZK;
-      this.prikazPacijenata=false;
-     // this.prikazPacijenta=false;
+          this.prikazZK=!this.prikazZK;
+          this.prikazPacijenata=false;
+          // this.prikazPacijenta=false;
         this.ponistiPretraguPacijenata();
-
+      }else{
+        alert('Niste nikad pregledali tog pacijenta!');
+      }
     },
     izmenaZK(){
       this.izmeniZK = true
@@ -577,11 +768,14 @@ import axios from 'axios'
           console.log(error)
       });
     },
-    azuriraj(nes){
+ 
+    azuriraj(){
+      console.log('azuriraj');
+      console.log(this.odabirSortiranja);
 	  		axios
-		      .put("/pacijent/azuriraj", nes)
-		      .then(pacijent => {
-			        this.pacijenti = pacijent.data;
+		      .put("/pacijent/azuriraj", this.odabirSortiranja)
+		      .then(pacijenti => {
+			        this.pacijenti = pacijenti.data;
 			      })
 		      .catch(error => {
 		          console.log(error)
@@ -591,15 +785,66 @@ import axios from 'axios'
         this.prikazPacijenata = false;
 	  		this.trenutniPacijent = pacijent;
 	  		this.prikazPacijenta = true;
+	  		        this.prikazKalendara = false;
+	  		
         this.prikazZK = false;
         this.prikazZapocniPregled = false;
            this.ponistiPretraguPacijenata();
-	  	},
+      },
+      izlistajPreglede(){
+      
+      },
+
       zapocniPregled(){
-        this.prikazZapocniPregled = !this.prikazZapocniPregled;
+     
+        event.preventDefault();
+
+        this.zapocetPregled = true;
+
+        var flag = 0;
+        for(var i = 0; i < this.pregledi.length; i++){
+          //samo ako postoji zakazan pregled kod tog pacijenta lekar moze da ga zapocne
+          if(this.pregledi[i].idPacijenta == this.trenutniPacijent.id && this.pregledi[i].lekar.id == this.$store.state.user.id && this.pregledi[i].zavrsen == false){
+            flag = 1;
+            break;
+          }  
+        }
+
+        if(flag == 1){
+          this.prikazZapocniPregled = !this.prikazZapocniPregled;
       //  this.prikazPacijenta = false;
+        }else{
+          alert('Nemate zakazan pregled kod tog pacijenta!');
+        }
+    
+      },
+      probaj(){
+		console.log('da vidimo jel radi');
       },
       dodajIzvestaj(){
+
+      event.preventDefault();
+
+      
+
+      var flag = 0;
+      for(var i = 0; i < this.pregledi.length; i++){
+        //samo ako postoji zakazan pregled kod tog pacijenta lekar moze da ga zapocne
+        if(this.pregledi[i].idPacijenta == this.trenutniPacijent.id && this.pregledi[i].lekar.id == this.$store.state.user.id && this.pregledi[i].zavrsen == false){
+          
+          axios
+		      .put("/pregled/zavrsi", this.pregledi[i])
+		      .then(pregledi => {
+			        this.pregledi = pregledi.data;
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+
+          break;
+        }  
+      }
+
         this.izvestaj.idPacijenta = this.trenutniPacijent.id;
         this.izvestaj.idLekara = this.$store.state.user.id;
         this.izvestaj.lekovi = this.izabraniLekovi;
@@ -626,12 +871,70 @@ import axios from 'axios'
 		      .catch(error => {
 		          console.log(error)
 		      });
-      }
+      },
+    otvoriZahtevZaOdmor(){
+      this.prikazZahtevZaOdmor = !this.prikazZahtevZaOdmor;
     },
+    posaljiZahtev(){
+      event.preventDefault();
+      this.odmor.lekar = this.$store.state.user.id;
+
+      this.odmor.start = this.time3[0];
+      this.odmor.end = this.time3[1];
+      axios
+		      .post("/zahtevZaOdmor/zatrazi", this.odmor)
+		      .then(odgovor => {
+              alert("Poslat zahtev!");
+			      })
+		      .catch(error => {
+            alert("Nije moguce traziti godisnji za izabrane datume! U tom periodu imate vec zakazan pregled/operaciju.")
+		          console.log(error)
+		      });
+    },
+
+    nadjiDatume() {
+
+      console.log('usao');
+
+      axios
+      .get("/zahtevZaOdmor/nadjiDatume/" + this.$store.state.user.id)
+      .then(datumi => {
+        this.datumi = datumi.data;
+
+        for(var i = 0; i < this.datumi.length; i++){
+            this.datumi[i] = new Date(this.datumi[i]);
+        }
+
+        })
+      .catch(error => {
+          console.log(error)
+      });
+ 
+      console.log(this.datumi[0]);
+
+    },
+   
+    kadJeNaGodisnjem(date) {
+
+      if(date ===  this.datumi[0]){
+          console.log('jednaki');
+      }else{
+        console.log('razliciti');
+      }
+
+      console.log(date);
+      console.log(this.datumi[0]);
+
+    
+         return (date >= this.datumi[0] && date <= this.datumi[1]);
+      
+    
+    },
+  },
  beforeUpdate(){
   
+ 
     if(this.prikazPacijenata){
-    console.log('USAO');
     if(this.ukljucenaPretraga === false){
   		if(this.selektovaniFilter === 'Ime'){
   			  for( var i = 0; i < this.pacijenti.length; i++){ 
@@ -803,8 +1106,21 @@ import axios from 'axios'
     }
   	
   },
+
  mounted() {
    {
+         axios
+		      .get("/pregled/izlistaj")
+		      .then(pregledi => {
+              this.pregledi = pregledi.data;
+              
+              console.log(this.pregledi);
+              console.log(this.pregledi.length);
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+        }{
       axios
       .get("/lekar/get/" + this.$store.state.user.id)
       .then(lekar =>{
@@ -918,6 +1234,7 @@ body {
   margin-right: 16px;
   
 }
+
 
 .popup-box {
   position: absolute;

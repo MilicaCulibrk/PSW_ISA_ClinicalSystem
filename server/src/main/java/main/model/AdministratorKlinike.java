@@ -1,5 +1,6 @@
 package main.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,8 +62,12 @@ public class AdministratorKlinike implements UserDetails{
 	@JoinColumn(name = "klinika_id", referencedColumnName = "id")
    public Klinika klinika;
 	
-	
+	 @OneToMany(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+     public java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor = new ArrayList<ZahtevZaOdmor>();
 
+	 @OneToMany(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+     public java.util.Collection<ZahtevZaPregled> zahtevZaPregled = new ArrayList<ZahtevZaPregled>();
+	 
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	@JoinTable(name = "admink_authority",
 			joinColumns = @JoinColumn(name = "admink_id", referencedColumnName = "id"),
@@ -90,6 +96,26 @@ public class AdministratorKlinike implements UserDetails{
 		this.jmbg = jmbg;
 		this.klinika = klinika;
 	}
+
+	public java.util.Collection<ZahtevZaOdmor> getZahtevZaOdmor() {
+		return zahtevZaOdmor;
+	}
+
+
+	public void setZahtevZaOdmor(java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor) {
+		this.zahtevZaOdmor = zahtevZaOdmor;
+	}
+
+
+	public java.util.Collection<ZahtevZaPregled> getZahtevZaPregled() {
+		return zahtevZaPregled;
+	}
+
+
+	public void setZahtevZaPregled(java.util.Collection<ZahtevZaPregled> zahtevZaPregled) {
+		this.zahtevZaPregled = zahtevZaPregled;
+	}
+
 
 	public Boolean getPromenjenaLozinka() {
 		return promenjenaLozinka;
