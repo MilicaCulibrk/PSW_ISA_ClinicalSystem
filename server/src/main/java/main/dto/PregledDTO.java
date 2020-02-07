@@ -14,6 +14,7 @@ public class PregledDTO {
 	private String cena;
 	private Long idPacijenta;
 	private Boolean zavrsen;
+	private String vrstaPregleda;
 
 	
 	public PregledDTO() {
@@ -31,6 +32,7 @@ public class PregledDTO {
 		this.idPacijenta = pregled.getIdPacijenta();
 		this.trajanjePregleda = pregled.getTrajanje();
 		this.zavrsen = pregled.isZavrsen();
+		this.vrstaPregleda = pregled.getVrstaPregleda();
 	}
 
 	public PregledDTO(Long id, String datum, String vreme, Integer trajanjePregleda, SalaDTO sala, TipPregledaDTO tipPregleda,
@@ -128,6 +130,14 @@ public class PregledDTO {
 
 	public void setZavrsen(Boolean zavrsen) {
 		this.zavrsen = zavrsen;
+	}
+
+	public String getVrstaPregleda() {
+		return vrstaPregleda;
+	}
+
+	public void setVrstaPregleda(String vrstaPregleda) {
+		this.vrstaPregleda = vrstaPregleda;
 	}
 
 	

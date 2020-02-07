@@ -300,7 +300,7 @@
                             </tr>
                             <tr>
                               <td align="right">
-                                  <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 40px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajAdministratora">Dodaj</button>
+                                  <button   v-b-modal.greska type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 40px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajAdministratora">Dodaj</button>
                                 </td> 
                                 <td align="left">
                                   <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 40px ; border-color: lightpink;  background-color: lightpink; " v-on:click="odustani1">Odustani</button>
@@ -317,15 +317,92 @@
 </form>
 
 
-       <form   v-if="prikazListaKlinika" class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
-          <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
-            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
-				<li v-for="k,i in klinike.length">
- 					<a href="#" class="list-group-item list-group-item-action">{{klinike[i].naziv}}, {{klinike[i].adresa}}</a>		
-				</li>        
+<form   v-if="prikazListaKlinika" class="message-form position: relative; " style="  border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset; position: relative; top: 50px; left: 280px; width: 35%; background-color: rgba(130, 206, 209, 0.733); ">
+ 
+    <div  class="container d-flex justify-content-center" >	                        
+      <div class="card" style="width: 98%; height: 98%; margin-top: 30px; margin-bottom: 30px">	
+          <h3 style=" text-align: center; color: dimgray;">LISTA KLINIKA</h3>
+      <table style="width: 100%; max-height: 300px; overflow:auto; " class="table table-striped table-fixed" >   
+      <tbody> 
+                  <tr>
+                    <th >Naziv</th>
+                    <th >Adresa</th>
+                    <th >Email</th>
+                  </tr>
+                  <tr v-for="k,i in klinike.length">
+                    <td >{{klinike[i].naziv}}</td>
+                    <td >{{klinike[i].adresa}}</td>
+                    <td >{{klinike[i].email}}</td>
+                  
+                  </tr>
+                  </tbody>  
+              </table>     
+      </div>
+    </div>   
+  </form>
+
+  <form v-if="prikazListaKlinika" class="message-form position: fixed; " style="  border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset; position: fixed; top: 60px; left: 870px; width: 35%; background-color: rgba(130, 206, 209, 0.733); ">
+   
+      <div  class="container d-flex justify-content-center" >	                        
+          <div class="card" style="width: 95%; height: 500px; margin-top: 30px; margin-bottom: 30px">	
+              
+
+              <table style="width: 100%;  " class="table table-striped" >
+                   <tr> 
+                      <th> Naziv</th>
+                      <th> Telefon </th>
+                   </tr> 
+                   <tr>
+                     <td> <input type="text" v-model=klinika.naziv /> </td>
+                     <td> <input type="text" v-model=klinika.telefon  /> </td>
+                   </tr>
+                   <tr> 
+                      <th> Adresa</th>
+                      <th> Email </th>
+                   </tr> 
+                   <tr>
+                      <td> <input type="text" v-model=klinika.adresa /> </td>
+                      <td> <input type="text" v-model=klinika.email  /> </td>
+                    </tr>
+                    <tr> 
+                        <th> Grad</th>
+                        <th> Opis </th>
+                     </tr> 
+                     <tr>
+                      
+                            
+                            <td> <input type="text" v-model=klinika.grad  /> </td>
+                        <td> <input type="text" v-model=klinika.opis  /> </td>
+                      </tr>
+                      <tr> 
+                          <th> Drzava</th>
+                          <th></th>
+                       </tr> 
+                       <tr>
+                          <td> <input type="text" v-model=klinika.drzava /> </td>
+                          <td>  </td>
+                        </tr>
+                        
+                         
+                          <tr>
+                            <td align="right">
+                                <button   v-b-modal.greska type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 40px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajKliniku">Dodaj</button>
+                              </td> 
+                              <td align="left">
+                                <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 40px ; border-color: lightpink;  background-color: lightpink; " v-on:click="odustaniKlinike">Odustani</button>
+                                </td>
+        <td>
+
+        </td>
+        </tr>
+        </table>
+            
+        
           </div>
-          </div>        
-       </form>
+          </div>
+</form>
+
+
        <form   v-if="prikazListaLekova" class="message-form" style="position: relative; top: 10px; left: 400px; width: 40%; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
           <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
             <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
@@ -428,6 +505,10 @@
                 </form>         
        </form>
     
+       <b-modal ref="my-modal" id="greska" hide-footer title="Klinicki Centar">
+          <b-alert v-if="error" show variant="danger" class="d-flex justify-content-center">{{errormessage}}</b-alert>
+          <b-alert v-else show variant="success" class="d-flex justify-content-center">{{errormessage}}</b-alert>
+        </b-modal>
 		         
 </div>
 
@@ -458,6 +539,8 @@ import axios from 'axios'
       dijagnoze: [],
       lek: {},
       dijagnoza: {},
+      error: false,
+      errormessage: "",
       administrator: {
           ime: "",
           prezime: "",
@@ -469,7 +552,18 @@ import axios from 'axios'
           telefon: "",
           jmbg: "",
           idKlinike: "",
-        }
+        },
+        klinika: {
+          naziv: "",
+          telefon: "",
+          adresa: "",
+          email: "",
+          grad: "",
+          opis: "",
+          ocena: 0,
+          drzava: "",
+        
+        },
       }
   },
   methods: {
@@ -490,9 +584,59 @@ import axios from 'axios'
       });
         },
         
-     dodajKliniku(){
-           	this.$router.push("/dodajKliniku");
-        },
+        dodajKliniku(){
+        if(this.klinika.naziv=="" || this.klinika.adresa=="" || this.klinika.grad=="" || this.klinika.drzava=="" ||
+         this.klinika.telefon=="" || this.klinika.opis=="" || this.klinika.email=="")
+         {
+          this.error = true;
+          this.errormessage = ('Molimo Vas popunite sva polja!');
+          return;
+         }
+
+         var rex = /^\+381\/6[0-9]-?[0-9]+(-[0-9]+)?$/;
+	      if (!rex.test(String(this.klinika.telefon.trim()))) {
+          console.log('USAO2');
+            this.error = true;
+            this.errormessage = ('Broj telefona treba da bude oblika +381/60-0771088');
+           return;
+        }
+
+           
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!re.test(String(this.klinika.email.trim()).toLowerCase())) {
+        this.error = true;
+        this.errormessage = ('Mail adresa treba da bude u obliku mc@gmail.com');
+        return;
+      }
+
+
+
+        axios
+        .post("/klinika/dodajKlinikuUBazu", this.klinika)
+        .then(klinika => 
+        {
+          this.klinika.naziv="";
+          this.klinika.adresa="";
+          this.klinika.grad="";
+          this.klinika.drzava="";
+          this.klinika.telefon="";
+          this.klinika.opis="";
+          this.klinika.email="";
+          this.klinika.ocena=0;
+          
+          this.error = false;
+          this.errormessage = ('Dodali ste kliniku!');
+          this.ucitajOpetKlinike();
+          return;
+         
+        })
+		.catch(error => {
+         this.error = false;
+          this.errormessage = ('Neuspesno dodavanje klinike!');
+		})
+        
+         
+      },
      prikaziZahtev(zahtev){
      	 	this.prikazListaLekova = false;
 	 		this.prikazListaDijagnoza = false;
@@ -557,9 +701,25 @@ import axios from 'axios'
          this.administrator.adresa=="" || this.administrator.grad=="" || this.administrator.drzava=="" ||
          this.administrator.telefon=="" || this.administrator.jmbg=="")
          {
-          alert("Molimo vas popunite sva polja.");
+          this.error = true;
+          this.errormessage = ('Molimo Vas popunite sva polja!');
           return;
          }
+
+         var rex = /^\+381\/6[0-9]-?[0-9]+(-[0-9]+)?$/;
+	      if (!rex.test(String(this.administrator.telefon.trim()))) {
+            this.error = true;
+            this.errormessage = ('Broj telefona treba da bude oblika +381/60-0771088');
+           return;
+        }
+
+             
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      if (!re.test(String(this.administrator.email.trim()).toLowerCase())) {
+        this.error = true;
+        this.errormessage = ('Mail adresa treba da bude u obliku mc@gmail.com');
+        return;
+      }
 
         axios
         .post("/adminKlinike/dodaj", this.administrator)
@@ -575,24 +735,40 @@ import axios from 'axios'
           this.administrator.telefon="";
           this.administrator.jmbg="";
           this.administrator.idKlinike="";
-          alert("Dodat administrator!");
+       
+            
+          this.error = false;
+          this.errormessage = ('Dodali ste administratora klinike!');
+
           this.ucitajOpetAd();
        
         })
         .catch(error => {
-			alert("Administrator sa ovim email-om vec postoji.");
+          this.error = true;
+          this.errormessage = ('Neuspesno dodavanje administratora klinike!');
         });
       },
-ucitajOpetAd(){
-  axios
-		      .get('/adminKlinike/izlistaj')
-		      .then(admini =>{
-		        this.admini = admini.data;
-		      })
-		      .catch(error => {
-		          console.log(error)
-		      });
-},
+      ucitajOpetAd(){
+        axios
+                .get('/adminKlinike/izlistaj')
+                .then(admini =>{
+                  this.admini = admini.data;
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+      },
+
+      ucitajOpetKlinike(){
+        axios
+                .get('/klinika/izlistaj')
+                .then(klinike =>{
+                  this.klinike = klinike.data;
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+      },
 
         otvoriFormu(){
         	this.prikazListaLekova = false;
@@ -616,6 +792,16 @@ ucitajOpetAd(){
           this.administrator.telefon="";
           this.administrator.jmbg="";
           this.administrator.idKlinike="";
+        },
+        odustaniKlinike(){
+          this.klinika.naziv="";
+          this.klinika.adresa="";
+          this.klinika.grad="";
+          this.klinika.drzava="";
+          this.klinika.telefon="";
+          this.klinika.email="";
+          this.klinika.opis="";
+      
         },
 
       odustani() {
@@ -662,11 +848,12 @@ ucitajOpetAd(){
             },
 	 listaAdmina(){
 	 	this.prikazListaLekova = false;
-	 	this.prikazListaDijagnoza = false;
-	 	this.prikazListaAdmina=!this.prikazListaAdmina;
-        this.prikaz = false;
-        this.prikaz1 = false;
-        this.prikazZ = false;	
+     this.prikazListaDijagnoza = false;
+     this.prikaz = false;
+     this.prikazZ = false;
+     this.prikazListaKlinika = false;
+     this.prikazListaAdmina=!this.prikazListaAdmina;
+    
         this.izlistajKlinike() ;	
         	axios
 		      .get('/adminKlinike/izlistaj')
@@ -689,14 +876,14 @@ ucitajOpetAd(){
       });
    },
 	 listaKlinika(){
-	 	this.prikazListaLekova = false;
-	 	this.prikazListaDijagnoza = false;
-	 	this.prikazListaKlinika=!this.prikazListaKlinika;
-        this.prikaz = false;
-        this.prikaz1 = false;
-        this.prikazZ = false;	
-        this.prikazListaAdmina = false; 	
-        	axios
+    this.prikazListaLekova = false;
+     this.prikazListaDijagnoza = false;
+     this.prikaz = false;
+     this.prikazZ = false;
+     this.prikazListaKlinika = !this.prikazListaKlinika;
+     this.prikazListaAdmina= false;
+          
+     axios
 		      .get('/klinika/izlistaj')
 		      .then(klinika =>{
 		        this.klinike = klinika.data;
@@ -751,10 +938,11 @@ ucitajOpetAd(){
 	          this.lek.sifra="";
 	          this.lek.naziv="";
 	          alert("Dodat lek!");
-       		  this.listaLekova();
+             this.listaLekova();
+           
 	        })
 	        .catch(error => {
-				alert("Lek sa ovom sifrom vec postoji.");
+           alert('Niste dodali lek!');
 	        });
 	        
 	 },

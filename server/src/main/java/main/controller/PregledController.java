@@ -364,6 +364,7 @@ public class PregledController {
 			
 	    throws MailException, InterruptedException {
 	
+			zahtevZaPregledDTO.setVrstaPregleda("pregled");
 		
 			Pacijent pacijent = pacijentService.findOne(zahtevZaPregledDTO.getIdPacijenta());
 			List<AdministratorKlinike> adminiKlinika = adminKlinikeService.findAll();
