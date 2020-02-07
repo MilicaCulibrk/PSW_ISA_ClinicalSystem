@@ -69,6 +69,7 @@ public class PregledService {
 		pregled.setTrajanje(pregledDTO.getTrajanjePregleda());
 		pregled.setIdPacijenta(null);
 		pregled.setZavrsen(false);
+		pregled.setVrstaPregleda("pregled");
 		System.out.println(pregledDTO.getTrajanjePregleda());
 		pregledRepository.save(pregled);
 		for (Sala s : salaKlinikeRepository.findAll()) {
@@ -99,7 +100,9 @@ public class PregledService {
 		zahtevZaPregled.setTrajanje(zahtevZaPregledDTO.getTrajanje());
 		zahtevZaPregled.setVrstaPregleda(zahtevZaPregledDTO.getVrstaPregleda());
 		zahtevZaPregled.setTipPregleda(tipPregledaRepository.findById(zahtevZaPregledDTO.getTipPregleda().getId()).orElse(null));
+		zahtevZaPregled.setVrstaPregleda("pregled");
 
+		
 		zahtevZaPregledRepository.save(zahtevZaPregled);
 		
 		admin.getZahtevZaPregled().add(zahtevZaPregled);
