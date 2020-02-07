@@ -25,11 +25,6 @@
                               
               </a>
               <a href="#">
-                <i class="zmdi zmdi-view-dashboard" v-on:click="otvoriFormuPREGLED"> ZAKAZI PREGLED
-                </i>     
-                              
-              </a>
-              <a href="#">
                 <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
                 </i>     
                               
@@ -184,9 +179,7 @@
           </div>
           </div>
 </form>
-<form v-if="prikazPREGLED"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 690px; height: 260px; background-color: rgba(130, 206, 209, 0.733); ">
 
-</form>
 <form v-if="prikazUDPREGLEDI" class="message-form position: relative; " style="  border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset; position: relative; top: 10px; left: 400px; width: 60%; background-color: rgba(130, 206, 209, 0.733); ">
   <button v-on:click="otvoriKliniku(klinika)" class="btn btn-warning" style=" margin-left: 25px; margin-top: 20px; height: 40px; width: 250px; border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash"> 	&#8592; Vrati se na profil klinike</i></button>
   <div  class="container d-flex justify-content-center" >	                        
@@ -269,7 +262,13 @@
   <tr>
     <th  > Izaberi datum pregleda</th>
 <td >
-  <input type="text"  class="form-control"  v-model="pretragaKlinika.datum" >
+  <section>
+    <date-picker
+    v-model="pretragaKlinika.datum"
+    format="YYYY-MM-DD"
+    type="date"
+    placeholder="Select date"
+  ></date-picker>  </section>
 
 </td>
   </tr>
@@ -290,7 +289,7 @@
 </div>
 
 </form>
-<form v-if="prikazListaKlinika" class="message-form" style="position: fixed;  top: 350px; left: 1050px; width: 450px; height: 300px; background-color:white ">
+<form v-if="prikazListaKlinika" class="message-form" style="position: fixed;  top: 370px; left: 1050px; width: 450px; height: 300px; background-color:white ">
      
   
   <div  class="container d-flex justify-content-center" style="margin-top: 30px; ">	                        
@@ -385,7 +384,7 @@
                 </tbody>
               </table>     
             
-              <button v-on:click="prikazudpregledi(klinika)" class="btn btn-warning" style=" margin-left: 70px; margin-top: 30px; height: 40px; width: 330px; border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash"> Prikazi unapred definisane preglede &#8594;</i></button>
+              <button v-on:click="prikazudpregledi(klinika)" class="btn btn-warning" style=" margin-left: 30px; margin-top: 30px; height: 50px; width: 330px; border-color: dimgray; background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash"> Prikazi unapred definisane preglede &#8594;</i></button>
             </div>
 
             <div class="card" style="position:fixed; width: 30%;  margin-top: -450px; margin-left: 450px; ">	
@@ -408,8 +407,16 @@
               <td align="center">{{lekari[l].ime}}</td>
               <td align="center">{{lekari[l].prezime}}</td>
               <td align="center">{{lekari[l].ocena}}</td>
-              <td></td>
-              <td style="text-align: center">   <button v-on:click="prikazPregleda(lekari[l]); nadjiTip(lekari[l])" type="button" class="btn btn-block z-depth-2" style=" border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;"  v-b-modal.zakazi ><i class="fa fa-trash">Dalje</i></button>
+              <td align="center"  v-on:click="nadjiBlokiraneSate(lekari[l].pocetak, lekari[l].kraj, lekari[l].id)" > <date-picker  style="width: fit-content;"
+                v-model="value[l]"           
+                value-type="format"
+                type="time"
+                format="HH"
+                placeholder="HH"
+                :default-value="new Date().setHours(9)"
+                :disabled-time="blokirajVreme"
+              ></date-picker></td>
+              <td style="text-align: center">   <button v-on:click="prikazPregleda(lekari[l],value[l]); nadjiTip(lekari[l])" type="button" class="btn btn-block z-depth-2" style=" border-color: dimgray; background-color: rgb(233, 233, 233); color: #37474F;"  v-b-modal.zakazi ><i class="fa fa-trash">Dalje</i></button>
               </td>
             </tr>
             
@@ -445,6 +452,7 @@
         
         </td>
           </tr>
+          
           <tr>
           <td align="right" > 
             <button  type="button"  class="btn btn-warning"  style=" width: 120px; height: 40px; border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;"  v-on:click="pretraziLekara">Pretraga</button>
@@ -461,51 +469,12 @@
       
       </div>
 
-      <div  class="container d-flex justify-content-center" style=" position: fixed; top: 430px; left: 770px; ">	                        
-        <div class="card" style=" position: fixed; border-color: #b3b3b3; width: 20%; height: 30%; margin-top: 30px; margin-bottom: 30px">	
-        
-        <table style="width: 100%; " class="table table-hover table-fixed">
-        
-          <tr>
-            <th  >Filtriraj po: </th>
-            
-        
-          <td>
-            <b-form-select v-model="selektovaniFilter1"  >
-              <option
-                v-for="f in filteri1"
-               
-             >{{f}}</option>
-            </b-form-select>
-          
-          </td>
-          </tr>
-          <tr>
-            <th  > </th>
-        <td >
-          <input type="text" v-model="filterString1" id="Form-ime" class="form-control"  >
-        
-        </td>
-          </tr>
-          <tr>
-            <th > 
-          
-            </th>
-            <td align="right" >  
-              <button  type="button"  class="btn btn-warning"  style=" width: 120px; height: 40px; border-color: rgb(233, 233, 233);  background-color: rgb(233, 233, 233); color: #37474F;" v-on:click="">Ponisti</button>
-          
-            </td>
-          </tr>
-        </table>
-        
-        </div>
-        
-        </div>
+      
         
   
     </form>
 
-    <b-modal ref="my-modal" id="zakazi" hide-footer title="Zakazite pregled">
+    <b-modal v-if="this.ukljucenaPretraga && this.v!=null" ref="my-modal" id="zakazi" hide-footer title="Zakazite pregled">
       
       
         <div class="card" style="width: 95%; height: 350px; margin-top: 5px; margin-left: 3%;   ">	
@@ -522,11 +491,10 @@
                     </tr>
                     <tr>
                       <th>Datum: </th>
-                      <td align="center" >{{}}</td>
-                    </tr>
+                      <td align="center" ><date-picker style="width: 150px" :placeholder="this.prikaziDatum" disabled></date-picker> </td> 
                     <tr>
                       <th>Vreme: </th>
-                      <td align="center"  >{{}}</td>
+                      <td align="center"  >{{v}}</td>
   
                     </tr>
                     <tr>
@@ -541,7 +509,7 @@
                 </table>     
               
               </div>
-              <button v-on:click="" class="btn btn-warning" style=" margin-left: 20px; margin-bottom: 20px; margin-top: 30px; height: 60px; width: 200px; border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash"> ZAKAZI PREGLED</i></button>
+              <button v-on:click="zakaziObicanPregled" class="btn btn-warning" style=" margin-left: 20px; margin-bottom: 20px; margin-top: 30px; height: 60px; width: 200px; border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash"> ZAKAZI PREGLED</i></button>
               <button v-on:click="odustaniOdPregleda" class="btn btn-warning" style=" margin-left: 20px;  margin-bottom: 20px; margin-top: 30px; height: 60px; width: 200px; border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash"> ODUSTANI</i></button>
 
     </b-modal>
@@ -557,13 +525,21 @@
 
 
 <script>
-  import axios from 'axios'
+  import axios from 'axios';
+  import VueCal from 'vue-cal';
+import 'vue-cal/dist/vuecal.css';
+import DatePicker from 'vue2-datepicker';
+import 'vue2-datepicker/index.css';
+
   export default {
+
+    components: { VueCal ,
+    DatePicker},
    data() {
        return {
 
         user: {},
-        
+        splitedStr: "",
         klinike: {},
         klinika: {},
         zdravstveniK: {},
@@ -573,18 +549,34 @@
         lekari: {},
         lekar: {},
         tipovi: {},
+        sati: [],
+        zahtevZaPregled: {
+           datum: "",
+           vreme: "",
+           tipPregleda: "",
+           lekar: "",
+           cena: "",
+           idPacijenta: "",
+           trajanje: 0,
+           vrstaPregleda: "",
+        },
+        pocetakRadnogVremena: 0,
+        krajRadnogVremena: 0,
+
+        prikaziDatum: "",
         rezultatiPretrage: [],
         pomocnaRezultatiPretrage: [],
         tip: {},
         pretragaKlinika: {
 	        tipPregleda: "",
-	        datum: "",
+	        datum: null,
         },
         pretragaLekara: {
 	        ime: "",
 	        prezime: "",
           ocena: "",
         },
+        izabraniDate: new Date(),
         filterString: "",
         selektovaniFilter: "",
         filterString1: "",
@@ -592,7 +584,7 @@
         cenaPregleda: "",
         pretrazeniLekari: {},
         pomocniLekari: {},
-        pomocniLekari1: {},
+        pomocniLekari1: [],
         ukljucenaPretraga1: false,
         ukljucenaPretraga: false,
         prikaz:false,
@@ -603,7 +595,9 @@
         prikazListaKlinika: false,
         prikazKlinike: false,
         izmeni:false,
-        id: 1,
+        id: 10,
+        value: { },
+        v:"",
         pomocna: [],
         filteri: ['Naziv klinike', 'Ocena klinike'],
         filteri1: ['Ime lekara', 'Prezime lekara' ],
@@ -627,7 +621,38 @@
         };
         this.$router.push("/");
           },
+  zakaziObicanPregled(){
 
+    this.zahtevZaPregled.datum = this.pretragaKlinika.datum;
+    this.zahtevZaPregled.vreme = this.v;
+    this.zahtevZaPregled.tipPregleda = this.tip;
+    this.zahtevZaPregled.lekar = this.lekar;
+    this.zahtevZaPregled.cena = this.tip.cena;
+    this.zahtevZaPregled.idPacijenta = this.$store.state.user.id;
+    this.zahtevZaPregled.vrstaPregleda = "pregled";
+    
+
+    console.log(this.zahtevZaPregled);
+   
+    axios
+        .post("/pregled/podnesiZahtevPacijent", this.zahtevZaPregled)
+        .then(response => {
+          this.zahtevZaPregled.datum = "",
+          this.zahtevZaPregled.vreme = "",
+          this.zahtevZaPregled.tipPregleda = "",
+          this.zahtevZaPregled.lekar = "",
+          this.zahtevZaPregled.cena = "",
+          this.zahtevZaPregled.idPacijenta = "",
+          this.zahtevZaPregled.vrstaPregleda = "",
+          this.trajanje = 5;
+          alert('Uspesno ste zakazali pregled!');
+        })
+        .catch(error => {
+            alert("Ne mozete da zakazete pregled u navedenom terminu!");
+        });
+
+
+  },
   otvoriFormuZK(){
             axios
               .get("/zdravstveniKarton/pronadjiZdravstveniKarton/" + this.id)
@@ -646,8 +671,12 @@
               this.prikazKlinike=false;
                },
 
+
+
   otvoriKliniku(k){
-    
+  
+
+
       axios
 
 	        .get("/klinika/pronadjiKliniku1/"+ k.id)
@@ -655,13 +684,13 @@
 	        .then(kl =>{
 
 	          this.klinika = kl.data;
-          })
-              this.prikazKlinike=!this.prikazKlinike; 
+            this.prikazKlinike=!this.prikazKlinike; 
               this.prikazPregled=false;
               this.prikazListaKlinika=false;
               this.prikaz=false;
               this.prikazZK=false;
               this.prikazUDPREGLEDI=false;
+          })
     },
     odustaniOdPregleda(){
       this.lekar={};
@@ -682,7 +711,7 @@
         .post("/lekar/pretraga/" + this.$store.state.user.id, this.pretragaLekara)
         .then(lekari =>{
          this.lekari = lekari.data;
-            this.rezultatiPretrage = lekari.data;
+            
             this.ukljucenaPretraga1 = true;
            
       })
@@ -692,20 +721,22 @@
   }else
   axios
         .post("/lekar/pretraga/" + this.$store.state.user.id, this.pretragaLekara)
-        .then(lekari =>{
+        .then(lekari1 =>{
 
-          this.pomocniLekari = lekari.data;
+          this.pomocniLekari = lekari1.data;
+          
+          this.ukljucenaPretraga1 = true; 
+
+        
+
           for( var i = 0; i < this.pomocniLekari.length; i++){ 
             for( var j = 0; j < this.pretrazeniLekari.length; j++){
-              if(this.pretrazeniLekari[j].id==this.pomocniLekari[i].id){
-                  this.pomocniLekari1.add(this.pretrazeniLekari[j]);
+              if(this.pretrazeniLekari[j].id===this.pomocniLekari[i].id){
+                  this.pomocniLekari1.push(this.pomocniLekari[i]);
               }
             }
-          }
-          this.lekari=this.pomocniLekari1;
-            this.rezultatiPretrage = klinike.data;
-            this.ukljucenaPretraga1 = true;
-           
+          }  
+          this.lekari=this.pomocniLekari1;  
       })
       .catch(error => {
           console.log(error)
@@ -713,6 +744,8 @@
   },
 
   ponistiPretraguLekara(){
+
+    this.ukljucenaPretraga1 = false;
       this.lekari= this.pretrazeniLekari;
       this.pretragaLekara.ime="";
       this.pretragaLekara.prezime="";
@@ -723,11 +756,11 @@
       if(this.pretragaKlinika.tipPregleda=="" || this.pretragaKlinika.datum==""){
         alert('Morate popuniti oba polja pretrage')
       } else{
-    
              axios
         .post("/klinika/pretraga/" + this.$store.state.user.id, this.pretragaKlinika)
         .then(klinike =>{
          this.klinike = klinike.data;
+     
             this.rezultatiPretrage = klinike.data;
             this.ukljucenaPretraga = true;
             for( var i = 0; i < this.tipovi.length; i++){ 
@@ -744,15 +777,23 @@
 
 
     ponistiPretraguKlinika(){
+
         axios
       .get('/klinika/izlistajK')
-      .then(klinika =>{
-        this.klinike = klinika.data;
+      .then(klinikaa =>{
+        
+        this.klinike = klinikaa.data;
       
+        console.log(this.klinike);
+
        this.pretragaKlinika.datum = "", 
        this.pretragaKlinika.tipPregleda = "",
         
         this.ukljucenaPretraga = false;
+        this.ukljucenaPretraga1 = false;
+        this.pretragaLekara.ime="";
+      this.pretragaLekara.prezime="";
+      this.pretragaLekara.ocena="";
         this.cenaPregleda="";
     })
     .catch(error => {
@@ -760,6 +801,34 @@
       console.log(error);
     });
         
+    },
+
+    nadjiBlokiraneSate(pocetak,kraj,id){
+
+      this.pocetakRadnogVremena=pocetak;
+      this.krajRadnogVremena=kraj;
+    if(this.ukljucenaPretraga){
+      
+      axios
+        .post('/lekar/nadjiZauzetePreglede/'+ id, this.pretragaKlinika.datum)
+       .then(sati =>{
+        
+            this.sati = sati.data;
+            console.log(this.sati);
+          })
+        .catch(error => {
+            console.log(error)
+      });
+    }
+      
+    
+    },
+
+    blokirajVreme(date) {
+
+
+
+      return date.getHours() < this.pocetakRadnogVremena || date.getHours() > this.krajRadnogVremena-1 || date.getHours()==this.sati[0] || date.getHours()==this.sati[1] || date.getHours()==this.sati[2] || date.getHours()==this.sati[3] || date.getHours()==this.sati[4] || date.getHours()==this.sati[5]  ;
     },
 
     ponistiFiltriranjeKlinika(){
@@ -844,8 +913,14 @@
 		        console.log(error);
 	      });
   },
-  prikazPregleda(l) {
 
+ 
+
+  prikazPregleda(l,vv) {
+    this.v=vv;
+  
+if(this.ukljucenaPretraga && this.v !=null ){
+this.prikaziDatum=this.pretragaKlinika.datum.toString();
                   axios
 
               .get("/lekar/get1/"+ l.id)
@@ -854,16 +929,8 @@
 
                 this.lekar = l.data;
               })
-
-              /*this.prikazPregled=!this.prikazPregled;
-              this.prikaz=false;
-              this.prikazUDPREGLEDI=false;
-              this.prikazListaKlinika=false;
-              this.prikaz=false;
-              this.prikazZK=false;
-              this.prikazKlinike=false;*/
-
-
+            }else
+            alert('Morate odabrati vreme,datum i tip pregleda');
   },
   prikazudpregledi(klinika) {
               this.prikaz=false;
@@ -1232,6 +1299,7 @@ box-shadow: 1px 1px 15px 0 rgba(0,0,0,0.2);
 padding: 40px;
 color: #555585;
 }
+
 
 
 

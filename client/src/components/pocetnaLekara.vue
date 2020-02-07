@@ -569,6 +569,7 @@ export default {
           }
         }
 
+        console.log(this.zahtevZaPregled);
 
         axios
         .post("/pregled/podnesiZahtevLekar/" + idPregleda, this.zahtevZaPregled)

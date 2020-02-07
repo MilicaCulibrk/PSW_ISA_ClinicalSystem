@@ -111,7 +111,7 @@ public class LekarService {
 		lekarRepository.deleteById(id);
 	}
 	
-public List<Lekar> pronadjiLekare( String ime, String prezime){
+/*public List<Lekar> pronadjiLekare( String ime, String prezime){
 		
 		//lista pregleda koju vracam
 		List<Lekar> ret = new ArrayList<Lekar>();
@@ -145,7 +145,7 @@ public List<Lekar> pronadjiLekare( String ime, String prezime){
 		return ret;
 		}
 	
-
+*/
 public List<Lekar> pronadjiLekare( String ime, String prezime, Double ocena){
 		
 		//lista lekara koju vracam
