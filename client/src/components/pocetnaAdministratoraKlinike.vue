@@ -1029,6 +1029,9 @@ export default {
         },
         otvoriZahteveZaPregled(){
           //this.ponisti();
+
+      
+
           this.prikazZahtevaZaPregled = true;
           axios
 		      .get("/adminKlinike/izlistajZahteveZaPregled/" + this.$store.state.user.id)
@@ -1612,12 +1615,8 @@ export default {
            this.errormessage = this.errormessage;
            this.prikazPretragaIfiltriranjeSala = false;
            this.otvoriZahteveZaPregled
-
-         for( var i = 0; i < this.zahteviZaPregled.length; i++){ 
-            if ( this.zahteviZaPregled[i] == this.trenutniZahtevZaPregled) {
-              this.zahteviZaPregled.splice(i, 1); 
-            }
-          }
+          
+      
 
           this.omoguci = false;
 
@@ -1626,7 +1625,7 @@ export default {
             console.log(error)
               
            this.error = true;
-           this.errormessage = ("dcfevsvrfbd!");
+           this.errormessage = ("Niste uspeli da rezervisete salu!");
         });
 
        },
