@@ -60,15 +60,12 @@ INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmp
 
 INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmpg, lozinka, ocena, prezime, telefon, tip_pregleda_id, klinika_id, pocetak, kraj, promenjena_lozinka)
 	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'db@gmail.com', 'Novi Sad', 'Dimitrije', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 1, 1, 10, 13, false);
-	
 
 INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen, vrsta_pregleda)
 	VALUES ('5000', '2020-02-20T00:00:00.000Z', null, 2, '11', 1, 1, 1, 'false', 'pregled');
 	
 INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen, vrsta_pregleda)
-	VALUES ('5000', '2020-02-10T00:00:00.000Z', null, 1, '9', 2, 1, 1, 'false', 'pregled');
 	
-INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen, vrsta_pregleda)
 	VALUES ('5000', '2020-02-22T00:00:00.000Z', 1, 1, '11', 1, 1, 1, 'false', 'pregled');
 	
 
@@ -119,4 +116,3 @@ INSERT INTO public.lekar_authority (lekar_id, authority_id) VALUES (3, 2);
 INSERT INTO public.admink_authority (admink_id, authority_id) VALUES (1,5);
 INSERT INTO public.adminkc_authority (adminkc_id, authority_id) VALUES (1, 4);
 INSERT INTO public.sestra_authority (sestra_id, authority_id) VALUES (1, 3);
-

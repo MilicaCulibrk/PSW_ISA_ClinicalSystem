@@ -63,7 +63,7 @@ public class Lekar implements UserDetails{
    private String jmbg;
 	
 	@Column(name = "ocena", nullable = false)
-   private double ocena;
+   private Double ocena;
 	
 	@Column(name = "pocetak", nullable = false)
 	private Integer pocetak;
@@ -94,7 +94,10 @@ public class Lekar implements UserDetails{
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	 public java.util.Collection<Pregled> pregled = new ArrayList<Pregled>();
 	 
-	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+	 @OneToMany(mappedBy = "lekar",   cascade = CascadeType.ALL)
+	 public java.util.Collection<OcenaLekara> ocenaLekara = new ArrayList<OcenaLekara>();
+	
+	@OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	 public java.util.Collection<Operacija> operacija;
 	 
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
@@ -205,9 +208,20 @@ public void setJmbg(String jmbg) {
 public double getOcena() {
 	return ocena;
 }
-public void setOcena(double ocena) {
-	this.ocena = ocena;
+public void setOcena(java.util.Collection<OcenaLekara> ocenaLekara) {
+	
+	int suma=0;
+	int duzina=0;
+	
+	
+	for(OcenaLekara o: ocenaLekara) {
+		duzina=duzina+1;
+		suma= suma+ o.getOcena();
+	}
+	this.ocena=(double) (suma/duzina);
 }
+
+
 public int getBrojRecenzija() {
 	return brojRecenzija;
 }
@@ -257,6 +271,13 @@ public void setRecept(java.util.Collection<Recept> recept) {
 	this.recept = recept;
 }
 
+
+public java.util.Collection<OcenaLekara> getOcenaLekara() {
+	return ocenaLekara;
+}
+public void setOcenaLekara(java.util.Collection<OcenaLekara> ocenaLekara) {
+	this.ocenaLekara = ocenaLekara;
+} 
 
 
 

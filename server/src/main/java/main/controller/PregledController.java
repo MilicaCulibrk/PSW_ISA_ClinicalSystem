@@ -243,6 +243,24 @@ public class PregledController {
 	
 			return new ResponseEntity<>(pregleddto, HttpStatus.OK);
 	}
+  
+  @GetMapping(value = "/nadjiOdradjen/{idPacijenta}")
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<List<PregledDTO>> nadjiOdradjen(@PathVariable Long idPacijenta) {
+		
+		List<Pregled> listaPregleda = pregledService.findAll();
+		List<PregledDTO> listaPregledaDTO = new ArrayList<PregledDTO>();
+		
+		
+		for (Pregled p : listaPregleda) {
+			if( p.isZavrsen()==true )
+				if(p.getIdPacijenta().equals(idPacijenta))
+					
+			listaPregledaDTO.add(new PregledDTO(p));
+			
+										}
+		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
+	}
 	
 	@PostMapping(value = "/podnesiZahtevLekar/{idPregleda}")
 	@PreAuthorize("hasAuthority('LEKAR')")

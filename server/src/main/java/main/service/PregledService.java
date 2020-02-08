@@ -103,6 +103,7 @@ public class PregledService {
 		zahtevZaPregled.setVrstaPregleda("pregled");
 		zahtevZaPregled.setStatus("na_cekanju");
 
+
 		
 		zahtevZaPregledRepository.save(zahtevZaPregled);
 		
