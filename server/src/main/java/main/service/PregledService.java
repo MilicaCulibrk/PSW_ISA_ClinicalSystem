@@ -22,25 +22,36 @@ import main.repository.ZahtevZaPregledRepository;
 @Service
 public class PregledService {
 	
-	@Autowired
-	private PregledRepository pregledRepository;
+	//@Autowired
+	private final PregledRepository pregledRepository;
 	
 	@Autowired
 	private ZahtevZaPregledRepository zahtevZaPregledRepository;
 	
 	
-	@Autowired
-	private LekarRepository lekarRepository;
+	//@Autowired
+	private final LekarRepository lekarRepository;
 	
-	@Autowired
-	private SalaRepository salaKlinikeRepository;
+	//@Autowired
+	private final SalaRepository salaKlinikeRepository;
 	
-	@Autowired
-	private TipPregledaRepository tipPregledaRepository;
+	//@Autowired
+	private final TipPregledaRepository tipPregledaRepository;
 	
 	@Autowired
 	private AdminKlinikeRepository adminKlinikeRepository;
 	
+	
+	
+	public PregledService(PregledRepository pregledRepository, LekarRepository lekarRepository,
+			SalaRepository salaKlinikeRepository, TipPregledaRepository tipPregledaRepository) {
+		super();
+		this.pregledRepository = pregledRepository;
+		this.lekarRepository = lekarRepository;
+		this.salaKlinikeRepository = salaKlinikeRepository;
+		this.tipPregledaRepository = tipPregledaRepository;
+	}
+
 	public Pregled findOne(Long id) {
 		return pregledRepository.findById(id).orElseGet(null);
 	}
@@ -70,7 +81,6 @@ public class PregledService {
 		pregled.setIdPacijenta(null);
 		pregled.setZavrsen(false);
 		pregled.setVrstaPregleda("pregled");
-		System.out.println(pregledDTO.getTrajanjePregleda());
 		pregledRepository.save(pregled);
 		for (Sala s : salaKlinikeRepository.findAll()) {
 			if(s.getId().equals(pregledDTO.getSala().getId())){

@@ -677,7 +677,7 @@ import axios from 'axios'
           drzava: "",
           telefon: "",
           jmbg: "",
-        }
+        },
         klinika: {
           naziv: "",
           telefon: "",
