@@ -12,10 +12,11 @@ public class ZahtevZaPregledDTO {
 	private LekarDTO lekar;
 	private LekarDTO lekar1;
 	private LekarDTO lekar2;
-	private Double cena;
+	private String cena;
 	private Long idPacijenta;
-	private String trajanje;
+	private Integer trajanje;
 	private String vrstaPregleda;
+	private String status;
 	
 	public ZahtevZaPregledDTO() {
 
@@ -46,10 +47,11 @@ public class ZahtevZaPregledDTO {
 		this.idPacijenta = zahtev.getIdPacijenta();
 		this.trajanje = zahtev.getTrajanje();
 		this.vrstaPregleda = zahtev.getVrstaPregleda();
+		this.vrstaPregleda = zahtev.getStatus();
 	}
 	
-	public ZahtevZaPregledDTO(Long id, String datum, String vreme, SalaDTO sala, TipPregledaDTO tipPregleda,
-			LekarDTO lekar,LekarDTO lekar1, LekarDTO lekar2, Double cena, Long idPacijenta, String trajanje, String vrstaPregleda) {
+	public ZahtevZaPregledDTO(Long id, String status, String datum, String vreme, SalaDTO sala, TipPregledaDTO tipPregleda,
+			LekarDTO lekar,LekarDTO lekar1, LekarDTO lekar2, String cena, Long idPacijenta, Integer trajanje, String vrstaPregleda) {
 		super();
 		this.id = id;
 		this.datum = datum;
@@ -63,6 +65,7 @@ public class ZahtevZaPregledDTO {
 		this.idPacijenta = idPacijenta;
 		this.trajanje = trajanje;
 		this.vrstaPregleda = vrstaPregleda;
+		this.status = status;
 	}
 
 	public Long getId() {
@@ -129,11 +132,11 @@ public class ZahtevZaPregledDTO {
 		this.lekar2 = lekar2;
 	}
 
-	public Double getCena() {
+	public String getCena() {
 		return cena;
 	}
 
-	public void setCena(Double cena) {
+	public void setCena(String cena) {
 		this.cena = cena;
 	}
 
@@ -145,11 +148,11 @@ public class ZahtevZaPregledDTO {
 		this.idPacijenta = idPacijenta;
 	}
 
-	public String getTrajanje() {
+	public Integer getTrajanje() {
 		return trajanje;
 	}
 
-	public void setTrajanje(String trajanje) {
+	public void setTrajanje(Integer trajanje) {
 		this.trajanje = trajanje;
 	}
 
@@ -159,6 +162,14 @@ public class ZahtevZaPregledDTO {
 
 	public void setVrstaPregleda(String vrstaPregleda) {
 		this.vrstaPregleda = vrstaPregleda;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 	
 	

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import main.model.Sala;
+import main.model.ZahtevZaPregled;
 
 @Repository
 public interface SalaRepository extends JpaRepository<Sala,Long> {

@@ -59,18 +59,24 @@ INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmp
 	
 
 INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmpg, lozinka, ocena, prezime, telefon, tip_pregleda_id, klinika_id, pocetak, kraj, promenjena_lozinka)
-	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'db@gmail.com', 'Novi Sad', 'Dimitrije', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 1, 1, 9, 10, false);
+	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'db@gmail.com', 'Novi Sad', 'Dimitrije', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 1, 1, 10, 13, false);
 	
+
+INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen, vrsta_pregleda)
+	VALUES ('5000', '2020-02-20T00:00:00.000Z', null, 2, '11', 1, 1, 1, 'false', 'pregled');
+	
+INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen, vrsta_pregleda)
+	VALUES ('5000', '2020-02-10T00:00:00.000Z', null, 1, '9', 2, 1, 1, 'false', 'pregled');
+	
+INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen, vrsta_pregleda)
+	VALUES ('5000', '2020-02-22T00:00:00.000Z', 1, 1, '11', 1, 1, 1, 'false', 'pregled');
+	
+
 	
 INSERT INTO public.administrator_klinike(adresa, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon, klinika_id, promenjena_lozinka)
 	VALUES ('Marsala Tita 58','Srbija', 'an@gmail.com', 'Novi Sad', 'Ana', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Nikolasevic', '+381/61-5534209', 1, false);
 
 
-INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen)
-	VALUES ('5000', '2020-02-20T00:00:00.000Z', 1, 1, '13', 1, 1, 1, 'false');
-	
-INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen)
-	VALUES ('5000', '2020-02-10T00:00:00.000Z', 2, 1, '13', 2, 1, 1, 'false');
 	
 INSERT INTO public.sala_pregledi(sala_id, pregledi_id)
 	VALUES (1,1);
@@ -78,6 +84,11 @@ INSERT INTO public.sala_pregledi(sala_id, pregledi_id)
 INSERT INTO public.sala_pregledi(sala_id, pregledi_id)
 	VALUES (1,2);
 	
+
+INSERT INTO public.administrator_klinike(adresa, drzava,  email, grad, ime, jmbg, lozinka, prezime, telefon, klinika_id, promenjena_lozinka)
+	VALUES ('Marsala Tita 58','Srbija', 'sc@gmail.com', 'Novi Sad', 'Sanja', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra',  'Culibrk', '+381/61-5534209', 1, true);
+
+
 INSERT INTO public.lek(sifra, naziv)
 	VALUES ('Kl130','Diklofenak');
 
