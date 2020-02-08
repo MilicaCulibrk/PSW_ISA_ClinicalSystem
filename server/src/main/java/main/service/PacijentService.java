@@ -27,6 +27,7 @@ public class PacijentService {
 
 	@Autowired
 	private ZdravstveniKartonRepository zdravstveniKartonRepository;
+	
 	public Pacijent findOne(Long id) {
 		return pacijentRepository.findById(id).orElseGet(null);
 	}
