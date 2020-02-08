@@ -1,7 +1,7 @@
 INSERT INTO public.klinika(adresa, broj_recenzija, email, grad, drzava, naziv, ocena, opis, telefon)
-VALUES ('Jovana Obrenovica 83A', '5', 'klinika@klinika.com', 'Podgorica', 'Crna Gora',  'Klinika', 3.5, 'Vrlo lepo', '+381/61-5534209');
+VALUES ('Radnicka', '5', 'klinika@klinika.com', 'Podgorica', 'Crna Gora',  'Klinika', 3.5, 'Vrlo lepo', '+381/61-5534209');
 INSERT INTO public.klinika(adresa, broj_recenzija, email, grad, drzava, naziv, ocena, opis, telefon)
-VALUES ('Jovana Obrenovica 83A', '5', 'klinika@klinika.com', 'Podgorica', 'Crna Gora',  'Infektivna', 3.5, 'Vrlo lepo', '+381/61-5534209');
+VALUES ('Radnicka', '5', 'klinika@klinika.com', 'Podgorica', 'Crna Gora',  'Infektivna', 3.5, 'Vrlo lepo', '+381/61-5534209');
 
 INSERT INTO public.zdravstveni_karton(dioptrija, alergije, visina, tezina)
 	VALUES ('3.0', 'nema', ' 1.70m', '60kg');
