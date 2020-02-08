@@ -8,29 +8,41 @@
                       
         <ul class="nav">
           <a href="#">
-              <i v-on:click="otvoriFormu" >    PROFIL          
+              <b v-on:click="otvoriFormu" v-if="prikaz"  style="color: rgba(130, 206, 209, 0.733);">    PROFIL          
+              </b>
+              <i v-on:click="otvoriFormu" v-else>    PROFIL          
               </i>
           </a>
+
+        <a href="#">
+            <b >           
+            </b>         
+        </a>
           <a href="#">
-              <i  v-on:click="dodajKliniku" class="zmdi zmdi-view-dashboard">DODAJ KLINIKU</i>
+             <b v-on:click="listaKlinika" class="zmdi zmdi-link" v-if="prikazListaKlinika" style="color: rgba(130, 206, 209, 0.733);"> KLINIKE</b> 
+             <i v-on:click="listaKlinika" class="zmdi zmdi-link" v-else> KLINIKE</i> 
           </a>
           <a href="#">
-             <i v-on:click="listaKlinika" class="zmdi zmdi-link"> LISTA KLINIKA</i> 
-          </a>
-          <a href="#">
-             <i  v-on:click="listaAdmina" class="zmdi zmdi-link"> LISTA ADMINISTRATORA</i> 
+             <b  v-on:click="listaAdmina" class="zmdi zmdi-link" v-if="prikazListaAdmina" style="color: rgba(130, 206, 209, 0.733);"> ADMINISTRATORI</b> 
+             <i  v-on:click="listaAdmina" class="zmdi zmdi-link" v-else> ADMINISTRATORI </i> 
           </a>
            <a href="#">
-             <i  v-on:click="listaLekova" class="zmdi zmdi-link"> LEKOVI</i> 
+             <b  v-on:click="listaLekova" class="zmdi zmdi-link" v-if="prikazListaLekova" style="color: rgba(130, 206, 209, 0.733);"> LEKOVI</b> 
+             <i  v-on:click="listaLekova" class="zmdi zmdi-link" v-else> LEKOVI</i> 
           </a>
           <a href="#">
-             <i  v-on:click="listaDijagnoza" class="zmdi zmdi-link">  DIJAGNOZE</i> 
+           <b></b>
+         </a>
+          <a href="#">
+             <b  v-on:click="listaDijagnoza" class="zmdi zmdi-link"  v-if="prikazListaDijagnoza" style="color: rgba(130, 206, 209, 0.733);">  DIJAGNOZE</b> 
+             <i  v-on:click="listaDijagnoza" class="zmdi zmdi-link" v-else>  DIJAGNOZE</i> 
           </a>
            <a href="#">
-             <i v-on:click="pogledajZahteve" class="zmdi zmdi-link" style="color: rgba(130, 206, 209, 0.733); " >ZAHTEVI ZA REGISTRACIJU : {{zahtevi.length}}</i> 
+             <b v-on:click="pogledajZahteve" class="zmdi zmdi-link"  v-if="prikaz1" style="color: rgba(130, 206, 209, 0.733); " >ZAHTEVI ZA REGISTRACIJU : {{zahtevi.length}}</b>
+             <i v-on:click="pogledajZahteve" class="zmdi zmdi-link" v-else >ZAHTEVI ZA REGISTRACIJU : {{zahtevi.length}}</i>  
           </a>
            <a href="#">
-	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
+	                <i class="zmdi zmdi-view-dashboard" style="color: lightpink" v-on:click="odjava"> ODJAVA
 	                </i>     
                                 
 	              </a>	    	  
@@ -643,6 +655,7 @@ import axios from 'axios'
             this.prikaz = false;
             this.prikaz1 = false;
             this.prikazZ = true;
+          
             this.trenutni = zahtev;
             axios
 	        .get("/zahtevZaReg/getPacijenta/"+ zahtev.id)
@@ -689,7 +702,7 @@ import axios from 'axios'
           this.prikaz = false;
           this.prikazZ = false;
           this.prikaz1=!this.prikaz1;
-             
+          this.prikazListaKlinika = false;
         },
 
 
@@ -772,10 +785,11 @@ import axios from 'axios'
 
         otvoriFormu(){
         	this.prikazListaLekova = false;
-	 		this.prikazListaDijagnoza = false;
+	 	      	this.prikazListaDijagnoza = false;
             this.prikaz1 = false;
             this.prikazZ = false;
             this.prikazListaAdmina=false;
+            this.prikazListaKlinika = false;
             this.prikaz=!this.prikaz;
         },
         izmena() {

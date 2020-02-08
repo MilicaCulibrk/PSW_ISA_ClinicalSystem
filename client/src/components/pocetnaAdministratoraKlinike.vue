@@ -598,7 +598,10 @@
                             >
                           </vue-cal>
                          </b-modal>
-			                  </tr>
+                         <div v-if="omoguci">
+                        <td ><button v-b-modal.greska class="btn" v-on:click="izaberiSaluZaPregled(sale[i])" style="background-color:rgba(130, 206, 209, 0.733);" type="button">  IZABERI </button> </td>
+                      </div>
+                      </tr>
 			              </table>
                     
 			              </div>
@@ -656,8 +659,10 @@
                             
                                       <div class="text-center mb-4 mt-4">
                                         <template>
-                                        <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="pretragaSala">Pretraga</button>
-                                         <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="ponistiPretraguSala">Ponisti</button>
+                                         
+                                        <button   v-b-modal.greska type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="pretragaSala">Pretraga</button>
+                                       
+                                        <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="ponistiPretraguSala">Ponisti</button>
                                          
                                         </template>
                                       </div>
@@ -951,6 +956,8 @@
           <b-modal ref="my-modal" id="greska" hide-footer title="Klinicki Centar">
             <b-alert v-if="error" show variant="danger" class="d-flex justify-content-center">{{errormessage}}</b-alert>
             <b-alert v-else show variant="success" class="d-flex justify-content-center">{{errormessage}}</b-alert>
+            <b-button v-if="error && prikazPretragaIfiltriranjeSala" v-on:click="izlistajSveSale"  style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Vrati listu sala</b-button>
+            <b-button v-if="!error && prikazPretragaIfiltriranjeSala" v-on:click="omoguciIzbor" style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Izaberi Salu</b-button>
           </b-modal>
          
 
@@ -1016,7 +1023,7 @@ export default {
 	        ime: "",
 	        prezime: "",
         },
-      vremena: [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+      vremena: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
 	  trajanja: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
 	  filteri: ['Naziv sale', 'Broj sale'],
 	  filter: "",
@@ -1024,6 +1031,7 @@ export default {
       tipovi: [],
       sale: [],
       error: false,
+      nemaSala: false,
       errormessage: "",
       rezultatiPretrage: [],
       pomocna: [],
@@ -1037,7 +1045,7 @@ export default {
       alert: "",
       alertTrue: false,
       ukljucenaPretraga: false,
-     
+      omoguci: false,   
       
       flag: 0,
       prikazProfil:false,
@@ -1294,6 +1302,9 @@ export default {
           this.ponistiFiltriranjeSala()
         },
         otvoriPretragaIfiltriranjeSala(trenutniZahtev) {
+          
+          this.trenutniZahtevZaPregled = trenutniZahtev;
+
           this.ponisti();
           this.prikazPretragaIfiltriranjeSala=!this.prikazPretragaIfiltriranjeSala;
           this.ponistiPretraguSala();
@@ -1386,8 +1397,19 @@ export default {
 			      .then(sale =>{
 			       this.sale = sale.data;
 			       	 this.rezultatiPretrage = sale.data;
-			   
-			       	  this.ukljucenaPretraga = true;
+              
+                 this.ukljucenaPretraga = true;
+                 
+                 if(this.sale.length == 0){
+                    this.nemaSala = true;
+                    this.error = true;
+                    this.errormessage = ("Sve sale su zauzete za navedeni termin. Pogledajte kada su sale slobodne u njihovim kalendarima.");
+                    
+                  }else{
+                    this.error = false;
+        
+                    this.errormessage = ("Postoje slobodne sale za dati termin. Izaberite neku i zakazite pregled.");
+                 }
 			       
 		      })
 		      .catch(error => {
@@ -1423,8 +1445,9 @@ export default {
       });
   },    
 
-
-
+   omoguciIzbor(){
+      this.omoguci = true;
+   },
      
     ponistiPretraguTipovaPregleda(){
         
@@ -1475,7 +1498,8 @@ export default {
 		       this.pretragaSale.datum = "", 
 		       this.pretragaSale.vreme = "",
 		        
-		        this.ukljucenaPretraga = false;
+            this.ukljucenaPretraga = false;
+            this.nemaSala = false;
 	      })
 	      .catch(error => {
 	        console.log(error);
@@ -1765,6 +1789,40 @@ export default {
 	        this.sala.broj = sala.broj;
 	        this.sala.klinika = sala.klinika;
        },
+       izaberiSaluZaPregled(salaZaPregled){
+
+     
+       
+        console.log(salaZaPregled);
+      
+
+        axios
+        .post("/pregled/dodajZakazaniPregled/" + this.datumS + '/' + this.vremeS + '/' + salaZaPregled.id + '/' + this.trenutniZahtevZaPregled.id)
+        .then(odgovor =>{
+          this.errormessage = odgovor.data;
+         
+           this.error = false;
+           this.errormessage = this.errormessage;
+           this.prikazPretragaIfiltriranjeSala = false;
+           this.otvoriZahteveZaPregled
+
+         for( var i = 0; i < this.zahteviZaPregled.length; i++){ 
+            if ( this.zahteviZaPregled[i] == this.trenutniZahtevZaPregled) {
+              this.zahteviZaPregled.splice(i, 1); 
+            }
+          }
+
+          this.omoguci = false;
+
+        })
+        .catch(error => {
+            console.log(error)
+              
+           this.error = true;
+           this.errormessage = ("dcfevsvrfbd!");
+        });
+
+       },
          izmeniSalu(){
         axios
         .put("/sala/izmeniSalu", this.sala)
@@ -1894,7 +1952,21 @@ export default {
      
          
       }, 
+      izlistajSveSale(){
+
+        this.omoguci = false;
+
+        axios
+      .get("/sala/getSale/" + this.$store.state.user.id)
+      .then(sale => {
+        this.sale = sale.data;
       
+        this.nemaSala = false;
+      })
+      .catch(error => {
+        console.log(error);
+      });
+      },  
      
       izmenaKlinika(){
 
@@ -1957,7 +2029,6 @@ export default {
     },
   },
   beforeUpdate(){
-  
     if(this.prikazPretragaIfiltriranjeSala){
     console.log('USAO');
     if(this.ukljucenaPretraga === false){

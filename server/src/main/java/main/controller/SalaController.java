@@ -227,7 +227,6 @@ System.out.println("helou ima li koga");
 			}
 			for (Pregled p : listaPregleda) {
 				try{
-					if(p.getIdPacijenta()!=null)
 						listaPregledaDTO.add(new PregledDTO(p));
 				}catch (Exception e) {
 					// TODO: handle exception

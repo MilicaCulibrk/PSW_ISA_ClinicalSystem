@@ -19,4 +19,5 @@ public interface PacijentRepository extends JpaRepository<Pacijent,Long>{
 	List<Pacijent> findAllByOrderByJmbgAsc();
 
 	List<Pacijent> findAllByOrderByEmailAsc();
+	
 }
