@@ -38,6 +38,16 @@ public class ZdravstveniKartonController {
 		
 		return new ResponseEntity<>(zdravstveniKartonDTO, HttpStatus.OK);
 	}
+	@GetMapping(value = "/pronadjiZdravstveniKarton1/{id}")
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<ZdravstveniKartonDTO> getPronadjiZdravstveniKarton1(@PathVariable Long id) {
+		
+		ZdravstveniKarton zdravstveniKarton = zdravstveniKartonService.findOne(id);
+		
+		ZdravstveniKartonDTO zdravstveniKartonDTO = new ZdravstveniKartonDTO(zdravstveniKarton);
+		
+		return new ResponseEntity<>(zdravstveniKartonDTO, HttpStatus.OK);
+	}
 	
 	@PutMapping(value = "/izmeni", consumes = MediaType.APPLICATION_JSON_VALUE,produces = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAnyAuthority('LEKAR,MEDICINSKA_SESTRA')")

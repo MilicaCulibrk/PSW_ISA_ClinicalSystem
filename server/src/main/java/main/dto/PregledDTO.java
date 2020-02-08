@@ -11,10 +11,11 @@ public class PregledDTO {
 	private SalaDTO sala;
 	private TipPregledaDTO tipPregleda;
 	private LekarDTO lekar;
-	private Double cena;
+	private String cena;
 	private Long idPacijenta;
 	private Boolean zavrsen;
-
+	private String vrstaPregleda;
+	
 	
 	public PregledDTO() {
 
@@ -31,10 +32,12 @@ public class PregledDTO {
 		this.idPacijenta = pregled.getIdPacijenta();
 		this.trajanjePregleda = pregled.getTrajanje();
 		this.zavrsen = pregled.isZavrsen();
+		this.vrstaPregleda = pregled.getVrstaPregleda();
 	}
 
 	public PregledDTO(Long id, String datum, String vreme, Integer trajanjePregleda, SalaDTO sala, TipPregledaDTO tipPregleda,
-			LekarDTO lekar, Double cena, Long idPacijenta, Boolean zavrsen) {
+
+			LekarDTO lekar, String cena, Long idPacijenta, Boolean zavrsen) {
 		super();
 		this.id = id;
 		this.datum = datum;
@@ -96,11 +99,11 @@ public class PregledDTO {
 		this.lekar = lekar;
 	}
 
-	public Double getCena() {
+	public String getCena() {
 		return cena;
 	}
 
-	public void setCena(Double cena) {
+	public void setCena(String cena) {
 		this.cena = cena;
 	}
 
@@ -127,6 +130,14 @@ public class PregledDTO {
 
 	public void setZavrsen(Boolean zavrsen) {
 		this.zavrsen = zavrsen;
+	}
+
+	public String getVrstaPregleda() {
+		return vrstaPregleda;
+	}
+
+	public void setVrstaPregleda(String vrstaPregleda) {
+		this.vrstaPregleda = vrstaPregleda;
 	}
 
 	

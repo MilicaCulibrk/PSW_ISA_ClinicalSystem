@@ -100,7 +100,9 @@ public class Klinika {
     @OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
 	private Collection<TipPregleda> tipPregleda = new HashSet<TipPregleda>();
 
-
+   @OneToMany(mappedBy = "klinika",  cascade = CascadeType.ALL)
+   public   List<OcenaKlinike> ocenaKlinike = new ArrayList<OcenaKlinike>();
+   	 
 
 
 	
@@ -200,9 +202,26 @@ public class Klinika {
 		return ocena;
 	}
 
-	public void setOcena(double ocena) {
-		this.ocena = ocena;
+	public void setOcena(java.util.Collection<OcenaKlinike> ocenaKlinike) {
+		
+		int suma=0;
+		int duzina=0;
+		
+		
+		ocenaKlinike.remove(ocenaKlinike.size());
+			// System.out.println(ocenaKlinike.size());
+		
+		for(OcenaKlinike o: ocenaKlinike) {
+			duzina=duzina+1;
+			suma= suma+ o.getOcena();
+			//System.out.println(o.getOcena());
+			
+
+		}
+		this.ocena=(double) (suma/duzina);
 	}
+	
+
 
 	public int getBrojRecenzija() {
 		return brojRecenzija;
@@ -220,6 +239,23 @@ public class Klinika {
 		this.pacijent = pacijent;
 	}
 	
+
+	
+
+
+
+	public List<OcenaKlinike> getOcenaKlinike() {
+		return ocenaKlinike;
+	}
+
+	public void setOcenaKlinike(List<OcenaKlinike> ocenaKlinike) {
+		this.ocenaKlinike = ocenaKlinike;
+	}
+
+	public void setOcena(double ocena) {
+		this.ocena = ocena;
+	}
+
 	public KlinickiCentar getKlinickiCentar() {
 		return klinickiCentar;
 	}

@@ -29,10 +29,13 @@ public class Pregled {
     private Integer trajanje;
 	
 	@Column(name = "cena", nullable = false)
-    private double cena;
+    private String cena;
 	
 	@Column(name = "zavrsen", nullable = false)
     private boolean zavrsen;
+	
+	@Column(name = "vrsta_pregleda", nullable = false)
+    private String vrstaPregleda;
    
 	@Column(name = "id_pacijenta", nullable = true, unique = false)
 	private Long idPacijenta;
@@ -90,12 +93,12 @@ public class Pregled {
 	}
 
 
-	public double getCena() {
+	public String getCena() {
 		return cena;
 	}
 	
 	
-	public void setCena(double cena) {
+	public void setCena(String cena) {
 		this.cena = cena;
 	}
 	
@@ -150,6 +153,16 @@ public class Pregled {
 	}
 
 
+	public String getVrstaPregleda() {
+		return vrstaPregleda;
+	}
+
+
+	public void setVrstaPregleda(String vrstaPregleda) {
+		this.vrstaPregleda = vrstaPregleda;
+	}
+
+
 	public boolean isZavrsen() {
 		return zavrsen;
 	}
@@ -158,8 +171,5 @@ public class Pregled {
 	public void setZavrsen(boolean zavrsen) {
 		this.zavrsen = zavrsen;
 	}
-	
-	
-
-  
+	  
 }

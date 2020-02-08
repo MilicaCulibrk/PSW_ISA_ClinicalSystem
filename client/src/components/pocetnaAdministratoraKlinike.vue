@@ -35,6 +35,9 @@
           <a href="#">
               <i v-on:click="otvoriZahteveZaOdmor"> ZAHTEVI ZA ODMOR </i>
           </a>
+          <a href="#">
+            <i v-on:click="otvoriIzvestajOPoslovanju"> IZVESTAJ O POSLOVANJU </i>
+        </a>
             <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
 	                </i>     
@@ -839,8 +842,78 @@
             </div>
           </form>
 
+          <form v-if="prikazIzvestajOPoslovanju" class="message-form" style="position: relative;  top: 70px; left: 240px; width: 600px; height: 300px; background-color:white ">
+     
+  
+            <div  class="container d-flex justify-content-center" style="margin-top: 30px; ">	                        
+              <div class="card" style="border-color: rgba(130, 206, 209, 0.733); width: 93%; height: 93%; margin-top: -50px; margin-bottom: 30px">	
+              
+                <h3 style=" text-align: center; color: dimgray;">KLINIKA</h3>
+    
+    
+                <table  style="width: 100%; " class="table table-striped " >
+                  <tbody>
+                    <tr>
+                      <th ></th>
+                      <th>Naziv</th>
+                      <th>Adresa</th>
+                      <th>Prosecna ocena</th>
+                      <th></th>
+                    </tr>
+                    
+                    <tr >
+                      <td></td>
+                      <td >{{this.klinika.naziv}}</td>
+                      <td >{{this.klinika.adresa}} </td>
+                      <td >{{this.klinika.ocena}}</td>
+                      <td ></td>
+                      
+                    </tr>
+                    
+                        </tbody>
+      
+      
+              </table>
 </div>
-
+</div>
+          </form>
+          <form v-if="prikazIzvestajOPoslovanju" class="message-form" style="position: relative;  top: -90px; left: 240px; width: 600px; height: 300px; background-color:white ">
+     
+  
+            <div  class="container d-flex justify-content-center" style="margin-top: 30px; ">	                        
+              <div class="card" style="border-color: rgba(130, 206, 209, 0.733); width: 93%; height: 93%; margin-top: -50px; margin-bottom: 30px">	
+              
+                <h3 style=" text-align: center; color: dimgray;">LISTA LEKARA</h3>
+    
+    
+                <table  style="width: 100%; " class="table table-striped " >
+                  <tbody>
+                    <tr>
+                      <th ></th>
+                      <th>Ime</th>
+                      <th>Prezime</th>
+                      <th>Prosecna ocena</th>
+                      <th></th>
+                    </tr>
+                    
+                    <tr v-for="k,i in lekari.length" >
+                      <td></td>
+                      <td >{{lekari[i].ime}}</td>
+                      <td >{{lekari[i].prezime}} </td>
+                      <td >{{lekari[i].ocena}}</td>
+                      <td ></td>
+                      
+                    </tr>
+                    
+                        </tbody>
+      
+      
+              </table>
+</div>
+</div>
+          </form>
+          </div>
+        </div>
 </template>
 
 <script>
@@ -864,6 +937,8 @@ export default {
 },
  data() {
      return {
+     
+  
       korisnik: {},
       datumS: {},
       vremeS: {},
@@ -921,6 +996,7 @@ export default {
      
       
       flag: 0,
+      prikazIzvestajOPoslovanju: false,
       prikazProfil:false,
       ponistizmenaKlinike: false,
       prikazLekariKlinike: false,
@@ -1595,7 +1671,46 @@ export default {
           
         });
     },
+    otvoriIzvestajOPoslovanju(){
+
+      this.prikazIzvestajOPoslovanju=!this.prikazIzvestajOPoslovanju;
+      this.prikazProfil=false;
+      this.ponistizmenaKlinike= false;
+      this.prikazLekariKlinike= false;
+      this.prikazDefinisanjePregleda= false;
+      this.prikazUpravljanjeSalama= false;
+      this.prikazUpravljanjeTipovimaPregleda= false;
+      this.prikazPretragaIfiltriranjeSala= false;
+      this.prikazZahtevaZaOdmor= false;
+      this.prikazZahtevaZaPregled= false;
+      this.izlistajKliniku();
+      this.izlistajLekare()
+    },
+    izlistajKliniku(){
+      axios
+      .get("/klinika/pronadjiKliniku/" + this.idKlinike)
+      .then(klinika =>{
+        this.klinika = klinika.data;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+    },
+    izlistajLekare(){
+      axios
+		      .get("/lekar/izlistaj/" + this.idKlinike)
+		      .then(lekar =>{
+		        this.lekari = lekar.data;
+		        
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });        
+
+      },
+
   },
+     
   beforeUpdate(){
   
     if(this.prikazPretragaIfiltriranjeSala){

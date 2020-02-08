@@ -95,6 +95,7 @@ public class PregledController {
 		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
 	}
 	
+	
 	@PutMapping(value = "/zavrsi")
 	@PreAuthorize("hasAuthority('LEKAR')")
 	public ResponseEntity<List<PregledDTO>> zavrsiPregled( @RequestBody PregledDTO pregledDTO) {
@@ -141,196 +142,236 @@ public class PregledController {
 	}
 	
 	
+	
+	
 	//dodaj predefinisani pregled kao administrator klinike sa ogranicenjima
-	@PostMapping(value = "/dodajPregled", consumes = MediaType.APPLICATION_JSON_VALUE)
-	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
-	public ResponseEntity<PregledDTO> dodajPregled(@RequestBody PregledDTO pregledDTO) {
+		@PostMapping(value = "/dodajPregled", consumes = MediaType.APPLICATION_JSON_VALUE)
+		@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+		public ResponseEntity<PregledDTO> dodajPregled(@RequestBody PregledDTO pregledDTO) {
 
-		System.out.println("LALALALLA");
-		
-		PregledDTO pregleddto = new PregledDTO();
-		boolean flag = false;
-		
-		System.out.println(pregledDTO.getLekar().getPocetak());
-		System.out.println(pregledDTO.getVreme());
-		
-		 Integer pocetakRV = pregledDTO.getLekar().getPocetak();
-		 Integer krajRV = pregledDTO.getLekar().getKraj();
-		 
-		 String pocetakPstr = pregledDTO.getVreme();
-		 Integer pocetakP = Integer.parseInt(pocetakPstr);
-		 Integer trajanjeP = pregledDTO.getTrajanjePregleda();
-	
-		 Integer krajP = pocetakP + trajanjeP;
-		 
-			//termin ne sme pocinjati pre radnog vremena lekara i zavrsavati se posle radnog vremena lekara
-		    if(pocetakP < pocetakRV || pocetakP > krajRV) {
-				flag = true;
-			}
+			System.out.println("LALALALLA");
 			
-			//termin ne sme pocinjati posle radnog vremena lekara, a zavrsavati se posle radnog vremena lekara
-		    if(pocetakP > pocetakRV && krajP > krajRV) {
-				flag = true;
-			}
+			PregledDTO pregleddto = new PregledDTO();
+			boolean flag = false;
 			
-		 
-		 //ako postoji predefinisan pregled sa istom salom i datumom proverimo da li se vreme poklapa, jer ne sme
-		 List<Pregled> pregledi = pregledService.findAll();
-			for(Pregled pregled : pregledi) {
-				
-				
-				String vremeStr = pregled.getVreme();
-				Integer pocetakPregleda =  Integer.parseInt(vremeStr);
-				Integer trajanjePregleda = pregledDTO.getTrajanjePregleda();
-				Integer krajPregleda = pocetakPregleda + trajanjePregleda;
-				
-				
-				if(pregledDTO.getDatum().equals(pregled.getDatum()) && pregled.getSala().getId() == pregledDTO.getSala().getId()) {
-				
-					//pregled ne sme da pocne u terminu drugog pregleda
-					if(pocetakP > pocetakPregleda && pocetakP < krajPregleda) {
-						flag = true;
-					}
-					
-					//termin ne sme da pocne pre pocetka drugog pregleda a zavrsi se posle pocetka drugog pregleda
-					else if(pocetakP <= pocetakPregleda && krajP > pocetakPregleda) {
-						flag = true;
-					}
-					
-				//ako postoji pregled sa istim datumom i razlicitom salom ali istim lekarom
-				}else if(pregledDTO.getDatum().equals(pregled.getDatum()) && pregled.getSala().getId() != pregledDTO.getSala().getId() && pregled.getLekar().getId() == pregledDTO.getLekar().getId()) {
-						
-				    //ako pregled pocinje u terminu drugog pregleda
-					if(pocetakP > pocetakPregleda && pocetakP < krajPregleda) {
-						flag = true;
-					}
-					
-					//termin ne sme da pocne pre pocetka drugog pregleda a zavrsi se posle pocetka drugog pregleda
-					else if(pocetakP <= pocetakPregleda && krajP > pocetakPregleda) {
-						flag = true;
-					}
-					
+			System.out.println(pregledDTO.getLekar().getPocetak());
+			System.out.println(pregledDTO.getVreme());
 			
+			 Integer pocetakRV = pregledDTO.getLekar().getPocetak();
+			 Integer krajRV = pregledDTO.getLekar().getKraj();
+			 
+			 String pocetakPstr = pregledDTO.getVreme();
+			 Integer pocetakP = Integer.parseInt(pocetakPstr);
+			 Integer trajanjeP = pregledDTO.getTrajanjePregleda();
+		
+			 Integer krajP = pocetakP + trajanjeP;
+			 
+				//termin ne sme pocinjati pre radnog vremena lekara i zavrsavati se posle radnog vremena lekara
+			    if(pocetakP < pocetakRV || pocetakP > krajRV) {
+					flag = true;
 				}
-			}
-			
-			if(!flag) {
-				pregleddto = pregledService.dodajPregled(pregledDTO);
-			}
-		 
-			if(flag) {
-				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);			
-			}			
-	
-			return new ResponseEntity<>(pregleddto, HttpStatus.OK);
-	}
-	
-	@PostMapping(value = "/podnesiZahtevLekar/{idPregleda}")
-	@PreAuthorize("hasAuthority('LEKAR')")
-	//dinamicki pravi id pregleda
-	public ResponseEntity<?> podnesiZahtevLekar(@RequestBody ZahtevZaPregledDTO zahtevZaPregledDTO, @PathVariable Long idPregleda)
-			
-	    throws MailException, InterruptedException {
-		
-		System.out.println("Usao u funkciju");
-
-			Pregled pregled = pregledService.findOne(idPregleda);
-			Boolean flag = false;
-			
-			zahtevZaPregledDTO.setLekar(new LekarDTO(pregled.getLekar()));
-			zahtevZaPregledDTO.setTipPregleda(new TipPregledaDTO(pregled.getLekar().getTipPregleda()));
-			zahtevZaPregledDTO.setIdPacijenta(pregled.getIdPacijenta());
-			zahtevZaPregledDTO.setCena(Double.parseDouble(pregled.getTipPregleda().getCena()));
+				
+				//termin ne sme pocinjati posle radnog vremena lekara, a zavrsavati se posle radnog vremena lekara
+			    if(pocetakP > pocetakRV && krajP > krajRV) {
+					flag = true;
+				}
+				
+			 
+			 //ako postoji predefinisan pregled sa istom salom i datumom proverimo da li se vreme poklapa, jer ne sme
+			 List<Pregled> pregledi = pregledService.findAll();
+				for(Pregled pregled : pregledi) {
 					
-			
-			Integer radnoOd = pregled.getLekar().getPocetak();
-			Integer radnoDo = pregled.getLekar().getKraj();
-			
-			List<Pregled> pregledi = pregledService.findAll();
-			List<ZahtevZaPregled> zahtevi = zahtevZaPregledService.findAll();
+					
+					String vremeStr = pregled.getVreme();
+					Integer pocetakPregleda =  Integer.parseInt(vremeStr);
+					Integer trajanjePregleda = pregledDTO.getTrajanjePregleda();
+					Integer krajPregleda = pocetakPregleda + trajanjePregleda;
+					
+					
+					if(pregledDTO.getDatum().equals(pregled.getDatum()) && pregled.getSala().getId() == pregledDTO.getSala().getId()) {
+					
+						//pregled ne sme da pocne u terminu drugog pregleda
+						if(pocetakP > pocetakPregleda && pocetakP < krajPregleda) {
+							flag = true;
+						}
+						
+						//termin ne sme da pocne pre pocetka drugog pregleda a zavrsi se posle pocetka drugog pregleda
+						else if(pocetakP <= pocetakPregleda && krajP > pocetakPregleda) {
+							flag = true;
+						}
+						
+					//ako postoji pregled sa istim datumom i razlicitom salom ali istim lekarom
+					}else if(pregledDTO.getDatum().equals(pregled.getDatum()) && pregled.getSala().getId() != pregledDTO.getSala().getId() && pregled.getLekar().getId() == pregledDTO.getLekar().getId()) {
+							
+					    //ako pregled pocinje u terminu drugog pregleda
+						if(pocetakP > pocetakPregleda && pocetakP < krajPregleda) {
+							flag = true;
+						}
+						
+						//termin ne sme da pocne pre pocetka drugog pregleda a zavrsi se posle pocetka drugog pregleda
+						else if(pocetakP <= pocetakPregleda && krajP > pocetakPregleda) {
+							flag = true;
+						}
+						
+				
+					}
+				}
+				
+				if(!flag) {
+					pregleddto = pregledService.dodajPregled(pregledDTO);
+				}
+			 
+				if(flag) {
+					return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);			
+				}			
 		
-			Double vreme = Double.parseDouble(zahtevZaPregledDTO.getVreme());
-			Double trajanje = Double.parseDouble(zahtevZaPregledDTO.getTrajanje());
+				return new ResponseEntity<>(pregleddto, HttpStatus.OK);
+		}
+		
+		@PostMapping(value = "/podnesiZahtevLekar/{idPregleda}")
+		@PreAuthorize("hasAuthority('LEKAR')")
+		//dinamicki pravi id pregleda
+		public ResponseEntity<?> podnesiZahtevLekar(@RequestBody ZahtevZaPregledDTO zahtevZaPregledDTO, @PathVariable Long idPregleda)
+				
+		    throws MailException, InterruptedException {
 			
-			//ako je zakazan pre radnog vremena lekara ili posle
-			if(vreme < pregled.getLekar().getPocetak() || vreme >= pregled.getLekar().getKraj())
-			{
-				flag = true;
-				System.out.println(zahtevZaPregledDTO.getDatum());
-				System.out.println("USAO 3");
-			}
+			System.out.println("Usao u funkciju");
+
+				Pregled pregled = pregledService.findOne(idPregleda);
+				Boolean flag = false;
+				
+				zahtevZaPregledDTO.setLekar(new LekarDTO(pregled.getLekar()));
+				zahtevZaPregledDTO.setTipPregleda(new TipPregledaDTO(pregled.getLekar().getTipPregleda()));
+				zahtevZaPregledDTO.setIdPacijenta(pregled.getIdPacijenta());
+				zahtevZaPregledDTO.setCena(Double.parseDouble(pregled.getTipPregleda().getCena()));
+						
+				
+				Integer radnoOd = pregled.getLekar().getPocetak();
+				Integer radnoDo = pregled.getLekar().getKraj();
+				
+				List<Pregled> pregledi = pregledService.findAll();
+				List<ZahtevZaPregled> zahtevi = zahtevZaPregledService.findAll();
 			
-			//ako je zakazan unutar radnog vremena ali traje duze od radnog vremena
-			if(vreme >= pregled.getLekar().getPocetak() && vreme <= pregled.getLekar().getKraj() && (vreme + trajanje) >= pregled.getLekar().getKraj())
-			{
-				flag = true;
-				System.out.println("USAO 4");
-			}
-			
-			//ako hocu da rezervisem datum za koji vec imam preglede
-			for (Pregled p : pregledi) {
-				 if (zahtevZaPregledDTO.getDatum().equals(p.getDatum())
-						&& p.getLekar().getId() == zahtevZaPregledDTO.getLekar().getId()) 
-				 {				
-					    //ako hocemo da zakazemo pregled usred nekog drugog pregleda
-						if(vreme >= Double.parseDouble(p.getVreme()) && vreme < (Double.parseDouble(p.getVreme()) + p.getTrajanje()))
+				Double vreme = Double.parseDouble(zahtevZaPregledDTO.getVreme());
+				Double trajanje = Double.parseDouble(zahtevZaPregledDTO.getTrajanje());
+				
+				//ako je zakazan pre radnog vremena lekara ili posle
+				if(vreme < pregled.getLekar().getPocetak() || vreme >= pregled.getLekar().getKraj())
+				{
+					flag = true;
+					System.out.println(zahtevZaPregledDTO.getDatum());
+					System.out.println("USAO 3");
+				}
+				
+				//ako je zakazan unutar radnog vremena ali traje duze od radnog vremena
+				if(vreme >= pregled.getLekar().getPocetak() && vreme <= pregled.getLekar().getKraj() && (vreme + trajanje) >= pregled.getLekar().getKraj())
+				{
+					flag = true;
+					System.out.println("USAO 4");
+				}
+				
+				//ako hocu da rezervisem datum za koji vec imam preglede
+				for (Pregled p : pregledi) {
+					 if (zahtevZaPregledDTO.getDatum().equals(p.getDatum())
+							&& p.getLekar().getId() == zahtevZaPregledDTO.getLekar().getId()) 
+					 {				
+						    //ako hocemo da zakazemo pregled usred nekog drugog pregleda
+							if(vreme >= Double.parseDouble(p.getVreme()) && vreme < (Double.parseDouble(p.getVreme()) + p.getTrajanje()))
+							{
+								flag = true;
+								
+								System.out.println("USAO 1");
+							}
+							
+							//ako hocemo da zakazemo pregled koji pocinje pre nekog ali se zavrsava posle njega
+							if(vreme <= Double.parseDouble(p.getVreme()) && (vreme + trajanje) >= Double.parseDouble(p.getVreme()))
+							{
+								flag = true;
+								System.out.println("USAO 2");
+							}
+							
+						
+					 }
+						 
+				}
+				
+				
+				
+				//ako hocu da rezervisem datum za koji vec imam zahteve za preglede
+				for(ZahtevZaPregled z : zahtevi) {
+
+					
+					if(zahtevZaPregledDTO.getDatum().equals(z.getDatum()) && zahtevZaPregledDTO.getLekar().getId() == z.getLekar().getId()) {
+						 //ako hocemo da zakazemo pregled usred nekog drugog pregleda
+						if(vreme >= Double.parseDouble(z.getVreme()) && vreme < (Double.parseDouble(z.getVreme()) + Double.parseDouble(z.getTrajanje())))
 						{
 							flag = true;
-							
-							System.out.println("USAO 1");
+							System.out.println("USAO 5");
 						}
 						
 						//ako hocemo da zakazemo pregled koji pocinje pre nekog ali se zavrsava posle njega
-						if(vreme <= Double.parseDouble(p.getVreme()) && (vreme + trajanje) >= Double.parseDouble(p.getVreme()))
+						if(vreme <= Double.parseDouble(z.getVreme()) && (vreme + trajanje) >= Double.parseDouble(z.getVreme()))
 						{
 							flag = true;
-							System.out.println("USAO 2");
+							System.out.println("USAO 6");
 						}
 						
+					}
+				}
 					
-				 }
-					 
-			}
-			
-			
-			
-			//ako hocu da rezervisem datum za koji vec imam zahteve za preglede
-			for(ZahtevZaPregled z : zahtevi) {
-
+					System.out.println(flag);
 				
-				if(zahtevZaPregledDTO.getDatum().equals(z.getDatum()) && zahtevZaPregledDTO.getLekar().getId() == z.getLekar().getId()) {
-					 //ako hocemo da zakazemo pregled usred nekog drugog pregleda
-					if(vreme >= Double.parseDouble(z.getVreme()) && vreme < (Double.parseDouble(z.getVreme()) + Double.parseDouble(z.getTrajanje())))
-					{
-						flag = true;
-						System.out.println("USAO 5");
+				//ne mozes tada da zakazes pregled
+				if (flag == true) {
+				
+					return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+				
+				
+				
+				if(flag == false) {
+				
+					
+					
+					List<AdministratorKlinike> adminiKlinika = adminKlinikeService.findAll();
+					AdministratorKlinike admin = new AdministratorKlinike();
+					
+					
+					for (AdministratorKlinike adminKlinike : adminiKlinika) {
+						System.out.println("Usao u listu admina klinike");
+						System.out.println(adminKlinike.getKlinika().getId());
+						System.out.println(zahtevZaPregledDTO.getLekar().getIdKlinike());
+						if (adminKlinike.getKlinika().getId() == zahtevZaPregledDTO.getLekar().getIdKlinike()) {
+							System.out.println("Nasao admina klinike");
+							String message = "Podneli ste zahtev za pregled/operaciju na Vasoj klinici od lekara "
+									+ zahtevZaPregledDTO.getLekar().getIme() + " " + zahtevZaPregledDTO.getLekar().getPrezime();
+							mailService.sendNotificaitionAsync(adminKlinike, message);
+							
+							admin = adminKlinike;
+						}
 					}
 					
-					//ako hocemo da zakazemo pregled koji pocinje pre nekog ali se zavrsava posle njega
-					if(vreme <= Double.parseDouble(z.getVreme()) && (vreme + trajanje) >= Double.parseDouble(z.getVreme()))
-					{
-						flag = true;
-						System.out.println("USAO 6");
-					}
+					pregledService.dodajZahtev(zahtevZaPregledDTO, admin);
 					
 				}
-			}
 				
-				System.out.println(flag);
-			
-			//ne mozes tada da zakazes pregled
-			if (flag == true) {
-			
-				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			
-			
-			
-			if(flag == false) {
-			
-				pregledService.dodajZahtev(zahtevZaPregledDTO);
+
+			 return new ResponseEntity<>(null, HttpStatus.OK);
 				
+		}
+		
+		@PostMapping(value = "/podnesiZahtevPacijent")
+		@PreAuthorize("hasAuthority('PACIJENT')")
+		//dinamicki pravi id pregleda
+		public ResponseEntity<?> podnesiZahtevPacijent(@RequestBody ZahtevZaPregledDTO zahtevZaPregledDTO)
+				
+		    throws MailException, InterruptedException {
+		
+				zahtevZaPregledDTO.setVrstaPregleda("pregled");
+			
+				Pacijent pacijent = pacijentService.findOne(zahtevZaPregledDTO.getIdPacijenta());
 				List<AdministratorKlinike> adminiKlinika = adminKlinikeService.findAll();
+				AdministratorKlinike admin = new AdministratorKlinike();
 
 				for (AdministratorKlinike adminKlinike : adminiKlinika) {
 					System.out.println("Usao u listu admina klinike");
@@ -338,46 +379,37 @@ public class PregledController {
 					System.out.println(zahtevZaPregledDTO.getLekar().getIdKlinike());
 					if (adminKlinike.getKlinika().getId() == zahtevZaPregledDTO.getLekar().getIdKlinike()) {
 						System.out.println("Nasao admina klinike");
-						String message = "Podneli ste zahtev za pregled/operaciju na Vasoj klinici od lekara "
-								+ zahtevZaPregledDTO.getLekar().getIme() + " " + zahtevZaPregledDTO.getLekar().getPrezime();
+
+						String message = "Pacijent "
+								+ pacijent.getIme() + " " + pacijent.getPrezime() + " je podneo zahtev za pregled.";
 						mailService.sendNotificaitionAsync(adminKlinike, message);
+						
+						admin = adminKlinike;
 					}
 				}
+
+		     pregledService.dodajZahtev(zahtevZaPregledDTO, admin);		
 				
-			}
-			
-
-		 return new ResponseEntity<>(null, HttpStatus.OK);
-			
-	}
+			 return new ResponseEntity<>(null, HttpStatus.OK);
+				
+		}
 	
-	@PostMapping(value = "/podnesiZahtevPacijent")
+	@GetMapping(value = "/nadjiOdradjen/{idPacijenta}")
 	@PreAuthorize("hasAuthority('PACIJENT')")
-	//dinamicki pravi id pregleda
-	public ResponseEntity<?> podnesiZahtevPacijent(@RequestBody ZahtevZaPregledDTO zahtevZaPregledDTO)
+	public ResponseEntity<List<PregledDTO>> nadjiOdradjen(@PathVariable Long idPacijenta) {
+		
+		List<Pregled> listaPregleda = pregledService.findAll();
+		List<PregledDTO> listaPregledaDTO = new ArrayList<PregledDTO>();
+		
+		
+		for (Pregled p : listaPregleda) {
+			if( p.isZavrsen()==true )
+				if(p.getIdPacijenta().equals(idPacijenta))
+					
+			listaPregledaDTO.add(new PregledDTO(p));
 			
-	    throws MailException, InterruptedException {
-	
-			pregledService.dodajZahtev(zahtevZaPregledDTO);
-			Pacijent pacijent = pacijentService.findOne(zahtevZaPregledDTO.getIdPacijenta());
-			List<AdministratorKlinike> adminiKlinika = adminKlinikeService.findAll();
-			AdministratorKlinike admin = new AdministratorKlinike();
-
-			for (AdministratorKlinike adminKlinike : adminiKlinika) {
-				System.out.println("Usao u listu admina klinike");
-				System.out.println(adminKlinike.getKlinika().getId());
-				System.out.println(zahtevZaPregledDTO.getLekar().getIdKlinike());
-				if (adminKlinike.getKlinika().getId() == zahtevZaPregledDTO.getLekar().getIdKlinike()) {
-					System.out.println("Nasao admina klinike");
-
-					String message = "Pacijent "
-							+ pacijent.getIme() + " " + pacijent.getPrezime() + " je podneo zahtev za pregled.";
-					mailService.sendNotificaitionAsync(adminKlinike, message);
-				}
-			}
-
-		 return new ResponseEntity<>(null, HttpStatus.OK);
-			
+										}
+		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
 	}
 	
 	
