@@ -15,7 +15,7 @@ public class PregledDTO {
 	private Long idPacijenta;
 	private Boolean zavrsen;
 	private String vrstaPregleda;
-	
+
 	
 	public PregledDTO() {
 

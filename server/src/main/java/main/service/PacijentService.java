@@ -27,6 +27,7 @@ public class PacijentService {
 
 	@Autowired
 	private ZdravstveniKartonRepository zdravstveniKartonRepository;
+	
 	public Pacijent findOne(Long id) {
 		return pacijentRepository.findById(id).orElseGet(null);
 	}
@@ -133,6 +134,11 @@ public class PacijentService {
 	
 		return ret;
 		}
+
+	public Pacijent findByEmail(String email) {
+		// TODO Auto-generated method stub
+		return pacijentRepository.findByEmail(email);
+	}
 	
 
 }

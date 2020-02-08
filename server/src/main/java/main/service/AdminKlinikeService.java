@@ -28,6 +28,8 @@ public class AdminKlinikeService {
 	
 	@Autowired
 	private KlinikaRepository klinikaRepository;
+	
+	
 	public AdministratorKlinike findOne(Long id) {
 		return adminKlinikeRepository.findById(id).orElseGet(null);
 	}

@@ -38,4 +38,15 @@ public class DijagnozaService {
 		DijagnozaDTO dijagnozadto=new DijagnozaDTO(dijagnoza);
 		return dijagnozadto;
 	}
+
+	public Dijagnoza findOne(Long id) {
+		// TODO Auto-generated method stub
+		return dijagnozaRepository.findById(id).orElseGet(null);
+	}
+
+	public void remove(Long id) {
+		// TODO Auto-generated method stub
+		dijagnozaRepository.deleteById(id);
+
+	}
 }

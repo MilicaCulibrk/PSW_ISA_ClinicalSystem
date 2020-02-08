@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import main.dto.SalaDTO;
 import main.model.AdministratorKlinike;
+import main.model.Lekar;
 import main.model.Pregled;
 import main.model.Sala;
 import main.repository.AdminKlinikeRepository;

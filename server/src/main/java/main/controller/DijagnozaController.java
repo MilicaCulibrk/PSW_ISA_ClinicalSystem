@@ -11,7 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.DijagnozaDTO;
 import main.dto.LekDTO;
+import main.dto.MedicinskaSestraDTO;
 import main.model.Dijagnoza;
+import main.model.Lek;
+import main.model.MedicinskaSestra;
 import main.service.DijagnozaService;
 
 @CrossOrigin
@@ -57,5 +62,26 @@ public class DijagnozaController {
 		}
 		
 		return new ResponseEntity<>(dijagnozadto, HttpStatus.OK);
+	}
+	
+	@DeleteMapping(value = "/izbrisi/{id}")
+	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
+	public ResponseEntity<List<DijagnozaDTO>> deleteDijagnoza(@PathVariable Long id) {
+
+		Dijagnoza d = dijagnozaService.findOne(id);
+		List<DijagnozaDTO> dijagnozaDTO = new ArrayList<DijagnozaDTO>();
+		if (d != null) {
+			dijagnozaService.remove(id);
+			List<Dijagnoza> dij = dijagnozaService.findAll();
+
+			for (Dijagnoza dijagnoza : dij) {
+				dijagnozaDTO.add(new DijagnozaDTO(dijagnoza));
+
+			}
+			return new ResponseEntity<>(dijagnozaDTO, HttpStatus.OK);
+
+		}
+
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 }

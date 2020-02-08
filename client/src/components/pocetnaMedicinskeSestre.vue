@@ -340,14 +340,7 @@ export default {
       prikazZK: false,
       time3: null,
       odmor: {},
-      events: [
-      {
-        startDate: new Date(),
-        endDate: new Date(),
-        title: 'Godisnji odmor',
-        //content: '<i class="v-icon material-icons">directions_run</i>',
-        //class: 'sport',
-      }],
+      events: [],
 		}
 	},
 	methods: {
@@ -362,16 +355,20 @@ export default {
         this.prikazZahtevZaOdmor= false;
         this.prikazZK= false;
         axios
-		      .get("/lekar/izlistajOdmor/" + this.$store.state.user.id)
+		      .get("/medicinska_sestra/izlistajOdmor/" + this.$store.state.user.id)
 		      .then(odgovor => {
             //this.events = odgovor.data;
-            event.preventDefault();
-            for (let i = 0; i < odgovor.data.length; i++) {
-              event.preventDefault();
-              this.events[0].startDate = new Date(odgovor.data[i].start);
-              this.events[0].endDate = new Date(odgovor.data[i].end);
+
+            this.events.length = 0;
+            for (var i = 0; i < odgovor.data.length; i++) {
+              var obj = {};
+              obj.startDate = new Date(odgovor.data[i].start);
+              obj.endDate = new Date(odgovor.data[i].end);
+              obj.title = 'Godisnji odmor';
+
+              this.events.unshift(obj);
+
              }
-   
 			      })
 		      .catch(error => {
 		          console.log(error)

@@ -144,7 +144,10 @@ public class AdminKlinikeController {
 		}
 		
 		for (ZahtevZaPregled zzp : listaZahteva) {
+			if(zzp.getSala() == null) {
 				listaZahtevaDTO.add(new ZahtevZaPregledDTO(zzp));
+			}
+			
 		}
 		
 		return new ResponseEntity<>(listaZahtevaDTO, HttpStatus.OK);

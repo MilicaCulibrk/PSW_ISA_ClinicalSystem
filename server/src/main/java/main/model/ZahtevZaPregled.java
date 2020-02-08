@@ -24,17 +24,20 @@ public class ZahtevZaPregled {
 		private String vreme;
 		
 		@Column(name = "trajanje")
-		private String trajanje;
+		private Integer trajanje;
 		
 		@Column(name = "vrstaPregleda")
 		private String vrstaPregleda;
 		
 
 		@Column(name = "cena")
-		private Double cena;
+		private String cena;
 		
 		@Column(name = "id_pacijenta")
 		private Long idPacijenta;
+		
+		@Column(name = "status")
+		private String status;
 		
 		@OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
 		@JoinColumn(name = "sala_id")
@@ -80,11 +83,11 @@ public class ZahtevZaPregled {
 			this.vreme = vreme;
 		}
 
-		public String getTrajanje() {
+		public Integer getTrajanje() {
 			return trajanje;
 		}
 
-		public void setTrajanje(String trajanje) {
+		public void setTrajanje(Integer trajanje) {
 			this.trajanje = trajanje;
 		}
 
@@ -96,11 +99,11 @@ public class ZahtevZaPregled {
 			this.vrstaPregleda = vrstaPregleda;
 		}
 
-		public Double getCena() {
+		public String getCena() {
 			return cena;
 		}
 
-		public void setCena(Double cena) {
+		public void setCena(String cena) {
 			this.cena = cena;
 		}
 
@@ -150,6 +153,14 @@ public class ZahtevZaPregled {
 
 		public void setTipPregleda(TipPregleda tipPregleda) {
 			this.tipPregleda = tipPregleda;
+		}
+
+		public String getStatus() {
+			return status;
+		}
+
+		public void setStatus(String status) {
+			this.status = status;
 		}
 		
 		

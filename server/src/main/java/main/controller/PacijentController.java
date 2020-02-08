@@ -39,7 +39,20 @@ public class PacijentController {
 	@Autowired
 	private PacijentService pacijentService;
 	
+	@GetMapping(value = "/getEmail/{email}")
+	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
+	public ResponseEntity<PacijentDTO> getPacijentEmail(@PathVariable String email) {
+		System.out.println(email);
+		Pacijent pacijent = pacijentService.findByEmail(email);
 
+		if (pacijent == null) {
+			return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+		}
+
+		PacijentDTO pacijentDTO = new PacijentDTO(pacijent);
+
+		return new ResponseEntity<>(pacijentDTO, HttpStatus.OK);
+	}
 
 	
 	@GetMapping(value = "/get/{id}")
