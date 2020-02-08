@@ -23,12 +23,14 @@
              <i v-on:click="listaKlinika" class="zmdi zmdi-link" v-else> KLINIKE</i> 
           </a>
           <a href="#">
+
              <b  v-on:click="listaAdmina" class="zmdi zmdi-link" v-if="prikazListaAdmina" style="color: rgba(130, 206, 209, 0.733);"> ADMINISTRATORI</b> 
              <i  v-on:click="listaAdmina" class="zmdi zmdi-link" v-else> ADMINISTRATORI </i> 
           </a>
            <a href="#">
              <b  v-on:click="listaLekova" class="zmdi zmdi-link" v-if="prikazListaLekova" style="color: rgba(130, 206, 209, 0.733);"> LEKOVI</b> 
              <i  v-on:click="listaLekova" class="zmdi zmdi-link" v-else> LEKOVI</i> 
+
           </a>
           <a href="#">
            <b></b>
@@ -37,10 +39,15 @@
              <b  v-on:click="listaDijagnoza" class="zmdi zmdi-link"  v-if="prikazListaDijagnoza" style="color: rgba(130, 206, 209, 0.733);">  DIJAGNOZE</b> 
              <i  v-on:click="listaDijagnoza" class="zmdi zmdi-link" v-else>  DIJAGNOZE</i> 
           </a>
+          <a href="#">
+            <i v-show="this.$store.state.user.id==1" v-on:click="listaAdminaKC" class="zmdi zmdi-link"> LISTA ADMINISTRATORA KLINICKOG CENTRA</i> 
+         </a>
            <a href="#">
+
              <b v-on:click="pogledajZahteve" class="zmdi zmdi-link"  v-if="prikaz1" style="color: rgba(130, 206, 209, 0.733); " >ZAHTEVI ZA REGISTRACIJU : {{zahtevi.length}}</b>
              <i v-on:click="pogledajZahteve" class="zmdi zmdi-link" v-else >ZAHTEVI ZA REGISTRACIJU : {{zahtevi.length}}</i>  
           </a>
+          
            <a href="#">
 	                <i class="zmdi zmdi-view-dashboard" style="color: lightpink" v-on:click="odjava"> ODJAVA
 	                </i>     
@@ -204,7 +211,10 @@
                                         <button v-if="!obradjen"  type="button" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733);  " v-on:click="prihvatiZahtev">Prihvati</button>
                                         </template>
                                         <template>
-                                        <button v-if="!obradjen"   type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odbijZahtev">Odbij</button>
+                                        <button v-if="!obradjen"  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odbijZahtev">Odbij</button>
+                                        </template>
+                                        <template>
+                                        <button v-if="obradjen"  type="button" class="btn btn-success btn-block z-depth-2"  style="color: #37474F; width: 300px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="napraviZK">Napravi zdravstveni karton</button>
                                         </template>
                                       </div>
                 
@@ -427,7 +437,7 @@
 			                  <tr v-for="k,i in lekovi.length">
 			                    <td>{{lekovi[i].sifra}}</td>
 			                    <td>{{lekovi[i].naziv}}</td>
-			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiLek(lekovi[i].id)"><i class="fa fa-trash">Obrisi</i></button>
+			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiLek(lekovi[i])"><i class="fa fa-trash">Obrisi</i></button>
 			                    </td>
 			                  </tr>
 			              </table>     
@@ -477,7 +487,7 @@
 			                  <tr v-for="k,i in dijagnoze.length">
 			                    <td>{{dijagnoze[i].sifra}}</td>
 			                    <td>{{dijagnoze[i].naziv}}</td>
-			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiDijagnozu(dijagnoze[i].id)"><i class="fa fa-trash">Obrisi</i></button>
+			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiDijagnozu(dijagnoze[i])"><i class="fa fa-trash">Obrisi</i></button>
 			                    </td>
 			                  </tr>
 			              </table>     
@@ -516,6 +526,95 @@
                   </div>
                 </form>         
        </form>
+
+       <form   v-if="prikazListaAdminaKC" class="message-form position: relative; " style="  border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset; position: relative; top: 50px; left: 280px; width: 35%; background-color: rgba(130, 206, 209, 0.733); ">
+ 
+        <div  class="container d-flex justify-content-center" >	                        
+          <div class="card" style="width: 98%; height: 98%; margin-top: 30px; margin-bottom: 30px">	
+              <h3 style=" text-align: center; color: dimgray;">LISTA ADMINISTRATORA KLINICKOG CENTRA</h3>
+          <table style="width: 100%; max-height: 300px; overflow:auto; " class="table table-striped table-fixed" >   
+          <tbody> 
+                      <tr>
+                        <th  >Ime</th>
+                        <th >Prezime</th>
+                        <th >Email</th>
+                      </tr>
+                      <tr v-for="k,i in adminiKC.length">
+                        <td >{{adminiKC[i].ime}}</td>
+                        <td >{{adminiKC[i].prezime}}</td>
+                        <td >{{adminiKC[i].email}}</td>
+                      
+                      </tr>
+                      </tbody>  
+                  </table>     
+          </div>
+        </div>   
+      </form>
+      <form v-if="prikazListaAdminaKC" class="message-form position: fixed; " style="  border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset; position: fixed; top: 60px; left: 870px; width: 35%; background-color: rgba(130, 206, 209, 0.733); ">
+   
+        <div  class="container d-flex justify-content-center" >	                        
+            <div class="card" style="width: 95%; height: 600px; margin-top: 30px; margin-bottom: 30px">	
+                
+               
+                <table style="width: 100%;  " class="table table-striped" >
+                     <tr> 
+                        <th> Ime</th>
+                        <th> Prezime </th>
+                     </tr> 
+                     <tr>
+                       <td> <input type="text" v-model=administratorKC.ime /> </td>
+                       <td> <input type="text" v-model=administratorKC.prezime  /> </td>
+                     </tr>
+                     <tr> 
+                        <th> Email</th>
+                        <th> Lozinka </th>
+                     </tr> 
+                     <tr>
+                        <td> <input type="text" v-model=administratorKC.email /> </td>
+                        <td> <input type="text" v-model=administratorKC.lozinka  /> </td>
+                      </tr>
+                      <tr> 
+                          <th> Adresa</th>
+                          <th> Grad </th>
+                       </tr> 
+                       <tr>
+                          <td>  
+                            <input type="text" v-model=administratorKC.adresa /> 
+                          <td> <input type="text" v-model=administratorKC.grad  /> </td>
+                        </tr>
+                        <tr> 
+                            <th> Drzava</th>
+                            <th> Telefon </th>
+                         </tr> 
+                         <tr>
+                            <td> <input type="text" v-model=administratorKC.drzava /> </td>
+                            <td> <input type="text" v-model=administratorKC.telefon  /> </td>
+                          </tr>
+                          <tr> 
+                              <th> JMBG</th>
+                              <th>  </th>
+                           </tr>
+                           <tr>
+                              <td> <input type="text" v-model=administratorKC.jmbg /> </td>
+                              <td> </td>
+                            </tr>
+                            <tr>
+                              <td align="right">
+                                  <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 40px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajAdministratoraKC">Dodaj</button>
+                                </td> 
+                                <td align="left">
+                                  <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 40px ; border-color: lightpink;  background-color: lightpink; " v-on:click="odustani2">Odustani</button>
+                                  </td>
+          <td>
+
+          </td>
+          </tr>
+          </table>
+              
+          
+            </div>
+            </div>
+</form>
     
        <b-modal ref="my-modal" id="greska" hide-footer title="Klinicki Centar">
           <b-alert v-if="error" show variant="danger" class="d-flex justify-content-center">{{errormessage}}</b-alert>
@@ -543,14 +642,17 @@ import axios from 'axios'
       trenutni: {},
       text: {},
       prikazListaAdmina: false,
+      prikazListaAdminaKC: false,
       prikazListaKlinika: false,
       admini: {},
+      adminiKC: {},
       prikazListaLekova: false,
       prikazListaDijagnoza: false,
       lekovi: [],
       dijagnoze: [],
       lek: {},
       dijagnoza: {},
+      dodatZK: false,
       error: false,
       errormessage: "",
       administrator: {
@@ -565,6 +667,17 @@ import axios from 'axios'
           jmbg: "",
           idKlinike: "",
         },
+        administratorKC: {
+          ime: "",
+          prezime: "",
+          email: "",
+          lozinka: "",
+          adresa: "",
+          grad: "",
+          drzava: "",
+          telefon: "",
+          jmbg: "",
+        }
         klinika: {
           naziv: "",
           telefon: "",
@@ -577,6 +690,7 @@ import axios from 'axios'
         
         },
       }
+     
   },
   methods: {
          ucitajZahteve(){
@@ -650,24 +764,32 @@ import axios from 'axios'
          
       },
      prikaziZahtev(zahtev){
-     	 	this.prikazListaLekova = false;
-	 		this.prikazListaDijagnoza = false;
-            this.prikaz = false;
-            this.prikaz1 = false;
-            this.prikazZ = true;
-          
-            this.trenutni = zahtev;
-            axios
-	        .get("/zahtevZaReg/getPacijenta/"+ zahtev.id)
-	        .then(z =>{
-	          this.pacijent = z.data;
+      axios
+          .get("/zahtevZaReg/getPacijenta/"+ zahtev.id)
+          .then(z =>{
+            this.pacijent = z.data;
+              })
+          .catch(error => {
+              console.log(error)
+          });
+       if(zahtev.status=="NA_CEKANJU"){         
+        this.obradjen = false;
 
+       }else{
+          this.obradjen = true;
 
-      })
-      .catch(error => {
-          console.log(error)
-      });
-             
+        }
+          this.prikazListaLekova = false;
+          this.prikazListaDijagnoza = false;
+          this.prikaz = false;
+          this.prikaz1 = false;
+          this.prikazZ = true;
+          this.trenutni = zahtev;
+          this.prikazListaAdminaKC=false;
+
+        
+
+            
         },
         odbijZahtev(){
         	this.trenutni.status = "ODBIJEN";
@@ -676,36 +798,61 @@ import axios from 'axios'
         	this.text = "Nazalost,"
                     + "\n\n vas zahtev je odbijen!" + "\n\nRazlog odbijanja: "+ razlog;
         	axios
-          .post("/registracija/odbijen", this.pacijent.email)
-        	
+          .post("/registracija/odbijen/" + this.trenutni.id +"/" + this.text, this.pacijent)
+          .then(() => {
+              alert('Odbili ste zahtev za registraciju pacijenta.');
+              this.pogledajZahteve();
+
+	        })
+	
+          .catch(function (error) {
+              alert('Neuspesno odbijanje!');
+          
+          });
+
         },
         prihvatiZahtev(){
         	this.trenutni.status = "PRIHVACEN";
-        	this.obradjen = true;
+          this.obradjen = true;
         	this.text = "Cestitamo,"
                     + "\n\n Upravo ste registrovani kao pacijent na sajt Klinickog centra!";
         	axios
-          .post("/registracija/register", this.pacijent)
+          .post("/registracija/register/" + this.trenutni.id, this.pacijent)
           .then(() => {
+              console.log(this.pacijent.id);
               alert('Pacijent uspesno registrovan!');
 	        })
 	
-		    .catch(function (error) {
-		        alert('Neuspesna registracija!');
-		    
-		    });
+          .catch(function (error) {
+              alert('Neuspesna registracija!');
+          
+          });
 
         },
         pogledajZahteve(){
         	this.prikazListaLekova = false;
-	 		this.prikazListaDijagnoza = false;
+	 		    this.prikazListaDijagnoza = false;
           this.prikaz = false;
           this.prikazZ = false;
           this.prikaz1=!this.prikaz1;
+          this.prikazListaAdminaKC=false;           
           this.prikazListaKlinika = false;
         },
 
+        napraviZK(){
+          console.log(this.pacijent.id);
+          axios
+          .post("/registracija/napraviZK", this.pacijent)
+          .then(() => {
+              //this.pacijent = odgovor;
+              alert('Uspesno ste napravili zdravstveni karton!');
+	        })
+          .catch(function (error) {
+              alert('Ovaj pacijent ima vec napravljen zdravstveni karton!');
+          
+          });
 
+        },
 
 
         dodajAdministratora(){
@@ -761,16 +908,57 @@ import axios from 'axios'
           this.errormessage = ('Neuspesno dodavanje administratora klinike!');
         });
       },
-      ucitajOpetAd(){
-        axios
-                .get('/adminKlinike/izlistaj')
-                .then(admini =>{
-                  this.admini = admini.data;
-                })
-                .catch(error => {
-                    console.log(error)
-                });
-      },
+      dodajAdministratoraKC(){
+          
+          if(this.administratorKC.ime=="" || this.administratorKC.prezime=="" || this.administratorKC.email==""  || this.administratorKC.lozinka=="" ||
+           this.administratorKC.adresa=="" || this.administratorKC.grad=="" || this.administratorKC.drzava=="" ||
+           this.administratorKC.telefon=="" || this.administratorKC.jmbg=="")
+           {
+            alert("Molimo vas popunite sva polja.");
+            return;
+           }
+  
+          axios
+          .post("/adminKlinickogCentra/dodaj", this.administratorKC)
+          .then(administratorKC => {
+             
+            this.administratorKC.ime="";
+            this.administratorKC.prezime="";
+            this.administratorKC.email="";
+            this.administratorKC.lozinka="";
+            this.administratorKC.adresa="";
+            this.administratorKC.grad="";
+            this.administratorKC.drzava="";
+            this.administratorKC.telefon="";
+            this.administratorKC.jmbg="";
+            alert("Dodat administrator!");
+            this.ucitajOpetAdKC();
+         
+          })
+          .catch(error => {
+        alert("Administrator sa ovim email-om vec postoji.");
+          });
+        },
+ucitajOpetAd(){
+  axios
+		      .get('/adminKlinike/izlistaj')
+		      .then(admini =>{
+		        this.admini = admini.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+},
+ucitajOpetAdKC(){
+  axios
+		      .get('/adminKlinickogCentra/izlistaj')
+		      .then(adminiKC =>{
+		        this.adminiKC = adminiKC.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+},
 
       ucitajOpetKlinike(){
         axios
@@ -789,6 +977,7 @@ import axios from 'axios'
             this.prikaz1 = false;
             this.prikazZ = false;
             this.prikazListaAdmina=false;
+            this.prikazListaAdminaKC=false;
             this.prikazListaKlinika = false;
             this.prikaz=!this.prikaz;
         },
@@ -807,6 +996,17 @@ import axios from 'axios'
           this.administrator.jmbg="";
           this.administrator.idKlinike="";
         },
+        odustani2(){
+          this.administratorKC.ime="";
+            this.administratorKC.prezime="";
+            this.administratorKC.email="";
+            this.administratorKC.lozinka="";
+            this.administratorKC.adresa="";
+            this.administratorKC.grad="";
+            this.administratorKC.drzava="";
+            this.administratorKC.telefon="";
+            this.administratorKC.jmbg="";
+            },
         odustaniKlinike(){
           this.klinika.naziv="";
           this.klinika.adresa="";
@@ -873,6 +1073,24 @@ import axios from 'axios'
 		      .get('/adminKlinike/izlistaj')
 		      .then(admini =>{
 		        this.admini = admini.data;
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+   },
+   listaAdminaKC(){
+	 	this.prikazListaLekova = false;
+	 	this.prikazListaDijagnoza = false;
+     this.prikazListaAdminaKC=!this.prikazListaAdminaKC;
+     this.prikazListaAdmina=false;
+        this.prikaz = false;
+        this.prikaz1 = false;
+        this.prikazZ = false;	
+        this.izlistajKlinike();	
+        	axios
+		      .get('/adminKlinickogCentra/izlistaj')
+		      .then(adminiKC =>{
+		        this.adminiKC = adminiKC.data;
 		      })
 		      .catch(error => {
 		          console.log(error)
@@ -985,11 +1203,21 @@ import axios from 'axios'
 	          	          this.lek.sifra="";
 	          this.lek.naziv="";
 	 },
-	 obrisiLek(idLek){
+	 obrisiLek(lek){
       		axios
-		      .post("/lek/obrisi/" + idLek)
+		      .delete("/lek/izbrisi/" + lek.id)
 		      .then(lek => {
-			        this.lek = lek.data;
+			        this.lekovi = lek.data;
+			      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+      },
+      obrisiDijagnozu(dij){
+      		axios
+		      .delete("/dijagnoza/izbrisi/" + dij.id)
+		      .then(lek => {
+			        this.dijagnoze = lek.data;
 			      })
 		      .catch(error => {
 		          console.log(error)

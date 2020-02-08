@@ -358,7 +358,7 @@ public class LekarController {
 		return new ResponseEntity<>(listaLekaraDTO, HttpStatus.OK);
 	}
 	
-	/*@GetMapping(value = "/izlistajOdmor/{idLekara}")
+	@GetMapping(value = "/izlistajOdmor/{idLekara}")
 	@PreAuthorize("hasAuthority('LEKAR')")
 	public ResponseEntity<?> izlistajOdmor(@PathVariable Long idLekara) {
 	System.out.println("heloooo");
@@ -379,9 +379,9 @@ public class LekarController {
 			}
 		}
 		return new ResponseEntity<>(listaOdmoraDTO, HttpStatus.OK);
-	}*/
+	}
 	
-	@GetMapping(value = "/izlistajOdmor/{idLekara}")
+	@GetMapping(value = "/izlistajPreglede/{idLekara}")
 	@PreAuthorize("hasAuthority('LEKAR')")
 	public ResponseEntity<?> izlistajPreglede(@PathVariable Long idLekara) {
 		List<Lekar> listaLekara = lekarService.findAll();

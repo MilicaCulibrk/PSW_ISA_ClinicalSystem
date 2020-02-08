@@ -53,6 +53,8 @@ public class Lek {
 	public void setSifra(String sifra) {
 		this.sifra = sifra;
 	}
+
+
 	
 	
 }

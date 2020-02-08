@@ -2,7 +2,9 @@ package main.model;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,8 +19,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.FetchMode;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -81,12 +87,38 @@ public class Pacijent implements UserDetails{
    @OneToMany(mappedBy = "pacijent", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
    public java.util.Collection<Izvestaj> izvestaj = new ArrayList<Izvestaj>();
    
+   @OneToMany(mappedBy = "pacijent",  cascade = CascadeType.ALL)
+   public  Set<OcenaLekara> ocenaLekara = new HashSet<OcenaLekara>();
+   
+   @OneToMany(mappedBy = "pacijent",  cascade = CascadeType.ALL)
+   public  Set<OcenaKlinike> ocenaKlinike = new HashSet<OcenaKlinike>();
    
    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
    @JoinTable(name = "pacijent_authority",
            joinColumns = @JoinColumn(name = "pacijent_id", referencedColumnName = "id"),
            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
    private List<Authority> authorities;
+
+
+  
+
+   
+
+public Set<OcenaLekara> getOcenaLekara() {
+	return ocenaLekara;
+}
+
+public void setOcenaLekara(Set<OcenaLekara> ocenaLekara) {
+	this.ocenaLekara = ocenaLekara;
+}
+
+public Set<OcenaKlinike> getOcenaKlinike() {
+	return ocenaKlinike;
+}
+
+public void setOcenaKlinike(Set<OcenaKlinike> ocenaKlinike) {
+	this.ocenaKlinike = ocenaKlinike;
+}
 
 public Pacijent() {
 	super();

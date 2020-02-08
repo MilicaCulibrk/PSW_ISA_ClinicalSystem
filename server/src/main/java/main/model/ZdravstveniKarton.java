@@ -20,16 +20,16 @@ public class ZdravstveniKarton {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "dioptrija", nullable = false)
+	@Column(name = "dioptrija", nullable = true)
    private String dioptrija;
 	
-	@Column(name = "alergije", nullable = false)
+	@Column(name = "alergije", nullable = true)
    private String alergije;
 	
-	@Column(name = "visina", nullable = false)
+	@Column(name = "visina", nullable = true)
    private String visina;
 	
-	@Column(name = "tezina", nullable = false)
+	@Column(name = "tezina", nullable = true)
    private String tezina;
    
 	@OneToOne(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)

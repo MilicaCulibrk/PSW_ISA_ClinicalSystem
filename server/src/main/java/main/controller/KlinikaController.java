@@ -20,11 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.KlinikaDTO;
+import main.dto.PacijentDTO;
 import main.dto.PretragaKlinikeDTO;
 import main.dto.PretragaSaleDTO;
 import main.dto.SalaDTO;
 import main.model.AdministratorKlinike;
 import main.model.Klinika;
+import main.model.Pacijent;
 import main.model.Sala;
 import main.service.KlinikaService;
 
@@ -112,6 +114,18 @@ public class KlinikaController {
 		
 		return new ResponseEntity<>(listaKlinikaDTO, HttpStatus.OK);
 	}
+	@GetMapping(value = "/izlistajKl")
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	public ResponseEntity<List<KlinikaDTO>> getIzlistajKl() {
+		
+		List<Klinika> listaKlinika = klinikaService.findAll();
+		List<KlinikaDTO> listaKlinikaDTO = new ArrayList<KlinikaDTO>();
+		for (Klinika k : listaKlinika) {
+			listaKlinikaDTO.add(new KlinikaDTO(k));
+		}
+		
+		return new ResponseEntity<>(listaKlinikaDTO, HttpStatus.OK);
+	}
 	
 	
 	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
@@ -162,4 +176,16 @@ public class KlinikaController {
 
 	    }
 	
+	@PutMapping(value = "/azuriraj")
+	@PreAuthorize("hasAnyAuthority('PACIJENT')")
+	public ResponseEntity<List<KlinikaDTO>> getAzuriraj(@RequestBody String sortBy) {
+		
+		List<Klinika> listaKlinika = klinikaService.sortiraj(sortBy);
+		List<KlinikaDTO> listaKlinikaDTO = new ArrayList<KlinikaDTO>();
+		for (Klinika k : listaKlinika) {
+			listaKlinikaDTO.add(new KlinikaDTO(k));
+		}
+		
+		return new ResponseEntity<>(listaKlinikaDTO, HttpStatus.OK);
+	}
 }

@@ -21,6 +21,7 @@ public class LekDTO {
 		// TODO Auto-generated constructor stub
 		this.sifra = l.getSifra();
 		this.naziv = l.getNaziv();
+		this.id = l.getId();
 	}
 	public Long getId() {
 		return id;

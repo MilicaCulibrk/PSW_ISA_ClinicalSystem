@@ -51,6 +51,7 @@ public class ZahtevZaOdmorService {
 		Long idKlinike = null;
 		for (MedicinskaSestra medicinskaSestra : ms) {
 			if(medicinskaSestra.getId().equals(zahtevZaOdmorDTO.getMedicinskaSestra())) {
+				zzo.setLekar(null);
 				zzo.setMedicinskaSestra(medicinskaSestra);
 				idKlinike = medicinskaSestra.getKlinika().getId();
 			}
@@ -58,15 +59,10 @@ public class ZahtevZaOdmorService {
 		
 		for (Lekar l : lekari) {
 			if(l.getId().equals(zahtevZaOdmorDTO.getLekar())) {
+				zzo.setMedicinskaSestra(null);
 				pregledi = l.getPregled();
 				zzo.setLekar(l);
 				idKlinike = l.getKlinika().getId();
-			}
-		}
-		
-		for (AdministratorKlinike ak : admini) {
-			if(ak.getKlinika().getId().equals(idKlinike)) {
-				ak.getZahtevZaOdmor().add(zzo);
 			}
 		}
 		
@@ -82,10 +78,20 @@ public class ZahtevZaOdmorService {
 
 		for (Pregled pregled : pregledi) {
 			Date pregledDatum = inFormat.parse(pregled.getDatum());
-			if(pregledDatum.after(start)&& pregledDatum.before(end)) {
+			if(pregledDatum.after(start)&& pregledDatum.before(end) && pregled.getLekar().getId().equals(zzo.getLekar().getId())) {
 				return null;
 			}
 		}
+		
+		for (AdministratorKlinike ak : admini) {
+			if(ak.getKlinika().getId().equals(idKlinike)) {
+				ak.getZahtevZaOdmor().add(zzo);
+				adminKlinikeRepository.save(ak);
+			}
+		}
+		
+
+		
 		zahtevZaOdmorRepository.save(zzo);
 		ZahtevZaOdmorDTO zahtevZaOdmorDTO1 =new ZahtevZaOdmorDTO(zzo);
 		return zahtevZaOdmorDTO1;

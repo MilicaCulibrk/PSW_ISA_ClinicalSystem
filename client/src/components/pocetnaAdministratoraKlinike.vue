@@ -21,6 +21,10 @@
               <b v-on:click="otvoriLekariKlinike" class="zmdi zmdi-link" v-if="prikazLekariKlinike" style="color:  rgba(130, 206, 209, 0.733)" > LEKARI KLINIKE </b> 
               <i v-on:click="otvoriLekariKlinike" v-else> LEKARI KLINIKE </i>
           </a>
+
+          <a href="#">
+            <i v-on:click="otvoriMedicinskeSestreKlinike"> MEDICINSKE SESTRE KLINIKE </i>
+        </a>
         
             <a href="#">
                 <b v-on:click="otvoriUpravljanjeSalama" class="zmdi zmdi-link" v-if="prikazUpravljanjeSalama" style="color:  rgba(130, 206, 209, 0.733)" > UPRAVLJANJE SALAMA </b> 
@@ -46,6 +50,9 @@
               <b v-on:click="otvoriZahteveZaOdmor" class="zmdi zmdi-link" v-if="prikazZahtevaZaOdmor" style="color:  rgba(130, 206, 209, 0.733)" > ZAHTEVI ZA ODMOR </b> 
               <i v-on:click="otvoriZahteveZaOdmor" v-else> ZAHTEVI ZA ODMOR </i>
           </a>
+          <a href="#">
+            <i v-on:click="otvoriIzvestajOPoslovanju"> IZVESTAJ O POSLOVANJU </i>
+        </a>
             <a href="#">
 	                <i class="zmdi zmdi-view-dashboard"   style="color: lightcoral" v-on:click="odjava"> ODJAVA
                   </i>   
@@ -144,7 +151,7 @@
                               </div>
                               </div>
                   </form>
-                  <form v-if="prikazIzmenaKlinike" class="message-form" style=" border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset;  position: fixed; top: 100px; left: 400px; width: 60%; height: 530px; background-color: rgba(130, 206, 209, 0.733); ">         
+                  <form v-if="prikazIzmenaKlinike" class="message-form" style=" border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset;  position: relative  ; top: 100px; left: 400px; width: 60%; height: 1000px; background-color: rgba(130, 206, 209, 0.733); ">         
                       <div class="card" style="width: 95%; height: 90%; margin-top: 25px; margin-left: 25px;   ">	
                             <div class="form-group">
                       
@@ -183,7 +190,34 @@
                                     
                       <label for="Form-email4" style="color: #b3b3b3;">Drzava</label>
                       <input type="text" v-model="klinika.drzava" id="Form-email4" class="form-control" :disabled="!izmeniKliniku">
-                      </div>                       
+                      <label  >
+
+                        <gmap-autocomplete class="form-control" v-model="klinika.adresa"
+                          @place_changed="setPlace">
+                        </gmap-autocomplete>
+                
+                
+                        <button style=" border-color: rgba(130, 206, 209, 0.733);  background-color:  rgba(130, 206, 209, 0.733);" class="btn  btn-block z-depth-2"  @click="addMarker">Nadji kliniku na mapi</button>
+                
+                      </label>
+                      <GmapMap
+                      :center="{lat:10, lng:10}"
+                      :zoom="7"
+                      map-type-id="terrain"
+                      style="width: 500px; height: 300px"
+                    >
+                      <GmapMarker
+                        :key="index"
+                        v-for="(m, index) in markers"
+                        :position="m.position"
+                        :clickable="true"
+                        :draggable="true"
+                        @click="center=m.position"
+                      />
+                    </GmapMap>
+                  
+      
+                            </div>                       
                     
                                    <div class="row">
                                      
@@ -519,6 +553,7 @@
                       <thead>
                         <tr>
                           <th class="th-lg">Lekar</th>
+                          <th class="th-lg">Medicinska sestra</th>
                           <th class="th-lg">Od</th>
                           <th class="th-lg">Do</th>
                           <th class="th-lg">Odobri</th>
@@ -527,7 +562,9 @@
                       </thead>
                       <tbody>
                       <tr v-for="k,i in zahteviZaOdmor.length">
-                        <td>{{zahteviZaOdmor[i].lekar}}{{zahteviZaOdmor[i].medicinskaSestra}}</td>
+                        <td>{{zahteviZaOdmor[i].lekar}}</td>
+                        <td>{{zahteviZaOdmor[i].medicinskaSestra}}</td>
+
                         <td>{{zahteviZaOdmor[i].start}}</td>
                         <td>{{zahteviZaOdmor[i].end}}</td>
                         <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="odobriZahtev(zahteviZaOdmor[i])"><i class="fa fa-trash">Odobri</i></button>
@@ -824,6 +861,110 @@
 		          </div>        
            </form>
            
+
+
+
+           <form v-if="prikazMedicinskeSestreKlinike"  class="message-form" style="position: relative; top: 10px; left: 950px; width: 550px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+
+            <div>
+                     
+                 
+                   <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+                 
+                     
+                     <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+
+                       <div class="form-group">
+                 
+                         <div class="card-body mx-4 mt-4">
+                           <div class="row">
+                 
+                             <div class="col">
+                             <div class="md-form">
+
+                               
+                               <label for="Form-ime" style="color: #b3b3b3;">Ime</label>
+                               <input type="text" v-model="medicinskaSestra.ime" id="Form-ime" class="form-control">
+                               
+                               <label for="Form-ime" style="color: #b3b3b3;">Prezime</label>
+                               <input type="text" v-model="medicinskaSestra.prezime" id="Form-ime" class="form-control">
+                               
+                                <label for="Form-username" style="color: #b3b3b3;">E-mail</label>
+                               <input type="text" v-model="medicinskaSestra.email" id="Form-username" class="form-control" >
+
+                               <label for="Form-username" style="color: #b3b3b3;">Lozinka</label>
+                               <input type="text" v-model="medicinskaSestra.lozinka" id="Form-username" class="form-control" >
+                               
+                               <label for="Form-phone" style="color: #b3b3b3;">Telefon</label>
+                               <input type="text" v-model="medicinskaSestra.telefon" id="Form-phone" class="form-control" >
+                               
+                               <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
+                               <input type="text" v-model="medicinskaSestra.adresa" id="Form-email4" class="form-control">
+
+
+                             </div>
+                             </div>
+                             <div class="col">
+                             <div class="md-form pb-3">
+                 
+                               <label for="Form-email4" style="color: #b3b3b3;">Grad</label>
+                               <input type="text" v-model="medicinskaSestra.grad" id="Form-email4" class="form-control" >
+                             
+                               <label for="Form-email4" style="color: #b3b3b3;">Drzava</label>
+                               <input type="text" v-model="medicinskaSestra.drzava" id="Form-email4" class="form-control" >                                        
+                 
+                               <label for="Form-email4" style="color: #b3b3b3;">Jmbg</label>
+                               <input type="text" v-model="medicinskaSestra.jmbg" id="Form-email4" class="form-control" >        
+
+                             </div>
+                             </div>
+                           </div>
+                           
+                 
+                 
+                           <div class="text-center mb-4 mt-4">
+                             <template>
+                             <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajMedicinskuSestru">Dodaj</button>
+                             <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustaniDodajMedicinskuSestru">Odustani</button>
+                             </template>
+                           </div>
+                 
+                         </div>
+                 
+                       </div>
+                 
+                 
+                     </div>
+                     
+                 
+                   </div>
+                   </div>
+     </form>
+
+     <form   v-if="prikazMedicinskeSestreKlinike" class="message-form" style="position: relative; top: -650px; left: 300px; width: 550px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+   <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+     <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+
+   <table style="width: 500px;">
+             <tr>
+               <th class="bg-info  text-white">Ime</th>
+               <th class="bg-info  text-white">Prezime</th>
+               <th class="bg-info  text-white">Obrisi</th>
+             </tr>
+             <tr v-for="k,i in medicinskeSestre.length">
+               <td>{{medicinskeSestre[i].ime}}</td>
+               <td>{{medicinskeSestre[i].prezime}}</td>
+               <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiMedicinskuSestru(medicinskeSestre[i])"><i class="fa fa-trash">Obrisi</i></button>
+               </td>
+             </tr>
+         </table>
+
+
+   </div>
+   </div>        
+</form>
+
+
            <form   v-if="prikazLekariKlinike" class="message-form" style="position: relative; top: -600px; left: 300px; width: 550px; height: 280px; background-color: rgba(130, 206, 209, 0.733); ">
             <div  class="container d-flex justify-content-center" style="margin-top: 30px">	
               <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	        
@@ -852,13 +993,86 @@
             <b-button v-if="!error && prikazPretragaIfiltriranjeSala" v-on:click="omoguciIzbor" style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Izaberi Salu</b-button>
           </b-modal>
          
-</div>
 
+          <form v-if="prikazIzvestajOPoslovanju" class="message-form" style="position: relative;  top: 70px; left: 240px; width: 600px; height: 300px; background-color:white ">
+     
+  
+            <div  class="container d-flex justify-content-center" style="margin-top: 30px; ">	                        
+              <div class="card" style="border-color: rgba(130, 206, 209, 0.733); width: 93%; height: 93%; margin-top: -50px; margin-bottom: 30px">	
+              
+                <h3 style=" text-align: center; color: dimgray;">KLINIKA</h3>
+    
+    
+                <table  style="width: 100%; " class="table table-striped " >
+                  <tbody>
+                    <tr>
+                      <th ></th>
+                      <th>Naziv</th>
+                      <th>Adresa</th>
+                      <th>Prosecna ocena</th>
+                      <th></th>
+                    </tr>
+                    
+                    <tr >
+                      <td></td>
+                      <td >{{this.klinika.naziv}}</td>
+                      <td >{{this.klinika.adresa}} </td>
+                      <td >{{this.klinika.ocena}}</td>
+                      <td ></td>
+                      
+                    </tr>
+                    
+                        </tbody>
+      
+      
+              </table>
+</div>
+</div>
+          </form>
+          <form v-if="prikazIzvestajOPoslovanju" class="message-form" style="position: relative;  top: -90px; left: 240px; width: 600px; height: 300px; background-color:white ">
+     
+  
+            <div  class="container d-flex justify-content-center" style="margin-top: 30px; ">	                        
+              <div class="card" style="border-color: rgba(130, 206, 209, 0.733); width: 93%; height: 93%; margin-top: -50px; margin-bottom: 30px">	
+              
+                <h3 style=" text-align: center; color: dimgray;">LISTA LEKARA</h3>
+    
+    
+                <table  style="width: 100%; " class="table table-striped " >
+                  <tbody>
+                    <tr>
+                      <th ></th>
+                      <th>Ime</th>
+                      <th>Prezime</th>
+                      <th>Prosecna ocena</th>
+                      <th></th>
+                    </tr>
+                    
+                    <tr v-for="k,i in lekari.length" >
+                      <td></td>
+                      <td >{{lekari[i].ime}}</td>
+                      <td >{{lekari[i].prezime}} </td>
+                      <td >{{lekari[i].ocena}}</td>
+                      <td ></td>
+                      
+                    </tr>
+                    
+                        </tbody>
+      
+      
+              </table>
+</div>
+</div>
+          </form>
+          </div>
+        </div>
 </template>
 
 <script>
-import moment from 'moment'
-import axios from 'axios'
+//import * as VueGoogleMaps from 'vue2-google-maps';
+//import GmapMarker from 'vue2-google-maps/src/components/marker'
+import moment from 'moment';
+import axios from 'axios';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 import DatePicker from 'vue2-datepicker';
@@ -877,6 +1091,8 @@ export default {
 },
  data() {
      return {
+     
+  
       korisnik: {},
       datumS: {},
       vremeS: {},
@@ -928,6 +1144,8 @@ export default {
       pomocna: [],
       pomocnaRezultatiPretrage: [],
       lekari: [],
+      markers: [],
+      medicinskeSestre:[],
       selektovaniTip: "",
       selektovanaSala: "",
       selektovaniFilter: "",
@@ -938,6 +1156,7 @@ export default {
       omoguci: false,   
       
       flag: 0,
+      prikazIzvestajOPoslovanju: false,
       prikazProfil:false,
       ponistizmenaKlinike: false,
       prikazLekariKlinike: false,
@@ -945,14 +1164,18 @@ export default {
       prikazUpravljanjeSalama: false,
       prikazUpravljanjeTipovimaPregleda: false,
       prikazPretragaIfiltriranjeSala: false,
+      prikazMedicinskeSestreKlinike: false,
+      
       prikazZahtevaZaOdmor: false,
       prikazZahtevaZaPregled: false,
       prikazIzmenaKlinike: false,
       show: false,
+
       izmeni:false,
       izmeniKliniku: false,
       idKlinike: {},
       lekar: {},
+      medicinskaSestra:{},
       id: 2,
 
       zahteviZaOdmor: {},
@@ -960,6 +1183,15 @@ export default {
       trenutniZahtevZaPregled: {},
 
       events: [],
+
+
+      installComponents: true,
+      error: false,
+      message: "",
+       center: { lat: 45.508, lng: -73.587 },
+      markers: [],
+      places: [],
+      currentPlace: null,
       }
  },
   methods: {
@@ -973,6 +1205,30 @@ export default {
       this.prikazPretragaIfiltriranjeSala = false;
       this.prikazZahtevaZaOdmor = false;
       this.prikazZahtevaZaPregled = false; */
+    },
+    setPlace(place) {
+      this.currentPlace = place;
+    },
+    addMarker() {
+      if (this.currentPlace) {
+          
+        const marker = {
+          lat: this.currentPlace.geometry.location.lat(),
+          lng: this.currentPlace.geometry.location.lng()
+        };
+        this.markers.push({ position: marker });
+        this.places.push(this.currentPlace);
+        this.center = marker;
+        this.currentPlace = null;
+      }
+    },
+    geolocate: function() {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      });
     },
         otvoriKalendar(sala){
           this.show = true;
@@ -1243,6 +1499,29 @@ export default {
 		          console.log(error)
 		      });
         },    
+
+        otvoriMedicinskeSestreKlinike(){
+            
+        this.prikazProfil = false,
+        this.prikazIzmenaKlinike = false,
+        this.prikazMedicinskeSestreKlinike = !this.prikazMedicinskeSestreKlinike,
+        this.prikazLekariKlinike = false,
+        this.prikazDefinisanjePregleda = false,
+        this.prikazUpravljanjeSalama = false,
+        this.prikazUpravljanjeTipovimaPregleda =  false,
+        this.prikazPretragaIfiltriranjeSala = false,
+        this.ponistiPretraguSala(),
+        this.ponistiFiltriranjeSala()
+          axios
+        .get("/medicinska_sestra/izlistaj/" + this.idKlinike)
+        .then(odgovor =>{
+          this.medicinskeSestre = odgovor.data;
+          
+        })
+        .catch(error => {
+            console.log(error)
+        });
+      },    
         
            pretragaSala(){
             this.pretragaSale.vreme = this.vremeS;
@@ -1429,7 +1708,7 @@ export default {
         },
         
         
-           dodajLekara(){
+      dodajLekara(){
 			 if(this.lekar.ime=="" || this.lekar.prezime=="" || this.lekar.email==""  || this.lekar.lozinka=="" ||
 			         this.lekar.adresa=="" || this.lekar.grad=="" || this.lekar.drzava=="" ||
 			         this.lekar.telefon=="" || this.lekar.jmbg=="")
@@ -1469,6 +1748,62 @@ export default {
 	          this.lekar.telefon="";
 	          this.lekar.jmbg="";
         },
+
+        dodajMedicinskuSestru(){
+			 if(this.medicinskaSestra.ime=="" || this.medicinskaSestra.prezime=="" || this.medicinskaSestra.email==""  || this.medicinskaSestra.lozinka=="" ||
+			         this.medicinskaSestra.adresa=="" || this.medicinskaSestra.grad=="" || this.medicinskaSestra.drzava=="" ||
+			         this.medicinskaSestra.telefon=="" || this.medicinskaSestra.jmbg=="")
+			         {
+			          alert("Molimo vas popunite sva polja.");
+			          return;
+			         }
+			this.medicinskaSestra.idKlinike = this.korisnik.idKlinike;
+	        axios
+	        .post("/medicinska_sestra/dodaj" , this.medicinskaSestra)
+	        .then(lekar => {
+	          this.medicinskaSestra.ime="";
+	          this.medicinskaSestra.prezime="";
+	          this.medicinskaSestra.email="";
+	          this.medicinskaSestra.lozinka="";
+	          this.medicinskaSestra.adresa="";
+	          this.medicinskaSestra.grad="";
+	          this.medicinskaSestra.drzava="";
+	          this.medicinskaSestra.telefon="";
+	          this.medicinskaSestra.jmbg="";
+	          alert("Dodata medicinska sestra!");
+       
+	        })
+	        .catch(error => {
+				alert("Medicinska sestra sa ovim email-om vec postoji.");
+          });
+          this.prikazMedicinskeSestreKlinike = false;
+          this.otvoriMedicinskeSestreKlinike();
+        },
+        
+        odustaniDodajMedicinskuSestru(){
+              this.medicinskaSestra.ime="";
+	          this.medicinskaSestra.prezime="";
+	          this.medicinskaSestra.email="";
+	          this.medicinskaSestra.lozinka="";
+	          this.medicinskaSestra.adresa="";
+	          this.medicinskaSestra.grad="";
+	          this.medicinskaSestra.drzava="";
+	          this.medicinskaSestra.telefon="";
+	          this.medicinskaSestra.jmbg="";
+        },
+
+        obrisiMedicinskuSestru(ms){
+            axios
+            .delete("/medicinska_sestra/izbrisi/" + ms.id)
+          .then(odgovor => {
+            this.medicinskeSestre = odgovor.data;
+          
+          })
+          .catch(error => {
+            console.log(error);
+            alert("Ne mozete obrisati medicinsku sestru");
+          });
+          },
          odustaniDodajSalu(){
               this.sala.naziv="";
 	          this.sala.broj="";
@@ -1833,7 +2168,46 @@ export default {
 
         });
     },
+    otvoriIzvestajOPoslovanju(){
+
+      this.prikazIzvestajOPoslovanju=!this.prikazIzvestajOPoslovanju;
+      this.prikazProfil=false;
+      this.ponistizmenaKlinike= false;
+      this.prikazLekariKlinike= false;
+      this.prikazDefinisanjePregleda= false;
+      this.prikazUpravljanjeSalama= false;
+      this.prikazUpravljanjeTipovimaPregleda= false;
+      this.prikazPretragaIfiltriranjeSala= false;
+      this.prikazZahtevaZaOdmor= false;
+      this.prikazZahtevaZaPregled= false;
+      this.izlistajKliniku();
+      this.izlistajLekare()
+    },
+    izlistajKliniku(){
+      axios
+      .get("/klinika/pronadjiKliniku/" + this.idKlinike)
+      .then(klinika =>{
+        this.klinika = klinika.data;
+      })
+      .catch(error => {
+          console.log(error)
+      });
+    },
+    izlistajLekare(){
+      axios
+		      .get("/lekar/izlistaj/" + this.idKlinike)
+		      .then(lekar =>{
+		        this.lekari = lekar.data;
+		        
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });        
+
+      },
+
   },
+     
   beforeUpdate(){
     if(this.prikazPretragaIfiltriranjeSala){
     console.log('USAO');
@@ -2007,7 +2381,10 @@ export default {
   	
   },
  mounted() {
-            
+  /*this.$refs.mapRef.$mapPromise.then((map) => {
+      map.panTo({lat: 1.38, lng: 103.80})
+    });*/
+    this.geolocate();
  	  axios
       .get("/tipPregleda/TipoviKlinike/" + this.$store.state.user.id)
       .then(tipovi => {
@@ -2037,6 +2414,7 @@ export default {
       .catch(error => {
         console.log(error);
       });
+      
   }
 };
 </script>
