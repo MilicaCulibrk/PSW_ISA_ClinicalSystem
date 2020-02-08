@@ -52,14 +52,14 @@ INSERT INTO public.tip_pregleda(naziv, oznaka, cena, klinika_id)
 	VALUES ('Kardio', 'krd', ' 3000', 1);
 	
 INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmpg, lozinka, ocena, prezime, telefon, tip_pregleda_id, klinika_id, pocetak, kraj, promenjena_lozinka)
-	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'pb@gmail.com', 'Novi Sad', 'Peca', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 1, 1, 10, 13, true);
+	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'pb@gmail.com', 'Novi Sad', 'Peca', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 1, 1, 10, 14, true);
 	
 INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmpg, lozinka, ocena, prezime, telefon, tip_pregleda_id, klinika_id, pocetak, kraj, promenjena_lozinka)
-	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'bb@gmail.com', 'Novi Sad', 'Bojana', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 2, 1, 9, 10, true);
+	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'bb@gmail.com', 'Novi Sad', 'Bojana', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 2, 1, 10, 14, true);
 	
 
 INSERT INTO public.lekar( adresa, broj_recenzija, drzava,  email, grad, ime, jmpg, lozinka, ocena, prezime, telefon, tip_pregleda_id, klinika_id, pocetak, kraj, promenjena_lozinka)
-	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'db@gmail.com', 'Novi Sad', 'Dimitrije', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 1, 1, 10, 13, false);
+	VALUES ('Marsala Tita 58',  '5', 'Srbija', 'db@gmail.com', 'Novi Sad', 'Dimitrije', '012123', '$2a$04$Vbug2lwwJGrvUXTj6z7ff.97IzVBkrJ1XfApfGNl.Z695zqcnPYra', 5, 'Basic', '+381/61-5534209', 1, 1, 10, 14, false);
 
 INSERT INTO public.pregled(cena, datum, id_pacijenta, trajanje, vreme, lekar_id, sala_id, tip_pregleda_id, zavrsen, vrsta_pregleda)
 	VALUES ('5000', '2020-02-20T00:00:00.000Z', null, 2, '11', 1, 1, 1, 'false', 'pregled');

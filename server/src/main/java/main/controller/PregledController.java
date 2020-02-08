@@ -185,11 +185,13 @@ public class PregledController {
 			//termin ne sme pocinjati pre radnog vremena lekara i zavrsavati se posle radnog vremena lekara
 		    if(pocetakP < pocetakRV || pocetakP > krajRV) {
 				flag = true;
+				System.out.println("udji ovdeeee");
 			}
 			
 			//termin ne sme pocinjati posle radnog vremena lekara, a zavrsavati se posle radnog vremena lekara
-		    if(pocetakP > pocetakRV && krajP > krajRV) {
+		    if(pocetakP >= pocetakRV && krajP > krajRV) {
 				flag = true;
+				System.out.println("udji ovdeeee2");
 			}
 			
 		 
@@ -439,7 +441,7 @@ public class PregledController {
 		ZahtevZaPregled zahtevZaPregled = zahtevZaPregledRepository.findById(idZahteva).orElse(null);
 			
 		String errormessage = "";
-		 
+		
 		 String[] datumm = zahtevZaPregled.getDatum().split("T");
 		
 		 System.out.println(datum);
@@ -462,8 +464,14 @@ public class PregledController {
 			  
 			  pregledRepository.save(pregled);
 			  
+			  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
+			  zahtevZaPregled.setVreme(vreme);
 			  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
+			  zahtevZaPregled.setStatus("odobren");
+			 
+			  
 			  zahtevZaPregledRepository.save(zahtevZaPregled);
+			
 			  
 
 			 String messagePacijent = "Odobren Vam je zahtev za pregled kod lekara " + pregled.getLekar().getIme() + " " + pregled.getLekar().getPrezime()  + " za vreme " + datumm[0] + " " + pregled.getVreme() + " sati" +  " u sali " + pregled.getSala().getNaziv(); 
@@ -503,12 +511,15 @@ public class PregledController {
 				
 				//ako hocu da rezervisem datum za koji vec imam preglede
 				for (Pregled p : pregledi) {
-					 if (datumm[0].equals(p.getDatum())
-							&& p.getLekar() == lekar) 
-					 {				
+				    
+					String[] datumPregleda2 = p.getDatum().split("T");
+					
+					 if (datumPregleda2[0].equals(datum) && p.getLekar() == lekar) {
+						 System.out.println("Usaoooooooooooooooooooooooooooooooooo");
+					 				
 						    //ako hocemo da zakazemo pregled usred nekog drugog pregleda
 					
-							if(vremeInt >= Integer.parseInt(p.getVreme()) && vremeInt < (Integer.parseInt(p.getVreme()) + p.getTrajanje()))
+							if(vremeInt >= Integer.parseInt(p.getVreme()) && vremeInt <= (Integer.parseInt(p.getVreme()) + p.getTrajanje()))
 							{
 								flag = true;
 								
@@ -534,7 +545,7 @@ public class PregledController {
 					
 					System.out.println("NIJE PUKO");
 					  
-					  zahtevZaPregled.setDatum(datumm[0]);
+					  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
 					  zahtevZaPregled.setVreme(vreme);
 					  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
 					  zahtevZaPregled.setStatus("odobren");
@@ -554,19 +565,163 @@ public class PregledController {
 					  
 						 errormessage = "Poslat mejl pacijentu da odobri promenu termina za istog lekara!";
 						 
-							return new ResponseEntity<String>(errormessage, HttpStatus.OK);	
-				}
-			 
-			 
-				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);			
+				
+						 return new ResponseEntity<String>(errormessage, HttpStatus.OK);	
+				
+				//moramo dodeliti drugog lekara, nas nije slobodan
+				}else {
+					List<Lekar> lekari = lekarRepository.findAll();
+					
+					Boolean zastava = false;
+					Boolean zastava2 = false;
+					
+					for(Lekar l: lekari) {
+						if(l.getTipPregleda() == zahtevZaPregled.getTipPregleda()) {
+							System.out.println(lekari.size());
+							System.out.println(l.getIme());
+							//ako je zakazan pre radnog vremena lekara ili posle
+							if(vremeInt < l.getPocetak() || vremeInt > l.getKraj())
+							{
+								zastava = true;
+								System.out.println("Z1 3");
+							}
+							
+							//ako je zakazan unutar radnog vremena ali traje duze od radnog vremena
+							if(vremeInt >= l.getPocetak() && vremeInt <= l.getKraj() && (vremeInt + zahtevZaPregled.getTrajanje()) >= l.getKraj())
+							{
+								zastava = true;
+								System.out.println("Z1 4");
+							}
+							
+							
+							//ako hocu da rezervisem datum za koji vec imam preglede
+							
+							List<Pregled> pregledi2 = new ArrayList<Pregled>();
+							 
+							
+							
+							for(Pregled p: pregledi) {
+								 String[] datumPregleda = p.getDatum().split("T");
+								 if (datum.equals(datumPregleda[0]) && p.getLekar() == l){ 	
+									 pregledi2.add(p);
+								 }
+							}
+							
+							if(pregledi2.isEmpty()) {
+								
+								  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
+								  zahtevZaPregled.setVreme(vreme);
+								  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
+								  zahtevZaPregled.setStatus("odobren");
+								 
+								  
+								  zahtevZaPregledRepository.save(zahtevZaPregled);
+								  
 
+									 String messagePacijent = "Potvrdite promenu termina i lekara.";
+									 mailService.sendNotificaitionAsync(pacijentService.findOne(pregled.getIdPacijenta()), messagePacijent);
+												
+
+									 String messageLekar = "Dodeljen Vam je novi pregled.";
+									 mailService.sendNotificaitionAsync(pacijentService.findOne(zahtevZaPregled.getIdPacijenta()), messageLekar);	
+									 
+									 String messageLekar2 = "Vas pregled je prebacen na drugog lekara";
+									 mailService.sendNotificaitionAsync(l, messageLekar);	
+								
+								  errormessage = "Dodeljen je drugi lekar tog tipa i pregled je zakazan!";
+								  return new ResponseEntity<String>(errormessage, HttpStatus.OK);
+							}
+							
+							
+							for (Pregled p : pregledi2) {
+								 zastava2 = false;
+								 System.out.println(datum);
+								 System.out.println(p.getDatum());
+								
+								 
+										
+									 System.out.println("Datumi");
+									    //ako hocemo da zakazemo pregled usred nekog drugog pregleda
+								
+										if(vremeInt >= Integer.parseInt(p.getVreme()) && vremeInt <= (Integer.parseInt(p.getVreme()) + p.getTrajanje()))
+										{
+											zastava2 = true;
+											
+											System.out.println("Z21");
+										}
+										
+										//ako hocemo da zakazemo pregled koji pocinje pre nekog ali se zavrsava posle pocetka
+										if(vremeInt <= Integer.parseInt(p.getVreme()) && (vremeInt + zahtevZaPregled.getTrajanje()) >= Integer.parseInt(p.getVreme()))
+										{
+											zastava2 = true;
+											System.out.println("Z22");
+										}
+										
+										System.out.println(zastava);
+										System.out.println(zastava2);
+										if(zastava == false && zastava2 == false) {
+											
+											  System.out.println(l.getIme());
+											  
+											  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
+											  zahtevZaPregled.setVreme(vreme);
+											  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
+											  zahtevZaPregled.setStatus("odobren");
+											 
+											  
+											  zahtevZaPregledRepository.save(zahtevZaPregled);
+							
+											  
+											  if(l == zahtevZaPregled.getLekar()) {
+												  
+												  String messagePacijent = "Potvrdite promenu termina kod istog lekara. "; 
+													 mailService.sendNotificaitionAsync(pacijentService.findOne(zahtevZaPregled.getIdPacijenta()), messagePacijent);
+																
+
+													 String messageLekar = "Ceka se da pacijent odobri promenu termina.";
+													 mailService.sendNotificaitionAsync(l, messageLekar);	
+												  
+												  
+												  errormessage = "Poslat mejl pacijentu da odobri promenu termina za istog lekara!";
+												  return new ResponseEntity<String>(errormessage, HttpStatus.OK);
+											  }else {
+												 
+
+													 String messagePacijent = "Pomeren Vam je termin i promenjen lekar.";
+													 mailService.sendNotificaitionAsync(pacijentService.findOne(pregled.getIdPacijenta()), messagePacijent);
+																
+
+													 String messageLekar = "Dodeljen Vam je novi pregled";
+													 mailService.sendNotificaitionAsync(zahtevZaPregled.getLekar(), messageLekar);	
+													 
+													 String messageLekar2 = "Vas pregled je prebacen na drugog lekara";
+													 mailService.sendNotificaitionAsync(l, messageLekar);	
+												
+												  
+												  errormessage = "Dodeljen je drugi lekar tog tipa i pregled je zakazan!";
+												  return new ResponseEntity<String>(errormessage, HttpStatus.OK);
+											  }
+											
+									
+									//ako smo nasli slobodnog lekara za taj tip pregleda
+										
+										
+									}
+									
+								
+							}							
+					}
+					
+				}
+			 		
 		 }
-	
 			
-	
+				  errormessage = "Nema slobodnih lekara za taj termin izaberite drugi!";
+				  return new ResponseEntity<String>(errormessage, HttpStatus.OK);
 			
 	}
 	
 	
+	}
 	
 }
