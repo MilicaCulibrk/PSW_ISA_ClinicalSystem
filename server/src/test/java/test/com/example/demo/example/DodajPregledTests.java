@@ -99,6 +99,11 @@ public class DodajPregledTests extends PregledServiceTest{
 		pregleddto.setLekar(lekar);
 		SalaDTO saladto = new SalaDTO();
 		saladto.setId((long)1);
+		saladto.setNaziv("nes");
+		saladto.setBroj(2);
+		KlinikaDTO klinikadto = new KlinikaDTO();
+		klinikadto.setId((long)1);
+		saladto.setKlinika(klinikadto);
 		pregleddto.setSala(saladto);
 		return pregleddto;
 	}
