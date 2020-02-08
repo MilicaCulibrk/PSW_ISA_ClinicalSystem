@@ -148,7 +148,7 @@
                               </div>
                               </div>
                   </form>
-                  <form v-if="prikazIzmenaKlinike" class="message-form" style=" border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset;  position: fixed; top: 100px; left: 400px; width: 60%; height: 530px; background-color: rgba(130, 206, 209, 0.733); ">         
+                  <form v-if="prikazIzmenaKlinike" class="message-form" style=" border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset;  position: relative  ; top: 100px; left: 400px; width: 60%; height: 1000px; background-color: rgba(130, 206, 209, 0.733); ">         
                       <div class="card" style="width: 95%; height: 90%; margin-top: 25px; margin-left: 25px;   ">	
                             <div class="form-group">
                       
@@ -187,7 +187,34 @@
                                     
                       <label for="Form-email4" style="color: #b3b3b3;">Drzava</label>
                       <input type="text" v-model="klinika.drzava" id="Form-email4" class="form-control" :disabled="!izmeniKliniku">
-                      </div>                       
+                      <label  >
+
+                        <gmap-autocomplete class="form-control" v-model="klinika.adresa"
+                          @place_changed="setPlace">
+                        </gmap-autocomplete>
+                
+                
+                        <button style=" border-color: rgba(130, 206, 209, 0.733);  background-color:  rgba(130, 206, 209, 0.733);" class="btn  btn-block z-depth-2"  @click="addMarker">Nadji kliniku na mapi</button>
+                
+                      </label>
+                      <GmapMap
+                      :center="{lat:10, lng:10}"
+                      :zoom="7"
+                      map-type-id="terrain"
+                      style="width: 500px; height: 300px"
+                    >
+                      <GmapMarker
+                        :key="index"
+                        v-for="(m, index) in markers"
+                        :position="m.position"
+                        :clickable="true"
+                        :draggable="true"
+                        @click="center=m.position"
+                      />
+                    </GmapMap>
+                  
+      
+                            </div>                       
                     
                                    <div class="row">
                                      
@@ -523,6 +550,7 @@
                       <thead>
                         <tr>
                           <th class="th-lg">Lekar</th>
+                          <th class="th-lg">Medicinska sestra</th>
                           <th class="th-lg">Od</th>
                           <th class="th-lg">Do</th>
                           <th class="th-lg">Odobri</th>
@@ -531,7 +559,9 @@
                       </thead>
                       <tbody>
                       <tr v-for="k,i in zahteviZaOdmor.length">
-                        <td>{{zahteviZaOdmor[i].lekar}}{{zahteviZaOdmor[i].medicinskaSestra}}</td>
+                        <td>{{zahteviZaOdmor[i].lekar}}</td>
+                        <td>{{zahteviZaOdmor[i].medicinskaSestra}}</td>
+
                         <td>{{zahteviZaOdmor[i].start}}</td>
                         <td>{{zahteviZaOdmor[i].end}}</td>
                         <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="odobriZahtev(zahteviZaOdmor[i])"><i class="fa fa-trash">Odobri</i></button>
@@ -966,8 +996,10 @@
 </template>
 
 <script>
-import moment from 'moment'
-import axios from 'axios'
+//import * as VueGoogleMaps from 'vue2-google-maps';
+//import GmapMarker from 'vue2-google-maps/src/components/marker'
+import moment from 'moment';
+import axios from 'axios';
 import VueCal from 'vue-cal';
 import 'vue-cal/dist/vuecal.css';
 import DatePicker from 'vue2-datepicker';
@@ -1037,6 +1069,7 @@ export default {
       pomocna: [],
       pomocnaRezultatiPretrage: [],
       lekari: [],
+      markers: [],
       medicinskeSestre:[],
       selektovaniTip: "",
       selektovanaSala: "",
@@ -1074,6 +1107,15 @@ export default {
       trenutniZahtevZaPregled: {},
 
       events: [],
+
+
+      installComponents: true,
+      error: false,
+      message: "",
+       center: { lat: 45.508, lng: -73.587 },
+      markers: [],
+      places: [],
+      currentPlace: null,
       }
  },
   methods: {
@@ -1087,6 +1129,30 @@ export default {
       this.prikazPretragaIfiltriranjeSala = false;
       this.prikazZahtevaZaOdmor = false;
       this.prikazZahtevaZaPregled = false; */
+    },
+    setPlace(place) {
+      this.currentPlace = place;
+    },
+    addMarker() {
+      if (this.currentPlace) {
+          
+        const marker = {
+          lat: this.currentPlace.geometry.location.lat(),
+          lng: this.currentPlace.geometry.location.lng()
+        };
+        this.markers.push({ position: marker });
+        this.places.push(this.currentPlace);
+        this.center = marker;
+        this.currentPlace = null;
+      }
+    },
+    geolocate: function() {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+      });
     },
         otvoriKalendar(sala){
           this.show = true;
@@ -2201,7 +2267,10 @@ export default {
   	
   },
  mounted() {
-            
+  /*this.$refs.mapRef.$mapPromise.then((map) => {
+      map.panTo({lat: 1.38, lng: 103.80})
+    });*/
+    this.geolocate();
  	  axios
       .get("/tipPregleda/TipoviKlinike/" + this.$store.state.user.id)
       .then(tipovi => {
@@ -2231,6 +2300,7 @@ export default {
       .catch(error => {
         console.log(error);
       });
+      
   }
 };
 </script>

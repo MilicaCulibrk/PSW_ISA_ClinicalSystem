@@ -134,7 +134,9 @@ public class LoginController {
 
 
 	        	Collection<?> roles = administratorKlinike.getAuthorities();
-
+	        	for (Object object : roles) {
+	        		System.out.println(object);
+				}
 	            String jwt = tokenUtils.generateTokenAK(administratorKlinike,  (Authority) roles.iterator().next());
 
 	            int expiresIn = tokenUtils.getExpiredIn();

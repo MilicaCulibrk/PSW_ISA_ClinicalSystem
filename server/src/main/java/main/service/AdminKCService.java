@@ -1,5 +1,8 @@
 package main.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.EntityNotFoundException;
 import javax.validation.ValidationException;
 
@@ -11,7 +14,9 @@ import main.dto.AdminKCDTO;
 import main.dto.AdminKlinikeDTO;
 import main.model.AdministratorKlinickogCentra;
 import main.model.AdministratorKlinike;
+import main.model.Authority;
 import main.repository.AdminKCRepository;
+import main.repository.AuthorityRepository;
 
 @Service
 public class AdminKCService {
@@ -22,8 +27,17 @@ public class AdminKCService {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
+
+	@Autowired
+	private AuthorityRepository authorityRepository;
+	
+	
 	public AdministratorKlinickogCentra findOne(Long id) {
 		return adminKCRepository.findById(id).orElseGet(null);
+	}
+	public List<AdministratorKlinickogCentra> findAll() {
+		// TODO Auto-generated method stub
+		return adminKCRepository.findAll();
 	}
 
 	public void izmeniAdminaKlinike(AdminKCDTO adminKCDTO) {
@@ -46,6 +60,37 @@ public class AdminKCService {
 		} catch (EntityNotFoundException e) {
 			throw new ValidationException("Admin sa tim id-ijem ne postoji");
 		}
+	}
+	
+	public AdminKCDTO dodajAdministratoraKC(AdminKCDTO adminKCDTO) {
+		AdministratorKlinickogCentra ak = new AdministratorKlinickogCentra();
+		
+		Authority auth = this.authorityRepository.findByUloga("ADMIN_CENTRA");
+		List<Authority> auths = new ArrayList<>();
+	    auths.add(auth);
+	    ak.setAuthorities(auths);
+		
+		ak.setIme(adminKCDTO.getIme());
+		ak.setPrezime(adminKCDTO.getPrezime());
+		ak.setAdresa(adminKCDTO.getAdresa());
+		ak.setGrad(adminKCDTO.getGrad());
+		ak.setDrzava(adminKCDTO.getDrzava());
+		ak.setTelefon(adminKCDTO.getTelefon());
+		ak.setEmail(adminKCDTO.getEmail());
+		ak.setJmbg(adminKCDTO.getJmbg());
+		ak.setLozinka(passwordEncoder.encode(adminKCDTO.getLozinka()));
+		ak.setPromenjenaLozinka(false);
+		for (AdministratorKlinickogCentra k : adminKCRepository.findAll()) {
+			if (ak.getEmail().equals(k.getEmail())) {
+				return null;
+			}
+		}
+		adminKCRepository.save(ak);
+		//SendEmailTLS.main(administratorDTO.getEmail());
+		AdminKCDTO administratordto =new AdminKCDTO(ak);
+		//klinikaRepository.getOne(administratorDTO.getIdKlinike()).administratorKlinike.add(ak);
+
+		return administratordto;
 	}
 }
 

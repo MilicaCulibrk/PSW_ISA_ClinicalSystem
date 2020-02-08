@@ -197,13 +197,7 @@ public class MedicinskaSestra implements UserDetails{
 	public void setZahtevZaOdmor(java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor) {
 		this.zahtevZaOdmor = zahtevZaOdmor;
 	}
-	@Override
-	public String toString() {
-		return "MedicinskaSestra [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", ocena=" + ocena + ", email="
-				+ email + ", lozinka=" + lozinka + ", adresa=" + adresa + ", grad=" + grad + ", drzava=" + drzava
-				+ ", telefon=" + telefon + ", jmbg=" + jmbg + ", radniKalendar=" + radniKalendar + ", klinika="
-				+ klinika + ", zahtevZaOdmor=" + zahtevZaOdmor + "]";
-	}
+
 
 
 	public void setAuthorities(List<Authority> authorities) {
