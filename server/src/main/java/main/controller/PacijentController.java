@@ -1,13 +1,10 @@
 package main.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-
-import javax.validation.ValidationException;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import main.dto.KlinikaDTO;
 import main.dto.PacijentDTO;
 import main.dto.PretragaPacijentaDTO;
 import main.dto.PromenaLozinkeDTO;
@@ -32,9 +28,11 @@ import main.dto.SalaDTO;
 import main.model.AdministratorKlinickogCentra;
 import main.model.AdministratorKlinike;
 import main.model.Klinika;
+import main.dto.ZahtevZaPregledDTO;
 import main.model.Pacijent;
-import main.model.Sala;
+import main.model.ZahtevZaPregled;
 import main.service.PacijentService;
+import main.service.ZahtevZaPregledService;
 
 
 @CrossOrigin
@@ -46,8 +44,11 @@ public class PacijentController {
 	private PacijentService pacijentService;
 	
 	@Autowired
+
 	private AuthenticationManager authenticationManager;
 	
+	private ZahtevZaPregledService zahtevZaPregledService;
+
 	
 	@GetMapping(value = "/getEmail/{email}")
 	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
@@ -183,6 +184,7 @@ public class PacijentController {
 
 
 	    }
+
 	
 	@PostMapping(value = "/promeniSvojuLozinku/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('PACIJENT')")
@@ -209,6 +211,27 @@ public class PacijentController {
 		
 	} 
 	
+
+	@GetMapping(value = "/izlistajZahteve/{id}")
+	@PreAuthorize("hasAnyAuthority('PACIJENT')")
+	public ResponseEntity<List<ZahtevZaPregledDTO>> izlistajZahteve(@PathVariable Long id) {
+
+		
+
+		Collection<ZahtevZaPregled> listaZahteva = new ArrayList<ZahtevZaPregled>();
+		List<ZahtevZaPregledDTO> listaZahtevaDTO = new ArrayList<ZahtevZaPregledDTO>();
+
+		listaZahteva =zahtevZaPregledService.izlistaj(id);
+		
+		
+		for (ZahtevZaPregled zzp : listaZahteva) {
+				listaZahtevaDTO.add(new ZahtevZaPregledDTO(zzp));
+			
+			
+		}
+		
+		return new ResponseEntity<>(listaZahtevaDTO, HttpStatus.OK);
+	}
 
 	
 }

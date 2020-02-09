@@ -39,6 +39,17 @@ public class ZahtevZaPregled {
 		@Column(name = "status")
 		private String status;
 		
+		@Column(name = "prihvacenOdPacijenta")
+		private Boolean prihvacenOdPacijenta;
+		
+		public Boolean getPrihvacenOdPacijenta() {
+			return prihvacenOdPacijenta;
+		}
+
+		public void setPrihvacenOdPacijenta(Boolean prihvacenOdPacijenta) {
+			this.prihvacenOdPacijenta = prihvacenOdPacijenta;
+		}
+
 		@OneToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
 		@JoinColumn(name = "sala_id")
 		private Sala sala;
