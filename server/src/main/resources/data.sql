@@ -223,6 +223,9 @@ VALUES ('D3234','Povisena temperatura');
 INSERT INTO public.dijagnoza(sifra, naziv)
 VALUES ('S1125','Stomacni problemi');
 
+INSERT INTO public.zahtev_za_pregled(cena, datum, id_pacijenta, prihvacen_od_pacijenta, status, trajanje, vreme, vrsta_pregleda, lekar_id, lekar1_id, lekar2_id, sala_id, tip_pregleda_id)
+VALUES ('1500', '2020-05-22T00:00:00.000Z', '1', 'false', 'odobren', 1, 13, 'pregled', 1, null, null, 1, 1);
+
 
 INSERT INTO public.authority (uloga) VALUES ('PACIJENT');
 INSERT INTO public.authority (uloga) VALUES ('LEKAR');

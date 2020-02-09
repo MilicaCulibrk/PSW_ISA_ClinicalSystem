@@ -78,11 +78,16 @@ public List<ZahtevZaPregled> izlistaj(Long id) {
 
 		List<ZahtevZaPregled> zahtevi = zahtevZaPregled.findAll();
 		for(ZahtevZaPregled z: zahtevi) {
-			if(z.getIdPacijenta().equals(id) && z.getStatus().equals("odobren") && z.getPrihvacenOdPacijenta().equals(false)) {
-				System.out.println(z.getPrihvacenOdPacijenta());
-				listaZahteva.add(z);
-				
+			try {
+				if(z.getIdPacijenta() == id  && z.getPrihvacenOdPacijenta() == false) {
+					System.out.println(z.getPrihvacenOdPacijenta());
+					listaZahteva.add(z); }
+			}catch (Exception e) {
+				// TODO: handle exception
 			}
+		
+				
+			
 		}
 		
 		

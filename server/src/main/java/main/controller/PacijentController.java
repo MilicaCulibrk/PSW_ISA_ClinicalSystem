@@ -220,9 +220,11 @@ public class PacijentController {
 
 		Collection<ZahtevZaPregled> listaZahteva = new ArrayList<ZahtevZaPregled>();
 		List<ZahtevZaPregledDTO> listaZahtevaDTO = new ArrayList<ZahtevZaPregledDTO>();
-
-		listaZahteva =zahtevZaPregledService.izlistaj(id);
-		
+		try {
+		   listaZahteva =zahtevZaPregledService.izlistaj(id);
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
 		
 		for (ZahtevZaPregled zzp : listaZahteva) {
 				listaZahtevaDTO.add(new ZahtevZaPregledDTO(zzp));
