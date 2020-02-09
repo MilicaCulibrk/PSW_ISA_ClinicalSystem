@@ -169,11 +169,9 @@ public class PregledController {
 	//dodaj predefinisani pregled kao administrator klinike sa ogranicenjima
 	@PostMapping(value = "/dodajPregled", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
-	public ResponseEntity<PregledDTO> dodajPregled(@RequestBody PregledDTO pregledDTO) {
+	public ResponseEntity dodajPregled(@RequestBody PregledDTO pregledDTO) {
 
-		System.out.println("LALALALLA");
-		
-		PregledDTO pregleddto = new PregledDTO();
+
 		boolean flag = false;
 		
 		System.out.println(pregledDTO.getLekar().getPocetak());
@@ -242,14 +240,14 @@ public class PregledController {
 			}
 			
 			if(!flag) {
-				pregleddto = pregledService.dodajPregled(pregledDTO);
+				pregledService.dodajPregled(pregledDTO);
 			}
 		 
 			if(flag) {
-				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);			
+				return new ResponseEntity<>( HttpStatus.INTERNAL_SERVER_ERROR);			
 			}			
 	
-			return new ResponseEntity<>(pregleddto, HttpStatus.OK);
+			return new ResponseEntity<>( HttpStatus.OK);
 	}
   
   @GetMapping(value = "/nadjiOdradjen/{idPacijenta}")

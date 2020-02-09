@@ -23,7 +23,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter @Setter @NoArgsConstructor 
+
 public class AdministratorKlinickogCentra implements UserDetails{
 	
 	
@@ -91,117 +97,6 @@ public class AdministratorKlinickogCentra implements UserDetails{
 		this.zahtevi = new HashSet<>();
 	}
 
-	public AdministratorKlinickogCentra() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-   
-   public KlinickiCentar getKlinickiCentar() {
-      return klinickiCentar;
-   }
-
-public Boolean getPromenjenaLozinka() {
-	return promenjenaLozinka;
-}
-
-public void setPromenjenaLozinka(Boolean promenjenaLozinka) {
-	this.promenjenaLozinka = promenjenaLozinka;
-}
-
-public Long getId() {
-	return id;
-}
-
-public void setId(Long id) {
-	this.id = id;
-}
-
-public String getIme() {
-	return ime;
-}
-
-public void setIme(String ime) {
-	this.ime = ime;
-}
-
-public String getPrezime() {
-	return prezime;
-}
-
-public void setPrezime(String prezime) {
-	this.prezime = prezime;
-}
-
-public String getEmail() {
-	return email;
-}
-
-public void setEmail(String email) {
-	this.email = email;
-}
-
-public String getLozinka() {
-	return lozinka;
-}
-
-public void setLozinka(String lozinka) {
-	this.lozinka = lozinka;
-}
-
-public String getAdresa() {
-	return adresa;
-}
-
-public void setAdresa(String adresa) {
-	this.adresa = adresa;
-}
-
-public String getGrad() {
-	return grad;
-}
-
-public void setGrad(String grad) {
-	this.grad = grad;
-}
-
-public String getDrzava() {
-	return drzava;
-}
-
-public void setDrzava(String drzava) {
-	this.drzava = drzava;
-}
-
-public String getTelefon() {
-	return telefon;
-}
-
-public void setTelefon(String telefon) {
-	this.telefon = telefon;
-}
-
-public String getJmbg() {
-	return jmbg;
-}
-
-public void setJmbg(String jmbg) {
-	this.jmbg = jmbg;
-}
-
-public void setKlinickiCentar(KlinickiCentar klinickiCentar) {
-	this.klinickiCentar = klinickiCentar;
-}
-
-
-
-public Set<ZahtevZaRegistraciju> getZahtevi() {
-	return zahtevi;
-}
-
-public void setZahtevi(Set<ZahtevZaRegistraciju> zahtevi) {
-	this.zahtevi = zahtevi;
-}
 
 @Override
 public String toString() {

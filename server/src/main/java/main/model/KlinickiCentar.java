@@ -12,13 +12,16 @@ import javax.persistence.OneToMany;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+
 @Entity
+@Getter @Setter @NoArgsConstructor 
+
 public class KlinickiCentar {
-	
-	public KlinickiCentar() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,30 +41,7 @@ public class KlinickiCentar {
 		this.klinika = klinika;
 	}
 
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public java.util.Collection<AdministratorKlinickogCentra> getAdministratorKlinickogCentra() {
-		return administratorKlinickogCentra;
-	}
-
-	public void setAdministratorKlinickogCentra(
-			java.util.Collection<AdministratorKlinickogCentra> administratorKlinickogCentra) {
-		this.administratorKlinickogCentra = administratorKlinickogCentra;
-	}
-
-	public java.util.Collection<AdministratorKlinickogCentra> getKlinika() {
-		return klinika;
-	}
-
-	public void setKlinika(java.util.Collection<AdministratorKlinickogCentra> klinika) {
-		this.klinika = klinika;
-	}
 
 	@Override
 	public String toString() {

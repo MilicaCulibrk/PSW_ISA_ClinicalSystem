@@ -5,8 +5,8 @@ package main.model;
  * Author:  23nik
  * Purpose: Defines the Class Klinika
  ***********************************************************************/
-
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,14 +20,19 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+
+@Setter
+@Getter
+@NoArgsConstructor 
 public class Klinika {
 	
-	public Klinika() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,19 +67,7 @@ public class Klinika {
    
    
    
-   public Klinika(Long id, String naziv, String adresa, String email, String grad, String drzava, String telefon,
-			String opis, Double ocena) {
-		super();
-		this.id = id;
-		this.naziv = naziv;
-		this.adresa = adresa;
-		this.email = email;
-		this.grad = grad;
-		this.drzava = drzava;
-		this.telefon = telefon;
-		this.opis = opis;
-		this.ocena= ocena;
-	}
+
 
 
 @ManyToMany(mappedBy = "klinika")
@@ -99,6 +92,7 @@ public class Klinika {
    
     @OneToMany(mappedBy = "klinika", fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
 	private Collection<TipPregleda> tipPregleda = new HashSet<TipPregleda>();
+
 
    @OneToMany(mappedBy = "klinika",  cascade = CascadeType.ALL)
    public   List<OcenaKlinike> ocenaKlinike = new ArrayList<OcenaKlinike>();
@@ -131,7 +125,7 @@ public class Klinika {
 	
 		this.tipPregleda = tipPregleda;
 	}
-	
+/*	
 	public String getDrzava() {
 		return drzava;
 	}
@@ -305,5 +299,5 @@ public class Klinika {
 	
 	public void setTipPregleda(Collection<TipPregleda> tipPregleda) {
 		this.tipPregleda = tipPregleda;
-	}
+	}*/
 }

@@ -16,6 +16,7 @@ import main.model.AdministratorKlinickogCentra;
 import main.model.AdministratorKlinike;
 import main.model.Authority;
 import main.model.Lekar;
+import main.model.Lekar.LekarBuilder;
 import main.model.MedicinskaSestra;
 import main.model.Pacijent;
 

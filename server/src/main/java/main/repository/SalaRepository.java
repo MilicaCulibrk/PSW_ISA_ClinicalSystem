@@ -30,6 +30,8 @@ public interface SalaRepository extends JpaRepository<Sala,Long> {
 	//po nazivu i broju
     @Query("select s from Sala s where s.id = ?3 and lower(s.naziv)=lower(?1) and  s.broj=?2")
     List<Sala> pronadjiSaluPoNazivuiBrojuiIdKlinike(String naziv,Integer broj,Long id);
+
+
 	
 	
 	

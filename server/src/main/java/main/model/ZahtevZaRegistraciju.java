@@ -12,7 +12,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter @Setter 
 public class ZahtevZaRegistraciju {
 	
 	    @Id
@@ -72,101 +77,6 @@ public class ZahtevZaRegistraciju {
 	    	this.status = "NA_CEKANJU";
 	    }
 
-		public Long getId() {
-			return id;
-		}
-
-		public void setId(Long id) {
-			this.id = id;
-		}
-
-		public String getStatus() {
-			return status;
-		}
-
-		public void setStatus(String status) {
-			this.status = status;
-		}
-
-		public String getIme() {
-			return ime;
-		}
-
-		public void setIme(String ime) {
-			this.ime = ime;
-		}
-
-		public String getPrezime() {
-			return prezime;
-		}
-
-		public void setPrezime(String prezime) {
-			this.prezime = prezime;
-		}
-
-		public String getEmail() {
-			return email;
-		}
-
-		public void setEmail(String email) {
-			this.email = email;
-		}
-
-		public String getLozinka() {
-			return lozinka;
-		}
-
-		public void setLozinka(String lozinka) {
-			this.lozinka = lozinka;
-		}
-
-		public String getAdresa() {
-			return adresa;
-		}
-
-		public void setAdresa(String adresa) {
-			this.adresa = adresa;
-		}
-
-		public String getGrad() {
-			return grad;
-		}
-
-		public void setGrad(String grad) {
-			this.grad = grad;
-		}
-
-		public String getDrzava() {
-			return drzava;
-		}
-
-		public void setDrzava(String drzava) {
-			this.drzava = drzava;
-		}
-
-		public String getTelefon() {
-			return telefon;
-		}
-
-		public void setTelefon(String telefon) {
-			this.telefon = telefon;
-		}
-
-		public String getJmbg() {
-			return jmbg;
-		}
-
-		public void setJmbg(String jmbg) {
-			this.jmbg = jmbg;
-		}
-
-		public AdministratorKlinickogCentra getAdminKC() {
-			return adminKC;
-		}
-
-		public void setAdminKC(AdministratorKlinickogCentra adminKC) {
-			this.adminKC = adminKC;
-		}
 
 	    
 
