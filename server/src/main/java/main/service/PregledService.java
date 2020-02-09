@@ -100,7 +100,7 @@ public class PregledService {
 		zahtevZaPregled.setTrajanje(zahtevZaPregledDTO.getTrajanje());
 		zahtevZaPregled.setVrstaPregleda(zahtevZaPregledDTO.getVrstaPregleda());
 		zahtevZaPregled.setTipPregleda(tipPregledaRepository.findById(zahtevZaPregledDTO.getTipPregleda().getId()).orElse(null));
-		zahtevZaPregled.setVrstaPregleda("pregled");
+		zahtevZaPregled.setVrstaPregleda(zahtevZaPregledDTO.getVrstaPregleda());
 		zahtevZaPregled.setStatus("na_cekanju");
 
 

@@ -712,7 +712,7 @@
                               </div>
                 </form>
 	 		
-	 		      	<form v-if="prikazPretragaIfiltriranjeSala"  class="message-form" style="position: relative; top: -500px; left: 450px; width: 600px; height: 50px;  ">
+	 		      	<form v-if="prikazPretragaIfiltriranjeSala"  class="message-form" style="position: relative; top: -500px; left: 800px; width: 600px; height: 50px;  ">
 	 		
                    <div   class="text-center mb-4 mt-4">
                                        <label for="Form-phone" style=" color: #b3b3b3;">Filtritaj po</label>
@@ -861,6 +861,31 @@
 		          </div>        
            </form>
            
+           <form v-if="trenutniZahtevZaPregled.vrstaPregleda == 'operacija'" class="message-form" style="position: relative; top: -600px; left: 300px; width: 550px; height: 400px; background-color: rgba(130, 206, 209, 0.733); ">
+            <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
+              <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
+
+            <table style="width: 500px;">
+                      <tr>
+                        <th class="bg-info  text-white">Ime</th>
+                        <th class="bg-info  text-white">Prezime</th>
+                        <th class="bg-info  text-white">Radno vreme</th>
+                  
+                      </tr>
+                      <tr v-for="k,i in lekari.length">
+                        <td>{{lekari[i].ime}}</td>
+                        <td>{{lekari[i].prezime}}</td>
+              <td>{{lekari[i].pocetak}}:00h - {{lekari[i].kraj}}:00h</td>
+              <td style="text-align: center">   <button class="btn btn-warning" v-if="lekari[i].id != trenutniZahtevZaPregled.lekar.id"  type="button" v-on:click="dodajUoperaciju(lekari[i])"><i class="fa fa-trash">Dodaj u operaciju</i></button>   
+                        </td>
+                      </tr>
+                  </table>
+
+     
+            </div>
+            </div>        
+         </form>
+         
 
 
 
@@ -1137,6 +1162,7 @@ export default {
 	  filterString: "",
       tipovi: [],
       sale: [],
+      sacuvanId: 0,
       error: false,
       nemaSala: false,
       errormessage: "",
@@ -1210,6 +1236,9 @@ export default {
       this.currentPlace = place;
     },
     addMarker() {
+
+      event.preventDefault();
+
       if (this.currentPlace) {
           
         const marker = {
@@ -1271,6 +1300,30 @@ export default {
           });
           
         },
+        dodajUoperaciju(lekar){
+          axios
+          .post("/lekar/dodajUoperaciju/" + this.vremeS + '/' + this.datumS + '/' + this.trenutniZahtevZaPregled.id, lekar)
+          .then(odgovor =>{
+
+            this.sacuvanId = lekar.id;
+           
+            alert("Uspesno dodavanje lekara u operaciju!");
+
+            for( var i = 0; i < this.lekari.length; i++){ 
+              if ( this.lekari[i] === lekar) {
+                this.lekari.splice(i, 1); 
+              }
+            }
+
+
+          })
+          .catch(error => {
+              console.log(error)
+           
+              alert("Ne mozete dodati lekara u operaciju jer on tad nije slobodan!");
+          });
+
+        },
         odbijZahtev(zahtev){
           event.preventDefault();
             axios
@@ -1286,13 +1339,16 @@ export default {
         otvoriZahteveZaPregled(){
           //this.ponisti();
 
-      
+         
 
           this.prikazZahtevaZaPregled = true;
           axios
 		      .get("/adminKlinike/izlistajZahteveZaPregled/" + this.$store.state.user.id)
 		      .then(odgovor => {
-		        this.zahteviZaPregled = odgovor.data;
+            console.log("Ulaziii");
+            this.zahteviZaPregled = odgovor.data;
+            console.log("nemaaaaaaaaa");
+            console.log(this.zahteviZaPregled.length);
 		      })
 		      .catch(error => {
 		        console.log(error);
@@ -1409,7 +1465,13 @@ export default {
        this.prikazPretragaIfiltriranjeSala =  !this.prikazPretragaIfiltriranjeSala ,
        this.prikazZahtevaZaOdmor = false, 
 		   this.ponistiPretraguSala(),
-		   this.ponistiFiltriranjeSala()
+       this.ponistiFiltriranjeSala(),
+
+      
+      
+     
+            
+  
 
           //this.ponisti();
           this.prikazUpravljanjeTipovimaPregleda=!this.prikazUpravljanjeTipovimaPregleda;
@@ -1447,6 +1509,17 @@ export default {
           this.ponistiFiltriranjeSala()
         },
         otvoriPretragaIfiltriranjeSala(trenutniZahtev) {
+
+          axios
+		      .get("/lekar/izlistajPoIdAdmina/" + this.$store.state.user.id)
+		      .then(lekar =>{
+            console.log("Usaotretfgvsf");
+		        this.lekari = lekar.data;
+		        
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
           
           this.trenutniZahtevZaPregled = trenutniZahtev;
 
@@ -1948,12 +2021,23 @@ export default {
          
            this.error = false;
            this.errormessage = this.errormessage;
-           this.prikazPretragaIfiltriranjeSala = false;
-           this.otvoriZahteveZaPregled
-          
-      
-
+           
+           axios
+		      .get("/adminKlinike/izlistajZahteveZaPregled/" + this.$store.state.user.id)
+		      .then(odgovor => {
+            console.log("Ulaziii");
+            this.zahteviZaPregled = odgovor.data;
+            console.log("nemaaaaaaaaa");
+            console.log(this.zahteviZaPregled.length);
+		      })
+		      .catch(error => {
+		        console.log(error);
+		      });
+        
+           
+          this.prikazPretragaIfiltriranjeSalaZaPregled = false;
           this.omoguci = false;
+         
 
         })
         .catch(error => {
@@ -2411,10 +2495,21 @@ export default {
       
     	
       })
+      
       .catch(error => {
         console.log(error);
       });
       
+      axios
+		      .get("/lekar/izlistajPoIdAdmina/" + this.$store.state.user.id)
+		      .then(lekar =>{
+		        this.lekari = lekar.data;
+		        
+		      })
+		      .catch(error => {
+		          console.log(error)
+		      });
+            
   }
 };
 </script>

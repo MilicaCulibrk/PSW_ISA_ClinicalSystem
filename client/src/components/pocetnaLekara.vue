@@ -846,7 +846,7 @@ odustaniOdZakazivanja(){
 
       zapocniPregled(){
      
-
+        event.preventDefault();
         this.zapocetPregled = true;
 
         var flag = 0;

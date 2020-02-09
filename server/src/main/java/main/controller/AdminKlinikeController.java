@@ -145,6 +145,7 @@ public class AdminKlinikeController {
 		
 		for (ZahtevZaPregled zzp : listaZahteva) {
 			if(zzp.getStatus().equals("na_cekanju")) {
+				System.out.println(zzp.getVrstaPregleda());
 				listaZahtevaDTO.add(new ZahtevZaPregledDTO(zzp));
 			}
 			

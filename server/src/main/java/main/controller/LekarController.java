@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,24 +25,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import main.dto.KlinikaDTO;
 import main.dto.LekarDTO;
-import main.dto.PregledDTO;
-import main.dto.ZahtevZaOdmorDTO;
 import main.dto.PregledDTO;
 import main.dto.PretragaKlinikeDTO;
 import main.dto.PretragaLekaraDTO;
-import main.dto.TipPregledaDTO;
-import main.model.Klinika;
+import main.dto.ZahtevZaOdmorDTO;
+import main.model.AdministratorKlinike;
 import main.model.Lekar;
 import main.model.Pregled;
 import main.model.ZahtevZaOdmor;
+import main.model.ZahtevZaPregled;
+import main.repository.AdminKlinikeRepository;
 import main.repository.LekarRepository;
 import main.repository.PregledRepository;
 import main.repository.ZahtevZaOdmorRepository;
+import main.repository.ZahtevZaPregledRepository;
 import main.service.LekarService;
+import main.service.MailService;
 import main.service.PregledService;
-import main.service.ZahtevZaOdmorService;
 
 @CrossOrigin
 @RestController
@@ -59,7 +60,17 @@ public class LekarController {
 	private LekarRepository	lekarRepository;
 	
 	@Autowired
+	private MailService mailService;
+	
+	@Autowired
+	private ZahtevZaPregledRepository zahtevZaPregledRepository;
+	
+	@Autowired
 	private PregledRepository	pregledRepository;
+	
+	
+	@Autowired
+	private AdminKlinikeRepository	adminKlinikeRepository;
 	
 	
 	@Autowired
@@ -358,6 +369,26 @@ public class LekarController {
 		return new ResponseEntity<>(listaLekaraDTO, HttpStatus.OK);
 	}
 	
+	@GetMapping(value = "/izlistajPoIdAdmina/{idAdmina}")
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	public ResponseEntity<List<LekarDTO>> getIzlistajPoIdAdmina(@PathVariable Long idAdmina) {
+		
+		
+		AdministratorKlinike ak = adminKlinikeRepository.findById(idAdmina).orElse(null);
+		
+		
+		List<Lekar> listaLekara = lekarService.findAll();
+		List<LekarDTO> listaLekaraDTO = new ArrayList<LekarDTO>();
+		for (Lekar l : listaLekara) {
+				if(l.getKlinika().getId().equals(ak.getKlinika().getId())) {
+					listaLekaraDTO.add(new LekarDTO(l));
+				}
+
+		}
+		
+		return new ResponseEntity<>(listaLekaraDTO, HttpStatus.OK);
+	}
+	
 	@GetMapping(value = "/izlistajOdmor/{idLekara}")
 	@PreAuthorize("hasAuthority('LEKAR')")
 	public ResponseEntity<?> izlistajOdmor(@PathVariable Long idLekara) {
@@ -416,6 +447,86 @@ public class LekarController {
 		}
 		
 		return new ResponseEntity<>(flag, HttpStatus.OK);
+	}
+	
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	@PostMapping(value = "/dodajUoperaciju/{vreme}/{datum}/{idZahteva}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<?> dodajUoperaciju(@RequestBody LekarDTO lekarDTO, @PathVariable String vreme, @PathVariable String datum, @PathVariable Long idZahteva) throws MailException, InterruptedException {
+		
+		Boolean flag = false;
+		
+		ZahtevZaPregled zahtevZaPregled = zahtevZaPregledRepository.findById(idZahteva).orElse(null);
+		
+		String errormessage = "";
+		
+		 String[] datumm = zahtevZaPregled.getDatum().split("T");
+		 
+		Integer vremeInt = Integer.parseInt(vreme);
+		
+		 List<Pregled> pregledi = pregledService.findAll();
+		
+		//ako je zakazan pre radnog vremena lekara ili posle
+		if(vremeInt < lekarDTO.getPocetak() || vremeInt > lekarDTO.getKraj())
+		{
+			flag = true;
+			System.out.println("USAO 3");
+		}
+		
+		//ako je zakazan unutar radnog vremena ali traje duze od radnog vremena
+		if(vremeInt >= lekarDTO.getPocetak() && vremeInt <= lekarDTO.getKraj() && (vremeInt + zahtevZaPregled.getTrajanje()) >= lekarDTO.getKraj())
+		{
+			flag = true;
+			System.out.println("USAO 4");
+		}
+		
+		//ako hocu da rezervisem datum za koji vec imam preglede
+		for (Pregled p : pregledi) {
+		    
+			String[] datumPregleda2 = p.getDatum().split("T");
+			
+			 if (datumPregleda2[0].equals(datum) && p.getLekar().getId() == lekarDTO.getId()) {
+			
+			 				
+				    //ako hocemo da zakazemo pregled usred nekog drugog pregleda
+			
+					if(vremeInt >= Integer.parseInt(p.getVreme()) && vremeInt <= (Integer.parseInt(p.getVreme()) + p.getTrajanje()))
+					{
+						flag = true;
+						
+						System.out.println("USAO 1");
+					}
+					
+					//ako hocemo da zakazemo pregled koji pocinje pre nekog ali se zavrsava posle pocetka
+					if(vremeInt <= Integer.parseInt(p.getVreme()) && (vremeInt + zahtevZaPregled.getTrajanje()) >= Integer.parseInt(p.getVreme()))
+					{
+						flag = true;
+						System.out.println("USAO 2");
+					}
+					
+				
+			 }
+				 
+		}
+		
+		
+		
+	    if(flag == false) {
+	    	
+	    	Lekar lekar = lekarRepository.findById(lekarDTO.getId()).orElse(null);
+	    	
+	    
+	    	
+	    	 String messagePacijent = "Dodati ste u operaciju od strane administratora";
+			 mailService.sendNotificaitionAsync(lekar, messagePacijent);
+
+	    	
+	    	return new ResponseEntity<>(HttpStatus.OK);									
+	    }else {
+	    	return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+		
+		
+		
 	}
 	
 	@PostMapping(value = "/obrisi/{id}")

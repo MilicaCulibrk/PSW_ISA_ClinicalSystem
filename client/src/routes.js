@@ -16,23 +16,89 @@ import pocetnaPacijenta from './components/pocetnaPacijenta.vue';
 import vidiLokaciju from './components/vidiLokaciju.vue';
 import promenaLozinke from './components/promenaLozinke.vue';
 const routes = [
-    { path: '/', component: pocetna},
-    { path: '/login', component: login},
-    { path: '/registration', component: registration},
-    { path: '/dodajKliniku', component: dodajKliniku},
-    { path: '/dodajAdministratora', component: dodajAdministratora},
-    { path: '/pocetnaAdministratoraKlinike', component: pocetnaAdministratoraKlinike },
-    { path: '/pocetnaMedicinskeSestre', component: pocetnaMedicinskeSestre},
-    { path: '/pocetnaAdministratorKC', component: pocetnaAdministratorKC},
-    { path: '/pocetnaPacijenta', component: pocetnaPacijenta},
-    { path: '/pocetnaLekara', component: pocetnaLekara},
-    { path: '/vidiLokaciju', component: vidiLokaciju},
-    { path: '/promenaLozinke', component: promenaLozinke}
+    { path: '/', 
+      component: pocetna,  
+      meta: {
+           requiresAuth: true
+        } 
+    },
+    { path: '/login', 
+      component: login,
+       meta: {
+        requiresAuth: true
+      } 
+    },
+    { path: '/registration', 
+      component: registration,
+      meta: {
+        requiresAuth: true
+      } 
+    },
+    { path: '/pocetnaAdministratoraKlinike', 
+      component: pocetnaAdministratoraKlinike,
+      meta: {
+        requiresAuth: false
+      } 
+    },
+    { path: '/pocetnaMedicinskeSestre', 
+      component: pocetnaMedicinskeSestre,
+      meta: {
+        requiresAuth: false
+      } 
+    },
+    { path: '/pocetnaAdministratorKC', 
+      component: pocetnaAdministratorKC,
+      meta: {
+        requiresAuth: false
+      } 
+    },
+    { path: '/pocetnaPacijenta', 
+      component: pocetnaPacijenta,
+      meta: {
+        requiresAuth: false
+      } 
+    },
+    { path: '/pocetnaLekara', 
+      component: pocetnaLekara,
+      meta: {
+        requiresAuth: false
+      } 
+    },
+    { path: '/vidiLokaciju',
+      component: vidiLokaciju,
+      meta: {
+        requiresAuth: false
+      } 
+    },
+    { path: '/promenaLozinke', 
+      component: promenaLozinke,
+      meta: {
+        requiresAuth: false
+      } 
+    }
 
 ]
 
 const router = new VueRouter({
   routes
 })
+
+router.beforeEach((to, from, next) => {
+
+  if (to.meta.requiresAuth) {
+    next();
+    return;
+  }
+  
+  if(localStorage.getItem('jwt'))
+  {
+    next();
+    return;
+  }
+   
+  next("/")
+  
+})
+
 
 export default router
