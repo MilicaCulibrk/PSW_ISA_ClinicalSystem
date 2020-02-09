@@ -3,6 +3,8 @@ package main.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,14 +20,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import main.dto.KlinikaDTO;
 import main.dto.LekarDTO;
 import main.dto.PregledDTO;
 import main.dto.TipPregledaDTO;
+import main.dto.ZahtevZaOdmorDTO;
 import main.dto.ZahtevZaPregledDTO;
 import main.model.AdministratorKlinike;
+import main.model.Klinika;
 import main.model.Lekar;
 import main.model.Pacijent;
 import main.model.Pregled;
+import main.model.ZahtevZaOdmor;
 import main.model.ZahtevZaPregled;
 import main.repository.LekarRepository;
 import main.repository.PregledRepository;
@@ -255,12 +261,13 @@ public class PregledController {
 		
 		
 		for (Pregled p : listaPregleda) {
-			if( p.isZavrsen()==true )
-				if(p.getIdPacijenta().equals(idPacijenta))
+			if( p.isZavrsen()==true) {
+				if(p.getIdPacijenta().equals(idPacijenta)) {
 					
 			listaPregledaDTO.add(new PregledDTO(p));
 			
-										}
+				}		}
+		}
 		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
 	}
 	
@@ -734,5 +741,50 @@ public class PregledController {
 		
 		 }
 		}
+	@PutMapping(value = "/odobri", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<?> odobri(@RequestBody ZahtevZaPregledDTO zahtevZaPregledDTO) {
+	
+			zahtevZaPregledService.odobri(zahtevZaPregledDTO);
+			
+
+		return new ResponseEntity<>(true, HttpStatus.OK);
+	}
+	@PutMapping(value = "/azurirajPreglede/{idPacijenta}")
+	@PreAuthorize("hasAnyAuthority('PACIJENT')")
+	public ResponseEntity<List<PregledDTO>> getAzurirajPreglede(@PathVariable Long idPacijenta ,@RequestBody String sortBy) {
+		
+		List<Pregled> listaPregleda = pregledService.sortirajPreglede(sortBy);
+		List<PregledDTO> listaPregledaDTO = new ArrayList<PregledDTO>();
+		for (Pregled p : listaPregleda) {
+			
+			if( p.isZavrsen()==true) {
+
+				if(p.getIdPacijenta().equals(idPacijenta) && p.getVrstaPregleda().equals("pregled") )
+					listaPregledaDTO.add(new PregledDTO(p));
+
+		}
+		}
+		
+		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
+	}
+	@PutMapping(value = "/azurirajOperacije/{idPacijenta}")
+	@PreAuthorize("hasAnyAuthority('PACIJENT')")
+	public ResponseEntity<List<PregledDTO>> getAzurirajOperacije(@PathVariable Long idPacijenta ,@RequestBody String sortBy) {
+		
+		List<Pregled> listaPregleda = pregledService.sortirajOperacije(sortBy);
+		List<PregledDTO> listaPregledaDTO = new ArrayList<PregledDTO>();
+		for (Pregled p : listaPregleda) {
+			if( p.isZavrsen()==true) {
+
+					if(p.getIdPacijenta().equals(idPacijenta) && p.getVrstaPregleda().equals("operacija"))
+							listaPregledaDTO.add(new PregledDTO(p));
+		
+		
+		}
+		}
+		
+		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
+	}
 		
 }
