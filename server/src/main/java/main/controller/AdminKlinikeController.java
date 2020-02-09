@@ -145,32 +145,25 @@ public class AdminKlinikeController {
 	public ResponseEntity<List<ZahtevZaPregledDTO>> getIzlistajZahteveZaPregled(@PathVariable Long idAdmina) {
 		Collection<ZahtevZaPregled> listaZahteva = new ArrayList<ZahtevZaPregled>();
 		List<ZahtevZaPregledDTO> listaZahtevaDTO = new ArrayList<ZahtevZaPregledDTO>();
-		List<ZahtevZaPregledDTO> listaZahtevaDTOpomocna = new ArrayList<ZahtevZaPregledDTO>();
 
 		List<AdministratorKlinike> admini = adminKlinikeService.findAll();
 		for (AdministratorKlinike administratorKlinike : admini) {
 			if(administratorKlinike.getId().equals(idAdmina)) {
-				System.out.println("lisataaaaa");
-				
-				for(ZahtevZaPregled zah: administratorKlinike.getZahtevZaPregled()) {
-				
-					listaZahtevaDTO.add(new ZahtevZaPregledDTO(zah));
-				}
-				
-				
+				listaZahteva = administratorKlinike.getZahtevZaPregled();
 			}
 		}
 		
-		for(ZahtevZaPregledDTO zzp : listaZahtevaDTO) {
-			if(zzp.getSala() == null) {
-				System.out.println("lisatttttttttttt");
-				listaZahtevaDTOpomocna.add(zzp);
+		for (ZahtevZaPregled zzp : listaZahteva) {
+			if(zzp.getSala() == null && zzp.getStatus().equals("na_cekanju")) {
+				System.out.println(zzp.getVrstaPregleda());
+				listaZahtevaDTO.add(new ZahtevZaPregledDTO(zzp));
 			}
 			
 		}
 		
-		return new ResponseEntity<>(listaZahtevaDTOpomocna, HttpStatus.OK);
+		return new ResponseEntity<>(listaZahtevaDTO, HttpStatus.OK);
 	}
+	
 	
 	@PostMapping(value = "/promeniSvojuLozinku/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")

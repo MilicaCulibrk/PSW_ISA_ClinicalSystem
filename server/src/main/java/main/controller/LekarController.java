@@ -602,7 +602,7 @@ public class LekarController {
 	    	
 	    	String ime = null;
 	    	String prezime =  null;
-	    	Double ocena = null;
+
 	    		
 
 	    	if(pretragaLekaraDTO.getIme() != null) {
@@ -621,12 +621,12 @@ public class LekarController {
 
 	      	if(pretragaLekaraDTO.getOcena() != null) {
 	    		if(!pretragaLekaraDTO.getOcena().equals("")){
-	    			ocena = pretragaLekaraDTO.getOcena();	    		
+	    		    		
 	    		}
 	    	}
 	    	
 
-	    	List<Lekar> lekari = lekarService.pronadjiLekare( ime,prezime,ocena);
+	    	List<Lekar> lekari = lekarService.pronadjiLekara( ime,prezime);
 
 			List<LekarDTO> lekariDTO = new ArrayList<>();
 			

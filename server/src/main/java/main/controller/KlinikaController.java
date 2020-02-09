@@ -1,6 +1,8 @@
 package main.controller;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.ValidationException;
@@ -20,15 +22,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.KlinikaDTO;
-import main.dto.PacijentDTO;
 import main.dto.PretragaKlinikeDTO;
-import main.dto.PretragaSaleDTO;
-import main.dto.SalaDTO;
-import main.model.AdministratorKlinike;
+import main.dto.PrihodiDTO;
 import main.model.Klinika;
-import main.model.Pacijent;
-import main.model.Sala;
+import main.model.Pregled;
 import main.service.KlinikaService;
+import main.service.PregledService;
 
 
 
@@ -39,6 +38,9 @@ public class KlinikaController {
 	
 	@Autowired
 	private KlinikaService klinikaService;
+	
+	@Autowired
+	private PregledService pregledService;
 	
 	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
 	@PostMapping(value = "/dodajKlinikuUBazu", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -187,5 +189,35 @@ public class KlinikaController {
 		}
 		
 		return new ResponseEntity<>(listaKlinikaDTO, HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/prihodi/{idKlinike}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	public ResponseEntity<Double> zatrazi(@PathVariable Long idKlinike,  @RequestBody PrihodiDTO prihodiDTO) throws ParseException {
+		
+		try {
+			String[] startS=prihodiDTO.getStart().split("'");
+			String[] endS=prihodiDTO.getEnd().split("'");
+
+			SimpleDateFormat inFormat = new SimpleDateFormat("yyyy-MM-dd");
+			
+			Date start = inFormat.parse(startS[0]);
+			Date end = inFormat.parse(endS[0]);	
+			
+			List <Pregled> pregledi = pregledService.findAll();
+			Double ukupnaCena = 0.0;
+			
+			for(Pregled p : pregledi) {
+				Date pregledDatum = inFormat.parse(p.getDatum());
+				if(p.getLekar().getKlinika().getId() == idKlinike && pregledDatum.after(start) && pregledDatum.before(end)) {
+					ukupnaCena += Double.parseDouble(p.getCena());
+				}
+			}
+				return new ResponseEntity<>(ukupnaCena, HttpStatus.OK);
+			}catch (ValidationException e) {
+				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+
+		
 	}
 }

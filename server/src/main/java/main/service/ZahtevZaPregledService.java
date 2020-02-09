@@ -66,7 +66,7 @@ public List<ZahtevZaPregled> izlistaj(Long id) {
 
 		List<ZahtevZaPregled> zahtevi = zahtevZaPregled.findAll();
 		for(ZahtevZaPregled z: zahtevi) {
-			if(z.getIdPacijenta().equals(id) && z.getStatus().equals("odobren") && z.getPrihvacenOdPacijenta().equals(false)) {
+			if(z.getIdPacijenta().equals(id) && z.getStatus().equals("na_cekanju") && z.getPrihvacenOdPacijenta().equals(false)) {
 				System.out.println(z.getPrihvacenOdPacijenta());
 				listaZahteva.add(z);
 				
@@ -76,6 +76,19 @@ public List<ZahtevZaPregled> izlistaj(Long id) {
 		
 		return listaZahteva ;
 	}
+
+public ZahtevZaPregled odbij(ZahtevZaPregledDTO zahtevZaPregledDTO) {
+	// TODO Auto-generated method stub
+	Collection<ZahtevZaPregled> lista = findAll();
+	for (ZahtevZaPregled z: lista) {
+		if(z.getId().equals(zahtevZaPregledDTO.getId())) {
+			z.setPrihvacenOdPacijenta(false);
+			zahtevZaPregled.save(z);
+			return z;
+		}
+	}
+	return null;
+}
 
 public void odobri(ZahtevZaPregledDTO zahtevZaPregledDTO) {
 	// TODO Auto-generated method stub

@@ -800,6 +800,8 @@ import StarRating from 'vue-star-rating';
         prikaz:false,
         prikazZK:false,
         prikazZahteva:false,
+        error: false,
+        errormessage: false,
         prikazPREGLED:false,
         prikazPregled:false,
         prikazUDPREGLEDI:false,
@@ -833,6 +835,21 @@ import StarRating from 'vue-star-rating';
               alert("Greska!");
           });
       },
+      odbijZahtev(zahtev){
+
+axios
+  .put("/pregled/odbij", zahtev)
+  .then(odgovor =>{
+    alert("Odbili ste pregled.");
+    this.prikazZahteva=false;
+    this.otvoriZahteve();
+
+  })
+  .catch(error => {
+      console.log(error)
+      alert("Greska!");
+  });
+},
 
       otvoriZahteve(){
               this.prikazZahteva=!this.prikazZahteva;
@@ -1026,7 +1043,7 @@ import StarRating from 'vue-star-rating';
       });
   }else
   axios
-        .post("/lekar/pretraga/" + this.$store.state.user.id, this.pretragaLekara)
+        .post("/lekar/pretragaP/" + this.$store.state.user.id, this.pretragaLekara)
         .then(lekari1 =>{
 
           this.pomocniLekari = lekari1.data;

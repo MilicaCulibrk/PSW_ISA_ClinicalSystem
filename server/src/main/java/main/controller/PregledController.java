@@ -104,6 +104,23 @@ public class PregledController {
 		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
 	}
 	
+	@PutMapping(value = "/odbij", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<?> odbij(@RequestBody ZahtevZaPregledDTO zahtevZaPregledDTO) {
+		ZahtevZaPregled zzo = new ZahtevZaPregled();
+		try {
+			zzo = zahtevZaPregledService.odbij(zahtevZaPregledDTO);
+			if (zzo ==null) {
+				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		} catch (ValidationException e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+
+		return new ResponseEntity<>(true, HttpStatus.OK);
+	}
+	
 	@GetMapping(value = "/izlistaj")
 	@PreAuthorize("hasAuthority('LEKAR')")
 	public ResponseEntity<List<PregledDTO>> getPreglede() {
@@ -148,7 +165,7 @@ public class PregledController {
 	
 	@PostMapping(value = "/zakaziUDPregled/{idPacijenta}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('PACIJENT')")
-	public ResponseEntity<PregledDTO> zakaziPregled( @RequestBody PregledDTO pregledDTO, @PathVariable Long idPacijenta) {
+	public ResponseEntity<PregledDTO> zakaziPregled( @RequestBody PregledDTO pregledDTO, @PathVariable Long idPacijenta) throws MailException, InterruptedException {
 		
 		Pregled pregled = (Pregled) pregledService.findOne(pregledDTO.getId());
 
@@ -159,6 +176,9 @@ public class PregledController {
 		
 		Pregled zakazanPregled = pregledService.zakaziPregled(idPacijenta, pregled);
 		PregledDTO newPregledDTO = new PregledDTO(zakazanPregled);
+		
+		 String messagePacijent = "Zakazali ste pregled!.";
+		 mailService.sendNotificaitionAsync(pacijentService.findOne(pregled.getIdPacijenta()), messagePacijent);
 
 
 		return new ResponseEntity<>( newPregledDTO, HttpStatus.OK);
@@ -414,7 +434,7 @@ public class PregledController {
 	
 			zahtevZaPregledDTO.setVrstaPregleda("pregled");
 			zahtevZaPregledDTO.setTrajanje(1);
-			zahtevZaPregledDTO.setStatus("odobren");
+			zahtevZaPregledDTO.setStatus("na_cekanju");
 		
 			Pacijent pacijent = pacijentService.findOne(zahtevZaPregledDTO.getIdPacijenta());
 			List<AdministratorKlinike> adminiKlinika = adminKlinikeService.findAll();
@@ -480,10 +500,10 @@ public class PregledController {
 			  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
 			  zahtevZaPregled.setVreme(vreme);
 			  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
-			  zahtevZaPregled.setStatus("na_cekanju");
+			  zahtevZaPregled.setStatus("odobren");
 			 
 			  
-			 // zahtevZaPregledService.remove(idZahteva);
+			 zahtevZaPregledRepository.save(zahtevZaPregled);
 			
 		  
 
