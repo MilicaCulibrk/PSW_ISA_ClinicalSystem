@@ -126,7 +126,7 @@ public class AdminKlinikeController {
 				listaZahtevaDTO.add(new ZahtevZaOdmorDTO(zzo));
 			}
 		}
-		
+
 		return new ResponseEntity<>(listaZahtevaDTO, HttpStatus.OK);
 	}
 	
@@ -144,8 +144,7 @@ public class AdminKlinikeController {
 		}
 		
 		for (ZahtevZaPregled zzp : listaZahteva) {
-			if(zzp.getStatus().equals("na_cekanju")) {
-				System.out.println(zzp.getVrstaPregleda());
+			if(zzp.getSala() == null) {
 				listaZahtevaDTO.add(new ZahtevZaPregledDTO(zzp));
 			}
 			
