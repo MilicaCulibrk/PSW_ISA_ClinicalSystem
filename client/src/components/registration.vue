@@ -59,7 +59,7 @@ export default {
 
           var rex = /^\+38[0-9]\/6[0-9]-?[0-9]+(-[0-9]+)?$/;
           if (!rex.test(String(this.korisnik.telefon.trim()))) {
-            alert("Broj telefona treba da bude oblika +381/65-504205!")
+            alert("Broj telefona treba da bude oblika +381/60-0771088!")
             return;
           }
 

@@ -16,7 +16,7 @@
                 </i>                   
               </a>
               <a href="#">
-                <i v-on:click="listaKlinika();izlistajTipove()" class="zmdi zmdi-view-dashboard "> LISTA KLINIKA
+                <i v-on:click="listaKlinika();izlistajTipove()" class="zmdi zmdi-view-dashboard "> LISTA KLINIKA / ZAKAZIVANJE PREGLEDA
                 </i>                   
                 </a>
                 <a href="#">
@@ -1415,7 +1415,8 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
 
     },
    mounted() {
-     
+    event.preventDefault();
+
         axios
         .get("/pacijent/get/"  + this.$store.state.user.id)
         .then(pacijent =>{
