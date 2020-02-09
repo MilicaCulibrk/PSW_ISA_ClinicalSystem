@@ -465,14 +465,9 @@ public class PregledController {
 			  pregled.setTipPregleda(tipPregledaRepository.findById(zahtevZaPregled.getTipPregleda().getId()).orElse(null));
 			  
 			  pregledRepository.save(pregled);
-			  
-			  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
-			  zahtevZaPregled.setVreme(vreme);
-			  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
-			  zahtevZaPregled.setStatus("odobren");
 			 
 			  
-			  zahtevZaPregledRepository.save(zahtevZaPregled);
+			  zahtevZaPregledService.remove(idZahteva);
 			
 			  
 

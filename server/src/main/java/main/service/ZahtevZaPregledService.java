@@ -22,4 +22,9 @@ public class ZahtevZaPregledService {
 		return zahtevZaPregled.findById(id).orElseGet(null);
 	}
 
+
+	public void remove(Long id) {
+		zahtevZaPregled.deleteById(id);
+	}
+	
 }
