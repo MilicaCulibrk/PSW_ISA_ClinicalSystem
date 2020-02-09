@@ -201,18 +201,7 @@ public void setJmbg(String jmbg) {
 public double getOcena() {
 	return ocena;
 }
-public void setOcena(java.util.Collection<OcenaLekara> ocenaLekara) {
-	
-	int suma=0;
-	int duzina=0;
-	
-	
-	for(OcenaLekara o: ocenaLekara) {
-		duzina=duzina+1;
-		suma= suma+ o.getOcena();
-	}
-	this.ocena=(double) (suma/duzina);
-}
+
 
 
 public int getBrojRecenzija() {
@@ -287,8 +276,18 @@ public void setKraj(Integer kraj) {
 	this.kraj = kraj;
 }
 */
-
-
+public void setOcena(java.util.Collection<OcenaLekara> ocenaLekara) {
+			
+			int suma=0;
+			int duzina=0;
+			
+			
+			for(OcenaLekara o: ocenaLekara) {
+				duzina=duzina+1;
+				suma= suma+ o.getOcena();
+			}
+			this.ocena=(double) (suma/duzina);
+		}
 
 public void setAuthorities(List<Authority> authorities) {
 

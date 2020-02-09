@@ -120,6 +120,7 @@ public class PregledController {
 		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
 	}
 	
+	//lekar zavrsava zapocet pregled
 	@PutMapping(value = "/zavrsi")
 	@PreAuthorize("hasAuthority('LEKAR')")
 	public ResponseEntity<List<PregledDTO>> zavrsiPregled( @RequestBody PregledDTO pregledDTO) {
@@ -145,7 +146,7 @@ public class PregledController {
 		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
 	}
 	
-	
+	//pacijent bira unapred definisani pregeld i zakazuje ga
 	@PostMapping(value = "/zakaziUDPregled/{idPacijenta}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('PACIJENT')")
 	public ResponseEntity<PregledDTO> zakaziPregled( @RequestBody PregledDTO pregledDTO, @PathVariable Long idPacijenta) {
@@ -269,9 +270,9 @@ public class PregledController {
 		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
 	}
 	
+  //lekar u toku trenuntog pregleda zakazuje naredni
 	@PostMapping(value = "/podnesiZahtevLekar/{idPregleda}")
 	@PreAuthorize("hasAuthority('LEKAR')")
-	//dinamicki pravi id pregleda
 	public ResponseEntity<?> podnesiZahtevLekar(@RequestBody ZahtevZaPregledDTO zahtevZaPregledDTO, @PathVariable Long idPregleda)
 			
 	    throws MailException, InterruptedException {
@@ -403,9 +404,9 @@ public class PregledController {
 			
 	}
 	
+	//pacijent bira parametre i salje zahtev za pregled
 	@PostMapping(value = "/podnesiZahtevPacijent")
 	@PreAuthorize("hasAuthority('PACIJENT')")
-	//dinamicki pravi id pregleda
 	public ResponseEntity<?> podnesiZahtevPacijent(@RequestBody ZahtevZaPregledDTO zahtevZaPregledDTO)
 			
 	    throws MailException, InterruptedException {
