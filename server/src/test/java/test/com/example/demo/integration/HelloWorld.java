@@ -1,15 +1,11 @@
 package test.com.example.demo.integration;
 
-
-
-
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
 public class HelloWorld extends AbstractResourceTest {
 
     @BeforeEach

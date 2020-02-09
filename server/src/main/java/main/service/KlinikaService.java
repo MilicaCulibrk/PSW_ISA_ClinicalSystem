@@ -93,13 +93,14 @@ public class KlinikaService {
 		}
 		try {
 			klinika = klinikaRepository.getOne(klinikaDTO.getId());
+		
 			klinika.setNaziv(klinikaDTO.getNaziv());
 			klinika.setOpis(klinikaDTO.getOpis());
 			klinika.setAdresa(klinikaDTO.getAdresa());
-			klinika.setTelefon(klinikaDTO.getTelefon());
 			klinika.setGrad(klinikaDTO.getGrad());
 			klinika.setDrzava(klinikaDTO.getDrzava());
-			klinikaRepository.save(klinika);
+			klinika.setTelefon(klinikaDTO.getTelefon());
+			klinika.setEmail(klinikaDTO.getEmail());
 		} catch (EntityNotFoundException e) {
 			throw new ValidationException("Admin sa tim id-ijem ne postoji");
 		}

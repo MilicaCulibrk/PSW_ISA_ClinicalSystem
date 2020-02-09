@@ -34,6 +34,7 @@ public class DodajPregledTests extends PregledServiceTest{
 	Long IDpregleddto = (long) 1;
 	Long IDlekardto = (long) 1;
 	Long IDklinikadto = (long) 1;
+	Long IDklinika = (long) 1;
 
 	@Test
 	public void trebaPozvatiLekaraRep_kadaSeMetodaPozove() {
@@ -134,7 +135,11 @@ public class DodajPregledTests extends PregledServiceTest{
 		Mockito.verify(tipPregledaRepository, Mockito.times(1)).getOne(Mockito.eq(IDtipPregleda));
 	}
 	
-	
+	private Klinika getKlinika() {
+		Klinika klinika = new Klinika();
+		klinika.setId(IDklinika);
+		return klinika;
+	}
 	
 	private Optional<Lekar> getLekar() {
 		Lekar lekar = new Lekar();
@@ -146,9 +151,7 @@ public class DodajPregledTests extends PregledServiceTest{
 		lekar.setEmail("bla@gmail.com");
 		lekar.setJmbg("123");
 		lekar.setId(IDlekar);
-		Klinika klinika = new Klinika();
-		klinika.setId((long)1);
-		lekar.setKlinika(klinika);
+		lekar.setKlinika(getKlinika());
 		lekar.setBrojRecenzija(0);
 		return Optional.of(lekar);
 	}

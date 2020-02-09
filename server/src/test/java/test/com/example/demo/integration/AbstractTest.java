@@ -10,9 +10,10 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import main.ClinicalSystemApplication;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-	@SpringBootTest(classes = ClinicalSystemApplication.class)
-	@WebAppConfiguration
-	@ActiveProfiles("dev")
+@SpringBootTest(classes = ClinicalSystemApplication.class)
+@WebAppConfiguration
+@ActiveProfiles("dev")
+
 	public abstract class AbstractTest {
 
 	}
