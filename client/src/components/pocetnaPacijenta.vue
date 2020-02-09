@@ -75,11 +75,9 @@
                             <label for="Form-phone" style="color: #b3b3b3;">Telefon</label>
                             <input type="text" v-model="user.telefon" id="Form-phone" class="form-control" :disabled="!izmeni">
                             
-                            <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
-                            <input type="text" v-model="user.adresa" id="Form-email4" class="form-control" :disabled="!izmeni">
 
                             <label for="Form-email4" style="color: #b3b3b3;">JMBG</label>
-                            <input type="text" v-model="user.jmbg" id="Form-email4" class="form-control" disabled>
+                            <input type="text" v-model="user.jmbg" id="Form-email4" class="form-control" :disabled="!izmeni">
                           
                             
               
@@ -88,12 +86,14 @@
                           <div class="col">
                           <div class="md-form pb-3">
               
-                            <label for="Form-city" style="color: #b3b3b3;">Lozinka</label>
-                            <input type="text" v-model="user.lozinka" id="Form-city" class="form-control" disabled>
+                         
                             
                             <label for="Form-prezime" style="color: #b3b3b3;">Prezime</label>
                             <input type="text" v-model="user.prezime" id="Form-prezime" class="form-control" :disabled="!izmeni">
               
+                            
+                            <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
+                            <input type="text" v-model="user.adresa" id="Form-email4" class="form-control" :disabled="!izmeni">
                             
                             <label for="Form-city" style="color: #b3b3b3;">Grad</label>
                             <input type="text" v-model="user.grad" id="Form-city" class="form-control" :disabled="!izmeni">
@@ -117,7 +117,8 @@
                           <template>
                           <button v-if="izmeni" type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="sacuvaj">Sacuvaj</button>
                           <button v-if="izmeni" type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustani">Odustani</button>
-                          </template>
+                          <button v-if="izmeni" v-b-modal.promenaLozinke type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 200px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); ">Promeni lozinku</button>
+                        </template>
                         </div>
               
                       </div>
@@ -614,7 +615,27 @@
   </form>
 
 
-  </div>   
+  
+  <b-modal ref="my-modal" id="promenaLozinke" hide-footer title="Promeni Lozinku">
+      <label for="Form-city" style="color: #b3b3b3;">Stara lozinka</label>
+      <input type="text" v-model="drugaLozinka.staraLozinka" id="Form-city" class="form-control">
+    
+      <label for="Form-city" style="color: #b3b3b3;">Nova lozinka</label>
+      <input type="text" v-model="drugaLozinka.novaLozinka" id="Form-city" class="form-control">
+    
+      <label for="Form-city" style="color: #b3b3b3;">Ponovljena lozinka</label>
+      <input type="text" v-model="drugaLozinka.ponovljenaLozinka" id="Form-city" class="form-control">
+      <br>
+    
+      <b-button v-b-modal.greska @click="sacuvajDruguLozinku"  style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Sacuvaj</b-button>
+      <b-button @click="odustaniDrugaLozinka"  style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Odustani</b-button>
+    
+    </b-modal>
+
+    <b-modal ref="my-modal" id="greska" hide-footer title="Klinicki Centar">
+        <b-alert v-if="error" show variant="danger" class="d-flex justify-content-center">{{errormessage}}</b-alert>
+        <b-alert v-else show variant="success" class="d-flex justify-content-center">{{errormessage}}</b-alert>
+</b-modal> 
 
 </div>
 
@@ -693,6 +714,13 @@ import StarRating from 'vue-star-rating';
         selektovaniFilter1: "",
         cenaPregleda: "",
         pretrazeniLekari: {},
+        drugaLozinka: {
+        staraLozinka: "",
+        novaLozinka: "",
+        error: "",
+        errormessage: "",
+        ponovljenaLozinka: "",
+      },
         pomocniLekari: {},
         pomocniLekari1: [],
         ukljucenaPretraga1: false,
@@ -869,7 +897,7 @@ import StarRating from 'vue-star-rating';
 
   if(!this.ukljucenaPretraga){
           axios
-        .post("/lekar/pretraga/" + this.$store.state.user.id, this.pretragaLekara)
+        .post("/lekar/pretragaP/" + this.$store.state.user.id, this.pretragaLekara)
         .then(lekari =>{
          this.lekari = lekari.data;
             
@@ -1139,7 +1167,55 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
           console.log(error)
       });
      }
-	 },
+   },
+   odustaniDrugaLozinka(){
+        this.drugaLozinka.staraLozinka = "";
+        this.drugaLozinka.novaLozinka = "";
+        this.drugaLozinka.ponovljenaLozinka = "";
+      },
+      sacuvajDruguLozinku(){
+
+        console.log('tu je');
+
+        if (
+        this.drugaLozinka.staraLozinka == "" ||
+        this.drugaLozinka.novaLozinka == "" ||
+        this.drugaLozinka.ponovljenaLozinka == ""
+      ) {
+
+        this.error = true;
+        this.errormessage = "Morate popuniti sva polja!";
+       
+        return;
+      }
+      if (this.drugaLozinka.novaLozinka !== this.drugaLozinka.ponovljenaLozinka) {
+        this.error = true;
+        this.errormessage = "Lozinke se ne poklapaju!";
+      
+        return;
+      }
+
+      axios
+        .post(
+          "/pacijent/promeniSvojuLozinku/" + this.$store.state.user.id,
+          this.drugaLozinka
+        )
+        .then(() => {
+          this.drugaLozinka = {
+            staraLozinka: "",
+            novaLozinka: "",
+            ponovljenaLozinka: ""
+          };
+          this.error = false;
+          this.errormessage = "Uspesno ste promenili lozinku";
+        })
+        .catch(error => {
+          this.error = true;
+          this.errormessage = "Netacna stara lozinka!";
+      
+          console.log(error);
+        });
+      },
   odustani() {
             this.izmeni = false
     axios

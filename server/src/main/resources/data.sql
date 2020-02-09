@@ -114,5 +114,6 @@ INSERT INTO public.lekar_authority (lekar_id, authority_id) VALUES (1, 2);
 INSERT INTO public.lekar_authority (lekar_id, authority_id) VALUES (2, 2);
 INSERT INTO public.lekar_authority (lekar_id, authority_id) VALUES (3, 2);
 INSERT INTO public.admink_authority (admink_id, authority_id) VALUES (1,5);
+INSERT INTO public.admink_authority (admink_id, authority_id) VALUES (2,5);
 INSERT INTO public.adminkc_authority (adminkc_id, authority_id) VALUES (1, 4);
 INSERT INTO public.sestra_authority (sestra_id, authority_id) VALUES (1, 3);

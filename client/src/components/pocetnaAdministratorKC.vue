@@ -89,11 +89,9 @@
                                           <label for="Form-phone" style="color: #b3b3b3;">Telefon</label>
                                           <input type="text" v-model="korisnik.telefon" id="Form-phone" class="form-control" :disabled="!izmeni">
                                           
-                                          <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
-                                          <input type="text" v-model="korisnik.adresa" id="Form-email4" class="form-control" :disabled="!izmeni">
-
+      
                                           <label for="Form-email4" style="color: #b3b3b3;">JMBG</label>
-                                          <input type="text" v-model="korisnik.jmbg" id="Form-email4" class="form-control" disabled>
+                                          <input type="text" v-model="korisnik.jmbg" id="Form-email4" class="form-control" :disabled=!izmeni>
                                         
                                           
                             
@@ -102,12 +100,12 @@
                                         <div class="col">
                                         <div class="md-form pb-3">
                             
-                                          <label for="Form-city" style="color: #b3b3b3;">Lozinka</label>
-                                          <input type="text" v-model="korisnik.lozinka" id="Form-city" class="form-control" disabled>
                                           
                                           <label for="Form-prezime" style="color: #b3b3b3;">Prezime</label>
                                           <input type="text" v-model="korisnik.prezime" id="Form-prezime" class="form-control" :disabled="!izmeni">
-                            
+                                        
+                                          <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
+                                          <input type="text" v-model="korisnik.adresa" id="Form-email4" class="form-control" :disabled="!izmeni">
                                           
                                           <label for="Form-city" style="color: #b3b3b3;">Grad</label>
                                           <input type="text" v-model="korisnik.grad" id="Form-city" class="form-control" :disabled="!izmeni">
@@ -131,7 +129,8 @@
                                         <template>
                                         <button v-if="izmeni" type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="sacuvaj">Sacuvaj</button>
                                         <button v-if="izmeni" type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustani">Odustani</button>
-                                        </template>
+                                        <button v-if="izmeni" v-b-modal.promenaLozinke type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 200px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); ">Promeni lozinku</button>
+                                      </template>
                                       </div>
                             
                                     </div>
@@ -200,7 +199,7 @@
                               <label for="Form-city" style="color: #b3b3b3;">Jmbg</label>
                               <input type="text" v-model="pacijent.jmbg" id="Form-city" class="form-control" disabled>
                              
-                           
+                              
 
                             </div>
                             </div>
@@ -615,11 +614,27 @@
             </div>
             </div>
 </form>
-    
-       <b-modal ref="my-modal" id="greska" hide-footer title="Klinicki Centar">
+
+<b-modal ref="my-modal" id="promenaLozinke" hide-footer title="Promeni Lozinku">
+  <label for="Form-city" style="color: #b3b3b3;">Stara lozinka</label>
+  <input type="text" v-model="drugaLozinka.staraLozinka" id="Form-city" class="form-control">
+
+  <label for="Form-city" style="color: #b3b3b3;">Nova lozinka</label>
+  <input type="text" v-model="drugaLozinka.novaLozinka" id="Form-city" class="form-control">
+
+  <label for="Form-city" style="color: #b3b3b3;">Ponovljena lozinka</label>
+  <input type="text" v-model="drugaLozinka.ponovljenaLozinka" id="Form-city" class="form-control">
+  <br>
+
+  <b-button v-b-modal.greska @click="sacuvajDruguLozinku"  style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Sacuvaj</b-button>
+  <b-button @click="odustaniDrugaLozinka"  style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Odustani</b-button>
+
+</b-modal>
+       
+<b-modal ref="my-modal" id="greska" hide-footer title="Klinicki Centar">
           <b-alert v-if="error" show variant="danger" class="d-flex justify-content-center">{{errormessage}}</b-alert>
           <b-alert v-else show variant="success" class="d-flex justify-content-center">{{errormessage}}</b-alert>
-        </b-modal>
+  </b-modal>
 		         
 </div>
 
@@ -652,6 +667,11 @@ import axios from 'axios'
       dijagnoze: [],
       lek: {},
       dijagnoza: {},
+      drugaLozinka: {
+        staraLozinka: "",
+        novaLozinka: "",
+        ponovljenaLozinka: "",
+      },
       dodatZK: false,
       error: false,
       errormessage: "",
@@ -762,6 +782,56 @@ import axios from 'axios'
 		})
         
          
+      },
+      odustaniDrugaLozinka(){
+        this.drugaLozinka.staraLozinka = "";
+        this.drugaLozinka.novaLozinka = "";
+        this.drugaLozinka.ponovljenaLozinka = "";
+      },
+      sacuvajDruguLozinku(){
+
+        console.log('tu je');
+
+        if (
+        this.drugaLozinka.staraLozinka == "" ||
+        this.drugaLozinka.novaLozinka == "" ||
+        this.drugaLozinka.ponovljenaLozinka == ""
+      ) {
+
+        this.error = true;
+        this.errormessage = "Morate popuniti sva polja!";
+       
+        return;
+      }
+      if (this.drugaLozinka.novaLozinka !== this.drugaLozinka.ponovljenaLozinka) {
+        this.error = true;
+        this.errormessage = "Lozinke se ne poklapaju!";
+      
+        return;
+      }
+
+    console.log(this.korisnik.lozinka);
+
+      axios
+        .post(
+          "/adminKlinickogCentra/promeniSvojuLozinku/" + this.$store.state.user.id,
+          this.drugaLozinka
+        )
+        .then(() => {
+          this.drugaLozinka = {
+            staraLozinka: "",
+            novaLozinka: "",
+            ponovljenaLozinka: ""
+          };
+          this.error = false;
+          this.errormessage = "Uspesno ste promenili lozinku";
+        })
+        .catch(error => {
+          this.error = true;
+          this.errormessage = "Netacna stara lozinka!";
+      
+          console.log(error);
+        });
       },
      prikaziZahtev(zahtev){
       axios

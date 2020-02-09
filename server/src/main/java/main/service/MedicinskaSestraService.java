@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import main.dto.LekarDTO;
 import main.dto.MedicinskaSestraDTO;
+import main.dto.PromenaLozinkeDTO;
+import main.model.AdministratorKlinickogCentra;
 import main.model.Authority;
 import main.model.Lekar;
 import main.model.MedicinskaSestra;
@@ -31,6 +33,10 @@ public class MedicinskaSestraService {
 
 	@Autowired
 	private KlinikaRepository klinikaRepository;
+	
+
+	@Autowired
+	private MedicinskaSestraRepository mssRepository;
 	
 	public MedicinskaSestra findOne(Long id) {
 		return msr.findById(id).orElseGet(null);
@@ -55,13 +61,21 @@ public class MedicinskaSestraService {
 			ms.setGrad(msdto.getGrad());
 			ms.setDrzava(msdto.getDrzava());
 			ms.setPromenjenaLozinka(true);
-			ms.setLozinka(passwordEncoder.encode(msdto.getLozinka()));			
+			//ms.setLozinka(passwordEncoder.encode(msdto.getLozinka()));			
 			msr.save(ms);
 		} catch (EntityNotFoundException e) {
 			throw new ValidationException("Admin sa tim id-ijem ne postoji");
 		}
 	}
 
+	public void izmeniLozinku(MedicinskaSestraDTO msdto) {
+		MedicinskaSestra ms = msr.findById(msdto.getId()).orElse(null);
+
+		ms.setPromenjenaLozinka(true);
+		ms.setLozinka(passwordEncoder.encode(msdto.getLozinka()));
+		msr.save(ms);
+		
+	}
 
 	public MedicinskaSestraDTO dodajLekara(MedicinskaSestraDTO msDTO) {
 		// TODO Auto-generated method stub
@@ -107,5 +121,14 @@ public class MedicinskaSestraService {
 		
 	}
 
+	public boolean promeniLozinku(MedicinskaSestra admin, PromenaLozinkeDTO lozinka) {
+
+		if (lozinka.getNovaLozinka().equals(lozinka.getPonovljenaLozinka())) {
+			admin.setLozinka(passwordEncoder.encode(lozinka.getNovaLozinka()));
+			mssRepository.save(admin);
+			return true;
+		}
+		return false;
+	}
 
 }
