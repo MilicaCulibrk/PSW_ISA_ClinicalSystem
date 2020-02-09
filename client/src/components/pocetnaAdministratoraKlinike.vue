@@ -286,8 +286,7 @@
 		          </div>
 			              
 			       <div>
-			              	<form class="message-form" style="position: relative; top: -110
-			              	px; left: 650px; width: 500px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
+			              	<form class="message-form" style="position: relative; top: -180px; left: 650px; width: 500px; height: 400px; background-color: rgba(130, 206, 209, 0.733); ">
 
                        <div>
                                 
@@ -1480,6 +1479,7 @@ axios
          this.prikazZahtevaZaPregled = false, 
          this.prikazZahtevaZaOdmor = !this.prikazZahtevaZaOdmor, 
          this.prikazMedicinskeSestreKlinike = false, 
+        
          this.prikazIzvestajOPoslovanju = false, 
          
          axios
@@ -1505,6 +1505,7 @@ axios
          this.prikazZahtevaZaOdmor = false, 
          this.prikazMedicinskeSestreKlinike = false, 
          this.prikazIzvestajOPoslovanju = false, 
+         this.prikazPretragaIfiltriranjeSala = false,
 		     this.ponistiPretraguSala(),
 		     this.ponistiFiltriranjeSala()
 		     
@@ -1555,7 +1556,8 @@ axios
 		     this.prikazLekariKlinike = false,
 		     this.prikazDefinisanjePregleda = !this.prikazDefinisanjePregleda,
 		     this.prikazUpravljanjeSalama = false,
-		     this.prikazUpravljanjeTipovimaPregleda = false,
+         this.prikazUpravljanjeTipovimaPregleda = false,
+         this.prikazPretragaIfiltriranjeSala = false,
          this.prikazZahtevaZaPregled = false, 
          this.prikazZahtevaZaOdmor = false, 
          this.prikazMedicinskeSestreKlinike = false, 
@@ -1593,8 +1595,8 @@ axios
 		     this.prikazLekariKlinike = false,
 		     this.prikazDefinisanjePregleda = false,
 		     this.prikazUpravljanjeSalama = !this.prikazUpravljanjeSalama,
-		     this.prikazUpravljanjeTipovimaPregleda = false,
-         this.prikazZahtevaZaPregled = false, 
+         this.prikazUpravljanjeTipovimaPregleda = false,
+         this.prikazPretragaIfiltriranjeSalaZaPregled = false,
          this.prikazZahtevaZaOdmor = false, 
          this.prikazMedicinskeSestreKlinike = false, 
          this.prikazIzvestajOPoslovanju = false, 
@@ -1663,6 +1665,7 @@ axios
 		     this.prikazUpravljanjeTipovimaPregleda = false,
          this.prikazZahtevaZaPregled = false, 
          this.prikazZahtevaZaOdmor = false, 
+         this.prikazPretragaIfiltriranjeSala = false,
          this.prikazMedicinskeSestreKlinike = false, 
          this.prikazIzvestajOPoslovanju = false, 
 
@@ -1689,6 +1692,7 @@ axios
 		     this.prikazUpravljanjeSalama = false,
 		     this.prikazUpravljanjeTipovimaPregleda = false,
          this.prikazZahtevaZaPregled = false, 
+         this.prikazZahtevaZaOdmor = false, 
          this.prikazZahtevaZaOdmor = false, 
          this.prikazMedicinskeSestreKlinike = !this.prikazMedicinskeSestreKlinike, 
          this.prikazIzvestajOPoslovanju = false, 
@@ -2106,6 +2110,7 @@ axios
 		     this.prikazUpravljanjeSalama = false,
 		     this.prikazUpravljanjeTipovimaPregleda = false,
          this.prikazZahtevaZaPregled = false, 
+         this.prikazPretragaIfiltriranjeSala = false,
          this.prikazZahtevaZaOdmor = false, 
          this.prikazMedicinskeSestreKlinike = false, 
          this.prikazIzvestajOPoslovanju = false

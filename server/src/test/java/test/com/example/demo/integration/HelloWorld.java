@@ -1,6 +1,6 @@
 package test.com.example.demo.integration;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.http.MediaType;
