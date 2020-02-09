@@ -69,21 +69,25 @@ public class LekController {
 	@DeleteMapping(value = "/izbrisi/{id}")
 	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
 	public ResponseEntity<List<LekDTO>> deleteLek(@PathVariable Long id) {
-
-		Lek l = lekService.findOne(id);
-		List<LekDTO> lekDTO = new ArrayList<LekDTO>();
-		if (l != null) {
-			lekService.remove(id);
-			List<Lek> sk = lekService.findAll();
-
-			for (Lek lek : sk) {
-				lekDTO.add(new LekDTO(lek));
-
+		try {
+			Lek l = lekService.findOne(id);
+			List<LekDTO> lekDTO = new ArrayList<LekDTO>();
+			if (l != null) {
+				lekService.remove(id);
+				List<Lek> sk = lekService.findAll();
+	
+				for (Lek lek : sk) {
+					lekDTO.add(new LekDTO(lek));
+	
+				}
+				return new ResponseEntity<>(lekDTO, HttpStatus.OK);
+	
 			}
-			return new ResponseEntity<>(lekDTO, HttpStatus.OK);
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<>(null,HttpStatus.NOT_FOUND);
 
 		}
-
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		return null;
 	}
 }

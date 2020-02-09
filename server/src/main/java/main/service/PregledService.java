@@ -88,6 +88,7 @@ public class PregledService {
 		pregled.setIdPacijenta(null);
 		pregled.setZavrsen(false);
 		pregled.setVrstaPregleda("pregled");
+		
 		pregledRepository.save(pregled);
 		for (Sala s : salaKlinikeRepository.findAll()) {
 			if(s.getId().equals(pregledDTO.getSala().getId())){
