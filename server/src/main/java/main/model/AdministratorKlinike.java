@@ -22,7 +22,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter @Setter @NoArgsConstructor 
+
 public class AdministratorKlinike implements UserDetails{
 	
 	@Id
@@ -75,11 +81,6 @@ public class AdministratorKlinike implements UserDetails{
 	private List<Authority> authorities;
 
 
-	public AdministratorKlinike() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
 
 	public AdministratorKlinike(Long id, String ime, String prezime, String email, String lozinka, String adresa,
 			String grad, String drzava, String telefon, String jmbg, Klinika klinika) {
@@ -97,154 +98,12 @@ public class AdministratorKlinike implements UserDetails{
 		this.klinika = klinika;
 	}
 
-	public java.util.Collection<ZahtevZaOdmor> getZahtevZaOdmor() {
-		return zahtevZaOdmor;
-	}
-
-
-	public void setZahtevZaOdmor(java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor) {
-		this.zahtevZaOdmor = zahtevZaOdmor;
-	}
-
-
-	public java.util.Collection<ZahtevZaPregled> getZahtevZaPregled() {
-		return zahtevZaPregled;
-	}
-
-
-	public void setZahtevZaPregled(java.util.Collection<ZahtevZaPregled> zahtevZaPregled) {
-		this.zahtevZaPregled = zahtevZaPregled;
-	}
-
-
-	public Boolean getPromenjenaLozinka() {
-		return promenjenaLozinka;
-	}
-
-	public void setPromenjenaLozinka(Boolean promenjenaLozinka) {
-		this.promenjenaLozinka = promenjenaLozinka;
-	}
-	public Long getId() {
-		return id;
-	}
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-
-	public String getIme() {
-		return ime;
-	}
-
-
-	public void setIme(String ime) {
-		this.ime = ime;
-	}
-
-
-	public String getPrezime() {
-		return prezime;
-	}
-
-
-	public void setPrezime(String prezime) {
-		this.prezime = prezime;
-	}
-
-
-	public String getEmail() {
-		return email;
-	}
-
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-
-	public String getLozinka() {
-		return lozinka;
-	}
-
-
-	public void setLozinka(String lozinka) {
-		this.lozinka = lozinka;
-	}
-
-
-	public String getAdresa() {
-		return adresa;
-	}
-
-
-	public void setAdresa(String adresa) {
-		this.adresa = adresa;
-	}
-
-
-	public String getGrad() {
-		return grad;
-	}
-
-
-	public void setGrad(String grad) {
-		this.grad = grad;
-	}
-
-
-	public String getDrzava() {
-		return drzava;
-	}
-
-
-	public void setDrzava(String drzava) {
-		this.drzava = drzava;
-	}
-
-
-	public String getTelefon() {
-		return telefon;
-	}
-
-
-	public void setTelefon(String telefon) {
-		this.telefon = telefon;
-	}
-
-
-	public String getJmbg() {
-		return jmbg;
-	}
-
-
-	public void setJmbg(String jmbg) {
-		this.jmbg = jmbg;
-	}
-
-
-	public Klinika getKlinika() {
-		return klinika;
-	}
-
-
-	public void setKlinika(Klinika klinika) {
-		this.klinika = klinika;
-	}
-
 
 	@Override
 	public String toString() {
 		return "AdministratorKlinike [id=" + id + ", ime=" + ime + ", prezime=" + prezime + ", email=" + email
 				+ ", lozinka=" + lozinka + ", adresa=" + adresa + ", grad=" + grad + ", drzava=" + drzava + ", telefon="
 				+ telefon + ", jmbg=" + jmbg + ", klinika=" + klinika + "]";
-	}
-
-	public void setAuthorities(List<Authority> authorities) {
-
-		this.authorities = authorities;
-
 	}
 
 

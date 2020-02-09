@@ -9,7 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter @Setter @NoArgsConstructor 
+
 public class Cenovnik {
 	
 	public Cenovnik(Long id, float cena, Klinika klinika) {
@@ -19,11 +25,6 @@ public class Cenovnik {
 		this.klinika = klinika;
 	}
 
-
-	public Cenovnik() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
 
 	@Id
@@ -37,34 +38,6 @@ public class Cenovnik {
 	@JoinColumn(name = "klinika_id", referencedColumnName = "id")
    public Klinika klinika;
 
-	public Long getId() {
-		return id;
-	}
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-
-	public float getCena() {
-		return cena;
-	}
-
-
-	public void setCena(float cena) {
-		this.cena = cena;
-	}
-
-
-	public Klinika getKlinika() {
-		return klinika;
-	}
-
-
-	public void setKlinika(Klinika klinika) {
-		this.klinika = klinika;
-	}
 
 
 	@Override

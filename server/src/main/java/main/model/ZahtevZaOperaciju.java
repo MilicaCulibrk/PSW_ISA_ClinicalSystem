@@ -10,7 +10,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter @Setter @NoArgsConstructor 
+
 public class ZahtevZaOperaciju {
 	
 	@Id
@@ -43,11 +49,6 @@ public class ZahtevZaOperaciju {
 	   @JoinColumn(name = "operacija_id", referencedColumnName = "id")
    public Operacija operacija;
 
-	public ZahtevZaOperaciju() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
 	
 
 	public ZahtevZaOperaciju(boolean odobren, long terminPregleda, long trajanje, long cena, Operacija operacija) {
@@ -59,53 +60,6 @@ public class ZahtevZaOperaciju {
 		this.operacija = operacija;
 	}
 
-
-
-	public boolean isOdobren() {
-		return odobren;
-	}
-
-	public void setOdobren(boolean odobren) {
-		this.odobren = odobren;
-	}
-
-	public long getTerminPregleda() {
-		return terminPregleda;
-	}
-
-	public void setTerminPregleda(long terminPregleda) {
-		this.terminPregleda = terminPregleda;
-	}
-
-	public long getTrajanje() {
-		return trajanje;
-	}
-
-	public void setTrajanje(long trajanje) {
-		this.trajanje = trajanje;
-	}
-
-	public long getCena() {
-		return cena;
-	}
-
-	public void setCena(long cena) {
-		this.cena = cena;
-	}
-
-	public Operacija getOperacija() {
-		return operacija;
-	}
-
-	public void setOperacija(Operacija operacija) {
-		this.operacija = operacija;
-	}
-
-	@Override
-	public String toString() {
-		return "ZahtevZaOperaciju [odobren=" + odobren + ", terminPregleda=" + terminPregleda + ", trajanje=" + trajanje
-				+ ", cena=" + cena + ", operacija=" + operacija + "]";
-	}
 
 
 

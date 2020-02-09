@@ -14,8 +14,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 
 @Entity
+@Getter @Setter @NoArgsConstructor 
+
 public class Sala {
 	
 	@Id
@@ -35,71 +41,5 @@ public class Sala {
 		private Klinika klinika;
 
 
-
-		public Long getId() {
-			return id;
-		}
-
-
-
-		public void setId(Long id) {
-			this.id = id;
-		}
-
-
-
-		public String getNaziv() {
-			return naziv;
-		}
-
-
-
-		public void setNaziv(String naziv) {
-			this.naziv = naziv;
-		}
-
-
-
-		public Integer getBroj() {
-			return broj;
-		}
-
-
-
-		public void setBroj(Integer broj) {
-			this.broj = broj;
-		}
-
-
-
-		public Klinika getKlinika() {
-			return klinika;
-		}
-
-
-
-		public void setKlinika(Klinika klinika) {
-			this.klinika = klinika;
-		}
-
-
-
-		public java.util.Collection<Pregled> getPregledi() {
-			return pregledi;
-		}
-
-
-
-		public void setPregledi(java.util.Collection<Pregled> pregledi) {
-			this.pregledi = pregledi;
-		}
-		
-	
- 
-
-	
-
-	
-  
 
 }

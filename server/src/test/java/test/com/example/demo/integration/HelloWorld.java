@@ -19,13 +19,13 @@ public class HelloWorld extends AbstractResourceTest {
 
     @Test
     public void test() throws Exception {
-        String url = "http:/localhost:/pocetnaPacijenta";
+        String url = "/";
         MvcResult  result = (MvcResult) mvc
                 .perform(MockMvcRequestBuilders.get(url)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON));
         int status = result.getResponse().getStatus();
-        Assertions.assertEquals(200, status);
+        Assertions.assertEquals(200,status);
 
     }
 

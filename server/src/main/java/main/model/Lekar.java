@@ -27,7 +27,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+
 @Entity
+@Setter
+@Getter
+@NoArgsConstructor 
+//@EqualsAndHashCode
+@Builder
+
 public class Lekar implements UserDetails{
 	
 
@@ -112,175 +125,10 @@ public class Lekar implements UserDetails{
 
 
 
-public Lekar() {
-	super();
-	// TODO Auto-generated constructor stub
-}
-public Lekar(String ime, String prezime, String email, String lozinka, String adresa, String grad, String drzava,
-		String telefon, String jmbg, Double ocena, int brojRecenzija, Collection<Izvestaj> izvestaj) {
-	super();
-	this.ime = ime;
-	this.prezime = prezime;
-	this.email = email;
-	this.lozinka = lozinka;
-	this.adresa = adresa;
-	this.grad = grad;
-	this.drzava = drzava;
-	this.telefon = telefon;
-	this.jmbg = jmbg;
-	this.ocena = ocena;
-	this.brojRecenzija = brojRecenzija;
-	this.izvestaj = izvestaj;
-}
 
 
 
 
-public Boolean getPromenjenaLozinka() {
-	return promenjenaLozinka;
-}
-public void setPromenjenaLozinka(Boolean promenjenaLozinka) {
-	this.promenjenaLozinka = promenjenaLozinka;
-}
-public Long getId() {
-	return id;
-}
-public void setId(Long id) {
-	this.id = id;
-}
-public String getIme() {
-	return ime;
-}
-public void setIme(String ime) {
-	this.ime = ime;
-}
-public String getPrezime() {
-	return prezime;
-}
-public void setPrezime(String prezime) {
-	this.prezime = prezime;
-}
-public String getEmail() {
-	return email;
-}
-public void setEmail(String email) {
-	this.email = email;
-}
-public String getLozinka() {
-	return lozinka;
-}
-public void setLozinka(String lozinka) {
-	this.lozinka = lozinka;
-}
-public String getAdresa() {
-	return adresa;
-}
-public void setAdresa(String adresa) {
-	this.adresa = adresa;
-}
-public String getGrad() {
-	return grad;
-}
-public void setGrad(String grad) {
-	this.grad = grad;
-}
-public String getDrzava() {
-	return drzava;
-}
-public void setDrzava(String drzava) {
-	this.drzava = drzava;
-}
-public String getTelefon() {
-	return telefon;
-}
-public void setTelefon(String telefon) {
-	this.telefon = telefon;
-}
-public String getJmbg() {
-	return jmbg;
-}
-public void setJmbg(String jmbg) {
-	this.jmbg = jmbg;
-}
-public double getOcena() {
-	return ocena;
-}
-public void setOcena(double ocena) {
-	this.ocena = ocena;
-}
-public int getBrojRecenzija() {
-	return brojRecenzija;
-}
-public void setBrojRecenzija(int brojRecenzija) {
-	this.brojRecenzija = brojRecenzija;
-}
-public java.util.Collection<Izvestaj> getIzvestaj() {
-	return izvestaj;
-}
-public void setIzvestaj(java.util.Collection<Izvestaj> izvestaj) {
-	this.izvestaj = izvestaj;
-}
-public Klinika getKlinika() {
-	return klinika;
-}
-public void setKlinika(Klinika klinika) {
-	this.klinika = klinika;
-}
-public RadniKalendar getRadniKalendar() {
-	return radniKalendar;
-}
-public void setRadniKalendar(RadniKalendar radniKalendar) {
-	this.radniKalendar = radniKalendar;
-}
-public java.util.Collection<Pregled> getPregled() {
-	return pregled;
-}
-public void setPregled(java.util.Collection<Pregled> pregled) {
-	this.pregled = pregled;
-}
-public java.util.Collection<Operacija> getOperacija() {
-	return operacija;
-}
-public void setOperacija(java.util.Collection<Operacija> operacija) {
-	this.operacija = operacija;
-}
-public java.util.Collection<ZahtevZaOdmor> getZahtevZaOdmor() {
-	return zahtevZaOdmor;
-}
-public void setZahtevZaOdmor(java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor) {
-	this.zahtevZaOdmor = zahtevZaOdmor;
-}
-public java.util.Collection<Recept> getRecept() {
-	return recept;
-}
-public void setRecept(java.util.Collection<Recept> recept) {
-	this.recept = recept;
-}
-
-
-
-
-public Integer getPocetak() {
-	return pocetak;
-}
-public void setPocetak(Integer pocetak) {
-	this.pocetak = pocetak;
-}
-public Integer getKraj() {
-	return kraj;
-}
-public void setKraj(Integer kraj) {
-	this.kraj = kraj;
-}
-
-
-
-
-public void setAuthorities(List<Authority> authorities) {
-
-	this.authorities = authorities;
-
-}
 
 
 
@@ -359,11 +207,41 @@ public boolean isEnabled() {
 	return true;
 
 }
-public TipPregleda getTipPregleda() {
-	return tipPregleda;
-}
-public void setTipPregleda(TipPregleda tipPregleda) {
+
+
+
+
+
+public Lekar(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
+		String drzava, String telefon, String jmbg, double ocena, Integer pocetak, Integer kraj, int brojRecenzija,
+		Boolean promenjenaLozinka, Collection<Izvestaj> izvestaj, Klinika klinika, TipPregleda tipPregleda,
+		RadniKalendar radniKalendar, Collection<Pregled> pregled, Collection<Operacija> operacija,
+		Collection<ZahtevZaOdmor> zahtevZaOdmor, Collection<Recept> recept, List<Authority> authorities) {
+	super();
+	this.id = id;
+	this.ime = ime;
+	this.prezime = prezime;
+	this.email = email;
+	this.lozinka = lozinka;
+	this.adresa = adresa;
+	this.grad = grad;
+	this.drzava = drzava;
+	this.telefon = telefon;
+	this.jmbg = jmbg;
+	this.ocena = ocena;
+	this.pocetak = pocetak;
+	this.kraj = kraj;
+	this.brojRecenzija = brojRecenzija;
+	this.promenjenaLozinka = promenjenaLozinka;
+	this.izvestaj = izvestaj;
+	this.klinika = klinika;
 	this.tipPregleda = tipPregleda;
+	this.radniKalendar = radniKalendar;
+	this.pregled = pregled;
+	this.operacija = operacija;
+	this.zahtevZaOdmor = zahtevZaOdmor;
+	this.recept = recept;
+	this.authorities = authorities;
 }
 
 

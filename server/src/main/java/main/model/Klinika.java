@@ -5,8 +5,8 @@ package main.model;
  * Author:  23nik
  * Purpose: Defines the Class Klinika
  ***********************************************************************/
-
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,14 +20,16 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter @Setter @NoArgsConstructor @EqualsAndHashCode 
+
 public class Klinika {
 	
-	public Klinika() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -130,7 +132,7 @@ public class Klinika {
 		this.tipPregleda = tipPregleda;
 	}
 	
-	public String getDrzava() {
+/*	public String getDrzava() {
 		return drzava;
 	}
 	
@@ -269,5 +271,5 @@ public class Klinika {
 	
 	public void setTipPregleda(Collection<TipPregleda> tipPregleda) {
 		this.tipPregleda = tipPregleda;
-	}
+	}*/
 }

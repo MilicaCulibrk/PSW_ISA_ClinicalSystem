@@ -37,7 +37,7 @@ public class DodajPregledTests extends PregledServiceTest{
 
 	@Test
 	public void trebaPozvatiLekaraRep_kadaSeMetodaPozove() {
-		Mockito.doReturn(getLekar()).when(lekarRepository).findById(Mockito.eq(IDlekar));
+		Mockito.doReturn(getLekar()).when(lekarRepository).findById(any(Long.class));
 		Mockito.doReturn(getSala()).when(salaKlinikeRepository).getOne(any(Long.class));
 		Mockito.doReturn(getTipPregleda()).when(tipPregledaRepository).getOne(any(Long.class));
 		Mockito.doReturn(getSalaList()).when(salaKlinikeRepository).findAll();
@@ -46,13 +46,13 @@ public class DodajPregledTests extends PregledServiceTest{
 		
 		service.dodajPregled(pregledDTO);
 		
-		Mockito.verify(lekarRepository, Mockito.times(1)).findById(Mockito.eq(IDlekar));
+		Mockito.verify(lekarRepository, Mockito.times(1)).findById(any(Long.class));
 	}
 	
 	@Test
 	public void trebaPozvatiSalaRep_kadaSeMetodaPozove() {
 		Mockito.doReturn(getLekar()).when(lekarRepository).findById(any(Long.class));
-		Mockito.doReturn(getSala()).when(salaKlinikeRepository).getOne(Mockito.eq(IDsala));
+		Mockito.doReturn(getSala()).when(salaKlinikeRepository).getOne(any(Long.class));
 		Mockito.doReturn(getTipPregleda()).when(tipPregledaRepository).getOne(any(Long.class));
 		Mockito.doReturn(getSalaList()).when(salaKlinikeRepository).findAll();
 		
@@ -60,7 +60,7 @@ public class DodajPregledTests extends PregledServiceTest{
 		
 		service.dodajPregled(pregledDTO);
 		
-		Mockito.verify(salaKlinikeRepository, Mockito.times(1)).getOne(Mockito.eq(IDsala));
+		Mockito.verify(salaKlinikeRepository, Mockito.times(1)).getOne(any(Long.class));
 		Mockito.verify(salaKlinikeRepository, Mockito.times(1)).findAll();
 	}
 	
@@ -68,14 +68,14 @@ public class DodajPregledTests extends PregledServiceTest{
 	public void trebaPozvatiTipPregledaRep_kadaSeMetodaPozove() {
 		Mockito.doReturn(getLekar()).when(lekarRepository).findById(any(Long.class));
 		Mockito.doReturn(getSala()).when(salaKlinikeRepository).getOne(any(Long.class));
-		Mockito.doReturn(getTipPregleda()).when(tipPregledaRepository).getOne(Mockito.eq(IDtipPregleda));
+		Mockito.doReturn(getTipPregleda()).when(tipPregledaRepository).getOne(any(Long.class));
 		Mockito.doReturn(getSalaList()).when(salaKlinikeRepository).findAll();	
 		
 		PregledDTO pregledDTO = pregledDTO();
 		
 		service.dodajPregled(pregledDTO);
 		
-		Mockito.verify(tipPregledaRepository, Mockito.times(1)).getOne(Mockito.eq(IDtipPregleda));
+		Mockito.verify(tipPregledaRepository, Mockito.times(1)).getOne(any(Long.class));
 	}
 	
 	@Test
@@ -91,6 +91,49 @@ public class DodajPregledTests extends PregledServiceTest{
 		
 		Mockito.verify(pregledRepository, Mockito.times(1)).save(any(Pregled.class));
 	}
+	@Test
+	public void daLiJeDobarArgLekaraRep_kadaSeMetodaPozove() {
+		Mockito.doReturn(getLekar()).when(lekarRepository).findById(Mockito.eq(IDlekar));
+		Mockito.doReturn(getSala()).when(salaKlinikeRepository).getOne(any(Long.class));
+		Mockito.doReturn(getTipPregleda()).when(tipPregledaRepository).getOne(any(Long.class));
+		Mockito.doReturn(getSalaList()).when(salaKlinikeRepository).findAll();
+
+		PregledDTO pregledDTO = pregledDTO();
+		
+		service.dodajPregled(pregledDTO);
+		
+		Mockito.verify(lekarRepository, Mockito.times(1)).findById(Mockito.eq(IDlekar));
+	}
+	
+	@Test
+	public void daLiJeDobarArgSalaRep_kadaSeMetodaPozove() {
+		Mockito.doReturn(getLekar()).when(lekarRepository).findById(any(Long.class));
+		Mockito.doReturn(getSala()).when(salaKlinikeRepository).getOne(Mockito.eq(IDsala));
+		Mockito.doReturn(getTipPregleda()).when(tipPregledaRepository).getOne(any(Long.class));
+		Mockito.doReturn(getSalaList()).when(salaKlinikeRepository).findAll();
+		
+		PregledDTO pregledDTO = pregledDTO();
+		
+		service.dodajPregled(pregledDTO);
+		
+		Mockito.verify(salaKlinikeRepository, Mockito.times(1)).getOne(Mockito.eq(IDsala));
+		Mockito.verify(salaKlinikeRepository, Mockito.times(1)).findAll();
+	}
+	
+	@Test
+	public void daLiJeDobarArgTipPregledaRep_kadaSeMetodaPozove() {
+		Mockito.doReturn(getLekar()).when(lekarRepository).findById(any(Long.class));
+		Mockito.doReturn(getSala()).when(salaKlinikeRepository).getOne(any(Long.class));
+		Mockito.doReturn(getTipPregleda()).when(tipPregledaRepository).getOne(Mockito.eq(IDtipPregleda));
+		Mockito.doReturn(getSalaList()).when(salaKlinikeRepository).findAll();	
+		
+		PregledDTO pregledDTO = pregledDTO();
+		
+		service.dodajPregled(pregledDTO);
+		
+		Mockito.verify(tipPregledaRepository, Mockito.times(1)).getOne(Mockito.eq(IDtipPregleda));
+	}
+	
 	
 	
 	private Optional<Lekar> getLekar() {

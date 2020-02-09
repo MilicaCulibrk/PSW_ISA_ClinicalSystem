@@ -8,7 +8,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter @Setter @NoArgsConstructor 
+
 public class Recept {
 	
 	
@@ -24,10 +30,7 @@ public class Recept {
 	@JoinColumn(name = "lekar_id", referencedColumnName = "id")
    public Lekar lekar;
 
-	public Recept() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+
 
 	public Recept(Long id, MedicinskaSestra medicinskaSestra, Lekar lekar) {
 		super();
@@ -36,35 +39,5 @@ public class Recept {
 		this.lekar = lekar;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public MedicinskaSestra getMedicinskaSestra() {
-		return medicinskaSestra;
-	}
-
-	public void setMedicinskaSestra(MedicinskaSestra medicinskaSestra) {
-		this.medicinskaSestra = medicinskaSestra;
-	}
-
-	public Lekar getLekar() {
-		return lekar;
-	}
-
-	public void setLekar(Lekar lekar) {
-		this.lekar = lekar;
-	}
-
-	@Override
-	public String toString() {
-		return "Recept [id=" + id + ", medicinskaSestra=" + medicinskaSestra + ", lekar=" + lekar + "]";
-	}
-
-	
 	
 }

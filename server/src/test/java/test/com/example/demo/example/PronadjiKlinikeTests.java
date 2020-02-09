@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -25,22 +26,36 @@ public class PronadjiKlinikeTests extends KlinikaServiceTest{
 	Long IDklinikadto = (long) 1;
 	
 	@Test
-	public void trebaPozvatiSveRep_kadaSeMetodaPozove() {
+	public void trebaPozvatiLekarRep_kadaSeMetodaPozove() throws ParseException {
 		Mockito.doReturn(getLekari()).when(lekarRepository).findAll();
 		Mockito.doReturn(getKlinike()).when(klinikaRepository).findAll();
 		Mockito.doReturn(getPregledi()).when(pregledRepository).findAll();
 		
-		try {
-			List<Klinika> result = service.pronadjiKlinike(null, null);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		service.pronadjiKlinike("2020-02-02T00:00:00", "kardio");
+
 		Mockito.verify(lekarRepository, Mockito.times(1)).findAll();
+	}
+	
+	@Test
+	public void trebaPozvatiKlinikaRep_kadaSeMetodaPozove() throws ParseException {
+		Mockito.doReturn(getLekari()).when(lekarRepository).findAll();
+		Mockito.doReturn(getKlinike()).when(klinikaRepository).findAll();
+		Mockito.doReturn(getPregledi()).when(pregledRepository).findAll();
+		
+		service.pronadjiKlinike("2020-02-02T00:00:00", "kardio");
+
 		Mockito.verify(klinikaRepository, Mockito.times(1)).findAll();
+	}
+	
+	@Test
+	public void trebaPozvatiPregledRep_kadaSeMetodaPozove() throws ParseException {
+		Mockito.doReturn(getLekari()).when(lekarRepository).findAll();
+		Mockito.doReturn(getKlinike()).when(klinikaRepository).findAll();
+		Mockito.doReturn(getPregledi()).when(pregledRepository).findAll();
+		
+		service.pronadjiKlinike("2020-02-02T00:00:00", "kardio");
+
 		Mockito.verify(pregledRepository, Mockito.times(1)).findAll();
-
-
 	}
 	
 	
