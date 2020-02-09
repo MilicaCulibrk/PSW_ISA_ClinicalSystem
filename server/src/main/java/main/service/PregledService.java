@@ -25,8 +25,8 @@ public class PregledService {
 	//@Autowired
 	private final PregledRepository pregledRepository;
 	
-	@Autowired
-	private ZahtevZaPregledRepository zahtevZaPregledRepository;
+	//@Autowired
+	private final ZahtevZaPregledRepository zahtevZaPregledRepository;
 	
 	
 	//@Autowired
@@ -38,18 +38,22 @@ public class PregledService {
 	//@Autowired
 	private final TipPregledaRepository tipPregledaRepository;
 	
-	@Autowired
-	private AdminKlinikeRepository adminKlinikeRepository;
+	//@Autowired
+	private final AdminKlinikeRepository adminKlinikeRepository;
 	
 	
-	
-	public PregledService(PregledRepository pregledRepository, LekarRepository lekarRepository,
-			SalaRepository salaKlinikeRepository, TipPregledaRepository tipPregledaRepository) {
+
+
+	public PregledService(PregledRepository pregledRepository, ZahtevZaPregledRepository zahtevZaPregledRepository,
+			LekarRepository lekarRepository, SalaRepository salaKlinikeRepository,
+			TipPregledaRepository tipPregledaRepository, AdminKlinikeRepository adminKlinikeRepository) {
 		super();
 		this.pregledRepository = pregledRepository;
+		this.zahtevZaPregledRepository = zahtevZaPregledRepository;
 		this.lekarRepository = lekarRepository;
 		this.salaKlinikeRepository = salaKlinikeRepository;
 		this.tipPregledaRepository = tipPregledaRepository;
+		this.adminKlinikeRepository = adminKlinikeRepository;
 	}
 
 	public Pregled findOne(Long id) {
@@ -67,7 +71,7 @@ public class PregledService {
 }
 
 	
-	public PregledDTO dodajPregled(PregledDTO pregledDTO) {
+	public void dodajPregled(PregledDTO pregledDTO) {
 		Pregled pregled = new Pregled();
 		
 		
@@ -89,8 +93,6 @@ public class PregledService {
 			}
 				
 		}
-		PregledDTO pregleddto = new PregledDTO(pregled);
-		return pregleddto;
 	}
 	
 	public List<Pregled> findAll() {

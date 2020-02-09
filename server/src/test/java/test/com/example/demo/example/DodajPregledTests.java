@@ -4,12 +4,13 @@ import static org.mockito.ArgumentMatchers.any;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.Times;
+
+import com.fasterxml.jackson.annotation.ObjectIdGenerator.IdKey;
 
 import main.dto.KlinikaDTO;
 import main.dto.LekarDTO;
@@ -24,28 +25,72 @@ import main.model.TipPregleda;
 
 public class DodajPregledTests extends PregledServiceTest{
 	
+	Long IDlekar = (long) 1;
+	Long IDsala = (long) 1;
+	Long IDtipPregleda = (long) 1;
+	Long IDpregled = (long) 1;
+	Long IDpacijentdto = (long) 1;
+	Long IDsaladto = (long) 1;
+	Long IDpregleddto = (long) 1;
+	Long IDlekardto = (long) 1;
+	Long IDklinikadto = (long) 1;
+
 	@Test
 	public void trebaPozvatiLekaraRep_kadaSeMetodaPozove() {
+		Mockito.doReturn(getLekar()).when(lekarRepository).findById(Mockito.eq(IDlekar));
+		Mockito.doReturn(getSala()).when(salaKlinikeRepository).getOne(any(Long.class));
+		Mockito.doReturn(getTipPregleda()).when(tipPregledaRepository).getOne(any(Long.class));
+		Mockito.doReturn(getSalaList()).when(salaKlinikeRepository).findAll();
+
+		PregledDTO pregledDTO = pregledDTO();
+		
+		service.dodajPregled(pregledDTO);
+		
+		Mockito.verify(lekarRepository, Mockito.times(1)).findById(Mockito.eq(IDlekar));
+	}
+	
+	@Test
+	public void trebaPozvatiSalaRep_kadaSeMetodaPozove() {
 		Mockito.doReturn(getLekar()).when(lekarRepository).findById(any(Long.class));
-		Mockito.doReturn(getSala()).when(salaKlinikeRepository).findById(any(Long.class));
-		Mockito.doReturn(getTipPregleda()).when(tipPregledaRepository).findById(any(Long.class));
+		Mockito.doReturn(getSala()).when(salaKlinikeRepository).getOne(Mockito.eq(IDsala));
+		Mockito.doReturn(getTipPregleda()).when(tipPregledaRepository).getOne(any(Long.class));
+		Mockito.doReturn(getSalaList()).when(salaKlinikeRepository).findAll();
 		
 		PregledDTO pregledDTO = pregledDTO();
 		
 		service.dodajPregled(pregledDTO);
 		
-		Mockito.verify(lekarRepository, Mockito.times(1)).findById(any(Long.class));
-	}
-	/*
-	@Test
-	public void trebaPozvatiSalaRep_kadaSeMetodaPozove() {
-		Mockito.doReturn(getSala()).when(salaKlinikeRepository.findById(any(Long.class)));
+		Mockito.verify(salaKlinikeRepository, Mockito.times(1)).getOne(Mockito.eq(IDsala));
+		Mockito.verify(salaKlinikeRepository, Mockito.times(1)).findAll();
 	}
 	
 	@Test
 	public void trebaPozvatiTipPregledaRep_kadaSeMetodaPozove() {
-		Mockito.doReturn(getTipPregleda()).when(tipPregledaRepository.findById(any(Long.class)));
-	}*/
+		Mockito.doReturn(getLekar()).when(lekarRepository).findById(any(Long.class));
+		Mockito.doReturn(getSala()).when(salaKlinikeRepository).getOne(any(Long.class));
+		Mockito.doReturn(getTipPregleda()).when(tipPregledaRepository).getOne(Mockito.eq(IDtipPregleda));
+		Mockito.doReturn(getSalaList()).when(salaKlinikeRepository).findAll();	
+		
+		PregledDTO pregledDTO = pregledDTO();
+		
+		service.dodajPregled(pregledDTO);
+		
+		Mockito.verify(tipPregledaRepository, Mockito.times(1)).getOne(Mockito.eq(IDtipPregleda));
+	}
+	
+	@Test
+	public void trebaSacuvatiPregled_kadaSeMetodaPozove() {
+		Mockito.doReturn(getLekar()).when(lekarRepository).findById(any(Long.class));
+		Mockito.doReturn(getSala()).when(salaKlinikeRepository).getOne(any(Long.class));
+		Mockito.doReturn(getTipPregleda()).when(tipPregledaRepository).getOne(any(Long.class));
+		Mockito.doReturn(getSalaList()).when(salaKlinikeRepository).findAll();	
+		
+		PregledDTO pregledDTO = pregledDTO();
+		
+		service.dodajPregled(pregledDTO);
+		
+		Mockito.verify(pregledRepository, Mockito.times(1)).save(any(Pregled.class));
+	}
 	
 	
 	private Optional<Lekar> getLekar() {
@@ -57,7 +102,7 @@ public class DodajPregledTests extends PregledServiceTest{
 		lekar.setPrezime("Nik");
 		lekar.setEmail("bla@gmail.com");
 		lekar.setJmbg("123");
-		lekar.setId((long) 1);
+		lekar.setId(IDlekar);
 		Klinika klinika = new Klinika();
 		klinika.setId((long)1);
 		lekar.setKlinika(klinika);
@@ -65,46 +110,54 @@ public class DodajPregledTests extends PregledServiceTest{
 		return Optional.of(lekar);
 	}
 	
-	private Optional<Sala> getSala() {
+	private Sala getSala() {
 		Sala sala = new Sala();
-		sala.setId((long) 1);
+		sala.setId(IDsala);
 		Pregled pregled = new Pregled();
-		pregled.setId((long) 1);
+		pregled.setId(IDpregled);
 		Collection<Pregled> pregledi = new ArrayList<Pregled>();
 		pregledi.add(pregled);
 		sala.setPregledi(pregledi);
-		return Optional.of(sala);
+		return sala;
 	}
 	
-	private Optional<TipPregleda> getTipPregleda() {
+	private TipPregleda getTipPregleda() {
 		TipPregleda tp = new TipPregleda();
-		tp.setId((long)1);
+		tp.setId(IDtipPregleda);
 		tp.setNaziv("naziv");
-		return Optional.of(tp);
+		return tp;
 	}
 	
 	private PregledDTO pregledDTO() {
 		PregledDTO pregleddto = new PregledDTO();
-		pregleddto.setId((long)1);
+		pregleddto.setId(IDpregleddto);
 		pregleddto.setCena("");
 		pregleddto.setDatum("");
 		pregleddto.setVreme("");
 		TipPregledaDTO tpdto = new TipPregledaDTO();
-		tpdto.setId((long)1);
+		tpdto.setId(IDtipPregleda);
 		pregleddto.setTipPregleda(tpdto);
-		pregleddto.setIdPacijenta((long)1);
+		pregleddto.setIdPacijenta(IDpacijentdto);
 		pregleddto.setTrajanjePregleda(1);
 		LekarDTO lekar = new LekarDTO();
-		lekar.setId((long)1);
+		lekar.setId(IDlekar);
 		pregleddto.setLekar(lekar);
 		SalaDTO saladto = new SalaDTO();
 		saladto.setId((long)1);
 		saladto.setNaziv("nes");
 		saladto.setBroj(2);
 		KlinikaDTO klinikadto = new KlinikaDTO();
-		klinikadto.setId((long)1);
+		klinikadto.setId(IDklinikadto);
 		saladto.setKlinika(klinikadto);
 		pregleddto.setSala(saladto);
 		return pregleddto;
+	}
+	
+	private List<Sala> getSalaList() {
+		ArrayList<Sala> result = new ArrayList<Sala>();
+		
+		result.add(getSala());
+		
+		return result;
 	}
 }

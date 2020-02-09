@@ -28,19 +28,30 @@ import main.repository.ZahtevZaOdmorRepository;
 
 @Service
 public class KlinikaService {
-	@Autowired
-	private KlinikaRepository klinikaRepository;
+	//@Autowired
+	private final KlinikaRepository klinikaRepository;
 	
-	@Autowired
-	private LekarRepository	lekarRepository;
+	//@Autowired
+	private final LekarRepository	lekarRepository;
 	
-	@Autowired
-	private PregledRepository	pregledRepository;
+	//@Autowired
+	private final PregledRepository	pregledRepository;
 	
 	
-	@Autowired
-	private ZahtevZaOdmorRepository	zahtevZaOdmorRepository;
+	//@Autowired
+	private final ZahtevZaOdmorRepository	zahtevZaOdmorRepository;
 	
+	
+	
+	public KlinikaService(KlinikaRepository klinikaRepository, LekarRepository lekarRepository,
+			PregledRepository pregledRepository, ZahtevZaOdmorRepository zahtevZaOdmorRepository) {
+		super();
+		this.klinikaRepository = klinikaRepository;
+		this.lekarRepository = lekarRepository;
+		this.pregledRepository = pregledRepository;
+		this.zahtevZaOdmorRepository = zahtevZaOdmorRepository;
+	}
+
 	public KlinikaDTO dodajKliniku(KlinikaDTO klinikaDTO) {
 		Klinika klinika = new Klinika();
 		

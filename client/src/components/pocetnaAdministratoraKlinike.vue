@@ -2070,7 +2070,7 @@ export default {
         .post(
           "/pregled/dodajPregled", this.pregled
         )
-        .then(pregled => {
+        .then(() => {
           this.pregled.naziv = "";
           this.pregled.vreme = "";
           this.pregled.cena = "";
