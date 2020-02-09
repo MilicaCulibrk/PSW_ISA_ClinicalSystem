@@ -16,11 +16,16 @@
                 </i>                   
               </a>
               <a href="#">
-                <i v-on:click="listaKlinika();izlistajTipove()" class="zmdi zmdi-view-dashboard "> LISTA KLINIKA
+                <i v-on:click="listaKlinika();izlistajTipove()" class="zmdi zmdi-view-dashboard "> LISTA KLINIKA / ZAKAZIVANJE PREGLEDA
                 </i>                   
                 </a>
                 <a href="#">
                 <i v-on:click="otvoriIstoriju()" class="zmdi zmdi-view-dashboard"> ISTORIJA PREGLEDA I OPERACIJA
+                </i>     
+                              
+              </a>
+              <a href="#">
+                <i v-on:click="otvoriZahteve()" class="zmdi zmdi-view-dashboard"> ODOBRAVANJE ZAHTEVA ZA PREGLED
                 </i>     
                               
               </a>
@@ -75,11 +80,9 @@
                             <label for="Form-phone" style="color: #b3b3b3;">Telefon</label>
                             <input type="text" v-model="user.telefon" id="Form-phone" class="form-control" :disabled="!izmeni">
                             
-                            <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
-                            <input type="text" v-model="user.adresa" id="Form-email4" class="form-control" :disabled="!izmeni">
 
                             <label for="Form-email4" style="color: #b3b3b3;">JMBG</label>
-                            <input type="text" v-model="user.jmbg" id="Form-email4" class="form-control" disabled>
+                            <input type="text" v-model="user.jmbg" id="Form-email4" class="form-control" :disabled="!izmeni">
                           
                             
               
@@ -88,12 +91,14 @@
                           <div class="col">
                           <div class="md-form pb-3">
               
-                            <label for="Form-city" style="color: #b3b3b3;">Lozinka</label>
-                            <input type="text" v-model="user.lozinka" id="Form-city" class="form-control" disabled>
+                         
                             
                             <label for="Form-prezime" style="color: #b3b3b3;">Prezime</label>
                             <input type="text" v-model="user.prezime" id="Form-prezime" class="form-control" :disabled="!izmeni">
               
+                            
+                            <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
+                            <input type="text" v-model="user.adresa" id="Form-email4" class="form-control" :disabled="!izmeni">
                             
                             <label for="Form-city" style="color: #b3b3b3;">Grad</label>
                             <input type="text" v-model="user.grad" id="Form-city" class="form-control" :disabled="!izmeni">
@@ -117,7 +122,8 @@
                           <template>
                           <button v-if="izmeni" type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="sacuvaj">Sacuvaj</button>
                           <button v-if="izmeni" type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustani">Odustani</button>
-                          </template>
+                          <button v-if="izmeni" v-b-modal.promenaLozinke type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 200px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); ">Promeni lozinku</button>
+                        </template>
                         </div>
               
                       </div>
@@ -524,7 +530,7 @@
     </b-modal>
 
    
-      <form v-if="prikazIstorije" class="message-form" style="position: relative;  top: 70px; left: 240px; width: 1200px; height: 300px; background-color:white ">
+      <form v-if="prikazIstorije" class="message-form" style="position: relative;  top: 70px; left: 240px; width: 1200px;  background-color:white ">
      
   
         <div  class="container d-flex justify-content-center" style="margin-top: 30px; ">	                        
@@ -535,6 +541,20 @@
 
             <table style="width: 100%; " class="table table-striped" >
               <tbody>
+                <tr>
+                  <td align="right">
+                    Sortiraj po:
+                  </td>
+                  <td colspan="6">
+                 <b-form-select v-model="odabirSortiranja1" @change="azuriraj1()" >
+                   <option 
+                     v-for="i in sortiranje1"
+                   >{{i}}</option>
+         
+                 </b-form-select>
+                 
+                   </td>
+               </tr>
                 <tr>
                   <th ></th>
                   <th>Tip pregleda</th>
@@ -570,7 +590,7 @@
 
     </form>
 
-    <form v-if="prikazIstorije" class="message-form" style="position: relative;  top: 30px; left: 240px; width: 1200px; height: 300px; background-color:white ">
+    <form v-if="prikazIstorije" class="message-form ; relative;" style="position: relative;  top:50px; left: 240px; width: 1200px;  background-color:white ">
      
   
       <div  class="container d-flex justify-content-center" style="margin-top: 30px; ">	                        
@@ -581,6 +601,20 @@
 
           <table style="width: 100%; " class="table table-striped" >
             <tbody>
+              <tr>
+                <td align="right">
+                  Sortiraj po:
+                </td>
+                <td colspan="6">
+               <b-form-select v-model="odabirSortiranja2" @change="azuriraj2()" >
+                 <option 
+                   v-for="i in sortiranje2"
+                 >{{i}}</option>
+       
+               </b-form-select>
+               
+                 </td>
+             </tr>
               <tr>
                 <th ></th>
                 <th>Tip operacije</th>
@@ -612,9 +646,64 @@
 
 
   </form>
+  <form   v-if="prikazZahteva" class="message-form position: relative; " style="  border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset; position: relative; top: 50px; left: 350px; width: 60%; background-color: rgba(130, 206, 209, 0.733); ">
+ 
+  <div  class="container d-flex justify-content-center" >	                        
+    <div class="card" style="width: 98%; height: 98%; margin-top: 30px; margin-bottom: 30px">	
+      <table style="width: 100%;" class="table table-hover table-fixed">
+     <thead>
+          <tr>
+            <th class="th-lg">Datum</th>
+            <th class="th-lg">Vreme</th>
+            <th class="th-lg">Vrsta Pregleda</th>
+            <th class="th-lg">Cena</th>
+            <th class="th-lg">Lekar</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr v-for="k,i in zahtevi.length">
+          <td align="center"><date-picker style="width: 117px" :placeholder="zahtevi[i].datum" disabled></date-picker> </td>
+          <td align="center">{{zahtevi[i].vreme}}h</td>
+          <td align="center">{{zahtevi[i].vrstaPregleda}}</td>
+          <td align="center">{{zahtevi[i].cena}}</td>
+          <td align="center">{{zahtevi[i].lekar.ime}} {{zahtevi[i].lekar.prezime}}</td>
+
+          <td style="text-align: center">   <button class="btn btn-warning"  v-on:click="odobriZahtev(zahtevi[i])" style="  border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash">Odobri</i></button>
+          </td>
+          <td style="text-align: center">   <button class="btn btn-warning" v-on:click="odbijZahtev(zahtevi[i])" style=" border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash">Odbij</i></button>
+          </td> 
+         
+        </tr>
+        </tbody>
+      </table>
+</div>
+</div>        
+</form>
 
 
-  </div>   
+  
+  <b-modal ref="my-modal" id="promenaLozinke" hide-footer title="Promeni Lozinku">
+      <label for="Form-city" style="color: #b3b3b3;">Stara lozinka</label>
+      <input type="text" v-model="drugaLozinka.staraLozinka" id="Form-city" class="form-control">
+    
+      <label for="Form-city" style="color: #b3b3b3;">Nova lozinka</label>
+      <input type="text" v-model="drugaLozinka.novaLozinka" id="Form-city" class="form-control">
+    
+      <label for="Form-city" style="color: #b3b3b3;">Ponovljena lozinka</label>
+      <input type="text" v-model="drugaLozinka.ponovljenaLozinka" id="Form-city" class="form-control">
+      <br>
+    
+      <b-button v-b-modal.greska @click="sacuvajDruguLozinku"  style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Sacuvaj</b-button>
+      <b-button @click="odustaniDrugaLozinka"  style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Odustani</b-button>
+    
+    </b-modal>
+
+    <b-modal ref="my-modal" id="greska" hide-footer title="Klinicki Centar">
+        <b-alert v-if="error" show variant="danger" class="d-flex justify-content-center">{{errormessage}}</b-alert>
+        <b-alert v-else show variant="success" class="d-flex justify-content-center">{{errormessage}}</b-alert>
+</b-modal> 
 
 </div>
 
@@ -659,6 +748,10 @@ import StarRating from 'vue-star-rating';
         basOperacije: [],
         basPregledi: [],
         sortiranje: ['Naziv', 'Adresa', 'Ocena'],
+        sortiranje1: ['Tip Pregleda', 'Datum'],
+        sortiranje2: ['Tip Pregleda', 'Datum'],
+        odabirSortiranja2: "",
+        odabirSortiranja1: "",
         odabirSortiranja: "",
         zahtevZaPregled: {
            datum: "",
@@ -693,12 +786,20 @@ import StarRating from 'vue-star-rating';
         selektovaniFilter1: "",
         cenaPregleda: "",
         pretrazeniLekari: {},
+        drugaLozinka: {
+        staraLozinka: "",
+        novaLozinka: "",
+        error: "",
+        errormessage: "",
+        ponovljenaLozinka: "",
+      },
         pomocniLekari: {},
         pomocniLekari1: [],
         ukljucenaPretraga1: false,
         ukljucenaPretraga: false,
         prikaz:false,
         prikazZK:false,
+        prikazZahteva:false,
         prikazPREGLED:false,
         prikazPregled:false,
         prikazUDPREGLEDI:false,
@@ -706,6 +807,7 @@ import StarRating from 'vue-star-rating';
         prikazKlinike: false,
         izmeni:false,
         prikazIstorije: false,
+        zahtevi: {},
         id: 10,
         value: { },
         v:"",
@@ -717,6 +819,42 @@ import StarRating from 'vue-star-rating';
         }
     },
     methods: {
+      odobriZahtev(zahtev){
+        axios
+          .put("/pregled/odobri", zahtev)
+          .then(odgovor =>{
+            alert("Odobrili ste pregled.");
+            this.prikazZahteva=false;
+            this.otvoriZahteve();
+
+          })
+          .catch(error => {
+              console.log(error)
+              alert("Greska!");
+          });
+      },
+
+      otvoriZahteve(){
+              this.prikazZahteva=!this.prikazZahteva;
+              this.prikaz=false;
+              this.prikazZK = false;
+              this.prikazPregled=false;
+              this.prikazListaKlinika=false;
+              this.prikazUDPREGLEDI=false;
+              this.prikazKlinike=false;
+              this.prikazIstorije=false;
+
+              axios
+		      .get("/pacijent/izlistajZahteve/" + this.$store.state.user.id)
+		      .then(odgovor => {
+		        this.zahtevi = odgovor.data;
+		      })
+		      .catch(error => {
+		        console.log(error);
+          });
+
+      },
+
   oceniKlinikuP(id){
     this.ocenaPK.klinikaId = id;
     axios
@@ -769,6 +907,7 @@ import StarRating from 'vue-star-rating';
               this.prikazUDPREGLEDI=false;
               this.prikazKlinike=false;
               this.prikazIstorije=false;
+              this.prikazZahteva=false;
           },
   odjava(){
               localStorage.removeItem("jwt");
@@ -828,6 +967,8 @@ import StarRating from 'vue-star-rating';
               this.prikazUDPREGLEDI=false;
               this.prikazKlinike=false;
               this.prikazIstorije=false;
+              this.prikazZahteva=false;
+
                },
 
 
@@ -850,6 +991,8 @@ import StarRating from 'vue-star-rating';
               this.prikazZK=false;
               this.prikazUDPREGLEDI=false;
               this.prikazIstorije=false;
+              this.prikazZahteva=false;
+
           })
     },
     odustaniOdPregleda(){
@@ -863,13 +1006,15 @@ import StarRating from 'vue-star-rating';
               this.prikazUDPREGLEDI=false;
               this.prikazKlinike=false;
               this.prikazIstorije=false;
+              this.prikazZahteva=false;
+
 
     },
   pretraziLekara(){
 
   if(!this.ukljucenaPretraga){
           axios
-        .post("/lekar/pretraga/" + this.$store.state.user.id, this.pretragaLekara)
+        .post("/lekar/pretragaP/" + this.$store.state.user.id, this.pretragaLekara)
         .then(lekari =>{
          this.lekari = lekari.data;
             
@@ -1044,6 +1189,8 @@ import StarRating from 'vue-star-rating';
         .post("/pregled/zakaziUDPregled/"+this.$store.state.user.id, p)
         .then(() => {
               alert('Uspesno ste zakazali pregled');
+              this.prikazUDPREGLEDI=false;
+            this.prikazudpregledi(this.klinika);
 	        })
 	
 		    .catch(function (error) {
@@ -1059,6 +1206,8 @@ import StarRating from 'vue-star-rating';
               this.prikazUDPREGLEDI=false;
               this.prikazKlinike=false;
               this.prikazIstorije=false;
+              this.prikazZahteva=false;
+
          },
   izmena() {
               this.izmeni = true;
@@ -1103,6 +1252,8 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
               this.prikazKlinike=false;
               this.prikazPregled=false;
               this.prikazIstorije=false;
+              this.prikazZahteva=false;
+
               
 
 
@@ -1125,6 +1276,8 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
             this.prikazUDPREGLEDI=false;
             this.prikazKlinike=false;
             this.prikazIstorije=false;
+            this.prikazZahteva=false;
+
           
      if(this.ukljucenaPretraga){
        this.klinike=this.rezultatiPretrage;
@@ -1139,7 +1292,55 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
           console.log(error)
       });
      }
-	 },
+   },
+   odustaniDrugaLozinka(){
+        this.drugaLozinka.staraLozinka = "";
+        this.drugaLozinka.novaLozinka = "";
+        this.drugaLozinka.ponovljenaLozinka = "";
+      },
+      sacuvajDruguLozinku(){
+
+        console.log('tu je');
+
+        if (
+        this.drugaLozinka.staraLozinka == "" ||
+        this.drugaLozinka.novaLozinka == "" ||
+        this.drugaLozinka.ponovljenaLozinka == ""
+      ) {
+
+        this.error = true;
+        this.errormessage = "Morate popuniti sva polja!";
+       
+        return;
+      }
+      if (this.drugaLozinka.novaLozinka !== this.drugaLozinka.ponovljenaLozinka) {
+        this.error = true;
+        this.errormessage = "Lozinke se ne poklapaju!";
+      
+        return;
+      }
+
+      axios
+        .post(
+          "/pacijent/promeniSvojuLozinku/" + this.$store.state.user.id,
+          this.drugaLozinka
+        )
+        .then(() => {
+          this.drugaLozinka = {
+            staraLozinka: "",
+            novaLozinka: "",
+            ponovljenaLozinka: ""
+          };
+          this.error = false;
+          this.errormessage = "Uspesno ste promenili lozinku";
+        })
+        .catch(error => {
+          this.error = true;
+          this.errormessage = "Netacna stara lozinka!";
+      
+          console.log(error);
+        });
+      },
   odustani() {
             this.izmeni = false
     axios
@@ -1184,37 +1385,35 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
          this.preglediIstorija=pregledi.data;
        //  console.log(this.preglediIstorija.length);
 
-
-         for( var i = 0; i < this.preglediIstorija.length; i++){ 
+          if(this.basPregledi.length===0){
+            for( var i = 0; i < this.preglediIstorija.length; i++){
             if(this.preglediIstorija[i].vrstaPregleda===this.p){
-              
+              this.basPregledi.push(this.preglediIstorija[i]);
 
-              if(this.basPregledi.length===0){
-                this.basPregledi.push(this.preglediIstorija[i]);
-              }else{
-              for( var j = 0; j <= this.basPregledi; j++){ 
-                if(this.basPregledi[j]===this.preglediIstorija[i]){
-                  break;
-                }  else{
-                  this.basPregledi.push(this.preglediIstorija[i]);
-              }
-            }
-
-          }
             }else{
-              if(this.basOperacije.length===0){
-                this.basOperacije.push(this.preglediIstorija[i]);
-              }else{
-              for( var k = 0; k <this.basOperacije; k++){ 
-                if(this.basOperacije[k]===this.preglediIstorija[i]){
-                  break;
-                }else{
-                  this.basOperacije.push(this.preglediIstorija[i]);
-              }
+              this.basOperacije.push(this.preglediIstorija[i]);
+
             }
           }
+          }else{
+            if(this.preglediIstorija[i].vrstaPregleda===this.p){
+               for( var i = 0; i < this.preglediIstorija.length; i++){
+                 if(this.basPregledi.includes(this.preglediIstorija[i])==0){
+                  this.basPregledi.push(this.preglediIstorija[i]);
+                 }
+
           }
-        }
+          }else{
+          for( var i = 0; i < this.preglediIstorija.length; i++){
+                 if(this.basOperacije.includes(this.preglediIstorija[i])==0){
+                  this.basOperacije.push(this.preglediIstorija[i]);
+                 }
+
+          }
+          }
+          }
+
+
          
         })
         .catch(error => {
@@ -1227,6 +1426,8 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
             this.prikazPregled=false;
             this.prikazUDPREGLEDI=false;
             this.prikazKlinike=false;
+            this.prikazZahteva=false;
+
 
 
     },
@@ -1242,7 +1443,32 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
 		          console.log(error)
 		      });
 	  	},
+      azuriraj1(){
+    
+    axios
+      .put("/pregled/azurirajPreglede/" + this.$store.state.user.id, this.odabirSortiranja1)
+      .then(pregledi => {
+          this.basPregledi = pregledi.data;
+
+        })
+      .catch(error => {
+          console.log(error)
+      });
   },
+  azuriraj2(){
+    
+    axios
+      .put("/pregled/azurirajOperacije/"+ this.$store.state.user.id , this.odabirSortiranja2)
+      .then(pregledi => {
+          this.basOperacije = pregledi.data;
+
+        })
+      .catch(error => {
+          console.log(error)
+      });
+  },
+  },
+  
     beforeUpdate()
     {
 
@@ -1415,7 +1641,8 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
 
     },
    mounted() {
-     
+    event.preventDefault();
+
         axios
         .get("/pacijent/get/"  + this.$store.state.user.id)
         .then(pacijent =>{

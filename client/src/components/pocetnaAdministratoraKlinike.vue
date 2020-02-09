@@ -23,7 +23,8 @@
           </a>
 
           <a href="#">
-            <i v-on:click="otvoriMedicinskeSestreKlinike"> MEDICINSKE SESTRE KLINIKE </i>
+            <b v-on:click="otvoriMedicinskeSestreKlinike" class="zmdi zmdi-link" v-if="prikazMedicinskeSestreKlinike" style="color:  rgba(130, 206, 209, 0.733)"> MEDICINSKE SESTRE KLINIKE </b>
+            <i v-on:click="otvoriMedicinskeSestreKlinike" v-else> MEDICINSKE SESTRE KLINIKE </i>
         </a>
         
             <a href="#">
@@ -41,9 +42,9 @@
           </a>
             <a href="#">
 
-                <b v-on:click="otvoriPretragaIfiltriranjeSala" class="zmdi zmdi-link" v-if="prikazPretragaIfiltriranjeSala" style="color:  rgba(130, 206, 209, 0.733)" > PRETRAGA I FILTRIRANJE SALA </b> 
+                <b v-on:click="otvoriZahteveZaPregled" class="zmdi zmdi-link" v-if="prikazZahtevaZaPregled" style="color:  rgba(130, 206, 209, 0.733)" > ZAHTEVI ZA PREGLED </b> 
             
-              <i v-on:click="otvoriZahteveZaPregled"> PRETRAGA I FILTRIRANJE SALA </i>
+              <i v-on:click="otvoriZahteveZaPregled" v-else> ZAHTEVI ZA PREGLED </i>
 
           </a>
           <a href="#">
@@ -51,7 +52,8 @@
               <i v-on:click="otvoriZahteveZaOdmor" v-else> ZAHTEVI ZA ODMOR </i>
           </a>
           <a href="#">
-            <i v-on:click="otvoriIzvestajOPoslovanju"> IZVESTAJ O POSLOVANJU </i>
+              <b v-on:click="otvoriIzvestajOPoslovanju" class="zmdi zmdi-link" v-if="prikazIzvestajOPoslovanju" style="color:  rgba(130, 206, 209, 0.733)" > IZVESTAJ O POSLOVANJU </b> 
+            <i v-on:click="otvoriIzvestajOPoslovanju" v-else> IZVESTAJ O POSLOVANJU </i>
         </a>
             <a href="#">
 	                <i class="zmdi zmdi-view-dashboard"   style="color: lightcoral" v-on:click="odjava"> ODJAVA
@@ -94,12 +96,10 @@
                                           
                                           <label for="Form-phone" style="color: #b3b3b3;">Telefon</label>
                                           <input type="text" v-model="korisnik.telefon" id="Form-phone" class="form-control" :disabled="!izmeni">
-                                          
-                                          <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
-                                          <input type="text" v-model="korisnik.adresa" id="Form-email4" class="form-control" :disabled="!izmeni">
+                                         
 
                                           <label for="Form-email4" style="color: #b3b3b3;">JMBG</label>
-                                          <input type="text" v-model="korisnik.jmbg" id="Form-email4" class="form-control" disabled>
+                                          <input type="text" v-model="korisnik.jmbg" id="Form-email4" class="form-control" :disabled="!izmeni">
                                         
                                           
                             
@@ -108,12 +108,15 @@
                                         <div class="col">
                                         <div class="md-form pb-3">
                             
-                                          <label for="Form-city" style="color: #b3b3b3;">Lozinka</label>
-                                          <input type="text" v-model="korisnik.lozinka" id="Form-city" class="form-control" disabled>
+                                       
                                           
                                           <label for="Form-prezime" style="color: #b3b3b3;">Prezime</label>
                                           <input type="text" v-model="korisnik.prezime" id="Form-prezime" class="form-control" :disabled="!izmeni">
                             
+ 
+                                          <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
+                                          <input type="text" v-model="korisnik.adresa" id="Form-email4" class="form-control" :disabled="!izmeni">
+
                                           
                                           <label for="Form-city" style="color: #b3b3b3;">Grad</label>
                                           <input type="text" v-model="korisnik.grad" id="Form-city" class="form-control" :disabled="!izmeni">
@@ -137,7 +140,8 @@
                                         <template>
                                         <button v-if="izmeni" type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="sacuvaj">Sacuvaj</button>
                                         <button v-if="izmeni" type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustani">Odustani</button>
-                                        </template>
+                                        <button v-if="izmeni" v-b-modal.promenaLozinke type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 200px; height: 35px;border-color: rgba(130, 206, 209, 0.733);  background-color: rgba(130, 206, 209, 0.733); ">Promeni lozinku</button>  
+                                      </template>
                                       </div>
                             
                                     </div>
@@ -1011,6 +1015,22 @@
             </div>
           </form>
           
+          <b-modal ref="my-modal" id="promenaLozinke" hide-footer title="Promeni Lozinku">
+            <label for="Form-city" style="color: #b3b3b3;">Stara lozinka</label>
+            <input type="text" v-model="drugaLozinka.staraLozinka" id="Form-city" class="form-control">
+          
+            <label for="Form-city" style="color: #b3b3b3;">Nova lozinka</label>
+            <input type="text" v-model="drugaLozinka.novaLozinka" id="Form-city" class="form-control">
+          
+            <label for="Form-city" style="color: #b3b3b3;">Ponovljena lozinka</label>
+            <input type="text" v-model="drugaLozinka.ponovljenaLozinka" id="Form-city" class="form-control">
+            <br>
+          
+            <b-button v-b-modal.greska @click="sacuvajDruguLozinku"  style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Sacuvaj</b-button>
+            <b-button @click="odustaniDrugaLozinka"  style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Odustani</b-button>
+          
+          </b-modal>
+
           <b-modal ref="my-modal" id="greska" hide-footer title="Klinicki Centar">
             <b-alert v-if="error" show variant="danger" class="d-flex justify-content-center">{{errormessage}}</b-alert>
             <b-alert v-else show variant="success" class="d-flex justify-content-center">{{errormessage}}</b-alert>
@@ -1131,6 +1151,11 @@ export default {
         lekar: {},
         sala: {}
         },
+        drugaLozinka: {
+          staraLozinka: "",
+          novaLozinka: "",
+          ponovljenaLozinka: "",
+        },
         sala: {
         	id: "",
 	        naziv: "",
@@ -1214,7 +1239,7 @@ export default {
       installComponents: true,
       error: false,
       message: "",
-       center: { lat: 45.508, lng: -73.587 },
+      center: { lat: 45.508, lng: -73.587 },
       markers: [],
       places: [],
       currentPlace: null,
@@ -1232,6 +1257,56 @@ export default {
       this.prikazZahtevaZaOdmor = false;
       this.prikazZahtevaZaPregled = false; */
     },
+    odustaniDrugaLozinka(){
+        this.drugaLozinka.staraLozinka = "";
+        this.drugaLozinka.novaLozinka = "";
+        this.drugaLozinka.ponovljenaLozinka = "";
+      },
+      sacuvajDruguLozinku(){
+
+        console.log('tu je');
+
+        if (
+        this.drugaLozinka.staraLozinka == "" ||
+        this.drugaLozinka.novaLozinka == "" ||
+        this.drugaLozinka.ponovljenaLozinka == ""
+      ) {
+
+        this.error = true;
+        this.errormessage = "Morate popuniti sva polja!";
+       
+        return;
+      }
+      if (this.drugaLozinka.novaLozinka !== this.drugaLozinka.ponovljenaLozinka) {
+        this.error = true;
+        this.errormessage = "Lozinke se ne poklapaju!";
+      
+        return;
+      }
+
+    console.log(this.korisnik.lozinka);
+
+      axios
+        .post(
+          "/adminKlinike/promeniSvojuLozinku/" + this.$store.state.user.id,
+          this.drugaLozinka
+        )
+        .then(() => {
+          this.drugaLozinka = {
+            staraLozinka: "",
+            novaLozinka: "",
+            ponovljenaLozinka: ""
+          };
+          this.error = false;
+          this.errormessage = "Uspesno ste promenili lozinku";
+        })
+        .catch(error => {
+          this.error = true;
+          this.errormessage = "Netacna stara lozinka!";
+      
+          console.log(error);
+        });
+      },
     setPlace(place) {
       this.currentPlace = place;
     },
@@ -1252,11 +1327,11 @@ export default {
       }
     },
     geolocate: function() {
-      navigator.geolocation.getCurrentPosition(position => {
+     navigator.geolocation.getCurrentPosition(position => {
         this.center = {
           lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
+          lng: position.coords.longitude,  
+       };
       });
     },
         otvoriKalendar(sala){
@@ -1329,7 +1404,7 @@ export default {
             axios
           .put("/zahtevZaOdmor/odbij", zahtev)
           .then(odgovor =>{
-            this.otvoriZahteveZaOdmor();
+            
           })
           .catch(error => {
               console.log(error)
@@ -1337,11 +1412,9 @@ export default {
           });
         },
         otvoriZahteveZaPregled(){
-          //this.ponisti();
 
-         
+          this.prikazZahtevaZaPregled = !this.prikazZahtevaZaPregled;
 
-          this.prikazZahtevaZaPregled = true;
           axios
 		      .get("/adminKlinike/izlistajZahteveZaPregled/" + this.$store.state.user.id)
 		      .then(odgovor => {
@@ -1353,9 +1426,21 @@ export default {
 		      .catch(error => {
 		        console.log(error);
 		      });
+       
+         this.prikazProfil = false,
+		     this.prikazIzmenaKlinike = false,
+		     this.prikazLekariKlinike = false,
+		     this.prikazDefinisanjePregleda = false,
+		     this.prikazUpravljanjeSalama = false,
+		     this.prikazUpravljanjeTipovimaPregleda = false,
+         this.prikazZahtevaZaPregled = !this.prikazZahtevaZaPregled, 
+         this.prikazZahtevaZaOdmor = false, 
+         this.prikazMedicinskeSestreKlinike = false, 
+         this.prikazIzvestajOPoslovanju = false
+
+         
         },
         otvoriZahteveZaOdmor(){
-
 
           this.prikazProfil = false,
 		     this.prikazIzmenaKlinike = false,
@@ -1363,10 +1448,10 @@ export default {
 		     this.prikazDefinisanjePregleda = false,
 		     this.prikazUpravljanjeSalama = false,
 		     this.prikazUpravljanjeTipovimaPregleda = false,
-         this.prikazPretragaIfiltriranjeSala = false, 
-         this.prikazZahtevaZaOdmor = !this.prikazZahtevaZaOdmor,
-         // this.ponisti();
-      
+         this.prikazZahtevaZaPregled = false, 
+         this.prikazZahtevaZaOdmor = !this.prikazZahtevaZaOdmor, 
+         this.prikazMedicinskeSestreKlinike = false, 
+         this.prikazIzvestajOPoslovanju = false, 
          
          axios
 		      .get("/adminKlinike/izlistajZahteveZaOdmor/" + this.$store.state.user.id)
@@ -1387,25 +1472,26 @@ export default {
 		     this.prikazDefinisanjePregleda = false,
 		     this.prikazUpravljanjeSalama = false,
 		     this.prikazUpravljanjeTipovimaPregleda = false,
-         this.prikazPretragaIfiltriranjeSala = false, 
+         this.prikazZahtevaZaPregled = false, 
          this.prikazZahtevaZaOdmor = false, 
-
-          //this.ponisti();
-          this.prikazProfil=!this.prikazProfil;
+         this.prikazMedicinskeSestreKlinike = false, 
+         this.prikazIzvestajOPoslovanju = false, 
 		     this.ponistiPretraguSala(),
 		     this.ponistiFiltriranjeSala()
 		     
         },
          otvoriUpravljanjeTipovimaPregleda(){
 
-             this.prikazProfil = false,
+          this.prikazProfil = false,
 		     this.prikazIzmenaKlinike = false,
 		     this.prikazLekariKlinike = false,
 		     this.prikazDefinisanjePregleda = false,
 		     this.prikazUpravljanjeSalama = false,
-		     this.prikazUpravljanjeTipovimaPregleda =  !this.prikazUpravljanjeTipovimaPregleda
-         this.prikazPretragaIfiltriranjeSala = false,
+		     this.prikazUpravljanjeTipovimaPregleda = !this.prikazUpravljanjeTipovimaPregleda,
+         this.prikazZahtevaZaPregled = false, 
          this.prikazZahtevaZaOdmor = false, 
+         this.prikazMedicinskeSestreKlinike = false, 
+         this.prikazIzvestajOPoslovanju = false, 
 		     this.ponistiPretraguSala(),
 		     this.ponistiFiltriranjeSala()
 		     
@@ -1419,14 +1505,7 @@ export default {
 		      });
         },
          otvoriUpravljanjeSalama(){
-             this.prikazProfil = false,
-		     this.prikazIzmenaKlinike = false,
-		     this.prikazLekariKlinike = false,
-		     this.prikazDefinisanjePregleda = false,
-		     this.prikazUpravljanjeSalama = !this.prikazUpravljanjeSalama,
-		     this.prikazUpravljanjeTipovimaPregleda =  false,
-          this.prikazPretragaIfiltriranjeSala = false,	
-          this.prikazZahtevaZaOdmor = false, 
+        
  		     this.ponistiPretraguSala(),	  
  		     this.ponistiFiltriranjeSala()   
 		        
@@ -1442,41 +1521,33 @@ export default {
         },
         otvoriDefinisanjePregleda(){
           
-           this.prikazProfil = false,
-	       this.prikazIzmenaKlinike = false,
-	       this.prikazLekariKlinike = false,
-	       this.prikazDefinisanjePregleda = !this.prikazDefinisanjePregleda,
-	       this.prikazUpravljanjeSalama = false,
-		   this.prikazUpravljanjeTipovimaPregleda =  false,
-       this.prikazPretragaIfiltriranjeSala = false,
-       this.prikazZahtevaZaOdmor = false, 
+          this.prikazProfil = false,
+		     this.prikazIzmenaKlinike = false,
+		     this.prikazLekariKlinike = false,
+		     this.prikazDefinisanjePregleda = !this.prikazDefinisanjePregleda,
+		     this.prikazUpravljanjeSalama = false,
+		     this.prikazUpravljanjeTipovimaPregleda = false,
+         this.prikazZahtevaZaPregled = false, 
+         this.prikazZahtevaZaOdmor = false, 
+         this.prikazMedicinskeSestreKlinike = false, 
+         this.prikazIzvestajOPoslovanju = false, 
        
 		   this.ponistiPretraguSala(),
 		   this.ponistiFiltriranjeSala()
         },
         otvoriPretragaIfiltriranjeSala(){
-          
-           this.prikazProfil = false,
-	       this.prikazIzmenaKlinike = false,
-	       this.prikazLekariKlinike = false,
-	       this.prikazDefinisanjePregleda = false,
-	       this.prikazUpravljanjeSalama = false,
-		   this.prikazUpravljanjeTipovimaPregleda =  false,
-       this.prikazPretragaIfiltriranjeSala =  !this.prikazPretragaIfiltriranjeSala ,
-       this.prikazZahtevaZaOdmor = false, 
+          this.prikazProfil = false,
+		     this.prikazIzmenaKlinike = false,
+		     this.prikazLekariKlinike = false,
+		     this.prikazDefinisanjePregleda = false,
+		     this.prikazUpravljanjeSalama = false,
+		     this.prikazUpravljanjeTipovimaPregleda = false,
+         this.prikazPretragaIfiltriranjeSala = !this.prikazPretragaIfiltriranjeSala, 
+         this.prikazZahtevaZaOdmor = false, 
+         this.prikazMedicinskeSestreKlinike = false, 
+         this.prikazIzvestajOPoslovanju = false, 
 		   this.ponistiPretraguSala(),
        this.ponistiFiltriranjeSala(),
-
-      
-      
-     
-            
-  
-
-          //this.ponisti();
-          this.prikazUpravljanjeTipovimaPregleda=!this.prikazUpravljanjeTipovimaPregleda;
-          this.ponistiPretraguSala(),
-          this.ponistiFiltriranjeSala()
           
           axios
             .get("/tipPregleda/TipoviKlinike/" + this.$store.state.user.id)
@@ -1488,8 +1559,16 @@ export default {
             });
         },
          otvoriUpravljanjeSalama(){
-          this.ponisti();
-          this.prikazUpravljanjeSalama=!this.prikazUpravljanjeSalama;
+          this.prikazProfil = false,
+		     this.prikazIzmenaKlinike = false,
+		     this.prikazLekariKlinike = false,
+		     this.prikazDefinisanjePregleda = false,
+		     this.prikazUpravljanjeSalama = !this.prikazUpravljanjeSalama,
+		     this.prikazUpravljanjeTipovimaPregleda = false,
+         this.prikazZahtevaZaPregled = false, 
+         this.prikazZahtevaZaOdmor = false, 
+         this.prikazMedicinskeSestreKlinike = false, 
+         this.prikazIzvestajOPoslovanju = false, 
           this.ponistiPretraguSala(),	  
           this.ponistiFiltriranjeSala()   
               axios
@@ -1502,14 +1581,10 @@ export default {
                 console.log(error)
             });
         },
-        otvoriDefinisanjePregleda(){
-          this.ponisti();
-          this.prikazDefinisanjePregleda=!this.prikazDefinisanjePregleda;
-          this.ponistiPretraguSala(),
-          this.ponistiFiltriranjeSala()
-        },
+    
         otvoriPretragaIfiltriranjeSala(trenutniZahtev) {
 
+      
           axios
 		      .get("/lekar/izlistajPoIdAdmina/" + this.$store.state.user.id)
 		      .then(lekar =>{
@@ -1523,7 +1598,15 @@ export default {
           
           this.trenutniZahtevZaPregled = trenutniZahtev;
 
-          this.ponisti();
+         this.prikazProfil = false,
+		     this.prikazIzmenaKlinike = false,
+		     this.prikazLekariKlinike = false,
+		     this.prikazDefinisanjePregleda = false,
+		     this.prikazUpravljanjeSalama = false,
+		     this.prikazUpravljanjeTipovimaPregleda = false,
+         this.prikazZahtevaZaOdmor = false, 
+         this.prikazMedicinskeSestreKlinike = false, 
+         this.prikazIzvestajOPoslovanju = false, 
           this.prikazPretragaIfiltriranjeSala=!this.prikazPretragaIfiltriranjeSala;
           this.ponistiPretraguSala();
 
@@ -1543,24 +1626,19 @@ export default {
         },
     
         otvoriLekariKlinike(){
+          this.prikazProfil = false,
+		     this.prikazIzmenaKlinike = false,
+		     this.prikazLekariKlinike = !this.prikazLekariKlinike,
+		     this.prikazDefinisanjePregleda = false,
+		     this.prikazUpravljanjeSalama = false,
+		     this.prikazUpravljanjeTipovimaPregleda = false,
+         this.prikazZahtevaZaPregled = false, 
+         this.prikazZahtevaZaOdmor = false, 
+         this.prikazMedicinskeSestreKlinike = false, 
+         this.prikazIzvestajOPoslovanju = false, 
 
-            
-            
-              this.prikazProfil = false,
-		      this.prikazIzmenaKlinike = false,
-		      this.prikazLekariKlinike = !this.prikazLekariKlinike,
-		      this.prikazDefinisanjePregleda = false,
-		      this.prikazUpravljanjeSalama = false,
-		      this.prikazUpravljanjeTipovimaPregleda =  false,
-            this.prikazPretragaIfiltriranjeSala = false,
-            this.prikazZahtevaZaOdmor = false, 
                 this.ponistiPretraguSala(),
                  this.ponistiFiltriranjeSala()
-
-          this.ponisti();
-          this.prikazLekariKlinike=!this.prikazLekariKlinike;
-          this.ponistiPretraguSala(),
-          this.ponistiFiltriranjeSala()
 
             axios
 		      .get("/lekar/izlistaj/" + this.idKlinike)
@@ -1575,14 +1653,16 @@ export default {
 
         otvoriMedicinskeSestreKlinike(){
             
-        this.prikazProfil = false,
-        this.prikazIzmenaKlinike = false,
-        this.prikazMedicinskeSestreKlinike = !this.prikazMedicinskeSestreKlinike,
-        this.prikazLekariKlinike = false,
-        this.prikazDefinisanjePregleda = false,
-        this.prikazUpravljanjeSalama = false,
-        this.prikazUpravljanjeTipovimaPregleda =  false,
-        this.prikazPretragaIfiltriranjeSala = false,
+         this.prikazProfil = false,
+		     this.prikazIzmenaKlinike = false,
+		     this.prikazLekariKlinike = false,
+		     this.prikazDefinisanjePregleda = false,
+		     this.prikazUpravljanjeSalama = false,
+		     this.prikazUpravljanjeTipovimaPregleda = false,
+         this.prikazZahtevaZaPregled = false, 
+         this.prikazZahtevaZaOdmor = false, 
+         this.prikazMedicinskeSestreKlinike = !this.prikazMedicinskeSestreKlinike, 
+         this.prikazIzvestajOPoslovanju = false, 
         this.ponistiPretraguSala(),
         this.ponistiFiltriranjeSala()
           axios
@@ -1990,15 +2070,16 @@ export default {
       .catch(error => {
           console.log(error)
       });
-      this.prikazIzmenaKlinike = !this.prikazIzmenaKlinike;
-    	 this.prikazProfil = false;
-	     this.prikazLekariKlinike = false,
-	     this.prikazDefinisanjePregleda = false,
-	     this.prikazUpravljanjeSalama =  false,
-	     this.prikazUpravljanjeTipovimaPregleda =  false,
-         this.prikazPretragaIfiltriranjeSala = false,
-         this.prikazZahtevaZaOdmor = false
-    	 this.ponisti(this.ponistizmenaKlinike);
+         this.prikazProfil = false,
+		     this.prikazIzmenaKlinike = !this.prikazIzmenaKlinike,
+		     this.prikazLekariKlinike = false,
+		     this.prikazDefinisanjePregleda = false,
+		     this.prikazUpravljanjeSalama = false,
+		     this.prikazUpravljanjeTipovimaPregleda = false,
+         this.prikazZahtevaZaPregled = false, 
+         this.prikazZahtevaZaOdmor = false, 
+         this.prikazMedicinskeSestreKlinike = false, 
+         this.prikazIzvestajOPoslovanju = false
      
     },
        izaberiSaluZaIzmenu(sala) {
@@ -2021,6 +2102,8 @@ export default {
          
            this.error = false;
            this.errormessage = this.errormessage;
+
+           
            
            axios
 		      .get("/adminKlinike/izlistajZahteveZaPregled/" + this.$store.state.user.id)
@@ -2029,6 +2112,8 @@ export default {
             this.zahteviZaPregled = odgovor.data;
             console.log("nemaaaaaaaaa");
             console.log(this.zahteviZaPregled.length);
+
+          
 		      })
 		      .catch(error => {
 		        console.log(error);
@@ -2254,16 +2339,17 @@ export default {
     },
     otvoriIzvestajOPoslovanju(){
 
-      this.prikazIzvestajOPoslovanju=!this.prikazIzvestajOPoslovanju;
-      this.prikazProfil=false;
-      this.ponistizmenaKlinike= false;
-      this.prikazLekariKlinike= false;
-      this.prikazDefinisanjePregleda= false;
-      this.prikazUpravljanjeSalama= false;
-      this.prikazUpravljanjeTipovimaPregleda= false;
-      this.prikazPretragaIfiltriranjeSala= false;
-      this.prikazZahtevaZaOdmor= false;
-      this.prikazZahtevaZaPregled= false;
+  
+         this.prikazProfil = false,
+		     this.prikazIzmenaKlinike = false,
+		     this.prikazLekariKlinike = false,
+		     this.prikazDefinisanjePregleda = false,
+		     this.prikazUpravljanjeSalama = false,
+		     this.prikazUpravljanjeTipovimaPregleda = false,
+         this.prikazPretragaIfiltriranjeSala = false, 
+         this.prikazZahtevaZaOdmor = false, 
+         this.prikazMedicinskeSestreKlinike = false, 
+         this.prikazIzvestajOPoslovanju = !this.prikazIzvestajOPoslovanju, 
       this.izlistajKliniku();
       this.izlistajLekare()
     },
@@ -2500,15 +2586,7 @@ export default {
         console.log(error);
       });
       
-      axios
-		      .get("/lekar/izlistajPoIdAdmina/" + this.$store.state.user.id)
-		      .then(lekar =>{
-		        this.lekari = lekar.data;
-		        
-		      })
-		      .catch(error => {
-		          console.log(error)
-		      });
+     
             
   }
 };
