@@ -45,7 +45,7 @@ public class ZahtevZaPregled {
 		@Column(name = "status")
 		private String status;
 		
-		@Column(name = "prihvacenOdPacijenta")
+		@Column(name = "prihvacenOdPacijenta", nullable= true)
 		private Boolean prihvacenOdPacijenta;
 		
 		public Boolean getPrihvacenOdPacijenta() {

@@ -213,16 +213,18 @@ public class PacijentController {
 	
 
 	@GetMapping(value = "/izlistajZahteve/{id}")
-	@PreAuthorize("hasAnyAuthority('PACIJENT')")
+	@PreAuthorize("hasAuthority('PACIJENT')")
 	public ResponseEntity<List<ZahtevZaPregledDTO>> izlistajZahteve(@PathVariable Long id) {
 
 		
 
 		Collection<ZahtevZaPregled> listaZahteva = new ArrayList<ZahtevZaPregled>();
 		List<ZahtevZaPregledDTO> listaZahtevaDTO = new ArrayList<ZahtevZaPregledDTO>();
-
+try {
 		listaZahteva =zahtevZaPregledService.izlistaj(id);
-		
+}catch (Exception e) {
+	// TODO: handle exception
+}	
 		
 		for (ZahtevZaPregled zzp : listaZahteva) {
 				listaZahtevaDTO.add(new ZahtevZaPregledDTO(zzp));

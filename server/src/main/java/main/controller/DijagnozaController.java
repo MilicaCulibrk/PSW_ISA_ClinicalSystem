@@ -67,7 +67,7 @@ public class DijagnozaController {
 	@DeleteMapping(value = "/izbrisi/{id}")
 	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
 	public ResponseEntity<List<DijagnozaDTO>> deleteDijagnoza(@PathVariable Long id) {
-
+		try {
 		Dijagnoza d = dijagnozaService.findOne(id);
 		List<DijagnozaDTO> dijagnozaDTO = new ArrayList<DijagnozaDTO>();
 		if (d != null) {
@@ -81,7 +81,11 @@ public class DijagnozaController {
 			return new ResponseEntity<>(dijagnozaDTO, HttpStatus.OK);
 
 		}
+		} catch (Exception e) {
+			// TODO: handle exception
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return null;
 	}
 }

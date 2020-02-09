@@ -44,8 +44,8 @@
          </a>
            <a href="#">
 
-             <b v-on:click="pogledajZahteve" class="zmdi zmdi-link"  v-if="prikaz1" style="color: rgba(130, 206, 209, 0.733); " >ZAHTEVI ZA REGISTRACIJU : {{zahtevi.length}}</b>
-             <i v-on:click="pogledajZahteve" class="zmdi zmdi-link" v-else >ZAHTEVI ZA REGISTRACIJU : {{zahtevi.length}}</i>  
+             <b v-on:click="pogledajZahteve" class="zmdi zmdi-link"  v-if="prikaz1" style="color: rgba(130, 206, 209, 0.733); " >ZAHTEVI ZA REGISTRACIJU</b>
+             <i v-on:click="pogledajZahteve" class="zmdi zmdi-link" v-else >ZAHTEVI ZA REGISTRACIJU </i>  
           </a>
           
            <a href="#">
@@ -212,7 +212,7 @@
                                         <template>
                                         <button v-if="!obradjen"  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odbijZahtev">Odbij</button>
                                         </template>
-                                        <template>
+                                        <template >
                                         <button v-if="obradjen"  type="button" class="btn btn-success btn-block z-depth-2"  style="color: #37474F; width: 300px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="napraviZK">Napravi zdravstveni karton</button>
                                         </template>
                                       </div>
@@ -685,6 +685,8 @@ import axios from 'axios'
       adminiKC: {},
       prikazListaLekova: false,
       prikazListaDijagnoza: false,
+      prihvacen: false,
+
       lekovi: [],
 
       dijagnoze: [],
@@ -869,8 +871,10 @@ import axios from 'axios'
         this.obradjen = false;
 
        }else{
-          this.obradjen = true;
-
+        this.obradjen = true;
+          if(zahtev.status=="PRIHVACEN"){
+            this.prihvacen = true;
+        }
         }
           this.prikazListaLekova = false;
           this.prikazListaDijagnoza = false;
@@ -1316,14 +1320,14 @@ ucitajOpetAdKC(){
 	          	          this.lek.sifra="";
 	          this.lek.naziv="";
 	 },
-	 obrisiLek(lek){
+obrisiLek(lek){
       		axios
 		      .delete("/lek/izbrisi/" + lek.id)
 		      .then(lek => {
 			        this.lekovi = lek.data;
 			      })
 		      .catch(error => {
-		          console.log(error)
+              alert("Ne mozete obrisati lek jer se nalazi u nekom od izvestaja!")
 		      });
       },
       obrisiDijagnozu(dij){
@@ -1333,7 +1337,8 @@ ucitajOpetAdKC(){
 			        this.dijagnoze = lek.data;
 			      })
 		      .catch(error => {
-		          console.log(error)
+            alert("Ne mozete obrisati dijagnozu jer se nalazi u nekom od izvestaja!")
+
 		      });
       }
     },
