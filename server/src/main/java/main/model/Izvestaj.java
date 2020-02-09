@@ -14,7 +14,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter @Setter @NoArgsConstructor 
+
 public class Izvestaj {
 	
 	@Id
@@ -57,10 +63,7 @@ public class Izvestaj {
       return pacijent;
    }
 
-public Izvestaj() {
-	super();
-	// TODO Auto-generated constructor stub
-}
+
 
 public Izvestaj(Long id,  String opis) {
 	super();
@@ -68,90 +71,8 @@ public Izvestaj(Long id,  String opis) {
 	this.opis = opis;
 }
 
-public Long getId() {
-	return id;
-}
-
-public void setId(Long id) {
-	this.id = id;
-}
 
 
-public MedicinskaSestra getMedicinskaSestra() {
-	return medicinskaSestra;
-}
-
-public void setMedicinskaSestra(MedicinskaSestra medicinskaSestra) {
-	this.medicinskaSestra = medicinskaSestra;
-}
-
-public Boolean getOverenRecept() {
-	return overenRecept;
-}
-
-public void setOverenRecept(Boolean overenRecept) {
-	this.overenRecept = overenRecept;
-}
-
-/*
-public Lek getLek() {
-	return lek;
-}
-
-public void setLek(Lek lek) {
-	this.lek = lek;
-}
-*/
-public Dijagnoza getDijagnoza() {
-	return dijagnoza;
-}
-
-public void setDijagnoza(Dijagnoza dijagnoza) {
-	this.dijagnoza = dijagnoza;
-}
-
-public String getOpis() {
-	return opis;
-}
-
-public void setOpis(String opis) {
-	this.opis = opis;
-}
-
-public Lekar getLekar() {
-	return lekar;
-}
-
-
-public void setLekar(Lekar lekar) {
-	this.lekar = lekar;
-}
-
-public ZdravstveniKarton getZdravstveniKarton() {
-	return zdravstveniKarton;
-}
-
-public void setZdravstveniKarton(ZdravstveniKarton zdravstveniKarton) {
-	this.zdravstveniKarton = zdravstveniKarton;
-}
-
-public void setPacijent(Pacijent pacijent) {
-	this.pacijent = pacijent;
-}
-
-@Override
-public String toString() {
-	return "Izvestaj [id=" + id + ",  opis=" + opis + ", pacijent=" + pacijent
-			+ ", lekar=" + lekar + ", zdravstveniKarton=" + zdravstveniKarton + "]";
-}
-
-public java.util.Collection<Lek> getLekovi() {
-	return lekovi;
-}
-
-public void setLekovi(java.util.Collection<Lek> lekovi) {
-	this.lekovi = lekovi;
-}
    
    
 }

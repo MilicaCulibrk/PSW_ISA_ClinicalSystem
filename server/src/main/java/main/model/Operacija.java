@@ -13,7 +13,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter @Setter @NoArgsConstructor 
+
 public class Operacija {
 	
 	@Id
@@ -66,103 +72,6 @@ public Operacija(Long id, long datumVreme, long trajanje, double cena, Sala sala
 }
 
 
-public Operacija() {
-	super();
-	// TODO Auto-generated constructor stub
-}
-
-
-public Long getId() {
-	return id;
-}
-
-
-public void setId(Long id) {
-	this.id = id;
-}
-
-
-public long getDatumVreme() {
-	return datumVreme;
-}
-
-
-public void setDatumVreme(long datumVreme) {
-	this.datumVreme = datumVreme;
-}
-
-
-public long getTrajanje() {
-	return trajanje;
-}
-
-
-public void setTrajanje(long trajanje) {
-	this.trajanje = trajanje;
-}
-
-
-public double getCena() {
-	return cena;
-}
-
-
-public void setCena(double cena) {
-	this.cena = cena;
-}
-
-
-public Sala getSala() {
-	return sala;
-}
-
-
-public void setSala(Sala sala) {
-	this.sala = sala;
-}
-
-
-public Lekar[] getLekar() {
-	return lekar;
-}
-
-
-public void setLekar(Lekar[] lekar) {
-	this.lekar = lekar;
-}
-
-
-public Pacijent getPacijent() {
-	return pacijent;
-}
-
-
-public void setPacijent(Pacijent pacijent) {
-	this.pacijent = pacijent;
-}
-
-
-
-public ZahtevZaOperaciju getZahtevZaOperaciju() {
-	return zahtevZaOperaciju;
-}
-
-
-public void setZahtevZaOperaciju(ZahtevZaOperaciju zahtevZaOperaciju) {
-	this.zahtevZaOperaciju = zahtevZaOperaciju;
-}
-
-
-@Override
-public String toString() {
-	return "Operacija [id=" + id + ", datumVreme=" + datumVreme + ", trajanje=" + trajanje + ", cena=" + cena
-			+ ", sala=" + sala + ", lekar=" + Arrays.toString(lekar) + ", pacijent=" + pacijent + ", zahtevZaOperaciju="
-			+ zahtevZaOperaciju + "]";
-}
-
-
-
-   
 
    
    

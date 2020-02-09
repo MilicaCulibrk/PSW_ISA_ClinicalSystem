@@ -24,29 +24,45 @@ import main.repository.ZahtevZaPregledRepository;
 @Service
 public class PregledService {
 	
-	@Autowired
-	private PregledRepository pregledRepository;
+	//@Autowired
+	private final PregledRepository pregledRepository;
 	
-	@Autowired
-	private ZahtevZaPregledRepository zahtevZaPregledRepository;
+	//@Autowired
+	private final ZahtevZaPregledRepository zahtevZaPregledRepository;
 	
 	
-	@Autowired
-	private LekarRepository lekarRepository;
+	//@Autowired
+	private final LekarRepository lekarRepository;
 	
-	@Autowired
-	private SalaRepository salaKlinikeRepository;
+	//@Autowired
+	private final SalaRepository salaKlinikeRepository;
 	
-	@Autowired
-	private TipPregledaRepository tipPregledaRepository;
+	//@Autowired
+	private final TipPregledaRepository tipPregledaRepository;
 	
-	@Autowired
-	private AdminKlinikeRepository adminKlinikeRepository;
+	//@Autowired
+	private final AdminKlinikeRepository adminKlinikeRepository;
 	
+	
+
+
+	public PregledService(PregledRepository pregledRepository, ZahtevZaPregledRepository zahtevZaPregledRepository,
+			LekarRepository lekarRepository, SalaRepository salaKlinikeRepository,
+			TipPregledaRepository tipPregledaRepository, AdminKlinikeRepository adminKlinikeRepository) {
+		super();
+		this.pregledRepository = pregledRepository;
+		this.zahtevZaPregledRepository = zahtevZaPregledRepository;
+		this.lekarRepository = lekarRepository;
+		this.salaKlinikeRepository = salaKlinikeRepository;
+		this.tipPregledaRepository = tipPregledaRepository;
+		this.adminKlinikeRepository = adminKlinikeRepository;
+	}
+
 	public Pregled findOne(Long id) {
 		return pregledRepository.findById(id).orElseGet(null);
 	}
 	
+	//pacijent bira unapred definisani pregeld i zakazuje ga
 	public Pregled zakaziPregled(Long idPacijent, Pregled pregled) {
 		  
 		pregled.setIdPacijenta(idPacijent);
@@ -57,8 +73,8 @@ public class PregledService {
 		return pregled;
 }
 
-	
-	public PregledDTO dodajPregled(PregledDTO pregledDTO) {
+	//dodaj predefinisani pregled kao administrator klinike sa ogranicenjima
+	public void dodajPregled(PregledDTO pregledDTO) {
 		Pregled pregled = new Pregled();
 		
 		
@@ -72,7 +88,6 @@ public class PregledService {
 		pregled.setIdPacijenta(null);
 		pregled.setZavrsen(false);
 		pregled.setVrstaPregleda("pregled");
-		System.out.println(pregledDTO.getTrajanjePregleda());
 		pregledRepository.save(pregled);
 		for (Sala s : salaKlinikeRepository.findAll()) {
 			if(s.getId().equals(pregledDTO.getSala().getId())){
@@ -81,14 +96,14 @@ public class PregledService {
 			}
 				
 		}
-		PregledDTO pregleddto = new PregledDTO(pregled);
-		return pregleddto;
 	}
 	
 	public List<Pregled> findAll() {
 		return pregledRepository.findAll();
 	}
 	
+	  //lekar u toku trenuntog pregleda zakazuje naredni
+	  //pacijent bira argumente za pregled i salje se adminu da odobri
 	public void dodajZahtev(ZahtevZaPregledDTO zahtevZaPregledDTO, AdministratorKlinike admin) {
 
 	

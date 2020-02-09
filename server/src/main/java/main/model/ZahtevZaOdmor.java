@@ -11,7 +11,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter @Setter @NoArgsConstructor 
+
 public class ZahtevZaOdmor {
 	
 
@@ -37,15 +43,6 @@ public class ZahtevZaOdmor {
 	@JoinColumn(name = "lekar_id", referencedColumnName = "id")
    public Lekar lekar;
 	
-	public ZahtevZaOdmor() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-
-	
-
-	
 
 	public ZahtevZaOdmor(Long id, String startDate, String endDate, MedicinskaSestra medicinskaSestra) {
 		super();
@@ -65,97 +62,6 @@ public class ZahtevZaOdmor {
 
 
 
-
-
-	public Boolean getOdobren() {
-		return odobren;
-	}
-
-
-
-
-
-
-	public void setOdobren(Boolean odobren) {
-		this.odobren = odobren;
-	}
-
-
-
-
-
-
-	public String getStartDate() {
-		return startDate;
-	}
-
-
-
-
-
-
-	public void setStartDate(String startDate) {
-		this.startDate = startDate;
-	}
-
-
-
-
-
-
-	public String getEndDate() {
-		return endDate;
-	}
-
-
-
-
-
-
-	public void setEndDate(String endDate) {
-		this.endDate = endDate;
-	}
-
-
-
-
-
-
-	public Long getId() {
-		return id;
-	}
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-
-	public MedicinskaSestra getMedicinskaSestra() {
-		return medicinskaSestra;
-	}
-
-
-	public void setMedicinskaSestra(MedicinskaSestra medicinskaSestra) {
-		this.medicinskaSestra = medicinskaSestra;
-	}
-
-
-	public Lekar getLekar() {
-		return lekar;
-	}
-
-
-	public void setLekar(Lekar lekar) {
-		this.lekar = lekar;
-	}
-
-
-	@Override
-	public String toString() {
-		return "ZahtevZaOdmor [id=" + id + ", medicinskaSestra=" + medicinskaSestra + ", lekar=" + lekar + "]";
-	}
-   
    
 
 }

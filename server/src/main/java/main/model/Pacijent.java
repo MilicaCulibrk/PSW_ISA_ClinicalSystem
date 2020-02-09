@@ -30,9 +30,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import main.dto.PacijentDTO;
 
 @Entity
+@Getter @Setter @NoArgsConstructor 
+
 public class Pacijent implements UserDetails{
 	
 	@Id
@@ -98,8 +103,21 @@ public class Pacijent implements UserDetails{
            joinColumns = @JoinColumn(name = "pacijent_id", referencedColumnName = "id"),
            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
    private List<Authority> authorities;
+   public Pacijent(PacijentDTO pacijentDTO) {
+		
+		this.id = pacijentDTO.getId();
+		this.ime = pacijentDTO.getIme();
+		this.prezime = pacijentDTO.getPrezime();
+		this.email = pacijentDTO.getEmail();
+		this.lozinka = pacijentDTO.getLozinka();
+		this.adresa = pacijentDTO.getAdresa();
+		this.grad = pacijentDTO.getGrad();
+		this.drzava = pacijentDTO.getDrzava();
+		this.telefon = pacijentDTO.getTelefon();
+		this.jmbg = pacijentDTO.getJmbg();
 
-
+	}
+/*
   
 
    
@@ -125,20 +143,8 @@ public Pacijent() {
 	// TODO Auto-generated constructor stub
 }
 
-public Pacijent(PacijentDTO pacijentDTO) {
-	
-	this.id = pacijentDTO.getId();
-	this.ime = pacijentDTO.getIme();
-	this.prezime = pacijentDTO.getPrezime();
-	this.email = pacijentDTO.getEmail();
-	this.lozinka = pacijentDTO.getLozinka();
-	this.adresa = pacijentDTO.getAdresa();
-	this.grad = pacijentDTO.getGrad();
-	this.drzava = pacijentDTO.getDrzava();
-	this.telefon = pacijentDTO.getTelefon();
-	this.jmbg = pacijentDTO.getJmbg();
 
-}
+
 
 public Pacijent(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
 		String drzava, String telefon, String jmbg) {
@@ -155,139 +161,7 @@ public Pacijent(Long id, String ime, String prezime, String email, String lozink
 	this.jmbg = jmbg;
 	this.aktiviranNalog = false;
 }
-
-public Long getId() {
-	return id;
-}
-
-public void setId(Long id) {
-	this.id = id;
-}
-
-public String getIme() {
-	return ime;
-}
-
-public void setIme(String ime) {
-	this.ime = ime;
-}
-
-
-public boolean isAktiviranNalog() {
-	return aktiviranNalog;
-}
-
-public void setAktiviranNalog(boolean aktiviranNalog) {
-	this.aktiviranNalog = aktiviranNalog;
-} 
-
-public String getPrezime() {
-	return prezime;
-}
-
-public void setPrezime(String prezime) {
-	this.prezime = prezime;
-}
-
-public String getEmail() {
-	return email;
-}
-
-public void setEmail(String email) {
-	this.email = email;
-}
-
-public String getLozinka() {
-	return lozinka;
-}
-
-public void setLozinka(String lozinka) {
-	this.lozinka = lozinka;
-}
-
-public String getAdresa() {
-	return adresa;
-}
-
-public void setAdresa(String adresa) {
-	this.adresa = adresa;
-}
-
-public String getGrad() {
-	return grad;
-}
-
-public void setGrad(String grad) {
-	this.grad = grad;
-}
-
-public String getDrzava() {
-	return drzava;
-}
-
-public void setDrzava(String drzava) {
-	this.drzava = drzava;
-}
-
-public String getTelefon() {
-	return telefon;
-}
-
-public void setTelefon(String telefon) {
-	this.telefon = telefon;
-}
-
-public String getJmbg() {
-	return jmbg;
-}
-
-public void setJmbg(String jmbg) {
-	this.jmbg = jmbg;
-}
-
-
-
-
-
-public java.util.Collection<Operacija> getOperacija() {
-	return operacija;
-}
-
-public void setOperacija(java.util.Collection<Operacija> operacija) {
-	this.operacija = operacija;
-}
-
-public ZdravstveniKarton getZdravstveniKarton() {
-	return zdravstveniKarton;
-}
-
-public void setZdravstveniKarton(ZdravstveniKarton zdravstveniKarton) {
-	this.zdravstveniKarton = zdravstveniKarton;
-}
-
-public java.util.Collection<Klinika> getKlinika() {
-	return klinika;
-}
-
-public void setKlinika(java.util.Collection<Klinika> klinika) {
-	this.klinika = klinika;
-}
-
-public java.util.Collection<Izvestaj> getIzvestaj() {
-	return izvestaj;
-}
-
-public void setIzvestaj(java.util.Collection<Izvestaj> izvestaj) {
-	this.izvestaj = izvestaj;
-}
-
-public void setAuthorities(List<Authority> authorities) {
-
-    this.authorities = authorities;
-
-}
-
-
+*/
 
 @Override
 
@@ -333,6 +207,6 @@ public boolean isEnabled() {
    
    
     
-   
+  
 
 }

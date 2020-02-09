@@ -26,7 +26,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter @Setter @NoArgsConstructor 
+
 public class MedicinskaSestra implements UserDetails{
 	
 	@Id
@@ -53,10 +59,7 @@ public class MedicinskaSestra implements UserDetails{
 		this.klinika = klinika;
 		this.zahtevZaOdmor = zahtevZaOdmor;
 	}
-	public MedicinskaSestra() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+
 	@Column(name = "ime", nullable = false)
    private String ime;
 	
@@ -105,108 +108,7 @@ public class MedicinskaSestra implements UserDetails{
 				joinColumns = @JoinColumn(name = "sestra_id", referencedColumnName = "id"),
 				inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
 		private List<Authority> authorities;
-	 
-	 public Boolean getPromenjenaLozinka() {
-			return promenjenaLozinka;
-		}
-
-		public void setPromenjenaLozinka(Boolean promenjenaLozinka) {
-			this.promenjenaLozinka = promenjenaLozinka;
-		}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
-	public String getIme() {
-		return ime;
-	}
-	public void setIme(String ime) {
-		this.ime = ime;
-	}
-	public String getPrezime() {
-		return prezime;
-	}
-	public void setPrezime(String prezime) {
-		this.prezime = prezime;
-	}
-	public int getOcena() {
-		return ocena;
-	}
-	public void setOcena(int ocena) {
-		this.ocena = ocena;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getLozinka() {
-		return lozinka;
-	}
-	public void setLozinka(String lozinka) {
-		this.lozinka = lozinka;
-	}
-	public String getAdresa() {
-		return adresa;
-	}
-	public void setAdresa(String adresa) {
-		this.adresa = adresa;
-	}
-	public String getGrad() {
-		return grad;
-	}
-	public void setGrad(String grad) {
-		this.grad = grad;
-	}
-	public String getDrzava() {
-		return drzava;
-	}
-	public void setDrzava(String drzava) {
-		this.drzava = drzava;
-	}
-	public String getTelefon() {
-		return telefon;
-	}
-	public void setTelefon(String telefon) {
-		this.telefon = telefon;
-	}
-	public String getJmbg() {
-		return jmbg;
-	}
-	public void setJmbg(String jmbg) {
-		this.jmbg = jmbg;
-	}
-	public RadniKalendar getRadniKalendar() {
-		return radniKalendar;
-	}
-	public void setRadniKalendar(RadniKalendar radniKalendar) {
-		this.radniKalendar = radniKalendar;
-	}
-	public Klinika getKlinika() {
-		return klinika;
-	}
-	public void setKlinika(Klinika klinika) {
-		this.klinika = klinika;
-	}
-	public java.util.Collection<ZahtevZaOdmor> getZahtevZaOdmor() {
-		return zahtevZaOdmor;
-	}
-	public void setZahtevZaOdmor(java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor) {
-		this.zahtevZaOdmor = zahtevZaOdmor;
-	}
-
-
-
-	public void setAuthorities(List<Authority> authorities) {
-
-		this.authorities = authorities;
-
-	}
-
-
+	
 
 	@Override
 

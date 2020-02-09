@@ -27,7 +27,20 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+
 @Entity
+@Setter
+@Getter
+@NoArgsConstructor 
+//@EqualsAndHashCode
+
+
 public class Lekar implements UserDetails{
 	
 
@@ -115,30 +128,10 @@ public class Lekar implements UserDetails{
 
 
 
-public Lekar() {
-	super();
-	// TODO Auto-generated constructor stub
-}
-public Lekar(String ime, String prezime, String email, String lozinka, String adresa, String grad, String drzava,
-		String telefon, String jmbg, Double ocena, int brojRecenzija, Collection<Izvestaj> izvestaj) {
-	super();
-	this.ime = ime;
-	this.prezime = prezime;
-	this.email = email;
-	this.lozinka = lozinka;
-	this.adresa = adresa;
-	this.grad = grad;
-	this.drzava = drzava;
-	this.telefon = telefon;
-	this.jmbg = jmbg;
-	this.ocena = ocena;
-	this.brojRecenzija = brojRecenzija;
-	this.izvestaj = izvestaj;
-}
 
 
 
-
+/*
 public Boolean getPromenjenaLozinka() {
 	return promenjenaLozinka;
 }
@@ -208,18 +201,7 @@ public void setJmbg(String jmbg) {
 public double getOcena() {
 	return ocena;
 }
-public void setOcena(java.util.Collection<OcenaLekara> ocenaLekara) {
-	
-	int suma=0;
-	int duzina=0;
-	
-	
-	for(OcenaLekara o: ocenaLekara) {
-		duzina=duzina+1;
-		suma= suma+ o.getOcena();
-	}
-	this.ocena=(double) (suma/duzina);
-}
+
 
 
 public int getBrojRecenzija() {
@@ -293,15 +275,26 @@ public Integer getKraj() {
 public void setKraj(Integer kraj) {
 	this.kraj = kraj;
 }
-
-
-
+*/
+public void setOcena(java.util.Collection<OcenaLekara> ocenaLekara) {
+			
+			int suma=0;
+			int duzina=0;
+			
+			
+			for(OcenaLekara o: ocenaLekara) {
+				duzina=duzina+1;
+				suma= suma+ o.getOcena();
+			}
+			this.ocena=(double) (suma/duzina);
+		}
 
 public void setAuthorities(List<Authority> authorities) {
 
 	this.authorities = authorities;
 
 }
+
 
 
 
@@ -380,11 +373,41 @@ public boolean isEnabled() {
 	return true;
 
 }
-public TipPregleda getTipPregleda() {
-	return tipPregleda;
-}
-public void setTipPregleda(TipPregleda tipPregleda) {
+
+
+
+
+
+public Lekar(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
+		String drzava, String telefon, String jmbg, double ocena, Integer pocetak, Integer kraj, int brojRecenzija,
+		Boolean promenjenaLozinka, Collection<Izvestaj> izvestaj, Klinika klinika, TipPregleda tipPregleda,
+		RadniKalendar radniKalendar, Collection<Pregled> pregled, Collection<Operacija> operacija,
+		Collection<ZahtevZaOdmor> zahtevZaOdmor, Collection<Recept> recept, List<Authority> authorities) {
+	super();
+	this.id = id;
+	this.ime = ime;
+	this.prezime = prezime;
+	this.email = email;
+	this.lozinka = lozinka;
+	this.adresa = adresa;
+	this.grad = grad;
+	this.drzava = drzava;
+	this.telefon = telefon;
+	this.jmbg = jmbg;
+	this.ocena = ocena;
+	this.pocetak = pocetak;
+	this.kraj = kraj;
+	this.brojRecenzija = brojRecenzija;
+	this.promenjenaLozinka = promenjenaLozinka;
+	this.izvestaj = izvestaj;
+	this.klinika = klinika;
 	this.tipPregleda = tipPregleda;
+	this.radniKalendar = radniKalendar;
+	this.pregled = pregled;
+	this.operacija = operacija;
+	this.zahtevZaOdmor = zahtevZaOdmor;
+	this.recept = recept;
+	this.authorities = authorities;
 }
 
 

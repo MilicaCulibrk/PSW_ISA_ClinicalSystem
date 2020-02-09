@@ -27,24 +27,36 @@ import main.repository.ZahtevZaPregledRepository;
 @Service
 public class ZahtevZaPregledService {
 	
-	@Autowired
-	private LekarRepository lekarRepository;
+	//@Autowired
+	private final LekarRepository lekarRepository;
 	
-	@Autowired
-	private SalaRepository salaKlinikeRepository;
+	//@Autowired
+	private final SalaRepository salaKlinikeRepository;
 	
-	@Autowired
-	private TipPregledaRepository tipPregledaRepository;
+	//@Autowired
+	private final TipPregledaRepository tipPregledaRepository;
 	
-	@Autowired
-	private ZahtevZaPregledRepository zahtevZaPregled;
+	//@Autowired
+	private final ZahtevZaPregledRepository zahtevZaPregled;
 	
-	@Autowired
-	private PregledRepository pregledRepository;
+	//@Autowired
+	private final PregledRepository pregledRepository;
 	
 	@Autowired
 	private AdminKlinikeRepository adminKlinikeRepository;
 	
+	public ZahtevZaPregledService(LekarRepository lekarRepository, SalaRepository salaKlinikeRepository,
+			TipPregledaRepository tipPregledaRepository, ZahtevZaPregledRepository zahtevZaPregled,
+			PregledRepository pregledRepository, AdminKlinikeRepository adminKlinikeRepository) {
+		super();
+		this.lekarRepository = lekarRepository;
+		this.salaKlinikeRepository = salaKlinikeRepository;
+		this.tipPregledaRepository = tipPregledaRepository;
+		this.zahtevZaPregled = zahtevZaPregled;
+		this.pregledRepository = pregledRepository;
+		this.adminKlinikeRepository = adminKlinikeRepository;
+	}
+
 	public List<ZahtevZaPregled> findAll() {
 		return zahtevZaPregled.findAll();
 	}
@@ -77,6 +89,7 @@ public List<ZahtevZaPregled> izlistaj(Long id) {
 		return listaZahteva ;
 	}
 
+
 public ZahtevZaPregled odbij(ZahtevZaPregledDTO zahtevZaPregledDTO) {
 	// TODO Auto-generated method stub
 	Collection<ZahtevZaPregled> lista = findAll();
@@ -90,8 +103,9 @@ public ZahtevZaPregled odbij(ZahtevZaPregledDTO zahtevZaPregledDTO) {
 	return null;
 }
 
+
 public void odobri(ZahtevZaPregledDTO zahtevZaPregledDTO) {
-	// TODO Auto-generated method stub
+
 	Pregled p=new Pregled();
 	
 			p.setCena(zahtevZaPregledDTO.getCena());

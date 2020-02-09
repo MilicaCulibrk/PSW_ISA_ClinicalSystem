@@ -13,7 +13,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
+@Getter @Setter @NoArgsConstructor 
 public class ZdravstveniKarton {
 	
 	@Id
@@ -49,10 +54,6 @@ public class ZdravstveniKarton {
 
    public java.util.Collection<SifranikDijagnoza> sifranikDijagnoza;
 
-	public ZdravstveniKarton() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
 	public ZdravstveniKarton(Long id, String dioptrija, String alergije, String visina, String tezina,
 			Pacijent pacijent, Collection<Izvestaj> izvestaj, Collection<SifarnikLekova> sifarnikLekova,
@@ -76,78 +77,8 @@ public class ZdravstveniKarton {
 				+ ", sifarnikLekova=" + sifarnikLekova + ", sifranikDijagnoza=" + sifranikDijagnoza + "]";
 	}
 
-	public Long getId() {
-		return id;
-	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
 
-	public String getDioptrija() {
-		return dioptrija;
-	}
-
-	public void setDioptrija(String dioptrija) {
-		this.dioptrija = dioptrija;
-	}
-
-	public String getAlergije() {
-		return alergije;
-	}
-
-	public void setAlergije(String alergije) {
-		this.alergije = alergije;
-	}
-
-	public String getVisina() {
-		return visina;
-	}
-
-	public void setVisina(String visina) {
-		this.visina = visina;
-	}
-
-	public String getTezina() {
-		return tezina;
-	}
-
-	public void setTezina(String tezina) {
-		this.tezina = tezina;
-	}
-
-	public Pacijent getPacijent() {
-		return pacijent;
-	}
-
-	public void setPacijent(Pacijent pacijent) {
-		this.pacijent = pacijent;
-	}
-
-	public java.util.Collection<Izvestaj> getIzvestaj() {
-		return izvestaj;
-	}
-
-	public void setIzvestaj(java.util.Collection<Izvestaj> izvestaj) {
-		this.izvestaj = izvestaj;
-	}
-
-	public java.util.Collection<SifarnikLekova> getSifarnikLekova() {
-		return sifarnikLekova;
-	}
-
-	public void setSifarnikLekova(java.util.Collection<SifarnikLekova> sifarnikLekova) {
-		this.sifarnikLekova = sifarnikLekova;
-	}
-
-	public java.util.Collection<SifranikDijagnoza> getSifranikDijagnoza() {
-		return sifranikDijagnoza;
-	}
-
-	public void setSifranikDijagnoza(java.util.Collection<SifranikDijagnoza> sifranikDijagnoza) {
-		this.sifranikDijagnoza = sifranikDijagnoza;
-	}
-   
    
    
    
