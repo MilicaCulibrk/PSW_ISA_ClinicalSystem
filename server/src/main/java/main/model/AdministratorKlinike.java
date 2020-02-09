@@ -65,7 +65,7 @@ public class AdministratorKlinike implements UserDetails{
 	 @OneToMany(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
      public java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor = new ArrayList<ZahtevZaOdmor>();
 
-	 @OneToMany(fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+	 @OneToMany(fetch = FetchType.LAZY,  cascade = CascadeType.ALL  )
      public java.util.Collection<ZahtevZaPregled> zahtevZaPregled = new ArrayList<ZahtevZaPregled>();
 	 
 	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

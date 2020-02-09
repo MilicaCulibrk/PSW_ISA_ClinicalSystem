@@ -218,7 +218,7 @@ public class KlinikaService {
 			return klinikaRepository.findAllByOrderByNazivAsc();
 		else if(sortBy.equals("Adresa"))
 			return klinikaRepository.findAllByOrderByAdresaAsc();
-		else if(sortBy.equals("O"))
+		else if(sortBy.equals("Ocena"))
 			return klinikaRepository.findAllByOrderByOcenaAsc();
 		return klinikaRepository.findAll();
 	}

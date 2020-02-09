@@ -1341,7 +1341,7 @@ export default {
 
          
 
-          this.prikazZahtevaZaPregled = true;
+          this.prikazZahtevaZaPregled = !this.prikazZahtevaZaPregled;
           axios
 		      .get("/adminKlinike/izlistajZahteveZaPregled/" + this.$store.state.user.id)
 		      .then(odgovor => {

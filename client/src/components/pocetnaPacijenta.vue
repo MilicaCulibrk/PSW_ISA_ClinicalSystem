@@ -25,6 +25,11 @@
                               
               </a>
               <a href="#">
+                <i v-on:click="otvoriZahteve()" class="zmdi zmdi-view-dashboard"> ODOBRAVANJE ZAHTEVA ZA PREGLED
+                </i>     
+                              
+              </a>
+              <a href="#">
                 <i class="zmdi zmdi-view-dashboard" style="color: red" v-on:click="odjava"> ODJAVA
                 </i>     
                               
@@ -524,7 +529,7 @@
     </b-modal>
 
    
-      <form v-if="prikazIstorije" class="message-form" style="position: relative;  top: 70px; left: 240px; width: 1200px; height: 300px; background-color:white ">
+      <form v-if="prikazIstorije" class="message-form" style="position: relative;  top: 70px; left: 240px; width: 1200px;  background-color:white ">
      
   
         <div  class="container d-flex justify-content-center" style="margin-top: 30px; ">	                        
@@ -535,6 +540,20 @@
 
             <table style="width: 100%; " class="table table-striped" >
               <tbody>
+                <tr>
+                  <td align="right">
+                    Sortiraj po:
+                  </td>
+                  <td colspan="6">
+                 <b-form-select v-model="odabirSortiranja1" @change="azuriraj1()" >
+                   <option 
+                     v-for="i in sortiranje1"
+                   >{{i}}</option>
+         
+                 </b-form-select>
+                 
+                   </td>
+               </tr>
                 <tr>
                   <th ></th>
                   <th>Tip pregleda</th>
@@ -570,7 +589,7 @@
 
     </form>
 
-    <form v-if="prikazIstorije" class="message-form" style="position: relative;  top: 30px; left: 240px; width: 1200px; height: 300px; background-color:white ">
+    <form v-if="prikazIstorije" class="message-form ; relative;" style="position: relative;  top:50px; left: 240px; width: 1200px;  background-color:white ">
      
   
       <div  class="container d-flex justify-content-center" style="margin-top: 30px; ">	                        
@@ -581,6 +600,20 @@
 
           <table style="width: 100%; " class="table table-striped" >
             <tbody>
+              <tr>
+                <td align="right">
+                  Sortiraj po:
+                </td>
+                <td colspan="6">
+               <b-form-select v-model="odabirSortiranja2" @change="azuriraj2()" >
+                 <option 
+                   v-for="i in sortiranje2"
+                 >{{i}}</option>
+       
+               </b-form-select>
+               
+                 </td>
+             </tr>
               <tr>
                 <th ></th>
                 <th>Tip operacije</th>
@@ -612,6 +645,41 @@
 
 
   </form>
+  <form   v-if="prikazZahteva" class="message-form position: relative; " style="  border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset; position: relative; top: 50px; left: 350px; width: 60%; background-color: rgba(130, 206, 209, 0.733); ">
+ 
+  <div  class="container d-flex justify-content-center" >	                        
+    <div class="card" style="width: 98%; height: 98%; margin-top: 30px; margin-bottom: 30px">	
+      <table style="width: 100%;" class="table table-hover table-fixed">
+     <thead>
+          <tr>
+            <th class="th-lg">Datum</th>
+            <th class="th-lg">Vreme</th>
+            <th class="th-lg">Vrsta Pregleda</th>
+            <th class="th-lg">Cena</th>
+            <th class="th-lg">Lekar</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        <tr v-for="k,i in zahtevi.length">
+          <td align="center"><date-picker style="width: 117px" :placeholder="zahtevi[i].datum" disabled></date-picker> </td>
+          <td align="center">{{zahtevi[i].vreme}}h</td>
+          <td align="center">{{zahtevi[i].vrstaPregleda}}</td>
+          <td align="center">{{zahtevi[i].cena}}</td>
+          <td align="center">{{zahtevi[i].lekar.ime}} {{zahtevi[i].lekar.prezime}}</td>
+
+          <td style="text-align: center">   <button class="btn btn-warning"  v-on:click="odobriZahtev(zahtevi[i])" style="  border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash">Odobri</i></button>
+          </td>
+          <td style="text-align: center">   <button class="btn btn-warning" v-on:click="odbijZahtev(zahtevi[i])" style=" border-color: rgb(233, 233, 233); background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash">Odbij</i></button>
+          </td> 
+         
+        </tr>
+        </tbody>
+      </table>
+</div>
+</div>        
+</form>
 
 
   </div>   
@@ -659,6 +727,10 @@ import StarRating from 'vue-star-rating';
         basOperacije: [],
         basPregledi: [],
         sortiranje: ['Naziv', 'Adresa', 'Ocena'],
+        sortiranje1: ['Tip Pregleda', 'Datum'],
+        sortiranje2: ['Tip Pregleda', 'Datum'],
+        odabirSortiranja2: "",
+        odabirSortiranja1: "",
         odabirSortiranja: "",
         zahtevZaPregled: {
            datum: "",
@@ -699,6 +771,7 @@ import StarRating from 'vue-star-rating';
         ukljucenaPretraga: false,
         prikaz:false,
         prikazZK:false,
+        prikazZahteva:false,
         prikazPREGLED:false,
         prikazPregled:false,
         prikazUDPREGLEDI:false,
@@ -706,6 +779,7 @@ import StarRating from 'vue-star-rating';
         prikazKlinike: false,
         izmeni:false,
         prikazIstorije: false,
+        zahtevi: {},
         id: 10,
         value: { },
         v:"",
@@ -717,6 +791,42 @@ import StarRating from 'vue-star-rating';
         }
     },
     methods: {
+      odobriZahtev(zahtev){
+        axios
+          .put("/pregled/odobri", zahtev)
+          .then(odgovor =>{
+            alert("Odobrili ste pregled.");
+            this.prikazZahteva=false;
+            this.otvoriZahteve();
+
+          })
+          .catch(error => {
+              console.log(error)
+              alert("Greska!");
+          });
+      },
+
+      otvoriZahteve(){
+              this.prikazZahteva=!this.prikazZahteva;
+              this.prikaz=false;
+              this.prikazZK = false;
+              this.prikazPregled=false;
+              this.prikazListaKlinika=false;
+              this.prikazUDPREGLEDI=false;
+              this.prikazKlinike=false;
+              this.prikazIstorije=false;
+
+              axios
+		      .get("/pacijent/izlistajZahteve/" + this.$store.state.user.id)
+		      .then(odgovor => {
+		        this.zahtevi = odgovor.data;
+		      })
+		      .catch(error => {
+		        console.log(error);
+          });
+
+      },
+
   oceniKlinikuP(id){
     this.ocenaPK.klinikaId = id;
     axios
@@ -769,6 +879,7 @@ import StarRating from 'vue-star-rating';
               this.prikazUDPREGLEDI=false;
               this.prikazKlinike=false;
               this.prikazIstorije=false;
+              this.prikazZahteva=false;
           },
   odjava(){
               localStorage.removeItem("jwt");
@@ -828,6 +939,8 @@ import StarRating from 'vue-star-rating';
               this.prikazUDPREGLEDI=false;
               this.prikazKlinike=false;
               this.prikazIstorije=false;
+              this.prikazZahteva=false;
+
                },
 
 
@@ -850,6 +963,8 @@ import StarRating from 'vue-star-rating';
               this.prikazZK=false;
               this.prikazUDPREGLEDI=false;
               this.prikazIstorije=false;
+              this.prikazZahteva=false;
+
           })
     },
     odustaniOdPregleda(){
@@ -863,6 +978,8 @@ import StarRating from 'vue-star-rating';
               this.prikazUDPREGLEDI=false;
               this.prikazKlinike=false;
               this.prikazIstorije=false;
+              this.prikazZahteva=false;
+
 
     },
   pretraziLekara(){
@@ -1044,6 +1161,8 @@ import StarRating from 'vue-star-rating';
         .post("/pregled/zakaziUDPregled/"+this.$store.state.user.id, p)
         .then(() => {
               alert('Uspesno ste zakazali pregled');
+              this.prikazUDPREGLEDI=false;
+            this.prikazudpregledi(this.klinika);
 	        })
 	
 		    .catch(function (error) {
@@ -1059,6 +1178,8 @@ import StarRating from 'vue-star-rating';
               this.prikazUDPREGLEDI=false;
               this.prikazKlinike=false;
               this.prikazIstorije=false;
+              this.prikazZahteva=false;
+
          },
   izmena() {
               this.izmeni = true;
@@ -1103,6 +1224,8 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
               this.prikazKlinike=false;
               this.prikazPregled=false;
               this.prikazIstorije=false;
+              this.prikazZahteva=false;
+
               
 
 
@@ -1125,6 +1248,8 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
             this.prikazUDPREGLEDI=false;
             this.prikazKlinike=false;
             this.prikazIstorije=false;
+            this.prikazZahteva=false;
+
           
      if(this.ukljucenaPretraga){
        this.klinike=this.rezultatiPretrage;
@@ -1184,37 +1309,35 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
          this.preglediIstorija=pregledi.data;
        //  console.log(this.preglediIstorija.length);
 
-
-         for( var i = 0; i < this.preglediIstorija.length; i++){ 
+          if(this.basPregledi.length===0){
+            for( var i = 0; i < this.preglediIstorija.length; i++){
             if(this.preglediIstorija[i].vrstaPregleda===this.p){
-              
+              this.basPregledi.push(this.preglediIstorija[i]);
 
-              if(this.basPregledi.length===0){
-                this.basPregledi.push(this.preglediIstorija[i]);
-              }else{
-              for( var j = 0; j <= this.basPregledi; j++){ 
-                if(this.basPregledi[j]===this.preglediIstorija[i]){
-                  break;
-                }  else{
-                  this.basPregledi.push(this.preglediIstorija[i]);
-              }
-            }
-
-          }
             }else{
-              if(this.basOperacije.length===0){
-                this.basOperacije.push(this.preglediIstorija[i]);
-              }else{
-              for( var k = 0; k <this.basOperacije; k++){ 
-                if(this.basOperacije[k]===this.preglediIstorija[i]){
-                  break;
-                }else{
-                  this.basOperacije.push(this.preglediIstorija[i]);
-              }
+              this.basOperacije.push(this.preglediIstorija[i]);
+
             }
           }
+          }else{
+            if(this.preglediIstorija[i].vrstaPregleda===this.p){
+               for( var i = 0; i < this.preglediIstorija.length; i++){
+                 if(this.basPregledi.includes(this.preglediIstorija[i])==0){
+                  this.basPregledi.push(this.preglediIstorija[i]);
+                 }
+
           }
-        }
+          }else{
+          for( var i = 0; i < this.preglediIstorija.length; i++){
+                 if(this.basOperacije.includes(this.preglediIstorija[i])==0){
+                  this.basOperacije.push(this.preglediIstorija[i]);
+                 }
+
+          }
+          }
+          }
+
+
          
         })
         .catch(error => {
@@ -1227,6 +1350,8 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
             this.prikazPregled=false;
             this.prikazUDPREGLEDI=false;
             this.prikazKlinike=false;
+            this.prikazZahteva=false;
+
 
 
     },
@@ -1242,7 +1367,32 @@ this.prikaziDatum=this.pretragaKlinika.datum.toString();
 		          console.log(error)
 		      });
 	  	},
+      azuriraj1(){
+    
+    axios
+      .put("/pregled/azurirajPreglede/" + this.$store.state.user.id, this.odabirSortiranja1)
+      .then(pregledi => {
+          this.basPregledi = pregledi.data;
+
+        })
+      .catch(error => {
+          console.log(error)
+      });
   },
+  azuriraj2(){
+    
+    axios
+      .put("/pregled/azurirajOperacije/"+ this.$store.state.user.id , this.odabirSortiranja2)
+      .then(pregledi => {
+          this.basOperacije = pregledi.data;
+
+        })
+      .catch(error => {
+          console.log(error)
+      });
+  },
+  },
+  
     beforeUpdate()
     {
 
