@@ -62,6 +62,7 @@ public class PregledService {
 		return pregledRepository.findById(id).orElseGet(null);
 	}
 	
+	//pacijent bira unapred definisani pregeld i zakazuje ga
 	public Pregled zakaziPregled(Long idPacijent, Pregled pregled) {
 		  
 		pregled.setIdPacijenta(idPacijent);
@@ -72,7 +73,7 @@ public class PregledService {
 		return pregled;
 }
 
-	
+	//dodaj predefinisani pregled kao administrator klinike sa ogranicenjima
 	public void dodajPregled(PregledDTO pregledDTO) {
 		Pregled pregled = new Pregled();
 		
@@ -101,6 +102,8 @@ public class PregledService {
 		return pregledRepository.findAll();
 	}
 	
+	  //lekar u toku trenuntog pregleda zakazuje naredni
+	  //pacijent bira argumente za pregled i salje se adminu da odobri
 	public void dodajZahtev(ZahtevZaPregledDTO zahtevZaPregledDTO, AdministratorKlinike admin) {
 
 	

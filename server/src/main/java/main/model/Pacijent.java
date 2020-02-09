@@ -103,6 +103,20 @@ public class Pacijent implements UserDetails{
            joinColumns = @JoinColumn(name = "pacijent_id", referencedColumnName = "id"),
            inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
    private List<Authority> authorities;
+   public Pacijent(PacijentDTO pacijentDTO) {
+		
+		this.id = pacijentDTO.getId();
+		this.ime = pacijentDTO.getIme();
+		this.prezime = pacijentDTO.getPrezime();
+		this.email = pacijentDTO.getEmail();
+		this.lozinka = pacijentDTO.getLozinka();
+		this.adresa = pacijentDTO.getAdresa();
+		this.grad = pacijentDTO.getGrad();
+		this.drzava = pacijentDTO.getDrzava();
+		this.telefon = pacijentDTO.getTelefon();
+		this.jmbg = pacijentDTO.getJmbg();
+
+	}
 /*
   
 
@@ -130,20 +144,7 @@ public Pacijent() {
 }
 
 
-public Pacijent(PacijentDTO pacijentDTO) {
-	
-	this.id = pacijentDTO.getId();
-	this.ime = pacijentDTO.getIme();
-	this.prezime = pacijentDTO.getPrezime();
-	this.email = pacijentDTO.getEmail();
-	this.lozinka = pacijentDTO.getLozinka();
-	this.adresa = pacijentDTO.getAdresa();
-	this.grad = pacijentDTO.getGrad();
-	this.drzava = pacijentDTO.getDrzava();
-	this.telefon = pacijentDTO.getTelefon();
-	this.jmbg = pacijentDTO.getJmbg();
 
-}
 
 public Pacijent(Long id, String ime, String prezime, String email, String lozinka, String adresa, String grad,
 		String drzava, String telefon, String jmbg) {
