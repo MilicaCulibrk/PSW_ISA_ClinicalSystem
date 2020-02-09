@@ -64,24 +64,24 @@
                       
                       <label for="Form-phone" style="color: #b3b3b3;">Telefon</label>
                       <input type="text" id="Form-phone" class="form-control" v-model=korisnik.telefon :disabled="!izmeni">
-                      
-                      <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
-                      <input type="text" id="Form-email4" class="form-control" v-model=korisnik.adresa :disabled="!izmeni">
+                    
                       
                       <label for="Form-email4" style="color: #b3b3b3;">JMBG</label>
-                      <input type="text" id="Form-email4" class="form-control" v-model=korisnik.jmbg disabled>
+                      <input type="text" id="Form-email4" class="form-control" v-model=korisnik.jmbg :disabled="!izmeni">
         
                     </div>
                     </div>
                     <div class="col">
                     <div class="md-form pb-3">
         
-                      <label for="Form-city" style="color: #b3b3b3;">Lozinka</label>
-                      <input type="text" id="Form-city" class="form-control" v-model=korisnik.lozinka disabled>
+                   
                       
                       <label for="Form-prezime" style="color: #b3b3b3;">Prezime</label>
                       <input type="text" id="Form-prezime" class="form-control" v-model=korisnik.prezime :disabled="!izmeni">
         
+                        
+                      <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
+                      <input type="text" id="Form-email4" class="form-control" v-model=korisnik.adresa :disabled="!izmeni">
                       
                       <label for="Form-city" style="color: #b3b3b3;">Grad</label>
                       <input type="text" id="Form-city" class="form-control" v-model=korisnik.grad :disabled="!izmeni">
@@ -89,13 +89,11 @@
                   
                       <label for="Form-city" style="color: #b3b3b3;">Drzava</label>
                       <input type="text" id="Form-city" class="form-control" v-model=korisnik.drzava :disabled="!izmeni">
-                     
-                      <label for="Form-city" style="color: #b3b3b3;">Ocene</label>
-                      <input type="text" id="Form-ocene" class="form-control" v-model=korisnik.ocene :disabled="!izmeni">
+                  
                     </div>
                     </div>
                   </div>
-                 
+                
                   <div class="text-center mb-4 mt-4">
                     <template>
                     <button type="button" v-if="!izmeni" v-on:click="izmena" class="btn btn-danger btn-block z-depth-2" style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " >Izmeni</button>
@@ -103,7 +101,8 @@
                     <template>
                     <button type="button" v-if="izmeni" v-on:click="sacuvaj" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " >Sačuvaj</button>
                     <button type="button" v-if="izmeni" v-on:click="odustani" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " >Odustani</button>
-                    </template>
+                    <button v-if="izmeni" v-b-modal.promenaLozinke type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 200px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); ">Promeni lozinku</button>
+                  </template>
                   </div>
         
                 </div>
@@ -295,7 +294,26 @@
   </div>   
   </form>
 
- 
+  <b-modal ref="my-modal" id="promenaLozinke" hide-footer title="Promeni Lozinku">
+      <label for="Form-city" style="color: #b3b3b3;">Stara lozinka</label>
+      <input type="text" v-model="drugaLozinka.staraLozinka" id="Form-city" class="form-control">
+    
+      <label for="Form-city" style="color: #b3b3b3;">Nova lozinka</label>
+      <input type="text" v-model="drugaLozinka.novaLozinka" id="Form-city" class="form-control">
+    
+      <label for="Form-city" style="color: #b3b3b3;">Ponovljena lozinka</label>
+      <input type="text" v-model="drugaLozinka.ponovljenaLozinka" id="Form-city" class="form-control">
+      <br>
+    
+      <b-button v-b-modal.greska @click="sacuvajDruguLozinku"  style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Sacuvaj</b-button>
+      <b-button @click="odustaniDrugaLozinka"  style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Odustani</b-button>
+    
+    </b-modal>
+
+    <b-modal ref="my-modal" id="greska" hide-footer title="Klinicki Centar">
+        <b-alert v-if="error" show variant="danger" class="d-flex justify-content-center">{{errormessage}}</b-alert>
+        <b-alert v-else show variant="success" class="d-flex justify-content-center">{{errormessage}}</b-alert>
+</b-modal>
               
 </div>
 
@@ -324,11 +342,18 @@ export default {
 			izmeni: false,
 			selektovan: {},
 			sortBy: {},
-			trenutniPacijent: {},
+      trenutniPacijent: {},
+      error: "",
+      errormessage: "",
       izmeni:false,
       izmeniZK:false,
       zdravstveniK: {},
       recepti: {},
+      drugaLozinka: {
+        staraLozinka: "",
+        novaLozinka: "",
+        ponovljenaLozinka: "",
+      },
       odabirSortiranja: {},
       sortiranje: ['id', 'ime', 'prezime', 'JMBG', 'email' ],
 
@@ -412,7 +437,55 @@ export default {
         this. prikazListaPacijenata= false;
         this.prikazRecepata= false;
         this.prikazZK= false;
-		},
+    },
+    odustaniDrugaLozinka(){
+        this.drugaLozinka.staraLozinka = "";
+        this.drugaLozinka.novaLozinka = "";
+        this.drugaLozinka.ponovljenaLozinka = "";
+      },
+      sacuvajDruguLozinku(){
+
+        console.log('tu je');
+
+        if (
+        this.drugaLozinka.staraLozinka == "" ||
+        this.drugaLozinka.novaLozinka == "" ||
+        this.drugaLozinka.ponovljenaLozinka == ""
+      ) {
+
+        this.error = true;
+        this.errormessage = "Morate popuniti sva polja!";
+       
+        return;
+      }
+      if (this.drugaLozinka.novaLozinka !== this.drugaLozinka.ponovljenaLozinka) {
+        this.error = true;
+        this.errormessage = "Lozinke se ne poklapaju!";
+      
+        return;
+      }
+
+      axios
+        .post(
+          "/medicinska_sestra/promeniSvojuLozinku/" + this.$store.state.user.id,
+          this.drugaLozinka
+        )
+        .then(() => {
+          this.drugaLozinka = {
+            staraLozinka: "",
+            novaLozinka: "",
+            ponovljenaLozinka: ""
+          };
+          this.error = false;
+          this.errormessage = "Uspesno ste promenili lozinku";
+        })
+        .catch(error => {
+          this.error = true;
+          this.errormessage = "Netacna stara lozinka!";
+      
+          console.log(error);
+        });
+      },
 		izmena(){
       event.preventDefault();
 

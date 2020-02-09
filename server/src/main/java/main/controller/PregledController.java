@@ -426,16 +426,19 @@ public class PregledController {
 				System.out.println(zahtevZaPregledDTO.getLekar().getIdKlinike());
 				if (adminKlinike.getKlinika().getId() == zahtevZaPregledDTO.getLekar().getIdKlinike()) {
 					System.out.println("Nasao admina klinike");
+					
+					admin = adminKlinike;
+					pregledService.dodajZahtev(zahtevZaPregledDTO, admin);	
 
 					String message = "Pacijent "
 							+ pacijent.getIme() + " " + pacijent.getPrezime() + " je podneo zahtev za pregled.";
 					mailService.sendNotificaitionAsync(adminKlinike, message);
 					
-					admin = adminKlinike;
+				
 				}
 			}
 
-	     pregledService.dodajZahtev(zahtevZaPregledDTO, admin);		
+	  	
 			
 		 return new ResponseEntity<>(null, HttpStatus.OK);
 			
@@ -476,7 +479,7 @@ public class PregledController {
 			  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
 			  zahtevZaPregled.setVreme(vreme);
 			  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
-			  zahtevZaPregled.setStatus("odobren");
+			  zahtevZaPregled.setStatus("na_cekanju");
 			 
 			  
 			  zahtevZaPregledRepository.save(zahtevZaPregled);

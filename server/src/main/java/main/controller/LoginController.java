@@ -70,7 +70,7 @@ public class LoginController {
 		@RequestMapping(value = "/login", method = RequestMethod.POST)
 	    public ResponseEntity<?>  createAuthenticationToken(@RequestBody ZahtevZaAutentikacijuDTO authenticationDTO,
 
-	                                   HttpServletResponse response) throws AuthenticationException, IOException {
+	                                   HttpServletResponse response) throws AuthenticationException {
 
 	        final Authentication authentication = authenticationManager
 
@@ -161,7 +161,7 @@ public class LoginController {
 
 	        } else {
 
-	            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	        	return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
 	        }
 

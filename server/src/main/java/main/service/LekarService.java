@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import main.dto.LekarDTO;
+import main.dto.PromenaLozinkeDTO;
+import main.model.AdministratorKlinickogCentra;
 import main.model.Authority;
 import main.model.Lekar;
 import main.model.Pacijent;
@@ -158,31 +160,31 @@ public List<Lekar> pronadjiLekare( String ime, String prezime, Double ocena){
 			ret = sviLekari;
 		}else if(ime == null && prezime == null && ocena != null){
 			for(Lekar p : sviLekari) {
-				if(p.getOcena()==ocena) {
+				if(p.getOcena() == ocena) {
 					ret.add(p);
 				}
 			}
 		}else if(ime == null && prezime != null && ocena == null){
 			for(Lekar p : sviLekari) {
-				if(p.getPrezime().equals(prezime)) {
+				if(p.getPrezime().contains(prezime)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime != null && prezime == null && ocena == null){
 			for(Lekar p : sviLekari) {
-				if(p.getIme().equals(ime)) {
+				if(p.getIme().contains(ime)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime != null && prezime != null && ocena == null){
 			for(Lekar p : sviLekari) {
-				if(p.getIme().equals(ime) && p.getPrezime().equals(prezime)) {
+				if(p.getIme().contains(ime) && p.getPrezime().contains(prezime)) {
 					ret.add(p);
 				}
 			}
 		}else if(ime != null && prezime == null && ocena != null){
 			for(Lekar p : sviLekari) {
-				if(p.getIme().equals(ime) && p.getOcena()==ocena) {
+				if(p.getIme().contains(ime) && p.getOcena()==ocena) {
 					ret.add(p);
 				}
 			}
@@ -194,7 +196,7 @@ public List<Lekar> pronadjiLekare( String ime, String prezime, Double ocena){
 			}
 		}else if(ime != null && prezime != null && ocena != null){
 			for(Lekar p : sviLekari) {
-				if(p.getPrezime().equals(prezime) && p.getOcena()==ocena  && p.getIme().equals(ime)) {
+				if(p.getPrezime().contains(prezime) && p.getOcena()==ocena  && p.getIme().contains(ime)) {
 					ret.add(p);
 				}
 			}
@@ -204,5 +206,15 @@ public List<Lekar> pronadjiLekare( String ime, String prezime, Double ocena){
 		return ret;
 		}
 	
+
+		public boolean promeniLozinku(Lekar admin, PromenaLozinkeDTO lozinka) {
+		
+			if (lozinka.getNovaLozinka().equals(lozinka.getPonovljenaLozinka())) {
+				admin.setLozinka(passwordEncoder.encode(lozinka.getNovaLozinka()));
+				lekarRepository.save(admin);
+				return true;
+			}
+			return false;
+		}
 
 }

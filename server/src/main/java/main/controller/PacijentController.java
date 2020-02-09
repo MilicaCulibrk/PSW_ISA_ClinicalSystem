@@ -6,8 +6,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.PacijentDTO;
 import main.dto.PretragaPacijentaDTO;
+import main.dto.PromenaLozinkeDTO;
+import main.dto.SalaDTO;
+import main.model.AdministratorKlinickogCentra;
+import main.model.AdministratorKlinike;
+import main.model.Klinika;
 import main.dto.ZahtevZaPregledDTO;
 import main.model.Pacijent;
 import main.model.ZahtevZaPregled;
@@ -35,7 +44,11 @@ public class PacijentController {
 	private PacijentService pacijentService;
 	
 	@Autowired
+
+	private AuthenticationManager authenticationManager;
+	
 	private ZahtevZaPregledService zahtevZaPregledService;
+
 	
 	@GetMapping(value = "/getEmail/{email}")
 	@PreAuthorize("hasAuthority('ADMIN_CENTRA')")
@@ -171,6 +184,34 @@ public class PacijentController {
 
 
 	    }
+
+	
+	@PostMapping(value = "/promeniSvojuLozinku/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<?> promeniLozinku(@PathVariable Long id, @RequestBody PromenaLozinkeDTO promenaLozinkeDTO){
+		
+		Pacijent admin = pacijentService.findOne(id);
+		
+		final Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(admin.getEmail(),
+						promenaLozinkeDTO.getStaraLozinka()));
+		
+		Pacijent adminKC = (Pacijent) authentication.getPrincipal();
+		if (adminKC == null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
+		boolean promena = pacijentService.promeniLozinku(admin, promenaLozinkeDTO);
+		
+		if (promena == true) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
+	} 
+	
+
 	@GetMapping(value = "/izlistajZahteve/{id}")
 	@PreAuthorize("hasAnyAuthority('PACIJENT')")
 	public ResponseEntity<List<ZahtevZaPregledDTO>> izlistajZahteve(@PathVariable Long id) {

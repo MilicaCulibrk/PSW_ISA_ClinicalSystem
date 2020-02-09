@@ -15,6 +15,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +32,9 @@ import main.dto.LekarDTO;
 import main.dto.PregledDTO;
 import main.dto.PretragaKlinikeDTO;
 import main.dto.PretragaLekaraDTO;
+import main.dto.PromenaLozinkeDTO;
 import main.dto.ZahtevZaOdmorDTO;
+import main.model.AdministratorKlinickogCentra;
 import main.model.AdministratorKlinike;
 import main.model.Lekar;
 import main.model.Pregled;
@@ -67,6 +72,9 @@ public class LekarController {
 	
 	@Autowired
 	private PregledRepository	pregledRepository;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 	
 	
 	@Autowired
@@ -586,7 +594,7 @@ public class LekarController {
 	}
 	
 
-	@PreAuthorize("hasAuthority('PACIJENT')")
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
 	 @PostMapping(value = "/pretraga/{id}",consumes = "application/json")
    public ResponseEntity<?> pretragaLekara(@RequestBody PretragaLekaraDTO pretragaLekaraDTO, @PathVariable Long id){
 
@@ -630,6 +638,76 @@ public class LekarController {
 
 
 	    }
+	
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	 @PostMapping(value = "/pretragaP/{id}",consumes = "application/json")
+  public ResponseEntity<?> pretragaLekaraP(@RequestBody PretragaLekaraDTO pretragaLekaraDTO, @PathVariable Long id){
+
+
+	    	
+	    	String ime = null;
+	    	String prezime =  null;
+	    	Double ocena = null;
+	    		
+
+	    	if(pretragaLekaraDTO.getIme() != null) {
+	    		if(!pretragaLekaraDTO.getIme().isEmpty()) {
+	    		
+	    			ime = pretragaLekaraDTO.getIme();
+
+	    		}
+	    	}
+	    	
+	    	if(pretragaLekaraDTO.getPrezime() != null) {
+	    		if(!pretragaLekaraDTO.getPrezime().equals("")){
+	    			prezime = pretragaLekaraDTO.getPrezime();	    		
+	    		}
+	    	}
+
+	      	if(pretragaLekaraDTO.getOcena() != null) {
+	    		if(!pretragaLekaraDTO.getOcena().equals("")){
+	    			ocena = pretragaLekaraDTO.getOcena();	    		
+	    		}
+	    	}
+	    	
+
+	    	List<Lekar> lekari = lekarService.pronadjiLekare( ime,prezime,ocena);
+
+			List<LekarDTO> lekariDTO = new ArrayList<>();
+			
+			for (Lekar l : lekari) {
+				lekariDTO.add(new LekarDTO(l));
+			}
+
+	    	return new ResponseEntity<>(lekariDTO, HttpStatus.OK);
+
+
+	    }
+
+	@PostMapping(value = "/promeniSvojuLozinku/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('LEKAR')")
+	public ResponseEntity<?> promeniLozinku(@PathVariable Long id, @RequestBody PromenaLozinkeDTO promenaLozinkeDTO){
+		
+		Lekar admin = lekarService.findOne(id);
+		
+		final Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(admin.getEmail(),
+						promenaLozinkeDTO.getStaraLozinka()));
+		
+		Lekar adminKC = (Lekar) authentication.getPrincipal();
+		if (adminKC == null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
+		boolean promena = lekarService.promeniLozinku(admin, promenaLozinkeDTO);
+		
+		if (promena == true) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
+	} 
 
 	  
 	 
