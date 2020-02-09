@@ -236,7 +236,7 @@
                                     
                                               <div class="col">
                                                   <template>
-                                                  <button  v-b-modal.greska   type="button"    :disabled="!izmeniKliniku"  class="btn  btn-block z-depth-2" style=" margin-top: -50px; margin-left: 150px; width: 100px; height: 50px;border-color: rgba(130, 206, 209, 0.733); border-width: 5px; background-color:  rgba(130, 206, 209, 0.733);" v-on:click="sacuvajKlinika"> <i class="fa fa-trash">Sacuvaj</i></button>
+                                                  <button  v-b-modal.greska   type="button"    :disabled="!izmeniKliniku"  class="btn  btn-block z-depth-2" style=" margin-top: 50px; margin-left: -80px; width: 100px; height: 50px;border-color: rgba(130, 206, 209, 0.733); border-width: 5px; background-color:  rgba(130, 206, 209, 0.733);" v-on:click="sacuvajKlinika"> <i class="fa fa-trash">Sacuvaj</i></button>
                                                   
                                                 </template>
                                                 </div> 
@@ -1106,10 +1106,18 @@
       
       
               </table>
+             
 </div>
 </div>
           </form>
-          </div>
+          <form v-if="prikazIzvestajOPoslovanju" class="message-form" style="position: relative;  top: -600px; left: 900px; width: 600px; height: 300px; background-color:white ">
+              <date-picker v-model="time3" range></date-picker>
+        
+              <button v-b-modal.greska v-on:click="posaljiVreme"  style=" position: fixed; margin-left: 30px;  height: 40px; width: 220px;  background-color: rgb(233, 233, 233); color: #37474F;" type="button"><i class="fa fa-trash">Prihodi klinike</i></button>
+  
+            </form>
+                    
+            </div>
         </div>
 </template>
 
@@ -1137,7 +1145,7 @@ export default {
  data() {
      return {
      
-  
+      time3: null,
       korisnik: {},
       datumS: {},
       vremeS: {},
@@ -1204,7 +1212,8 @@ export default {
       alert: "",
       alertTrue: false,
       ukljucenaPretraga: false,
-      omoguci: false,   
+      omoguci: false,  
+      prihodi: {}, 
       
       flag: 0,
       prikazIzvestajOPoslovanju: false,
@@ -1326,6 +1335,22 @@ export default {
         this.currentPlace = null;
       }
     },
+posaljiVreme(){
+
+this.prihodi.start = this.time3[0];
+this.prihodi.end = this.time3[1];
+axios
+    .post("/klinika/prihodi/" + this.idKlinike, this.prihodi)
+    .then(ukupnaCena => {
+        this.ukupnaCena = ukupnaCena.data;
+        this.error = false;
+        this.errormessage = ("Prihodi klinike za navedeni period su " + this.ukupnaCena + " dinara.");
+      })
+    .catch(error => {
+      alert("Nije moguce izlistati cenovnik.")
+        console.log(error)
+    });
+},
     geolocate: function() {
      navigator.geolocation.getCurrentPosition(position => {
         this.center = {
@@ -1359,6 +1384,7 @@ export default {
 		          console.log(error)
 		      });
         },
+    
         odobriZahtev(zahtev){
           event.preventDefault();
             axios
@@ -1401,8 +1427,11 @@ export default {
         },
         odbijZahtev(zahtev){
           event.preventDefault();
+          var razlog = prompt("Molimo vas navedite razlog odbijanja:");
+        	this.text = "Nazalost,"
+                    + "\n\n vas zahtev je odbijen!" + "\n\nRazlog odbijanja: "+ razlog;
             axios
-          .put("/zahtevZaOdmor/odbij", zahtev)
+          .put("/zahtevZaOdmor/odbij/" + this.text, zahtev)
           .then(odgovor =>{
             
           })
@@ -1413,7 +1442,7 @@ export default {
         },
         otvoriZahteveZaPregled(){
 
-          this.prikazZahtevaZaPregled = !this.prikazZahtevaZaPregled;
+    
 
           axios
 		      .get("/adminKlinike/izlistajZahteveZaPregled/" + this.$store.state.user.id)
@@ -2089,8 +2118,6 @@ export default {
 	        this.sala.klinika = sala.klinika;
        },
        izaberiSaluZaPregled(salaZaPregled){
-
-     
        
         console.log(salaZaPregled);
       
@@ -2108,7 +2135,7 @@ export default {
            axios
 		      .get("/adminKlinike/izlistajZahteveZaPregled/" + this.$store.state.user.id)
 		      .then(odgovor => {
-            console.log("Ulaziii");
+            console.log("anciiiiiiiiiii");
             this.zahteviZaPregled = odgovor.data;
             console.log("nemaaaaaaaaa");
             console.log(this.zahteviZaPregled.length);
@@ -2344,7 +2371,7 @@ export default {
 		     this.prikazIzmenaKlinike = false,
 		     this.prikazLekariKlinike = false,
 		     this.prikazDefinisanjePregleda = false,
-		     this.prikazUpravljanjeSalama = false,
+		     this.prikazZahtevaZaPregled = false,
 		     this.prikazUpravljanjeTipovimaPregleda = false,
          this.prikazPretragaIfiltriranjeSala = false, 
          this.prikazZahtevaZaOdmor = false, 

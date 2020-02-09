@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 
 import main.dto.ZahtevZaOdmorDTO;
@@ -30,6 +31,9 @@ public class ZahtevZaOdmorService {
 	
 	@Autowired
 	private LekarRepository lekarRepository;
+	
+	@Autowired
+	private MailService mailService;
 	
 	@Autowired
 	private MedicinskaSestraRepository medicinskaSestraRepository;
@@ -102,7 +106,7 @@ public class ZahtevZaOdmorService {
 		return zahtevZaOdmorRepository.findAll();
 	}
 
-	public ZahtevZaOdmor odobri(ZahtevZaOdmorDTO zahtevZaOdmorDTO) {
+	public ZahtevZaOdmor odobri(ZahtevZaOdmorDTO zahtevZaOdmorDTO) throws MailException, InterruptedException {
 		// TODO Auto-generated method stub
 		Collection<ZahtevZaOdmor> lista = findAll();
 		ZahtevZaOdmor zzo = new ZahtevZaOdmor();
@@ -118,18 +122,24 @@ public class ZahtevZaOdmorService {
 		for (MedicinskaSestra medicinskaSestra : ms) {
 			if(medicinskaSestra.getId().equals(zahtevZaOdmorDTO.getMedicinskaSestra())) {
 				medicinskaSestra.getZahtevZaOdmor().add(zzo);
+				
+				 String messagePacijent = "Vas zahtev za godisnji odmor je odobren!.";
+				 mailService.sendNotificaitionAsync(medicinskaSestra, messagePacijent);
 			}
 		}
 		
 		for (Lekar l : lekari) {
 			if(l.getId().equals(zahtevZaOdmorDTO.getLekar())) {
 				l.getZahtevZaOdmor().add(zzo);
+				
+				 String messagePacijent = "Vas zahtev za godisnji odmor je odobren!.";
+				 mailService.sendNotificaitionAsync(l, messagePacijent);
 			}
 		}
 		return zzo;
 	}
 
-	public ZahtevZaOdmor odbij(ZahtevZaOdmorDTO zahtevZaOdmorDTO) {
+	public ZahtevZaOdmor odbij(ZahtevZaOdmorDTO zahtevZaOdmorDTO, String text) throws MailException, InterruptedException {
 		// TODO Auto-generated method stub
 		Collection<ZahtevZaOdmor> lista = findAll();
 		for (ZahtevZaOdmor zahtevZaOdmor : lista) {
@@ -137,7 +147,13 @@ public class ZahtevZaOdmorService {
 				zahtevZaOdmor.setOdobren(false);
 				zahtevZaOdmorRepository.save(zahtevZaOdmor);
 				return zahtevZaOdmor;
+				
+				 
+				
 			}
+			
+			 mailService.sendNotificaitionAsync(zahtevZaOdmor.getLekar(), text);
+
 		}
 		return null;
 	}

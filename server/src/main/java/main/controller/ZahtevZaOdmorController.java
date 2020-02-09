@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,7 +63,7 @@ public class ZahtevZaOdmorController {
 	
 	@PutMapping(value = "/odobri", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
-	public ResponseEntity<?> odobri(@RequestBody ZahtevZaOdmorDTO zahtevZaOdmorDTO) {
+	public ResponseEntity<?> odobri(@RequestBody ZahtevZaOdmorDTO zahtevZaOdmorDTO) throws MailException, InterruptedException {
 		ZahtevZaOdmor zzo = new ZahtevZaOdmor();
 		try {
 			zzo = zahtevZaOdmorService.odobri(zahtevZaOdmorDTO);
@@ -73,16 +74,18 @@ public class ZahtevZaOdmorController {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
+		 String messagePacijent = "Pomeren Vam je termin i promenjen lekar.";
+		
 
 		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
 	
-	@PutMapping(value = "/odbij", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/odbij/{text}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
-	public ResponseEntity<?> odbij(@RequestBody ZahtevZaOdmorDTO zahtevZaOdmorDTO) {
+	public ResponseEntity<?> odbij(@PathVariable String text, @RequestBody ZahtevZaOdmorDTO zahtevZaOdmorDTO) throws MailException, InterruptedException {
 		ZahtevZaOdmor zzo = new ZahtevZaOdmor();
 		try {
-			zzo = zahtevZaOdmorService.odbij(zahtevZaOdmorDTO);
+			zzo = zahtevZaOdmorService.odbij(zahtevZaOdmorDTO, text);
 			if (zzo ==null) {
 				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
