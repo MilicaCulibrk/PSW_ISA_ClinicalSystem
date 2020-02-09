@@ -64,14 +64,14 @@
       </div>
     </div>
 
-                  <form v-if="prikaz"  class="message-form" style="position: relative; top: 10px; left: 400px; width: 800px; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
-                        <div>
-                                
-                            
-                              <div  class="container d-flex justify-content-center" style="margin-top: 30px">
-                            
-                                
-                                <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
+    <form v-if="prikaz" class="message-form position: relative; " style="  border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset; position: relative; top: 5px; left: 400px; width: 40%; background-color: rgba(130, 206, 209, 0.733); ">
+      <div>
+              
+          
+            <div  class="container d-flex justify-content-center" style="margin-top: 30px">
+          
+              
+              <div class="card" style="width: 98%; height: 98%; margin-top: 30px; margin-bottom: 30px">
 
                                   <div class="form-group">
                             
@@ -89,11 +89,9 @@
                                           <label for="Form-phone" style="color: #b3b3b3;">Telefon</label>
                                           <input type="text" v-model="korisnik.telefon" id="Form-phone" class="form-control" :disabled="!izmeni">
                                           
-                                          <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
-                                          <input type="text" v-model="korisnik.adresa" id="Form-email4" class="form-control" :disabled="!izmeni">
-
+      
                                           <label for="Form-email4" style="color: #b3b3b3;">JMBG</label>
-                                          <input type="text" v-model="korisnik.jmbg" id="Form-email4" class="form-control" disabled>
+                                          <input type="text" v-model="korisnik.jmbg" id="Form-email4" class="form-control" :disabled=!izmeni>
                                         
                                           
                             
@@ -102,12 +100,12 @@
                                         <div class="col">
                                         <div class="md-form pb-3">
                             
-                                          <label for="Form-city" style="color: #b3b3b3;">Lozinka</label>
-                                          <input type="text" v-model="korisnik.lozinka" id="Form-city" class="form-control" disabled>
                                           
                                           <label for="Form-prezime" style="color: #b3b3b3;">Prezime</label>
                                           <input type="text" v-model="korisnik.prezime" id="Form-prezime" class="form-control" :disabled="!izmeni">
-                            
+                                        
+                                          <label for="Form-email4" style="color: #b3b3b3;">Adresa</label>
+                                          <input type="text" v-model="korisnik.adresa" id="Form-email4" class="form-control" :disabled="!izmeni">
                                           
                                           <label for="Form-city" style="color: #b3b3b3;">Grad</label>
                                           <input type="text" v-model="korisnik.grad" id="Form-city" class="form-control" :disabled="!izmeni">
@@ -131,7 +129,8 @@
                                         <template>
                                         <button v-if="izmeni" type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="sacuvaj">Sacuvaj</button>
                                         <button v-if="izmeni" type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustani">Odustani</button>
-                                        </template>
+                                        <button v-if="izmeni" v-b-modal.promenaLozinke type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 200px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); ">Promeni lozinku</button>
+                                      </template>
                                       </div>
                             
                                     </div>
@@ -200,7 +199,7 @@
                               <label for="Form-city" style="color: #b3b3b3;">Jmbg</label>
                               <input type="text" v-model="pacijent.jmbg" id="Form-city" class="form-control" disabled>
                              
-                           
+                              
 
                             </div>
                             </div>
@@ -425,107 +424,129 @@
 </form>
 
 
-       <form   v-if="prikazListaLekova" class="message-form" style="position: relative; top: 10px; left: 400px; width: 40%; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
-          <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
-            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
-						  <table style="width: 100%;">
-			                  <tr>
-			                    <th class="bg-info  text-white">Sifra</th>
-			                    <th class="bg-info  text-white">Naziv</th>
-			                    <th class="bg-info  text-white">Obrisi</th>
-			                  </tr>
-			                  <tr v-for="k,i in lekovi.length">
-			                    <td>{{lekovi[i].sifra}}</td>
-			                    <td>{{lekovi[i].naziv}}</td>
-			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiLek(lekovi[i])"><i class="fa fa-trash">Obrisi</i></button>
-			                    </td>
-			                  </tr>
-			              </table>     
-          	</div>
-          </div>   
-          <form class="message-form" style="position: relative; top: -70px; left: 700px; width: 40%; height: 58%;  background-color: rgba(130, 206, 209, 0.733); ">
-                <div>
-                  <div  class="container d-flex justify-content-center" style="margin-top: 30px">
-                   <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
-                      <div class="form-group">                        
-                        <div class="card-body mx-4 mt-4">
-                          <div class="row">                            
-                            <div class="col">
-                            <div class="md-form">
-                              
-                              <label for="Form-ime" style="color: #b3b3b3;">Sifra</label>
-                              <input type="text" id="Form-ime" class="form-control" v-model="lek.sifra">
+     
+       <form   v-if="prikazListaLekova" class="message-form position: relative; " style="  border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset; position: relative; top: 50px; left: 280px; width: 35%; background-color: rgba(130, 206, 209, 0.733); ">
+ 
+        <div  class="container d-flex justify-content-center" >	                        
+          <div class="card" style="width: 98%; height: 98%; margin-top: 30px; margin-bottom: 30px">	
+              <h3 style=" text-align: center; color: dimgray;">LISTA LEKOVA</h3>
+          <table style="width: 100%; max-height: 300px; overflow:auto; " class="table table-striped table-fixed" >   
+          <tbody> 
+                      <tr>
+                        <th >Sifra</th>
+                        <th >Naziv</th>
+                        <th ></th>
+                      </tr>
+                      <tr v-for="k,i in lekovi.length">
+                        <td>{{lekovi[i].sifra}}</td>
+                        <td>{{lekovi[i].naziv}}</td>
+                        <td style="text-align: center">   <button class="btn btn-warning" type="button" style="background-color: #b3b3b3; border-color: #b3b3b3;" v-on:click="obrisiLek(lekovi[i])"><i class="fa fa-trash">Obrisi</i></button>
+                        </td>
+                      </tr>
+                      </tbody>  
+                  </table>     
+          </div>
+        </div>   
+      </form>
+    
+
+      <form v-if="prikazListaLekova" class="message-form position: fixed; " style="  border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset; position: fixed;top: 110px; left: 870px; width: 35%; background-color: rgba(130, 206, 209, 0.733); ">
+   
+        <div  class="container d-flex justify-content-center" >	                        
+            <div class="card" style="width: 95%; height: 200px; margin-top: 30px; margin-bottom: 30px">	
                 
-                              <label for="Form-email4" style="color: #b3b3b3;">Naziv</label>
-                              <input type="text"  id="Form-email4" class="form-control" v-model="lek.naziv">
-                            
-                            </div>
-                            </div>
-                          </div>
-                          <div class="text-center mb-4 mt-4">
-                            <template>
-                            <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajLek">Dodaj</button>
-                            <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustani">Odustani</button>
-                            </template>
-                          </div>                            
-                        </div>                         
-                      </div>
-                   </div>
-                  </div>
-                  </div>
-                </form>          
-       </form>
-       <form v-if="prikazListaDijagnoza" class="message-form" style="position: relative; top: 10px; left: 400px; width: 40%; height: 620px; background-color: rgba(130, 206, 209, 0.733); ">
-          <div  class="container d-flex justify-content-center" style="margin-top: 30px">	                        
-            <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">	
-						  <table style="width: 100%;">
-			                  <tr>
-			                    <th class="bg-info  text-white">Sifra</th>
-			                    <th class="bg-info  text-white">Naziv</th>
-			                    <th class="bg-info  text-white">Obrisi</th>
-			                  </tr>
-			                  <tr v-for="k,i in dijagnoze.length">
-			                    <td>{{dijagnoze[i].sifra}}</td>
-			                    <td>{{dijagnoze[i].naziv}}</td>
-			                    <td style="text-align: center">   <button class="btn btn-warning" type="button" v-on:click="obrisiDijagnozu(dijagnoze[i])"><i class="fa fa-trash">Obrisi</i></button>
-			                    </td>
-			                  </tr>
-			              </table>     
-          	</div>
-          	
-          </div>        
-          <form class="message-form" style="position: relative; top: -45px; left: 700px; width: 40%; height: 58%;  background-color: rgba(130, 206, 209, 0.733); ">
-                <div>
-                  <div  class="container d-flex justify-content-center" style="margin-top: 30px">
-                   <div class="card" style="width: 99.5%; height: 99.5%; margin-top: 5px; margin-bottom: 5px">
-                      <div class="form-group">                        
-                        <div class="card-body mx-4 mt-4">
-                          <div class="row">                            
-                            <div class="col">
-                            <div class="md-form">
-                              
-                              <label for="Form-ime" style="color: #b3b3b3;">Sifra</label>
-                              <input type="text" id="Form-ime" class="form-control" v-model="dijagnoza.sifra">
+  
+                <table style="width: 100%;  " class="table table-striped" >
+                     <tr> 
+                        <th> Sifra</th>
+                        <th> Naziv </th>
+                     </tr> 
+                     <tr>
+                       <td> <input type="text" v-model="lek.sifra" /> </td>
+                       <td> <input type="text" v-model="lek.naziv"  /> </td>
+                     </tr>
+                    
+                           
+                            <tr>
+                              <td align="right">
+                                  <button    type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 40px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajLek">Dodaj</button>
+                                </td> 
+                                <td align="left">
+                                  <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 40px ; border-color: lightpink;  background-color: lightpink; " v-on:click="odustani">Odustani</button>
+                                  </td>
+          <td>
+  
+          </td>
+          </tr>
+          </table>
+              
+          
+            </div>
+            </div>
+  </form>
+
+           
+       
+  <form   v-if="prikazListaDijagnoza" class="message-form position: relative; " style="  border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset; position: relative; top: 50px; left: 280px; width: 35%; background-color: rgba(130, 206, 209, 0.733); ">
+ 
+    <div  class="container d-flex justify-content-center" >	                        
+      <div class="card" style="width: 98%; height: 98%; margin-top: 30px; margin-bottom: 30px">	
+          <h3 style=" text-align: center; color: dimgray;">LISTA DIJAGNOZA</h3>
+      <table style="width: 100%; max-height: 300px; overflow:auto; " class="table table-striped table-fixed" >   
+      <tbody> 
+                  <tr>
+                    <th >Sifra</th>
+                    <th >Naziv</th>
+                    <th ></th>
+                  </tr>
+                  <tr v-for="k,i in dijagnoze.length">
+                    <td>{{dijagnoze[i].sifra}}</td>
+                    <td>{{dijagnoze[i].naziv}}</td>
+                    <td style="text-align: center">   <button class="btn btn-warning" type="button" style="background-color: #b3b3b3; border-color: #b3b3b3;" v-on:click="obrisiDijagnozu(dijagnoze[i])"><i class="fa fa-trash">Obrisi</i></button>
+                    </td>
+                  </tr>
+                  </tbody>  
+              </table>     
+      </div>
+    </div>   
+  </form>
+
+
+  <form v-if="prikazListaDijagnoza" class="message-form position: fixed; " style="  border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset; position: fixed;top: 110px; left: 870px; width: 35%; background-color: rgba(130, 206, 209, 0.733); ">
+
+    <div  class="container d-flex justify-content-center" >	                        
+        <div class="card" style="width: 95%; height: 200px; margin-top: 30px; margin-bottom: 30px">	
+            
+
+            <table style="width: 100%;  " class="table table-striped" >
+                 <tr> 
+                    <th> Sifra</th>
+                    <th> Naziv </th>
+                 </tr> 
+                 <tr>
+                   <td> <input type="text"  v-model="dijagnoza.sifra" /> </td>
+                   <td> <input type="text" v-model="dijagnoza.naziv"  /> </td>
+                 </tr>
                 
-                              <label for="Form-email4" style="color: #b3b3b3;">Naziv</label>
-                              <input type="text"  id="Form-email4" class="form-control" v-model="dijagnoza.naziv">
-                            
-                            </div>
-                            </div>
-                          </div>
-                          <div class="text-center mb-4 mt-4">
-                            <template>
-                            <button  type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajDijagnozu" >Dodaj</button>
-                            <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 35px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="odustani" >Odustani</button>
-                            </template>
-                          </div>                            
-                        </div>                         
-                      </div>
-                   </div>
-                  </div>
-                  </div>
-                </form>         
-       </form>
+                       
+                        <tr>
+                          <td align="right">
+                              <button    type="button" class="btn btn-success btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 40px;border-color: rgba(130, 206, 209, 0.733); ; background-color: rgba(130, 206, 209, 0.733); " v-on:click="dodajDijagnozu">Dodaj</button>
+                            </td> 
+                            <td align="left">
+                              <button type="button" class="btn btn-danger btn-block z-depth-2"  style=" color: #37474F; width: 100px; height: 40px ; border-color: lightpink;  background-color: lightpink; " v-on:click="odustani">Odustani</button>
+                              </td>
+      <td>
+
+      </td>
+      </tr>
+      </table>
+          
+      
+        </div>
+        </div>
+</form>
+       
 
        <form   v-if="prikazListaAdminaKC" class="message-form position: relative; " style="  border-radius: 25px; box-shadow: 10px 10px 10px 0 white inset, -10px -10px 10px 0 white inset; position: relative; top: 50px; left: 280px; width: 35%; background-color: rgba(130, 206, 209, 0.733); ">
  
@@ -615,11 +636,27 @@
             </div>
             </div>
 </form>
-    
-       <b-modal ref="my-modal" id="greska" hide-footer title="Klinicki Centar">
+
+<b-modal ref="my-modal" id="promenaLozinke" hide-footer title="Promeni Lozinku">
+  <label for="Form-city" style="color: #b3b3b3;">Stara lozinka</label>
+  <input type="text" v-model="drugaLozinka.staraLozinka" id="Form-city" class="form-control">
+
+  <label for="Form-city" style="color: #b3b3b3;">Nova lozinka</label>
+  <input type="text" v-model="drugaLozinka.novaLozinka" id="Form-city" class="form-control">
+
+  <label for="Form-city" style="color: #b3b3b3;">Ponovljena lozinka</label>
+  <input type="text" v-model="drugaLozinka.ponovljenaLozinka" id="Form-city" class="form-control">
+  <br>
+
+  <b-button v-b-modal.greska @click="sacuvajDruguLozinku"  style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Sacuvaj</b-button>
+  <b-button @click="odustaniDrugaLozinka"  style="color: black; border-color:  rgba(130, 206, 209, 0.733); background-color: rgba(130, 206, 209, 0.733);">Odustani</b-button>
+
+</b-modal>
+       
+<b-modal ref="my-modal" id="greska" hide-footer title="Klinicki Centar">
           <b-alert v-if="error" show variant="danger" class="d-flex justify-content-center">{{errormessage}}</b-alert>
           <b-alert v-else show variant="success" class="d-flex justify-content-center">{{errormessage}}</b-alert>
-        </b-modal>
+  </b-modal>
 		         
 </div>
 
@@ -649,9 +686,15 @@ import axios from 'axios'
       prikazListaLekova: false,
       prikazListaDijagnoza: false,
       lekovi: [],
+
       dijagnoze: [],
       lek: {},
       dijagnoza: {},
+      drugaLozinka: {
+        staraLozinka: "",
+        novaLozinka: "",
+        ponovljenaLozinka: "",
+      },
       dodatZK: false,
       error: false,
       errormessage: "",
@@ -763,6 +806,56 @@ import axios from 'axios'
         
          
       },
+      odustaniDrugaLozinka(){
+        this.drugaLozinka.staraLozinka = "";
+        this.drugaLozinka.novaLozinka = "";
+        this.drugaLozinka.ponovljenaLozinka = "";
+      },
+      sacuvajDruguLozinku(){
+
+        console.log('tu je');
+
+        if (
+        this.drugaLozinka.staraLozinka == "" ||
+        this.drugaLozinka.novaLozinka == "" ||
+        this.drugaLozinka.ponovljenaLozinka == ""
+      ) {
+
+        this.error = true;
+        this.errormessage = "Morate popuniti sva polja!";
+       
+        return;
+      }
+      if (this.drugaLozinka.novaLozinka !== this.drugaLozinka.ponovljenaLozinka) {
+        this.error = true;
+        this.errormessage = "Lozinke se ne poklapaju!";
+      
+        return;
+      }
+
+    console.log(this.korisnik.lozinka);
+
+      axios
+        .post(
+          "/adminKlinickogCentra/promeniSvojuLozinku/" + this.$store.state.user.id,
+          this.drugaLozinka
+        )
+        .then(() => {
+          this.drugaLozinka = {
+            staraLozinka: "",
+            novaLozinka: "",
+            ponovljenaLozinka: ""
+          };
+          this.error = false;
+          this.errormessage = "Uspesno ste promenili lozinku";
+        })
+        .catch(error => {
+          this.error = true;
+          this.errormessage = "Netacna stara lozinka!";
+      
+          console.log(error);
+        });
+      },
      prikaziZahtev(zahtev){
       axios
           .get("/zahtevZaReg/getPacijenta/"+ zahtev.id)
@@ -783,9 +876,12 @@ import axios from 'axios'
           this.prikazListaDijagnoza = false;
           this.prikaz = false;
           this.prikaz1 = false;
-          this.prikazZ = true;
+          this.prikazZ = !this.prikazZ;
           this.trenutni = zahtev;
           this.prikazListaAdminaKC=false;
+          this.prikazListaKlinika=false;
+          this.prikazListaAdmina=false;
+     
 
         
 
@@ -830,6 +926,7 @@ import axios from 'axios'
 
         },
         pogledajZahteve(){
+
         	this.prikazListaLekova = false;
 	 		    this.prikazListaDijagnoza = false;
           this.prikaz = false;
@@ -837,6 +934,7 @@ import axios from 'axios'
           this.prikaz1=!this.prikaz1;
           this.prikazListaAdminaKC=false;           
           this.prikazListaKlinika = false;
+          this.prikazListaAdmina=false;
         },
 
         napraviZK(){
@@ -980,9 +1078,10 @@ ucitajOpetAdKC(){
             this.prikazListaAdminaKC=false;
             this.prikazListaKlinika = false;
             this.prikaz=!this.prikaz;
+
         },
         izmena() {
-        this.izmeni = true
+        this.izmeni = true;
         },
         odustani1(){
           this.administrator.ime="";
@@ -1019,7 +1118,7 @@ ucitajOpetAdKC(){
         },
 
       odustani() {
-        this.izmeni = false
+        this.izmeni = false;
         axios
         .get("/adminKlinickogCentra/get/" + this.$store.state.user.id)
         .then(adminKlinike =>{
@@ -1067,6 +1166,9 @@ ucitajOpetAdKC(){
      this.prikazZ = false;
      this.prikazListaKlinika = false;
      this.prikazListaAdmina=!this.prikazListaAdmina;
+          this.prikaz1=false;
+          this.prikazListaAdminaKC=false;           
+  
     
         this.izlistajKlinike() ;	
         	axios
@@ -1086,6 +1188,8 @@ ucitajOpetAdKC(){
         this.prikaz = false;
         this.prikaz1 = false;
         this.prikazZ = false;	
+        this.prikazListaKlinika = false;
+
         this.izlistajKlinike();	
         	axios
 		      .get('/adminKlinickogCentra/izlistaj')
@@ -1114,6 +1218,10 @@ ucitajOpetAdKC(){
      this.prikazZ = false;
      this.prikazListaKlinika = !this.prikazListaKlinika;
      this.prikazListaAdmina= false;
+     this.prikazListaAdminaKC=false;
+        this.prikaz1 = false;
+
+
           
      axios
 		      .get('/klinika/izlistaj')
@@ -1125,13 +1233,16 @@ ucitajOpetAdKC(){
 		      });
 	 },
 	 listaLekova(){
-	 	this.prikazListaLekova = true;
+	 	this.prikazListaLekova =! this.prikazListaLekova;
 	 	this.prikazListaDijagnoza = false;
 	 	this.prikazListaKlinika=false;
         this.prikaz = false;
         this.prikaz1 = false;
         this.prikazZ = false;	
         this.prikazListaAdmina = false;
+        this.prikazListaAdminaKC=false;
+
+
              axios
 		      .get('/lek/izlistaj')
 		      .then(lekovi =>{
@@ -1142,13 +1253,15 @@ ucitajOpetAdKC(){
 		      });
 	 },
 	 listaDijagnoza(){
-	 	this.prikazListaDijagnoza = true;
+	 	this.prikazListaDijagnoza =! this.prikazListaDijagnoza;
 	 	this.prikazListaLekova = false;
 	 	this.prikazListaKlinika=false;
         this.prikaz = false;
         this.prikaz1 = false;
         this.prikazZ = false;	
         this.prikazListaAdmina = false; 
+        this.prikazListaAdminaKC=false;
+
              axios
 		      .get('/dijagnoza/izlistaj')
 		      .then(dijagnoze =>{

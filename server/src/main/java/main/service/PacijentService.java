@@ -8,9 +8,11 @@ import javax.validation.ValidationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import main.dto.PacijentDTO;
+import main.dto.PromenaLozinkeDTO;
 import main.model.AdministratorKlinickogCentra;
 import main.model.Pacijent;
 import main.model.Pregled;
@@ -27,6 +29,9 @@ public class PacijentService {
 
 	@Autowired
 	private ZdravstveniKartonRepository zdravstveniKartonRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	public Pacijent findOne(Long id) {
 		return pacijentRepository.findById(id).orElseGet(null);
@@ -138,6 +143,16 @@ public class PacijentService {
 	public Pacijent findByEmail(String email) {
 		// TODO Auto-generated method stub
 		return pacijentRepository.findByEmail(email);
+	}
+	
+	public boolean promeniLozinku(Pacijent admin, PromenaLozinkeDTO lozinka) {
+
+		if (lozinka.getNovaLozinka().equals(lozinka.getPonovljenaLozinka())) {
+			admin.setLozinka(passwordEncoder.encode(lozinka.getNovaLozinka()));
+			pacijentRepository.save(admin);
+			return true;
+		}
+		return false;
 	}
 	
 

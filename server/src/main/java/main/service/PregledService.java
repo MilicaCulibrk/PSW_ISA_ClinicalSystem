@@ -1,6 +1,7 @@
 package main.service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import main.dto.PregledDTO;
 import main.dto.ZahtevZaPregledDTO;
 import main.model.AdministratorKlinike;
+import main.model.Klinika;
 import main.model.Pregled;
 import main.model.Sala;
 import main.model.ZahtevZaPregled;
@@ -112,16 +114,36 @@ public class PregledService {
 		zahtevZaPregled.setTrajanje(zahtevZaPregledDTO.getTrajanje());
 		zahtevZaPregled.setVrstaPregleda(zahtevZaPregledDTO.getVrstaPregleda());
 		zahtevZaPregled.setTipPregleda(tipPregledaRepository.findById(zahtevZaPregledDTO.getTipPregleda().getId()).orElse(null));
-		zahtevZaPregled.setVrstaPregleda("pregled");
+		zahtevZaPregled.setVrstaPregleda(zahtevZaPregledDTO.getVrstaPregleda());
 		zahtevZaPregled.setStatus("na_cekanju");
+		zahtevZaPregled.setPrihvacenOdPacijenta(false);
+
 
 		
 		zahtevZaPregledRepository.save(zahtevZaPregled);
 		
-		admin.getZahtevZaPregled().add(zahtevZaPregled);
+		Collection<ZahtevZaPregled> zahtevi = new ArrayList<ZahtevZaPregled>();
+		zahtevi=admin.getZahtevZaPregled();
+
+		zahtevi.add(zahtevZaPregled);
 		adminKlinikeRepository.save(admin);
 		
 }
+	public List<Pregled> sortirajPreglede(String sortBy) {
+		if(sortBy.equals("Tip Pregleda"))
+			return pregledRepository.findAllByOrderByTipPregledaAsc();
+		else if(sortBy.equals("Datum"))
+			return pregledRepository.findAllByOrderByDatumAsc();
+		return pregledRepository.findAll();
+	}
+
+	public List<Pregled> sortirajOperacije(String sortBy) {
+		if(sortBy.equals("Tip Pregleda"))
+			return pregledRepository.findAllByOrderByTipPregledaAsc();
+		else if(sortBy.equals("Datum"))
+			return pregledRepository.findAllByOrderByDatumAsc();
+		return pregledRepository.findAll();
+	}
 
 
 }

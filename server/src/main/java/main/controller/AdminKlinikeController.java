@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,8 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.AdminKlinikeDTO;
+import main.dto.PromenaLozinkeDTO;
 import main.dto.ZahtevZaOdmorDTO;
 import main.dto.ZahtevZaPregledDTO;
+import main.model.AdministratorKlinickogCentra;
 import main.model.AdministratorKlinike;
 import main.model.ZahtevZaOdmor;
 import main.model.ZahtevZaPregled;
@@ -36,6 +41,11 @@ public class AdminKlinikeController {
 	
 	@Autowired
 	private AdminKlinikeService adminKlinikeService;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	
+	
 	
 	
 	@PostMapping(value = "/dodaj", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -83,7 +93,7 @@ public class AdminKlinikeController {
 		return new ResponseEntity<>(adminKlinikeDTO, HttpStatus.OK);
 	}
 	
-	@PostMapping(value = "/izmeniLozinku")
+	@PutMapping(value = "/izmeniLozinku")
 	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
 	public ResponseEntity<AdminKlinikeDTO> izmeniLozinku(@RequestBody AdminKlinikeDTO adminKlinikeDTO){
 		
@@ -126,7 +136,7 @@ public class AdminKlinikeController {
 				listaZahtevaDTO.add(new ZahtevZaOdmorDTO(zzo));
 			}
 		}
-		
+
 		return new ResponseEntity<>(listaZahtevaDTO, HttpStatus.OK);
 	}
 	
@@ -135,21 +145,59 @@ public class AdminKlinikeController {
 	public ResponseEntity<List<ZahtevZaPregledDTO>> getIzlistajZahteveZaPregled(@PathVariable Long idAdmina) {
 		Collection<ZahtevZaPregled> listaZahteva = new ArrayList<ZahtevZaPregled>();
 		List<ZahtevZaPregledDTO> listaZahtevaDTO = new ArrayList<ZahtevZaPregledDTO>();
+		List<ZahtevZaPregledDTO> listaZahtevaDTOpomocna = new ArrayList<ZahtevZaPregledDTO>();
 
 		List<AdministratorKlinike> admini = adminKlinikeService.findAll();
 		for (AdministratorKlinike administratorKlinike : admini) {
 			if(administratorKlinike.getId().equals(idAdmina)) {
-				listaZahteva = administratorKlinike.getZahtevZaPregled();
+				System.out.println("lisataaaaa");
+				
+				for(ZahtevZaPregled zah: administratorKlinike.getZahtevZaPregled()) {
+				
+					listaZahtevaDTO.add(new ZahtevZaPregledDTO(zah));
+				}
+				
+				
 			}
 		}
 		
-		for (ZahtevZaPregled zzp : listaZahteva) {
+		for(ZahtevZaPregledDTO zzp : listaZahtevaDTO) {
 			if(zzp.getSala() == null) {
-				listaZahtevaDTO.add(new ZahtevZaPregledDTO(zzp));
+				System.out.println("lisatttttttttttt");
+				listaZahtevaDTOpomocna.add(zzp);
 			}
 			
 		}
 		
-		return new ResponseEntity<>(listaZahtevaDTO, HttpStatus.OK);
+		return new ResponseEntity<>(listaZahtevaDTOpomocna, HttpStatus.OK);
 	}
+	
+	@PostMapping(value = "/promeniSvojuLozinku/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('ADMIN_KLINIKE')")
+	public ResponseEntity<?> promeniLozinku(@PathVariable Long id, @RequestBody PromenaLozinkeDTO promenaLozinkeDTO){
+		
+		AdministratorKlinike admin = adminKlinikeService.findOne(id);
+		
+		final Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(admin.getEmail(),
+						promenaLozinkeDTO.getStaraLozinka()));
+		
+		AdministratorKlinike adminKC = (AdministratorKlinike) authentication.getPrincipal();
+		if (adminKC == null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
+		boolean promena = adminKlinikeService.promeniLozinku(admin, promenaLozinkeDTO);
+		
+		if (promena == true) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
+	} 
+	
+	
+	
+	
 }

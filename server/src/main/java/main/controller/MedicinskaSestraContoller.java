@@ -11,6 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import main.dto.LekarDTO;
 import main.dto.MedicinskaSestraDTO;
+import main.dto.PromenaLozinkeDTO;
 import main.dto.SalaDTO;
+import main.model.AdministratorKlinickogCentra;
 import main.model.Lekar;
 import main.model.Pregled;
 import main.model.Sala;
@@ -40,6 +45,9 @@ public class MedicinskaSestraContoller {
 	
 	@Autowired
 	MedicinskaSestraService mss = new MedicinskaSestraService();
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 	
 
 	@GetMapping(value = "/get/{id}")
@@ -64,6 +72,19 @@ public class MedicinskaSestraContoller {
 		
 		try {
 			mss.izmeniMedicinskuSestru(msdto);
+		} catch (ValidationException e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return new ResponseEntity<>(msdto, HttpStatus.OK);
+	}
+	
+	@PutMapping(value = "/izmeniLozinku")
+	@PreAuthorize("hasAuthority('MEDICINSKA_SESTRA')")
+	public ResponseEntity<MedicinskaSestraDTO> izmeniLozinku(@RequestBody MedicinskaSestraDTO msdto){
+		
+		try {
+			mss.izmeniLozinku(msdto);
 		} catch (ValidationException e) {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
@@ -147,6 +168,31 @@ public class MedicinskaSestraContoller {
 		}
 		return new ResponseEntity<>(listaOdmoraDTO, HttpStatus.OK);
 	}
+	
+	@PostMapping(value = "/promeniSvojuLozinku/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('MEDICINSKA_SESTRA')")
+	public ResponseEntity<?> promeniLozinku(@PathVariable Long id, @RequestBody PromenaLozinkeDTO promenaLozinkeDTO){
+		
+		MedicinskaSestra admin = mss.findOne(id);
+		
+		final Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(admin.getEmail(),
+						promenaLozinkeDTO.getStaraLozinka()));
+		
+		MedicinskaSestra adminKC = (MedicinskaSestra) authentication.getPrincipal();
+		if (adminKC == null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
+		boolean promena = mss.promeniLozinku(admin, promenaLozinkeDTO);
+		
+		if (promena == true) {
+			return new ResponseEntity<>(null, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		
+	} 
 	
 
 }

@@ -18,6 +18,7 @@ import main.dto.KlinikaDTO;
 import main.model.AdministratorKlinike;
 import main.model.Klinika;
 import main.model.Lekar;
+import main.model.Pacijent;
 import main.model.Pregled;
 import main.model.Sala;
 import main.model.ZahtevZaOdmor;
@@ -224,4 +225,14 @@ public class KlinikaService {
 		return ret;
 		
 		}
+	public List<Klinika> sortiraj(String sortBy) {
+		if(sortBy.equals("Naziv"))
+			return klinikaRepository.findAllByOrderByNazivAsc();
+		else if(sortBy.equals("Adresa"))
+			return klinikaRepository.findAllByOrderByAdresaAsc();
+		else if(sortBy.equals("Ocena"))
+			return klinikaRepository.findAllByOrderByOcenaAsc();
+		return klinikaRepository.findAll();
+	}
+	
 }

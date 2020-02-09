@@ -47,7 +47,7 @@ public class ZahtevZaPregledDTO {
 		this.idPacijenta = zahtev.getIdPacijenta();
 		this.trajanje = zahtev.getTrajanje();
 		this.vrstaPregleda = zahtev.getVrstaPregleda();
-		this.vrstaPregleda = zahtev.getStatus();
+		this.status = zahtev.getStatus();
 	}
 	
 	public ZahtevZaPregledDTO(Long id, String status, String datum, String vreme, SalaDTO sala, TipPregledaDTO tipPregleda,

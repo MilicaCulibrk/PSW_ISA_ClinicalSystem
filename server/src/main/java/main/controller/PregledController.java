@@ -3,6 +3,8 @@ package main.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.ValidationException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,14 +20,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import main.dto.KlinikaDTO;
 import main.dto.LekarDTO;
 import main.dto.PregledDTO;
 import main.dto.TipPregledaDTO;
+import main.dto.ZahtevZaOdmorDTO;
 import main.dto.ZahtevZaPregledDTO;
 import main.model.AdministratorKlinike;
+import main.model.Klinika;
 import main.model.Lekar;
 import main.model.Pacijent;
 import main.model.Pregled;
+import main.model.ZahtevZaOdmor;
 import main.model.ZahtevZaPregled;
 import main.repository.LekarRepository;
 import main.repository.PregledRepository;
@@ -183,11 +189,13 @@ public class PregledController {
 			//termin ne sme pocinjati pre radnog vremena lekara i zavrsavati se posle radnog vremena lekara
 		    if(pocetakP < pocetakRV || pocetakP > krajRV) {
 				flag = true;
+				System.out.println("udji ovdeeee");
 			}
 			
 			//termin ne sme pocinjati posle radnog vremena lekara, a zavrsavati se posle radnog vremena lekara
-		    if(pocetakP > pocetakRV && krajP > krajRV) {
+		    if(pocetakP >= pocetakRV && krajP > krajRV) {
 				flag = true;
+				System.out.println("udji ovdeeee2");
 			}
 			
 		 
@@ -241,6 +249,25 @@ public class PregledController {
 	
 			return new ResponseEntity<>( HttpStatus.OK);
 	}
+  
+  @GetMapping(value = "/nadjiOdradjen/{idPacijenta}")
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<List<PregledDTO>> nadjiOdradjen(@PathVariable Long idPacijenta) {
+		
+		List<Pregled> listaPregleda = pregledService.findAll();
+		List<PregledDTO> listaPregledaDTO = new ArrayList<PregledDTO>();
+		
+		
+		for (Pregled p : listaPregleda) {
+			if( p.isZavrsen()==true) {
+				if(p.getIdPacijenta().equals(idPacijenta)) {
+					
+			listaPregledaDTO.add(new PregledDTO(p));
+			
+				}		}
+		}
+		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
+	}
 	
 	@PostMapping(value = "/podnesiZahtevLekar/{idPregleda}")
 	@PreAuthorize("hasAuthority('LEKAR')")
@@ -259,6 +286,8 @@ public class PregledController {
 			zahtevZaPregledDTO.setIdPacijenta(pregled.getIdPacijenta());
 			zahtevZaPregledDTO.setCena(pregled.getTipPregleda().getCena());
 			zahtevZaPregledDTO.setStatus("na_cekanju");		
+			
+			System.out.println(zahtevZaPregledDTO.getVrstaPregleda());
 			
 			Integer radnoOd = pregled.getLekar().getPocetak();
 			Integer radnoDo = pregled.getLekar().getKraj();
@@ -395,16 +424,19 @@ public class PregledController {
 				System.out.println(zahtevZaPregledDTO.getLekar().getIdKlinike());
 				if (adminKlinike.getKlinika().getId() == zahtevZaPregledDTO.getLekar().getIdKlinike()) {
 					System.out.println("Nasao admina klinike");
+					
+					admin = adminKlinike;
+					pregledService.dodajZahtev(zahtevZaPregledDTO, admin);	
 
 					String message = "Pacijent "
 							+ pacijent.getIme() + " " + pacijent.getPrezime() + " je podneo zahtev za pregled.";
 					mailService.sendNotificaitionAsync(adminKlinike, message);
 					
-					admin = adminKlinike;
+				
 				}
 			}
 
-	     pregledService.dodajZahtev(zahtevZaPregledDTO, admin);		
+	  	
 			
 		 return new ResponseEntity<>(null, HttpStatus.OK);
 			
@@ -419,7 +451,7 @@ public class PregledController {
 		ZahtevZaPregled zahtevZaPregled = zahtevZaPregledRepository.findById(idZahteva).orElse(null);
 			
 		String errormessage = "";
-		 
+		
 		 String[] datumm = zahtevZaPregled.getDatum().split("T");
 		
 		 System.out.println(datum);
@@ -441,10 +473,17 @@ public class PregledController {
 			  pregled.setTipPregleda(tipPregledaRepository.findById(zahtevZaPregled.getTipPregleda().getId()).orElse(null));
 			  
 			  pregledRepository.save(pregled);
+
 			  
+			  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
+			  zahtevZaPregled.setVreme(vreme);
 			  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
-			  zahtevZaPregledRepository.save(zahtevZaPregled);
+			  zahtevZaPregled.setStatus("na_cekanju");
+			 
 			  
+			 // zahtevZaPregledService.remove(idZahteva);
+			
+		  
 
 			 String messagePacijent = "Odobren Vam je zahtev za pregled kod lekara " + pregled.getLekar().getIme() + " " + pregled.getLekar().getPrezime()  + " za vreme " + datumm[0] + " " + pregled.getVreme() + " sati" +  " u sali " + pregled.getSala().getNaziv(); 
 			 mailService.sendNotificaitionAsync(pacijentService.findOne(pregled.getIdPacijenta()), messagePacijent);
@@ -483,12 +522,15 @@ public class PregledController {
 				
 				//ako hocu da rezervisem datum za koji vec imam preglede
 				for (Pregled p : pregledi) {
-					 if (datumm[0].equals(p.getDatum())
-							&& p.getLekar() == lekar) 
-					 {				
+				    
+					String[] datumPregleda2 = p.getDatum().split("T");
+					
+					 if (datumPregleda2[0].equals(datum) && p.getLekar() == lekar) {
+						 System.out.println("Usaoooooooooooooooooooooooooooooooooo");
+					 				
 						    //ako hocemo da zakazemo pregled usred nekog drugog pregleda
 					
-							if(vremeInt >= Integer.parseInt(p.getVreme()) && vremeInt < (Integer.parseInt(p.getVreme()) + p.getTrajanje()))
+							if(vremeInt >= Integer.parseInt(p.getVreme()) && vremeInt <= (Integer.parseInt(p.getVreme()) + p.getTrajanje()))
 							{
 								flag = true;
 								
@@ -514,7 +556,7 @@ public class PregledController {
 					
 					System.out.println("NIJE PUKO");
 					  
-					  zahtevZaPregled.setDatum(datumm[0]);
+					  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
 					  zahtevZaPregled.setVreme(vreme);
 					  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
 					  zahtevZaPregled.setStatus("odobren");
@@ -534,19 +576,217 @@ public class PregledController {
 					  
 						 errormessage = "Poslat mejl pacijentu da odobri promenu termina za istog lekara!";
 						 
-							return new ResponseEntity<String>(errormessage, HttpStatus.OK);	
-				}
-			 
-			 
-				return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);			
+				
+						 return new ResponseEntity<String>(errormessage, HttpStatus.OK);	
+				
+				//moramo dodeliti drugog lekara, nas nije slobodan
+				}else {
+					if(zahtevZaPregled.getVrstaPregleda().equals("pregled")) {
+						List<Lekar> lekari = lekarRepository.findAll();
+						
+						Boolean zastava = false;
+						Boolean zastava2 = false;
+						
+						for(Lekar l: lekari) {
+							if(l.getTipPregleda() == zahtevZaPregled.getTipPregleda()) {
+								System.out.println(lekari.size());
+								System.out.println(l.getIme());
+								//ako je zakazan pre radnog vremena lekara ili posle
+								if(vremeInt < l.getPocetak() || vremeInt > l.getKraj())
+								{
+									zastava = true;
+									System.out.println("Z1 3");
+								}
+								
+								//ako je zakazan unutar radnog vremena ali traje duze od radnog vremena
+								if(vremeInt >= l.getPocetak() && vremeInt <= l.getKraj() && (vremeInt + zahtevZaPregled.getTrajanje()) >= l.getKraj())
+								{
+									zastava = true;
+									System.out.println("Z1 4");
+								}
+								
+								
+								//ako hocu da rezervisem datum za koji vec imam preglede
+								
+								List<Pregled> pregledi2 = new ArrayList<Pregled>();
+								 
+								
+								
+								for(Pregled p: pregledi) {
+									 String[] datumPregleda = p.getDatum().split("T");
+									 if (datum.equals(datumPregleda[0]) && p.getLekar() == l){ 	
+										 pregledi2.add(p);
+									 }
+								}
+								
+								if(pregledi2.isEmpty()) {
+									
+									  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
+									  zahtevZaPregled.setVreme(vreme);
+									  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
+									  zahtevZaPregled.setStatus("odobren");
+									 
+									  
+									  zahtevZaPregledRepository.save(zahtevZaPregled);
+									  
 
+										 String messagePacijent = "Potvrdite promenu termina i lekara.";
+										 mailService.sendNotificaitionAsync(pacijentService.findOne(pregled.getIdPacijenta()), messagePacijent);
+													
+
+										 String messageLekar = "Dodeljen Vam je novi pregled.";
+										 mailService.sendNotificaitionAsync(pacijentService.findOne(zahtevZaPregled.getIdPacijenta()), messageLekar);	
+										 
+										 String messageLekar2 = "Vas pregled je prebacen na drugog lekara";
+										 mailService.sendNotificaitionAsync(l, messageLekar);	
+									
+									  errormessage = "Dodeljen je drugi lekar tog tipa i pregled je zakazan!";
+									  return new ResponseEntity<String>(errormessage, HttpStatus.OK);
+								}
+								
+								
+								for (Pregled p : pregledi2) {
+									 zastava2 = false;
+									 System.out.println(datum);
+									 System.out.println(p.getDatum());
+									
+									 
+											
+										 System.out.println("Datumi");
+										    //ako hocemo da zakazemo pregled usred nekog drugog pregleda
+									
+											if(vremeInt >= Integer.parseInt(p.getVreme()) && vremeInt <= (Integer.parseInt(p.getVreme()) + p.getTrajanje()))
+											{
+												zastava2 = true;
+												
+												System.out.println("Z21");
+											}
+											
+											//ako hocemo da zakazemo pregled koji pocinje pre nekog ali se zavrsava posle pocetka
+											if(vremeInt <= Integer.parseInt(p.getVreme()) && (vremeInt + zahtevZaPregled.getTrajanje()) >= Integer.parseInt(p.getVreme()))
+											{
+												zastava2 = true;
+												System.out.println("Z22");
+											}
+											
+											System.out.println(zastava);
+											System.out.println(zastava2);
+											if(zastava == false && zastava2 == false) {
+												
+												  System.out.println(l.getIme());
+												  
+												  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
+												  zahtevZaPregled.setVreme(vreme);
+												  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
+												  zahtevZaPregled.setStatus("odobren");
+												 
+												  
+												  zahtevZaPregledRepository.save(zahtevZaPregled);
+								
+												  
+												  if(l == zahtevZaPregled.getLekar()) {
+													  
+													  String messagePacijent = "Potvrdite promenu termina kod istog lekara. "; 
+														 mailService.sendNotificaitionAsync(pacijentService.findOne(zahtevZaPregled.getIdPacijenta()), messagePacijent);
+																	
+
+														 String messageLekar = "Ceka se da pacijent odobri promenu termina.";
+														 mailService.sendNotificaitionAsync(l, messageLekar);	
+													  
+													  
+													  errormessage = "Poslat mejl pacijentu da odobri promenu termina za istog lekara!";
+													  return new ResponseEntity<String>(errormessage, HttpStatus.OK);
+												  }else {
+													 
+
+														 String messagePacijent = "Pomeren Vam je termin i promenjen lekar.";
+														 mailService.sendNotificaitionAsync(pacijentService.findOne(pregled.getIdPacijenta()), messagePacijent);
+																	
+
+														 String messageLekar = "Dodeljen Vam je novi pregled";
+														 mailService.sendNotificaitionAsync(zahtevZaPregled.getLekar(), messageLekar);	
+														 
+														 String messageLekar2 = "Vas pregled je prebacen na drugog lekara";
+														 mailService.sendNotificaitionAsync(l, messageLekar);	
+													
+													  
+													  errormessage = "Dodeljen je drugi lekar tog tipa i pregled je zakazan!";
+													  return new ResponseEntity<String>(errormessage, HttpStatus.OK);
+												  }
+												
+										
+										//ako smo nasli slobodnog lekara za taj tip pregleda
+											
+											
+										}
+										
+									
+									}							
+								}
+						
+							}
+				 		
+					}else {
+						
+						 errormessage = "Lekar nije slobodan da izvrsi operaciju u toj sali u tom terminu! Promenite termin!";
+						  return new ResponseEntity<String>(errormessage, HttpStatus.OK);
+						
+					}
+					
+			
+				
+				}
+				
+				  errormessage = "Nema slobodnih lekara za taj termin izaberite drugi!";
+				  return new ResponseEntity<String>(errormessage, HttpStatus.OK);
+			
+		
 		 }
+		}
+	@PutMapping(value = "/odobri", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PreAuthorize("hasAuthority('PACIJENT')")
+	public ResponseEntity<?> odobri(@RequestBody ZahtevZaPregledDTO zahtevZaPregledDTO) {
 	
+			zahtevZaPregledService.odobri(zahtevZaPregledDTO);
 			
-	
-			
+
+		return new ResponseEntity<>(true, HttpStatus.OK);
 	}
-	
-	
-	
+	@PutMapping(value = "/azurirajPreglede/{idPacijenta}")
+	@PreAuthorize("hasAnyAuthority('PACIJENT')")
+	public ResponseEntity<List<PregledDTO>> getAzurirajPreglede(@PathVariable Long idPacijenta ,@RequestBody String sortBy) {
+		
+		List<Pregled> listaPregleda = pregledService.sortirajPreglede(sortBy);
+		List<PregledDTO> listaPregledaDTO = new ArrayList<PregledDTO>();
+		for (Pregled p : listaPregleda) {
+			
+			if( p.isZavrsen()==true) {
+
+				if(p.getIdPacijenta().equals(idPacijenta) && p.getVrstaPregleda().equals("pregled") )
+					listaPregledaDTO.add(new PregledDTO(p));
+
+		}
+		}
+		
+		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
+	}
+	@PutMapping(value = "/azurirajOperacije/{idPacijenta}")
+	@PreAuthorize("hasAnyAuthority('PACIJENT')")
+	public ResponseEntity<List<PregledDTO>> getAzurirajOperacije(@PathVariable Long idPacijenta ,@RequestBody String sortBy) {
+		
+		List<Pregled> listaPregleda = pregledService.sortirajOperacije(sortBy);
+		List<PregledDTO> listaPregledaDTO = new ArrayList<PregledDTO>();
+		for (Pregled p : listaPregleda) {
+			if( p.isZavrsen()==true) {
+
+					if(p.getIdPacijenta().equals(idPacijenta) && p.getVrstaPregleda().equals("operacija"))
+							listaPregledaDTO.add(new PregledDTO(p));
+		
+		
+		}
+		}
+		
+		return new ResponseEntity<>(listaPregledaDTO, HttpStatus.OK);
+	}
+		
 }

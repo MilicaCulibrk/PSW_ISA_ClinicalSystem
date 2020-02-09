@@ -11,6 +11,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import main.dto.AdminKlinikeDTO;
+import main.dto.PromenaLozinkeDTO;
+import main.model.AdministratorKlinickogCentra;
 import main.model.AdministratorKlinike;
 import main.model.Authority;
 import main.repository.AdminKlinikeRepository;
@@ -65,7 +67,7 @@ public class AdminKlinikeService {
 		}
 		adminKlinikeRepository.save(ak);
 		//SendEmailTLS.main(administratorDTO.getEmail());
-		AdminKlinikeDTO administratordto =new AdminKlinikeDTO(ak);
+		AdminKlinikeDTO administratordto = new AdminKlinikeDTO(ak);
 		//klinikaRepository.getOne(administratorDTO.getIdKlinike()).administratorKlinike.add(ak);
 
 		return administratordto;
@@ -106,5 +108,15 @@ public class AdminKlinikeService {
 		adminKlinike.setLozinka(passwordEncoder.encode(adminKlinikeDTO.getLozinka()));
 		adminKlinikeRepository.save(adminKlinike);
 
+	}
+	
+	public boolean promeniLozinku(AdministratorKlinike admin, PromenaLozinkeDTO lozinka) {
+
+		if (lozinka.getNovaLozinka().equals(lozinka.getPonovljenaLozinka())) {
+			admin.setLozinka(passwordEncoder.encode(lozinka.getNovaLozinka()));
+			adminKlinikeRepository.save(admin);
+			return true;
+		}
+		return false;
 	}
 }

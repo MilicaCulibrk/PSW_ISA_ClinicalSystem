@@ -39,7 +39,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor 
 //@EqualsAndHashCode
-@Builder
+
 
 public class Lekar implements UserDetails{
 	
@@ -76,7 +76,7 @@ public class Lekar implements UserDetails{
    private String jmbg;
 	
 	@Column(name = "ocena", nullable = false)
-   private double ocena;
+   private Double ocena;
 	
 	@Column(name = "pocetak", nullable = false)
 	private Integer pocetak;
@@ -107,7 +107,10 @@ public class Lekar implements UserDetails{
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	 public java.util.Collection<Pregled> pregled = new ArrayList<Pregled>();
 	 
-	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
+	 @OneToMany(mappedBy = "lekar",   cascade = CascadeType.ALL)
+	 public java.util.Collection<OcenaLekara> ocenaLekara = new ArrayList<OcenaLekara>();
+	
+	@OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
 	 public java.util.Collection<Operacija> operacija;
 	 
 	 @OneToMany(mappedBy = "lekar", fetch = FetchType.LAZY,  cascade = CascadeType.ALL)
@@ -128,6 +131,170 @@ public class Lekar implements UserDetails{
 
 
 
+/*
+public Boolean getPromenjenaLozinka() {
+	return promenjenaLozinka;
+}
+public void setPromenjenaLozinka(Boolean promenjenaLozinka) {
+	this.promenjenaLozinka = promenjenaLozinka;
+}
+public Long getId() {
+	return id;
+}
+public void setId(Long id) {
+	this.id = id;
+}
+public String getIme() {
+	return ime;
+}
+public void setIme(String ime) {
+	this.ime = ime;
+}
+public String getPrezime() {
+	return prezime;
+}
+public void setPrezime(String prezime) {
+	this.prezime = prezime;
+}
+public String getEmail() {
+	return email;
+}
+public void setEmail(String email) {
+	this.email = email;
+}
+public String getLozinka() {
+	return lozinka;
+}
+public void setLozinka(String lozinka) {
+	this.lozinka = lozinka;
+}
+public String getAdresa() {
+	return adresa;
+}
+public void setAdresa(String adresa) {
+	this.adresa = adresa;
+}
+public String getGrad() {
+	return grad;
+}
+public void setGrad(String grad) {
+	this.grad = grad;
+}
+public String getDrzava() {
+	return drzava;
+}
+public void setDrzava(String drzava) {
+	this.drzava = drzava;
+}
+public String getTelefon() {
+	return telefon;
+}
+public void setTelefon(String telefon) {
+	this.telefon = telefon;
+}
+public String getJmbg() {
+	return jmbg;
+}
+public void setJmbg(String jmbg) {
+	this.jmbg = jmbg;
+}
+public double getOcena() {
+	return ocena;
+}
+public void setOcena(java.util.Collection<OcenaLekara> ocenaLekara) {
+	
+	int suma=0;
+	int duzina=0;
+	
+	
+	for(OcenaLekara o: ocenaLekara) {
+		duzina=duzina+1;
+		suma= suma+ o.getOcena();
+	}
+	this.ocena=(double) (suma/duzina);
+}
+
+
+public int getBrojRecenzija() {
+	return brojRecenzija;
+}
+public void setBrojRecenzija(int brojRecenzija) {
+	this.brojRecenzija = brojRecenzija;
+}
+public java.util.Collection<Izvestaj> getIzvestaj() {
+	return izvestaj;
+}
+public void setIzvestaj(java.util.Collection<Izvestaj> izvestaj) {
+	this.izvestaj = izvestaj;
+}
+public Klinika getKlinika() {
+	return klinika;
+}
+public void setKlinika(Klinika klinika) {
+	this.klinika = klinika;
+}
+public RadniKalendar getRadniKalendar() {
+	return radniKalendar;
+}
+public void setRadniKalendar(RadniKalendar radniKalendar) {
+	this.radniKalendar = radniKalendar;
+}
+public java.util.Collection<Pregled> getPregled() {
+	return pregled;
+}
+public void setPregled(java.util.Collection<Pregled> pregled) {
+	this.pregled = pregled;
+}
+public java.util.Collection<Operacija> getOperacija() {
+	return operacija;
+}
+public void setOperacija(java.util.Collection<Operacija> operacija) {
+	this.operacija = operacija;
+}
+public java.util.Collection<ZahtevZaOdmor> getZahtevZaOdmor() {
+	return zahtevZaOdmor;
+}
+public void setZahtevZaOdmor(java.util.Collection<ZahtevZaOdmor> zahtevZaOdmor) {
+	this.zahtevZaOdmor = zahtevZaOdmor;
+}
+public java.util.Collection<Recept> getRecept() {
+	return recept;
+}
+public void setRecept(java.util.Collection<Recept> recept) {
+	this.recept = recept;
+}
+
+
+public java.util.Collection<OcenaLekara> getOcenaLekara() {
+	return ocenaLekara;
+}
+public void setOcenaLekara(java.util.Collection<OcenaLekara> ocenaLekara) {
+	this.ocenaLekara = ocenaLekara;
+} 
+
+
+
+public Integer getPocetak() {
+	return pocetak;
+}
+public void setPocetak(Integer pocetak) {
+	this.pocetak = pocetak;
+}
+public Integer getKraj() {
+	return kraj;
+}
+public void setKraj(Integer kraj) {
+	this.kraj = kraj;
+}
+*/
+
+
+
+public void setAuthorities(List<Authority> authorities) {
+
+	this.authorities = authorities;
+
+}
 
 
 

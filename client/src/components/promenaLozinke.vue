@@ -52,7 +52,7 @@
 				      });
 				  } else if (this.$store.state.user.role.authority == "ADMIN_KLINIKE"){
 			      	axios
-				      .put("/adminKlinike/izmeni", this.korisnik)
+				      .put("/adminKlinike/izmeniLozinku", this.korisnik)
 				      .then(admin =>{
 				        this.korisnik = admin.data;
 						this.$router.push('/pocetnaAdministratoraKlinike')
@@ -63,7 +63,7 @@
 				      });
 				  } else if (this.$store.state.user.role.authority == "ADMIN_CENTRA"){
 			      	axios
-				      .put("/adminKlinickogCentra/izmeni", this.korisnik)
+				      .put("/adminKlinickogCentra/izmeniLozinku", this.korisnik)
 				      .then(admin =>{
 				        this.korisnik = admin.data;
 						this.$router.push('/pocetnaAdministratorKC')
@@ -74,7 +74,7 @@
 				      });
 				  } else if (this.$store.state.user.role.authority == "MEDICINSKA_SESTRA"){
 			      	axios
-				      .put("/medicinska_sestra/izmeni", this.korisnik)
+				      .put("/medicinska_sestra/izmeniLozinku", this.korisnik)
 				      .then(ms =>{
 				        this.korisnik = ms.data;
 						this.$router.push('/pocetnaMedicinskeSestre')
