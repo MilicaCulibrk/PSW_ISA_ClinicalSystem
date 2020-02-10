@@ -580,7 +580,7 @@ public class PregledController {
 					  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
 					  zahtevZaPregled.setVreme(vreme);
 					  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
-					  zahtevZaPregled.setStatus("odobren");
+					  zahtevZaPregled.setStatus("na_cekanju");
 					 
 					  
 					  zahtevZaPregledRepository.save(zahtevZaPregled);
@@ -645,7 +645,7 @@ public class PregledController {
 									  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
 									  zahtevZaPregled.setVreme(vreme);
 									  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
-									  zahtevZaPregled.setStatus("odobren");
+									  zahtevZaPregled.setStatus("na_cekanju");
 									 
 									  
 									  zahtevZaPregledRepository.save(zahtevZaPregled);
@@ -699,7 +699,7 @@ public class PregledController {
 												  zahtevZaPregled.setDatum(datum + "T00:00:00.000Z");
 												  zahtevZaPregled.setVreme(vreme);
 												  zahtevZaPregled.setSala(salaRepository.findById(idSale).orElse(null));
-												  zahtevZaPregled.setStatus("odobren");
+												  zahtevZaPregled.setStatus("na_cekanju");
 												 
 												  
 												  zahtevZaPregledRepository.save(zahtevZaPregled);

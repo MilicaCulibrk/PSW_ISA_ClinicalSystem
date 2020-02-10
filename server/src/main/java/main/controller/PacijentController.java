@@ -47,6 +47,7 @@ public class PacijentController {
 
 	private AuthenticationManager authenticationManager;
 	
+	@Autowired
 	private ZahtevZaPregledService zahtevZaPregledService;
 
 	
@@ -220,19 +221,13 @@ public class PacijentController {
 
 		Collection<ZahtevZaPregled> listaZahteva = new ArrayList<ZahtevZaPregled>();
 		List<ZahtevZaPregledDTO> listaZahtevaDTO = new ArrayList<ZahtevZaPregledDTO>();
-<<<<<<< HEAD
+
 		try {
 		   listaZahteva =zahtevZaPregledService.izlistaj(id);
 		}catch (Exception e) {
 			// TODO: handle exception
 		}
-=======
-try {
-		listaZahteva =zahtevZaPregledService.izlistaj(id);
-}catch (Exception e) {
-	// TODO: handle exception
-}	
->>>>>>> 75a728060a9da4635aaf1671325a549b5b31599f
+	
 		
 		for (ZahtevZaPregled zzp : listaZahteva) {
 				listaZahtevaDTO.add(new ZahtevZaPregledDTO(zzp));

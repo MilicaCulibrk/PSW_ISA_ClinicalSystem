@@ -74,38 +74,21 @@ public class ZahtevZaPregledService {
 	
 public List<ZahtevZaPregled> izlistaj(Long id) {
 		
-<<<<<<< HEAD
+
 		List<ZahtevZaPregled> listaZahteva = new ArrayList<ZahtevZaPregled>();
 
 		List<ZahtevZaPregled> zahtevi = zahtevZaPregled.findAll();
 		for(ZahtevZaPregled z: zahtevi) {
 			try {
-				if(z.getIdPacijenta() == id  && z.getPrihvacenOdPacijenta() == false) {
+				if(z.getIdPacijenta() == id  && z.getStatus().equals("na_cekanju") && z.getPrihvacenOdPacijenta() == false) {
 					System.out.println(z.getPrihvacenOdPacijenta());
 					listaZahteva.add(z); }
 			}catch (Exception e) {
 				// TODO: handle exception
 			}
-		
-				
-=======
-	List<ZahtevZaPregled> listaZahteva = new ArrayList<ZahtevZaPregled>();
-
-	List<ZahtevZaPregled> zahtevi = zahtevZaPregled.findAll();
-	for(ZahtevZaPregled z: zahtevi) {
-		try {
-		if(z.getIdPacijenta().equals(id)) {
-			System.out.println(z.getPrihvacenOdPacijenta());
-			listaZahteva.add(z);
->>>>>>> 75a728060a9da4635aaf1671325a549b5b31599f
-			
 		}
-	}catch (Exception e) {
-		// TODO: handle exception
-	}
-	
-	}
-	return listaZahteva ;
+		
+			return listaZahteva;
 	}
 
 
